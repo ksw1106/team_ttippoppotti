@@ -156,9 +156,9 @@
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="mainGame.h" />
-    <ClInclude Include="minion.h" />
     <ClInclude Include="pixelCollision.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="playerManager.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="stdafx.h" />
@@ -173,9 +173,9 @@
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="mainGame.cpp" />
-    <ClCompile Include="minion.cpp" />
     <ClCompile Include="pixelCollision.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

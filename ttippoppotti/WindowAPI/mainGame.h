@@ -1,13 +1,17 @@
 #pragma once
 #include "gameNode.h"
-#include "player.h"	//플레이어 클래스 사용하기 위해
+#include "playerManager.h"
 #include "enemyManager.h"
 #include "pixelCollision.h"
 
 class mainGame : public gameNode
 {
 private:
+	playerManager* _playerManager;
+	enemyManager* _enemyManager;
 
+	RECT _rcCamera;
+	image* _backGround;
 public:
 	HRESULT init(void);
 	void release(void);

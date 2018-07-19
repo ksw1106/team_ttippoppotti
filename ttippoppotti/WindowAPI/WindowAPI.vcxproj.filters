@@ -77,14 +77,14 @@
     <ClInclude Include="enemy.h">
       <Filter>MainGame\슈팅게임</Filter>
     </ClInclude>
-    <ClInclude Include="minion.h">
-      <Filter>MainGame\슈팅게임</Filter>
-    </ClInclude>
     <ClInclude Include="enemyManager.h">
       <Filter>MainGame\슈팅게임</Filter>
     </ClInclude>
     <ClInclude Include="pixelCollision.h">
       <Filter>MainGame\픽셀충돌</Filter>
+    </ClInclude>
+    <ClInclude Include="playerManager.h">
+      <Filter>MainGame\슈팅게임</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -121,14 +121,14 @@
     <ClCompile Include="enemy.cpp">
       <Filter>MainGame\슈팅게임</Filter>
     </ClCompile>
-    <ClCompile Include="minion.cpp">
-      <Filter>MainGame\슈팅게임</Filter>
-    </ClCompile>
     <ClCompile Include="enemyManager.cpp">
       <Filter>MainGame\슈팅게임</Filter>
     </ClCompile>
     <ClCompile Include="pixelCollision.cpp">
       <Filter>MainGame\픽셀충돌</Filter>
+    </ClCompile>
+    <ClCompile Include="playerManager.cpp">
+      <Filter>MainGame\슈팅게임</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
