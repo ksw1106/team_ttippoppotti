@@ -7,19 +7,12 @@
 class mainGame : public gameNode
 {
 private:
-	player * _player;	//플레이어 클래스 선언
-	enemyManager* _enemyManager;
-
-	pixelCollision* _pc;
 
 public:
 	HRESULT init(void);
 	void release(void);
 	void update(void);
 	void render(void);
-
-	//충돌함수
-	void collision();
 
 	mainGame() {}
 	~mainGame() {}
