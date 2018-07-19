@@ -6,6 +6,7 @@
 
 //테스트 입니다.
 //나도 테스트
+//또 테스트
 HRESULT bullet::init(const char * imageName, int bulletMax, float range)
 {
 	//총알 이미지 초기화
