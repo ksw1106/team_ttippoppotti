@@ -5,18 +5,18 @@ HRESULT enemy::init(void)
 {
 	return S_OK;
 }
-
+//
 HRESULT enemy::init(const char * imageName, POINT position)
 {
-	//ÇÁ·¹ÀÓ ÃÊ±âÈ­
+	//í”„ë ˆì„ ì´ˆê¸°í™”
 	_count = 0;
 	_currentFrameX = _currentFrameY = 0;
 
-	//ÀÌ¹ÌÁö, ÀÌ¹ÌÁö·ºÆ® ÃÊ±âÈ­
+	//ì´ë¯¸ì§€, ì´ë¯¸ì§€ë ‰íŠ¸ ì´ˆê¸°í™”
 	_image = IMAGEMANAGER->findImage(imageName);
 	_rc = RectMakeCenter(position.x, position.y, _image->getFrameWidth(), _image->getFrameHeight());
 
-	//·£´ıÀ¸·Î ÃÑ¾Ë ÄğÅ¸ÀÓ ÁÖ±â
+	//ëœë¤ìœ¼ë¡œ ì´ì•Œ ì¿¨íƒ€ì„ ì£¼ê¸°
 	_fireCount = 0;
 	_rndFireCount = RND->getFromIntTo(1, 1000);
 
@@ -38,7 +38,7 @@ void enemy::render(void)
 	draw();
 }
 
-//¾Ë¾Æ¼­ ¸¸µé¸é µÈ´Ù
+//ì•Œì•„ì„œ ë§Œë“¤ë©´ ëœë‹¤
 void enemy::move()
 {
 }
