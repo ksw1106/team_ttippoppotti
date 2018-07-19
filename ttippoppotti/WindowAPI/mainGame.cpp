@@ -79,7 +79,8 @@ void mainGame::update(void)
 	//this->collision();
 
 	//픽셀충돌 업데이트
-	_pc->update();
+	
+	//_pc->update();
 
 }
 
