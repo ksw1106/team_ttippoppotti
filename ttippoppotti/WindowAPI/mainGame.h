@@ -12,6 +12,14 @@ private:
 
 	RECT _rcCamera;
 	image* _backGround;
+	image* _helicopter;
+
+	float _x, _y;
+	int _count;
+	int _index;
+	int _speed;
+	bool _isLeft;
+	bool _isDown;
 public:
 	HRESULT init(void);
 	void release(void);

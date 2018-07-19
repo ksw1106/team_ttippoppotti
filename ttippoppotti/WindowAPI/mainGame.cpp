@@ -16,7 +16,11 @@ HRESULT mainGame::init(void)
 	_enemyManager->init();
 
 	_backGround = IMAGEMANAGER->addImage("backGround", "background.bmp", 5296, 2131);
-
+	_helicopter = IMAGEMANAGER->addFrameImage("helicopter", "helicopter.bmp", 1625, 182, 5, 1);
+	_isLeft = _isDown = false;
+	_count = _index = _speed = 0;
+	_x = 3400;
+	_y = 50;
 	_rcCamera = RectMake(0, 2131-1080, 5296, 2131-1080);
 	return S_OK;
 }
@@ -75,6 +79,25 @@ void mainGame::update(void)
 			_rcCamera.top += 5;
 		}
 	}
+
+	if (_isDown)
+	{
+		_y+=0.5f;
+		if (_y >= 55.f)
+		{
+			_isDown = false;
+		}
+	}
+	else if (!_isDown)
+	{
+		_y-=0.5f;
+		if (_y <= 50.f)
+		{
+			_isDown = true;
+		}
+	}
+
+	FRAMEMANAGER->frameChange(_helicopter, _count, _index, _speed, _isLeft);
 }
 
 //=============================================================
@@ -87,6 +110,7 @@ void mainGame::render(void)
 //=============================================================
 
 	_backGround->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+	_helicopter->frameRender(getMemDC(), _x - _rcCamera.left, _y - _rcCamera.top);
 
 	_playerManager->render();
 	_enemyManager->render();

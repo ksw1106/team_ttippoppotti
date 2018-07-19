@@ -20,6 +20,7 @@ HRESULT gameNode::init(bool managerInit)
 		KEYMANAGER->init();					//키매니져 초기화
 		RND->init();						//랜더펑션 초기화
 		IMAGEMANAGER->init();				//이미지매니져 초기화
+		FRAMEMANAGER->init();				//프레임매니져 초기화
 	}
 
 	return S_OK;
@@ -43,6 +44,8 @@ void gameNode::release(void)
 		//이미지매니져 싱글톤 해제
 		IMAGEMANAGER->release();
 		IMAGEMANAGER->releaseSingleton();
+		FRAMEMANAGER->release();
+		FRAMEMANAGER->releaseSingleton();
 	}
 
 	//DC 해제

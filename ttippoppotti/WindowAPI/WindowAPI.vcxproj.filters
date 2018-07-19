@@ -86,6 +86,9 @@
     <ClInclude Include="playerManager.h">
       <Filter>MainGame\슈팅게임</Filter>
     </ClInclude>
+    <ClInclude Include="frameManager.h">
+      <Filter>GameFramework2D\매니져</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -129,6 +132,9 @@
     </ClCompile>
     <ClCompile Include="playerManager.cpp">
       <Filter>MainGame\슈팅게임</Filter>
+    </ClCompile>
+    <ClCompile Include="frameManager.cpp">
+      <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
