@@ -19,17 +19,29 @@ HRESULT mainGame::init(void)
 	_helicopter = IMAGEMANAGER->addFrameImage("helicopter", "helicopter.bmp", 1625, 182, 5, 1);
 	IMAGEMANAGER->addImage("ladder", "ladder.bmp", 25, 237, true, RGB(255, 0, 255));
 
-	_saveFlag = IMAGEMANAGER->addFrameImage("saveFlag", "saveFlag.bmp", 485, 110, 5, 1);
+	_saveFlag = IMAGEMANAGER->addFrameImage("saveFlag", "saveFlag.bmp", 3234, 88, 33, 1);
+	_humanDead = IMAGEMANAGER->addFrameImage("humanDead", "human_dead.bmp", 1404, 125, 13, 1);
+	IMAGEMANAGER->addImage("spike", "spike.bmp", 3795.f, 976.f, 15, 108, true, RGB(255, 0, 255));
+	_humanDead->setX(3754.f);
+	_humanDead->setY(995.f);
 
-	_flagX = 3327.f;
-	_flagY = 878.f;
+	_flag = IMAGEMANAGER->addFrameImage("flag", "flag.bmp", 3650.f, 972.f, 2048, 112, 32, 1);
+
+	_flagCount = _flagIndex = 0;
+	_flagSpeed = 5;
+
+
+	_flagX = 3326.f;
+	_flagY = 870.f;
 	_isLeft = _isDown = false;
-	_count = _index = _fcount = _findex = _speed = 0;
-	_fspeed = 5;
+	_count = _index = _fcount = _findex = _speed = _hcount = _hindex = 0;
+	_fspeed = 1;
+	_hspeed = 5;
 	_x = 3400.f;
 	_y = 500.f;
 	_rcCamera = RectMake(0, 2878-1080, 5755, 1080);
 	return S_OK;
+\
 }
 
 //=============================================================
@@ -106,6 +118,8 @@ void mainGame::update(void)
 
 	FRAMEMANAGER->frameChange(_helicopter, _count, _index, _speed, _isLeft);
 	FRAMEMANAGER->frameChange(_saveFlag, _fcount, _findex, _fspeed, _isLeft);
+	FRAMEMANAGER->frameChange(_humanDead, _hcount, _hindex, _hspeed, _isLeft);
+	FRAMEMANAGER->frameChange(_flag, _flagCount, _flagIndex, _flagSpeed, _isLeft);
 }
 
 //=============================================================
@@ -121,6 +135,12 @@ void mainGame::render(void)
 	_helicopter->frameRender(getMemDC(), _x - _rcCamera.left, _y - _rcCamera.top);
 	IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x+169 - _rcCamera.left, _y+181 - _rcCamera.top);
 	_saveFlag->frameRender(getMemDC(), _flagX - _rcCamera.left, _flagY - _rcCamera.top);
+
+	IMAGEMANAGER->findImage("spike")->render(getMemDC(), IMAGEMANAGER->findImage("spike")->getX() - _rcCamera.left, IMAGEMANAGER->findImage("spike")->getY() - _rcCamera.top);
+	_humanDead->frameRender(getMemDC(), _humanDead->getX() - _rcCamera.left, _humanDead->getY() - _rcCamera.top);
+
+	_flag->frameRender(getMemDC(), _flag->getX() - _rcCamera.left, _flag->getY() - _rcCamera.top);
+
 	_playerManager->render();
 	_enemyManager->render();
 
