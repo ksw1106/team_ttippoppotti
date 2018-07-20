@@ -15,13 +15,20 @@ HRESULT mainGame::init(void)
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
 
-	_backGround = IMAGEMANAGER->addImage("backGround", "background.bmp", 5296, 2131);
+	_backGround = IMAGEMANAGER->addImage("backGround", "background.bmp", 5755, 2878);
 	_helicopter = IMAGEMANAGER->addFrameImage("helicopter", "helicopter.bmp", 1625, 182, 5, 1);
+	IMAGEMANAGER->addImage("ladder", "ladder.bmp", 25, 237, true, RGB(255, 0, 255));
+
+	_saveFlag = IMAGEMANAGER->addFrameImage("saveFlag", "saveFlag.bmp", 485, 110, 5, 1);
+
+	_flagX = 3327.f;
+	_flagY = 878.f;
 	_isLeft = _isDown = false;
-	_count = _index = _speed = 0;
-	_x = 3400;
-	_y = 50;
-	_rcCamera = RectMake(0, 2131-1080, 5296, 2131-1080);
+	_count = _index = _fcount = _findex = _speed = 0;
+	_fspeed = 5;
+	_x = 3400.f;
+	_y = 500.f;
+	_rcCamera = RectMake(0, 2878-1080, 5755, 1080);
 	return S_OK;
 }
 
@@ -54,36 +61,36 @@ void mainGame::update(void)
 	{
 		if (_rcCamera.left > 0)
 		{
-			_rcCamera.left -= 5;
+			_rcCamera.left -= 10;
 		}
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 	{
-		if (_rcCamera.right >= _rcCamera.left + 5 + 1920)
+		if (_rcCamera.right >= _rcCamera.left + 10 + 1920)
 		{
-			_rcCamera.left += 5;
+			_rcCamera.left += 10;
 		}
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_UP))
 	{
-		if (_rcCamera.top > 5)
+		if (_rcCamera.top > 10)
 		{
-			_rcCamera.top -= 5;
+			_rcCamera.top -= 10;
 		}
 	}
 
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
 	{
-		if (_rcCamera.bottom > _rcCamera.top + 5 + 1080)
+		if (_rcCamera.bottom > _rcCamera.top + 10 + 1080)
 		{
-			_rcCamera.top += 5;
+			_rcCamera.top += 10;
 		}
 	}
 
 	if (_isDown)
 	{
 		_y+=0.5f;
-		if (_y >= 55.f)
+		if (_y >= 500.f)
 		{
 			_isDown = false;
 		}
@@ -91,13 +98,14 @@ void mainGame::update(void)
 	else if (!_isDown)
 	{
 		_y-=0.5f;
-		if (_y <= 50.f)
+		if (_y <= 495.f)
 		{
 			_isDown = true;
 		}
 	}
 
 	FRAMEMANAGER->frameChange(_helicopter, _count, _index, _speed, _isLeft);
+	FRAMEMANAGER->frameChange(_saveFlag, _fcount, _findex, _fspeed, _isLeft);
 }
 
 //=============================================================
@@ -111,7 +119,8 @@ void mainGame::render(void)
 
 	_backGround->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	_helicopter->frameRender(getMemDC(), _x - _rcCamera.left, _y - _rcCamera.top);
-
+	IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x+169 - _rcCamera.left, _y+181 - _rcCamera.top);
+	_saveFlag->frameRender(getMemDC(), _flagX - _rcCamera.left, _flagY - _rcCamera.top);
 	_playerManager->render();
 	_enemyManager->render();
 
