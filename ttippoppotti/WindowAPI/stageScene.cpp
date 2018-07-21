@@ -12,7 +12,20 @@ HRESULT stageScene::init(void)
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
 
-	_backGround = IMAGEMANAGER->addImage("backGround", "background.bmp", 5755, 2878);
+	for (int i = 0; i < 7; i++)
+	{
+		ZeroMemory(&_backGround[i], sizeof(object));
+		_backGround[i]._rc = RectMake(0, 2878 - 1080, 5755, 1080);
+	}
+
+	_backGround[0]._image = IMAGEMANAGER->addImage("backGround_sky", "background_sky.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_backGround[1]._image = IMAGEMANAGER->addImage("backGround_tree1", "background_tree1.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_backGround[2]._image = IMAGEMANAGER->addImage("backGround_tree2", "background_tree2.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_backGround[3]._image = IMAGEMANAGER->addImage("backGround_tree3", "background_tree3.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_backGround[4]._image = IMAGEMANAGER->addImage("backGround_tree4", "background_tree4.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_backGround[5]._image = IMAGEMANAGER->addImage("backGround_rock", "background_rock.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_backGround[6]._image = IMAGEMANAGER->addImage("backGround_object", "background_object.bmp", 5755, 2878, true, RGB(255, 0, 255));
+
 	_helicopter = IMAGEMANAGER->addFrameImage("helicopter", "helicopter.bmp", 1625, 182, 5, 1);
 	IMAGEMANAGER->addImage("ladder", "ladder.bmp", 25, 237, true, RGB(255, 0, 255));
 
@@ -112,7 +125,11 @@ void stageScene::update(void)
 
 void stageScene::render(void)
 {
-	_backGround->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+	for (int i = 0; i < 7; i++)
+	{
+		_backGround[i]._image->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+	}
+
 	_helicopter->frameRender(getMemDC(), _x - _rcCamera.left, _y - _rcCamera.top);
 	IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x + 169 - _rcCamera.left, _y + 181 - _rcCamera.top);
 	_saveFlag->frameRender(getMemDC(), _flagX - _rcCamera.left, _flagY - _rcCamera.top);

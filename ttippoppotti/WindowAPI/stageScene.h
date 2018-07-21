@@ -3,6 +3,14 @@
 #include "playerManager.h"
 #include "enemyManager.h"
 
+struct object
+{
+	image* _image;
+	float _x, _y;
+	RECT _rc;
+	bool _isActived;
+};
+
 class stageScene : public gameNode
 {
 private:
@@ -10,7 +18,7 @@ private:
 	enemyManager* _enemyManager;
 
 	RECT _rcCamera;
-	image* _backGround;
+	object _backGround[7];
 	image* _helicopter;
 	image* _saveFlag;
 	image* _humanDead;

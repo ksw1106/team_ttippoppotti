@@ -15,7 +15,7 @@ HRESULT mainGame::init(void)
 	SCENEMANAGER->addScene("스테이지씬", new stageScene);
 	SCENEMANAGER->addScene("테스트씬", new testScene);
 	/*현재씬 설정*/
-	SCENEMANAGER->loadScene("테스트씬");
+	SCENEMANAGER->loadScene("스테이지씬");
 
 	return S_OK;
 }
