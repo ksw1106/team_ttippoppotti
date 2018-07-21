@@ -20,7 +20,15 @@ HRESULT gameNode::init(bool managerInit)
 		KEYMANAGER->init();					//키매니져 초기화
 		RND->init();						//랜더펑션 초기화
 		IMAGEMANAGER->init();				//이미지매니져 초기화
+		SCENEMANAGER->init();				//씬매니져 초기화
+		SOUNDMANAGER->init();				//사운드매니져 초기화
+		EFFECTMANAGER->init();				//이펙트매니져 초기화
+
 		FRAMEMANAGER->init();				//프레임매니져 초기화
+		OBJECTMANAGER->init();				//오브젝트매니져 초기화
+
+		SAVEDATA->init();					//세이브데이터 초기화
+		TXTDATA->init();					//텍스트데이터 초기화
 	}
 
 	return S_OK;
@@ -44,8 +52,27 @@ void gameNode::release(void)
 		//이미지매니져 싱글톤 해제
 		IMAGEMANAGER->release();
 		IMAGEMANAGER->releaseSingleton();
+		//씬매니져 싱글톤 해제
+		SCENEMANAGER->release();
+		SCENEMANAGER->releaseSingleton();
+		//사운드매니져 싱글톤 해제
+		SOUNDMANAGER->release();
+		SOUNDMANAGER->releaseSingleton();
+		//이펙트매니져 싱글톤 해제
+		EFFECTMANAGER->release();
+		EFFECTMANAGER->releaseSingleton();
+		//프레임매니져 싱글톤 해제
 		FRAMEMANAGER->release();
 		FRAMEMANAGER->releaseSingleton();
+		//오브젝트매니져 싱글톤 해제
+		OBJECTMANAGER->release();
+		OBJECTMANAGER->releaseSingleton();
+		//세이브데이터 싱글톤 해제
+		SAVEDATA->release();
+		SAVEDATA->releaseSingleton();
+		//텍스트데이터 싱글톤 해제
+		TXTDATA->release();
+		TXTDATA->releaseSingleton();
 	}
 
 	//DC 해제
