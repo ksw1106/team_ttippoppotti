@@ -52,5 +52,5 @@ inline void EllipseMakeCenter(HDC hdc, int x, int y, int width, int height)
 //렉트 편하게 만들자
 inline void Rectangle(HDC hdc, RECT rc)
 {
-	Rectangle(hdc, rc.left, rc.top, rc.right, rc.bottom);
+	Rectangle(hdc, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top);
 }

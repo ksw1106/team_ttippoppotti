@@ -12,6 +12,9 @@ HRESULT stageScene::init(void)
 	_enemyManager = new enemyManager;
 	_enemyManager->init();
 
+	_mapData = new mapData;
+	_mapData->init();
+
 	for (int i = 0; i < 7; i++)
 	{
 		ZeroMemory(&_backGround[i], sizeof(object));
@@ -121,6 +124,34 @@ void stageScene::update(void)
 	FRAMEMANAGER->frameChange(_saveFlag, _fcount, _findex, _fspeed, _isLeft);
 	FRAMEMANAGER->frameChange(_humanDead, _hcount, _hindex, _hspeed, _isLeft);
 	FRAMEMANAGER->frameChange(_flag, _flagCount, _flagIndex, _flagSpeed, _isLeft);
+
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		POINT ptTemp;
+		ptTemp.x = _ptMouse.x + _rcCamera.left;
+		ptTemp.y = _ptMouse.y + _rcCamera.top;
+		//충돌체크
+		for (int i = 0; i < _mapData->getObject().size(); i++)
+		{
+			if (!_mapData->getObject()[i]._isActived) continue;
+
+			if (PtInRect(&_mapData->getObject()[i]._rc, ptTemp))
+			{
+				
+				mapObject obj = _mapData->getObject()[i];
+
+				SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_BRUSH));
+				SetDCBrushColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
+				SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_PEN));
+				SetDCPenColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
+				RectangleMake(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), obj._rc.left, obj._rc.top, 76, 70);
+
+				obj._isActived = false;
+				_mapData->setObject(obj, i);
+				break; //임시
+			}
+		}
+	}
 }
 
 void stageScene::render(void)
@@ -139,6 +170,27 @@ void stageScene::render(void)
 
 	_flag->frameRender(getMemDC(), _flag->getX() - _rcCamera.left, _flag->getY() - _rcCamera.top);
 
+	if (KEYMANAGER->isToggleKey(VK_F1))
+	{
+		char str[64];
+		sprintf_s(str, "%d", _ptMouse.x + _rcCamera.left);
+		TextOut(getMemDC(), 10, 10, str, strlen(str));
+		sprintf_s(str, "%d", _ptMouse.y + _rcCamera.top);
+		TextOut(getMemDC(), 80, 10, str, strlen(str));
+	}
+
+	
+	if (KEYMANAGER->isToggleKey(VK_F5))
+	{
+		for (int i = 0; i < _mapData->getObject().size(); i++)
+		{
+			//Rectangle(getMemDC(), _mapData->getObject()[i]._rc);
+			if (!_mapData->getObject()[i]._isActived) continue;
+
+			RectangleMake(getMemDC(), _mapData->getObject()[i]._rc.left-_rcCamera.left, _mapData->getObject()[i]._rc.top-_rcCamera.top, 75, 70);
+		}
+	}
+ 
 	_playerManager->render();
 	_enemyManager->render();
 }

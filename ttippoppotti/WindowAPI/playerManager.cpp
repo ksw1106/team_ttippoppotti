@@ -4,7 +4,7 @@
 
 HRESULT playerManager::init(void)
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 void playerManager::release(void)

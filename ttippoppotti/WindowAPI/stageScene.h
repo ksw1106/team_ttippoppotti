@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "playerManager.h"
 #include "enemyManager.h"
+#include "mapData.h"
 
 struct object
 {
@@ -16,6 +17,7 @@ class stageScene : public gameNode
 private:
 	playerManager * _playerManager;
 	enemyManager* _enemyManager;
+	mapData* _mapData;
 
 	RECT _rcCamera;
 	object _backGround[7];
