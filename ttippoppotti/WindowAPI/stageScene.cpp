@@ -64,6 +64,7 @@ void stageScene::release(void)
 
 	SAFE_DELETE(_playerManager);
 	SAFE_DELETE(_enemyManager);
+	SAFE_DELETE(_mapData);
 }
 
 void stageScene::update(void)
@@ -125,7 +126,7 @@ void stageScene::update(void)
 	FRAMEMANAGER->frameChange(_humanDead, _hcount, _hindex, _hspeed, _isLeft);
 	FRAMEMANAGER->frameChange(_flag, _flagCount, _flagIndex, _flagSpeed, _isLeft);
 
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 	{
 		POINT ptTemp;
 		ptTemp.x = _ptMouse.x + _rcCamera.left;
@@ -144,7 +145,7 @@ void stageScene::update(void)
 				SetDCBrushColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
 				SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_PEN));
 				SetDCPenColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
-				RectangleMake(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), obj._rc.left, obj._rc.top, 76, 70);
+				RectangleMake(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), obj._rc.left, obj._rc.top, obj._width, obj._height);
 
 				obj._isActived = false;
 				_mapData->setObject(obj, i);
@@ -187,7 +188,7 @@ void stageScene::render(void)
 			//Rectangle(getMemDC(), _mapData->getObject()[i]._rc);
 			if (!_mapData->getObject()[i]._isActived) continue;
 
-			RectangleMake(getMemDC(), _mapData->getObject()[i]._rc.left-_rcCamera.left, _mapData->getObject()[i]._rc.top-_rcCamera.top, 75, 70);
+			RectangleMake(getMemDC(), _mapData->getObject()[i]._rc.left-_rcCamera.left, _mapData->getObject()[i]._rc.top-_rcCamera.top, _mapData->getObject()[i]._width, _mapData->getObject()[i]._height);
 		}
 	}
  
