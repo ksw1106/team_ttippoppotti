@@ -116,19 +116,11 @@
     <ClInclude Include="mapData.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="progressBar.h">
       <Filter>GameFramework2D\체력바</Filter>
     </ClInclude>
     <ClInclude Include="loading.h">
       <Filter>GameFramework2D\로딩</Filter>
-=======
-    <ClInclude Include="effects.h">
-      <Filter>MainGame\브로포스</Filter>
-    </ClInclude>
-    <ClInclude Include="cameraManager.h">
-      <Filter>GameFramework2D\매니져</Filter>
->>>>>>> b3fed39a8cad6aa10ad1859588cadfe2abcb766b
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -198,19 +190,11 @@
     <ClCompile Include="mapData.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="progressBar.cpp">
       <Filter>GameFramework2D\체력바</Filter>
     </ClCompile>
     <ClCompile Include="loading.cpp">
       <Filter>GameFramework2D\로딩</Filter>
-=======
-    <ClCompile Include="effects.cpp">
-      <Filter>MainGame\브로포스</Filter>
-    </ClCompile>
-    <ClCompile Include="cameraManager.cpp">
-      <Filter>GameFramework2D\매니져</Filter>
->>>>>>> b3fed39a8cad6aa10ad1859588cadfe2abcb766b
     </ClCompile>
   </ItemGroup>
 </Project>
