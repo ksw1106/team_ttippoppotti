@@ -157,11 +157,13 @@
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="loading.h" />
     <ClInclude Include="mainGame.h" />
     <ClInclude Include="mapData.h" />
     <ClInclude Include="objectManager.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerManager.h" />
+    <ClInclude Include="progressBar.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="saveData.h" />
     <ClInclude Include="sceneManager.h" />
@@ -182,11 +184,13 @@
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="loading.cpp" />
     <ClCompile Include="mainGame.cpp" />
     <ClCompile Include="mapData.cpp" />
     <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerManager.cpp" />
+    <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="saveData.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="soundManager.cpp" />
