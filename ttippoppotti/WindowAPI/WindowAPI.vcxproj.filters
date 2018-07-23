@@ -36,6 +36,12 @@
     <Filter Include="MainGame\브로포스">
       <UniqueIdentifier>{3d632b61-367b-4709-a321-88457eacd66f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameFramework2D\로딩">
+      <UniqueIdentifier>{8d4c2f14-5532-4509-82d9-c23cdb92bef6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework2D\체력바">
+      <UniqueIdentifier>{1185f067-cd46-4aa5-8732-1db0fde93c3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commonMacroFunction.h">
@@ -110,6 +116,12 @@
     <ClInclude Include="mapData.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="progressBar.h">
+      <Filter>GameFramework2D\체력바</Filter>
+    </ClInclude>
+    <ClInclude Include="loading.h">
+      <Filter>GameFramework2D\로딩</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -177,6 +189,12 @@
     </ClCompile>
     <ClCompile Include="mapData.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="progressBar.cpp">
+      <Filter>GameFramework2D\체력바</Filter>
+    </ClCompile>
+    <ClCompile Include="loading.cpp">
+      <Filter>GameFramework2D\로딩</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

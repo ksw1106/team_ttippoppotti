@@ -4,7 +4,10 @@
 
 HRESULT player::init(void)
 {
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 7df168a7314a7d71b279599c0fb8dcdaebbfb1e0
 	return S_OK;
 }
 
