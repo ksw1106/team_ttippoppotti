@@ -95,9 +95,6 @@
     <ClInclude Include="stageScene.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
-    <ClInclude Include="testScene.h">
-      <Filter>MainGame\브로포스</Filter>
-    </ClInclude>
     <ClInclude Include="playerManager.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
@@ -162,9 +159,6 @@
     </ClCompile>
     <ClCompile Include="sceneManager.cpp">
       <Filter>GameFramework2D\매니져</Filter>
-    </ClCompile>
-    <ClCompile Include="testScene.cpp">
-      <Filter>MainGame\브로포스</Filter>
     </ClCompile>
     <ClCompile Include="stageScene.cpp">
       <Filter>MainGame\브로포스</Filter>

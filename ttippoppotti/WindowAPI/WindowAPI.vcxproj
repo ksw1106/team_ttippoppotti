@@ -169,7 +169,6 @@
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stageScene.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="testScene.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
@@ -198,7 +197,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="testScene.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="winMain.cpp" />

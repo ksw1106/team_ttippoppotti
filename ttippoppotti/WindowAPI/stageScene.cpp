@@ -162,14 +162,15 @@ void stageScene::render(void)
 		_backGround[i]._image->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	}
 
-	_helicopter->frameRender(getMemDC(), _x - _rcCamera.left, _y - _rcCamera.top);
+	//헬기 등 오브젝트
+	/*_helicopter->frameRender(getMemDC(), _x - _rcCamera.left, _y - _rcCamera.top);
 	IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x + 169 - _rcCamera.left, _y + 181 - _rcCamera.top);
 	_saveFlag->frameRender(getMemDC(), _flagX - _rcCamera.left, _flagY - _rcCamera.top);
 
 	IMAGEMANAGER->findImage("spike")->render(getMemDC(), IMAGEMANAGER->findImage("spike")->getX() - _rcCamera.left, IMAGEMANAGER->findImage("spike")->getY() - _rcCamera.top);
 	_humanDead->frameRender(getMemDC(), _humanDead->getX() - _rcCamera.left, _humanDead->getY() - _rcCamera.top);
 
-	_flag->frameRender(getMemDC(), _flag->getX() - _rcCamera.left, _flag->getY() - _rcCamera.top);
+	_flag->frameRender(getMemDC(), _flag->getX() - _rcCamera.left, _flag->getY() - _rcCamera.top);*/
 
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{

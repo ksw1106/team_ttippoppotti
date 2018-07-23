@@ -13,7 +13,7 @@ HRESULT mainGame::init(void)
 
 	/*씬추가*/
 	SCENEMANAGER->addScene("스테이지씬", new stageScene);
-	SCENEMANAGER->addScene("테스트씬", new testScene);
+
 	/*현재씬 설정*/
 	SCENEMANAGER->loadScene("스테이지씬");
 
