@@ -156,6 +156,8 @@ void stageScene::update(void)
 			}
 		}
 	}
+
+	CAMERAMANAGER->setCamera(_rcCamera);
 }
 
 void stageScene::render(void)
