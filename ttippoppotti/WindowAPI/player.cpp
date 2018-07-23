@@ -4,7 +4,6 @@
 
 HRESULT player::init(void)
 {
-
 	return S_OK;
 }
 
