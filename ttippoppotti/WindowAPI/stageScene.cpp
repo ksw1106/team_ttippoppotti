@@ -15,6 +15,9 @@ HRESULT stageScene::init(void)
 	_mapData = new mapData;
 	_mapData->init();
 
+	_playerManager->setEnemyManager(_enemyManager);
+	_enemyManager->setPlayerManager(_playerManager);
+
 	for (int i = 0; i < 7; i++)
 	{
 		ZeroMemory(&_backGround[i], sizeof(object));
