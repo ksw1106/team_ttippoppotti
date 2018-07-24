@@ -14,8 +14,9 @@ HRESULT stageScene::init(void)
 
 	_mapData = new mapData;
 	_mapData->init();
-	_playerManager->setMap(_mapData);
 
+	_playerManager->setMap(_mapData);
+	_enemyManager->setMapData(_mapData);
 	_playerManager->setEnemyManager(_enemyManager);
 	_enemyManager->setPlayerManager(_playerManager);
 
