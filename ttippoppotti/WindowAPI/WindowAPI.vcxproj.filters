@@ -122,11 +122,11 @@
     <ClInclude Include="loading.h">
       <Filter>GameFramework2D\로딩</Filter>
     </ClInclude>
-    <ClInclude Include="effects.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="cameraManager.h">
       <Filter>GameFramework2D\매니져</Filter>
+    </ClInclude>
+    <ClInclude Include="effects.h">
+      <Filter>MainGame\브로포스</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -202,11 +202,11 @@
     <ClCompile Include="loading.cpp">
       <Filter>GameFramework2D\로딩</Filter>
     </ClCompile>
-    <ClCompile Include="effects.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="cameraManager.cpp">
       <Filter>GameFramework2D\매니져</Filter>
+    </ClCompile>
+    <ClCompile Include="effects.cpp">
+      <Filter>MainGame\브로포스</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
