@@ -27,6 +27,7 @@ HRESULT gameNode::init(bool managerInit)
 
 		FRAMEMANAGER->init();				//프레임매니져 초기화
 		OBJECTMANAGER->init();				//오브젝트매니져 초기화
+		CAMERAMANAGER->init();				//카메라매니져 초기화
 
 		SAVEDATA->init();					//세이브데이터 초기화
 		TXTDATA->init();					//텍스트데이터 초기화
@@ -71,6 +72,9 @@ void gameNode::release(void)
 		//오브젝트매니져 싱글톤 해제
 		OBJECTMANAGER->release();
 		OBJECTMANAGER->releaseSingleton();
+		//카메라매니져 싱글톤 해제
+		CAMERAMANAGER->release();
+		CAMERAMANAGER->releaseSingleton();
 		//세이브데이터 싱글톤 해제
 		SAVEDATA->release();
 		SAVEDATA->releaseSingleton();
