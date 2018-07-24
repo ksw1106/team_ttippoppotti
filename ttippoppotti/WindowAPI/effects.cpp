@@ -18,7 +18,7 @@ void effects::release(void)
 
 void effects::update(void)
 {
-	this->explosionBoom();
+	this->boom();
 }
 
 void effects::render(void)

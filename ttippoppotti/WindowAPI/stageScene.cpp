@@ -6,6 +6,21 @@ HRESULT stageScene::init(void)
 	gameNode::init(TRUE);
 	//이곳에서 초기화를 한다
 
+	//사운드 추가
+	SOUNDMANAGER->addSound("1", "start_one.mp3");
+	SOUNDMANAGER->addSound("2", "start_two.mp3");
+	SOUNDMANAGER->addSound("3", "start_three.mp3");
+	SOUNDMANAGER->addSound("go", "start_go.mp3");
+
+	soundName[0] = "3";
+	soundName[1] = "2";
+	soundName[2] = "1";
+	soundName[3] = "go";
+	
+
+
+	soundCount = 0;
+
 	_playerManager = new playerManager;
 	_playerManager->init();
 
@@ -73,6 +88,38 @@ void stageScene::release(void)
 
 void stageScene::update(void)
 {
+	switch (soundCount)
+	{
+	case 0:
+		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount]))
+		{
+			SOUNDMANAGER->play(soundName[soundCount]);
+			soundCount++;
+		}
+		break;
+	case 1:
+		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount-1]))
+		{
+			SOUNDMANAGER->play(soundName[soundCount]);
+			soundCount++;
+		}
+		break;
+	case 2:
+		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount - 1]))
+		{
+			SOUNDMANAGER->play(soundName[soundCount]);
+			soundCount++;
+		}
+		break;
+	case 3:
+		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount - 1]))
+		{
+			SOUNDMANAGER->play(soundName[soundCount]);
+			soundCount++;
+		}
+		break;
+	}
+
 	_playerManager->update();
 	_enemyManager->update();
 	_test->update();

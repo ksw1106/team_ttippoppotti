@@ -39,6 +39,7 @@ void mainGame::update(void)
 	SCENEMANAGER->update();
 
 	//사운드매니져 업데이트
+	SOUNDMANAGER->update();
 }
 
 //=============================================================
