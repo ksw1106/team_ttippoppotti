@@ -3,6 +3,7 @@
 #include "playerManager.h"
 #include "enemyManager.h"
 #include "mapData.h"
+#include "testScene_kmy.h"
 
 struct object
 {
@@ -18,9 +19,10 @@ private:
 	playerManager * _playerManager;
 	enemyManager* _enemyManager;
 	mapData* _mapData;
-
+	testScene_kmy* _test;
+	
 	RECT _rcCamera;
-	object _backGround[7];
+	object _backGround[3];
 	image* _helicopter;
 	image* _saveFlag;
 	image* _humanDead;
@@ -43,6 +45,9 @@ private:
 	int _speed;
 	bool _isLeft;
 	bool _isDown;
+
+	const char* soundName[4];
+	int soundCount;
 public:
 	HRESULT init(void);
 	void release(void);

@@ -39,6 +39,7 @@ void mainGame::update(void)
 	SCENEMANAGER->update();
 
 	//사운드매니져 업데이트
+	SOUNDMANAGER->update();
 }
 
 //=============================================================
@@ -50,8 +51,11 @@ void mainGame::render(void)
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, BLACKNESS);
 //=============================================================
 
-//씬매니져 렌더
+	//씬매니져 렌더
 	SCENEMANAGER->render();
+
+	//타임매니져 렌더
+	TIMEMANAGER->render(getMemDC());
 
 //=============================================================
 	//백버퍼의 내용을 HDC에 그린다 (이것도 렌더에 그냥 둘것!!)

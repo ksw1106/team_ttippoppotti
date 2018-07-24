@@ -6,6 +6,21 @@ HRESULT stageScene::init(void)
 	gameNode::init(TRUE);
 	//이곳에서 초기화를 한다
 
+	//사운드 추가
+	SOUNDMANAGER->addSound("1", "start_one.mp3");
+	SOUNDMANAGER->addSound("2", "start_two.mp3");
+	SOUNDMANAGER->addSound("3", "start_three.mp3");
+	SOUNDMANAGER->addSound("go", "start_go.mp3");
+
+	soundName[0] = "3";
+	soundName[1] = "2";
+	soundName[2] = "1";
+	soundName[3] = "go";
+	
+
+
+	soundCount = 0;
+
 	_playerManager = new playerManager;
 	_playerManager->init();
 
@@ -14,28 +29,28 @@ HRESULT stageScene::init(void)
 
 	_mapData = new mapData;
 	_mapData->init();
-	_playerManager->setMap(_mapData);
 
+	_test = new testScene_kmy;
+	_test->init();
+
+	_playerManager->setMap(_mapData);
+	_enemyManager->setMapData(_mapData);
 	_playerManager->setEnemyManager(_enemyManager);
 	_enemyManager->setPlayerManager(_playerManager);
 
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		ZeroMemory(&_backGround[i], sizeof(object));
 		_backGround[i]._rc = RectMake(0, 2878 - 1080, 5755, 1080);
 	}
 
-	_backGround[0]._image = IMAGEMANAGER->addImage("backGround_sky", "background_sky.bmp", 5755, 2878, true, RGB(255, 0, 255));
-	_backGround[1]._image = IMAGEMANAGER->addImage("backGround_tree1", "background_tree1.bmp", 5755, 2878, true, RGB(255, 0, 255));
-	_backGround[2]._image = IMAGEMANAGER->addImage("backGround_tree2", "background_tree2.bmp", 5755, 2878, true, RGB(255, 0, 255));
-	_backGround[3]._image = IMAGEMANAGER->addImage("backGround_tree3", "background_tree3.bmp", 5755, 2878, true, RGB(255, 0, 255));
-	_backGround[4]._image = IMAGEMANAGER->addImage("backGround_tree4", "background_tree4.bmp", 5755, 2878, true, RGB(255, 0, 255));
-	_backGround[5]._image = IMAGEMANAGER->addImage("backGround_rock", "background_rock.bmp", 5755, 2878, true, RGB(255, 0, 255));
-	_backGround[6]._image = IMAGEMANAGER->addImage("backGround_object", "background_object.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_backGround[0]._image = IMAGEMANAGER->addImage("backGround", "background.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_backGround[1]._image = IMAGEMANAGER->addImage("backGround_rock", "background_rock.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_backGround[2]._image = IMAGEMANAGER->addImage("backGround_object", "background_object.bmp", 5755, 2878, true, RGB(255, 0, 255));
 
 	_helicopter = IMAGEMANAGER->addFrameImage("helicopter", "helicopter.bmp", 1625, 182, 5, 1);
 	IMAGEMANAGER->addImage("ladder", "ladder.bmp", 25, 237, true, RGB(255, 0, 255));
-
+	
 	_saveFlag = IMAGEMANAGER->addFrameImage("saveFlag", "saveFlag.bmp", 3234, 88, 33, 1);
 	_humanDead = IMAGEMANAGER->addFrameImage("humanDead", "human_dead.bmp", 1404, 125, 13, 1);
 	IMAGEMANAGER->addImage("spike", "spike.bmp", 3795.f, 976.f, 15, 108, true, RGB(255, 0, 255));
@@ -73,9 +88,41 @@ void stageScene::release(void)
 
 void stageScene::update(void)
 {
+	switch (soundCount)
+	{
+	case 0:
+		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount]))
+		{
+			SOUNDMANAGER->play(soundName[soundCount]);
+			soundCount++;
+		}
+		break;
+	case 1:
+		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount-1]))
+		{
+			SOUNDMANAGER->play(soundName[soundCount]);
+			soundCount++;
+		}
+		break;
+	case 2:
+		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount - 1]))
+		{
+			SOUNDMANAGER->play(soundName[soundCount]);
+			soundCount++;
+		}
+		break;
+	case 3:
+		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount - 1]))
+		{
+			SOUNDMANAGER->play(soundName[soundCount]);
+			soundCount++;
+		}
+		break;
+	}
+
 	_playerManager->update();
 	_enemyManager->update();
-
+	_test->update();
 	//이곳에서 계산식, 키보드, 마우스등등 업데이트를 한다
 	//간단하게 이곳에서 코딩한다고 생각하면 된다
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
@@ -163,7 +210,7 @@ void stageScene::update(void)
 
 void stageScene::render(void)
 {
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		_backGround[i]._image->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	}
@@ -186,8 +233,7 @@ void stageScene::render(void)
 		sprintf_s(str, "%d", _ptMouse.y + _rcCamera.top);
 		TextOut(getMemDC(), 80, 10, str, strlen(str));
 	}
-
-	
+		
 	if (KEYMANAGER->isToggleKey(VK_F5))
 	{
 		for (int i = 0; i < _mapData->getObject().size(); i++)
@@ -198,7 +244,10 @@ void stageScene::render(void)
 			RectangleMake(getMemDC(), _mapData->getObject()[i]._rc.left-_rcCamera.left, _mapData->getObject()[i]._rc.top-_rcCamera.top, _mapData->getObject()[i]._width, _mapData->getObject()[i]._height);
 		}
 	}
- 
+
+
+
 	_playerManager->render();
 	_enemyManager->render();
+	_test->render();
 }

@@ -16,7 +16,9 @@ struct tagParticle
 	bool isActive;
 	int count;
 };
-
+//=============================================================
+//	## effects ## (공용이펙트)
+//=============================================================
 class effects : public gameNode
 {
 private:
@@ -28,31 +30,30 @@ private:
 	float _range;
 
 public:
-	HRESULT init(const char* imageName, int particleMax, float range);
+	HRESULT init(const char* imageName, int particleMax);
 	void release(void);
 	void update(void);
 	void render(void);
 
-	//이펙트발사
-	void fire(float x, float y, float angle, float speed);
-	//이펙트무브
-	void move();
+	//이펙트 발사 설정
+	void activate(float x, float y, float angle, float speed, float gravity);
+	//이펙트 발사!
+	void boom();
 
 	//이펙트벡터 가져오기
 	vector<tagParticle> getVParticle() { return _vParticle; }
 
 
-	//rambro 탄피 떨어지는 효과
-	void rambroCatridge();
+	////rambro 탄피 떨어지는 효과
+	//void rambroCatridge();
 
-	//벽 파편 떨어지는 효과
-	void rockParticleFall();
+	////벽 파편 떨어지는 효과
+	//void rockParticleFall();
 
-	//피터지는 효과
-	void bloodSplash();
+	////피터지는 효과
+	//void bloodSplash();
 
 
 	effects() {}
 	~effects() {}
 };
-
