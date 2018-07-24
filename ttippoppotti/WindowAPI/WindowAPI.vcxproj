@@ -160,6 +160,7 @@
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="loading.h" />
+    <ClInclude Include="loadingScene.h" />
     <ClInclude Include="mainGame.h" />
     <ClInclude Include="mapData.h" />
     <ClInclude Include="objectManager.h" />
@@ -170,9 +171,12 @@
     <ClInclude Include="saveData.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="singletonBase.h" />
+    <ClInclude Include="soldier.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stageScene.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="testScene_kmy.h" />
+    <ClInclude Include="timeManager.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
@@ -188,7 +192,12 @@
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="Kim_Min_Young_addResource.cpp" />
+    <ClCompile Include="Kim_Sang_Won_addResource.cpp" />
+    <ClCompile Include="Lee_Ji_Woong_addResource.cpp" />
+    <ClCompile Include="Lee_Moon_Gyu_addResource.cpp" />
     <ClCompile Include="loading.cpp" />
+    <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="mainGame.cpp" />
     <ClCompile Include="mapData.cpp" />
     <ClCompile Include="objectManager.cpp" />
@@ -197,6 +206,7 @@
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="saveData.cpp" />
     <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="soldier.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stageScene.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -205,6 +215,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="testScene_kmy.cpp" />
+    <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="winMain.cpp" />

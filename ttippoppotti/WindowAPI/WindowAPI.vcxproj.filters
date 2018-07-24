@@ -113,20 +113,29 @@
     <ClInclude Include="enemy.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
-    <ClInclude Include="mapData.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="progressBar.h">
       <Filter>GameFramework2D\체력바</Filter>
     </ClInclude>
     <ClInclude Include="loading.h">
       <Filter>GameFramework2D\로딩</Filter>
     </ClInclude>
-    <ClInclude Include="effects.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="cameraManager.h">
       <Filter>GameFramework2D\매니져</Filter>
+    </ClInclude>
+    <ClInclude Include="effects.h">
+      <Filter>MainGame\브로포스</Filter>
+    </ClInclude>
+    <ClInclude Include="timeManager.h">
+      <Filter>GameFramework2D\매니져</Filter>
+    </ClInclude>
+    <ClInclude Include="testScene_kmy.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="mapData.h">
+      <Filter>MainGame\브로포스</Filter>
+    </ClInclude>
+    <ClInclude Include="loadingScene.h">
+      <Filter>MainGame\브로포스</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -193,20 +202,41 @@
     <ClCompile Include="enemyManager.cpp">
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
-    <ClCompile Include="mapData.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="progressBar.cpp">
       <Filter>GameFramework2D\체력바</Filter>
     </ClCompile>
     <ClCompile Include="loading.cpp">
       <Filter>GameFramework2D\로딩</Filter>
     </ClCompile>
-    <ClCompile Include="effects.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="cameraManager.cpp">
       <Filter>GameFramework2D\매니져</Filter>
+    </ClCompile>
+    <ClCompile Include="effects.cpp">
+      <Filter>MainGame\브로포스</Filter>
+    </ClCompile>
+    <ClCompile Include="timeManager.cpp">
+      <Filter>GameFramework2D\매니져</Filter>
+    </ClCompile>
+    <ClCompile Include="testScene_kmy.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Kim_Sang_Won_addResource.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="mapData.cpp">
+      <Filter>MainGame\브로포스</Filter>
+    </ClCompile>
+    <ClCompile Include="loadingScene.cpp">
+      <Filter>MainGame\브로포스</Filter>
+    </ClCompile>
+    <ClCompile Include="Kim_Min_Young_addResource.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Lee_Moon_Gyu_addResource.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Lee_Ji_Woong_addResource.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

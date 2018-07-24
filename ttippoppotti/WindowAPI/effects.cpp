@@ -2,14 +2,12 @@
 #include "effects.h"
 
 
-HRESULT effects::init(const char * imageName, int particleMax, float range)
+HRESULT effects::init(const char * imageName, int particleMax)
 {
 	//이미지 초기화
 	_imageName = imageName;
 	//갯수 초기화
 	_particleMax = particleMax;
-
-	_range = range;
 	
 	return S_OK;
 }
@@ -20,7 +18,7 @@ void effects::release(void)
 
 void effects::update(void)
 {
-	this->move();
+	this->boom();
 }
 
 void effects::render(void)
@@ -31,7 +29,7 @@ void effects::render(void)
 	}
 }
 
-void effects::fire(float x, float y, float angle, float speed)
+void effects::activate(float x, float y, float angle, float speed, float gravity)
 {
 	//벡터에 담는것을 제한하자
 	if (_particleMax < _vParticle.size() + 1) return;
@@ -41,6 +39,7 @@ void effects::fire(float x, float y, float angle, float speed)
 	particle.particleImg = IMAGEMANAGER->findImage(_imageName);
 	particle.speed = speed;
 	particle.angle = angle;
+	particle.gravity = gravity;
 	particle.x = particle.fireX = x;
 	particle.y = particle.fireY = y;
 	particle.rc = RectMakeCenter(particle.x, particle.y,
@@ -51,26 +50,15 @@ void effects::fire(float x, float y, float angle, float speed)
 	_vParticle.push_back(particle);
 }
 
-void effects::move()
+void effects::boom()
 {
 	for (int i = 0; _vParticle.size(); ++i)
 	{
+		_vParticle[i].gravity += 0.0f;
 		_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
-		_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed;
+		_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
 		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
 			_vParticle[i].particleImg->getWidth(),
 			_vParticle[i].particleImg->getHeight());
-
-		//파편이 사거리보다 커졌을때
-		float distance = getDistance(_vParticle[i].fireX, _vParticle[i].fireY,
-			_vParticle[i].x, _vParticle[i].y);
-		if (_range < distance)
-		{
-			_vParticle[i].isActive = false;
-		}
-		else
-		{
-			++i;
-		}
 	}
 }
