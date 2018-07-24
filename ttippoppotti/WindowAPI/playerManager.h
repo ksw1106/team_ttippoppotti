@@ -5,9 +5,16 @@
 class enemyManager;
 class mapData;
 
-#define J_NUM 5.0f;
 #define G_NUM 0.05f;
-#define S_NUM 5.0f;
+#define S_NUM 23.0f;
+#define SPEED 7
+#define MAX_POSE 5
+
+
+enum pose
+{
+	IDLE, RUN, FAST_RUN, JUMP, ROLL
+};
 
 enum playerState
 {
@@ -23,7 +30,7 @@ struct tagBroforce
 	float x, y;
 	float speed;
 	float gravity;
-	float jumpPower;
+	float angle;
 };
 
 
@@ -34,11 +41,20 @@ private:
 	enemyManager * _enemyManager;
 	player _player;
 	mapData* map;
+	image * _ramBro[MAX_POSE];
 
 	playerState _state;
 	tagBroforce _broforce;
-	bool _iscollision;
+	pose _pose;
 	RECT temp;
+
+	RECT _isCollision[2];
+	bool _isLeftFall;
+	bool _isRightFall;
+
+	int _index, _count;
+	int _speed;
+	bool _isLeft;
 
 public:
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }
