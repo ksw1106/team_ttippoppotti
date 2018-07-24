@@ -13,7 +13,10 @@ struct tagBullet
 	float gravity;
 	float radius;
 	bool fire;
+	bool isLeft;
 	int count;
+	int frameCount;
+	int frameIndex;
 };
 
 //=============================================================
@@ -115,6 +118,42 @@ public:
 
 	missileM1() {}
 	~missileM1() {}
+};
+
+//=============================================================
+//	## eBullet ## (Àû ÀÏ¹ÝÃÑ¾Ë)
+//=============================================================
+class eBullet : public gameNode
+{
+private:
+	//ÃÑ¾Ë ±¸Á¶Ã¼¸¦ ´ãÀ» º¤ÅÍ, ¹Ýº¹ÀÚ
+	vector<tagBullet> _vEBullet;
+
+private:
+	float _range;			//ÃÑ¾Ë »ç°Å¸®
+	int _bulletMax;			//ÃÑ¾Ë ÃÖ´ë°¹¼ö
+
+	int _bulletCount;
+
+public:
+	HRESULT init(int bulletMax, float range);
+	void release(void);
+	void update(void);
+	void render(void);
+
+	//ÃÑ¾Ë¹ß»ç
+	void fire(int x, int y, bool isLeft);
+	//ÃÑ¾Ë¹«ºê
+	void move();
+	void animation();
+
+	void removeBullet(int index);
+
+	//ÃÑ¾Ëº¤ÅÍ °¡Á®¿À±â
+	vector<tagBullet> getVEnemybullet() { return _vEBullet; }
+
+	eBullet() {}
+	~eBullet() {}
 };
 
 
