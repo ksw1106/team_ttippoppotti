@@ -128,6 +128,9 @@
     <ClInclude Include="effects.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
+    <ClInclude Include="soldier.h">
+      <Filter>MainGame\브로포스</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -206,6 +209,9 @@
       <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
     <ClCompile Include="effects.cpp">
+      <Filter>MainGame\브로포스</Filter>
+    </ClCompile>
+    <ClCompile Include="soldier.cpp">
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
   </ItemGroup>

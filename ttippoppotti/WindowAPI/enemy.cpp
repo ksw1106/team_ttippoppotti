@@ -2,21 +2,17 @@
 #include "enemy.h"
 
 
-HRESULT enemy::init(const char* bodyImage, const char* armImage, int x, int y, int hp)
-{		
-	_x = x, _y = y;
-	_hp = hp;
-
-	_bodyImage = IMAGEMANAGER->findImage(bodyImage);
-	_armImage = IMAGEMANAGER->findImage(armImage);
-	_enemyRC = RectMakeCenter(_x, _y, _bodyImage->getFrameWidth(), _bodyImage->getFrameHeight());
-
+HRESULT enemy::init(int x, int y, int hp)
+{
+	_bodyImage = IMAGEMANAGER->addFrameImage("利个烹", "enemyImage/_enemy_with_head.bmp", 1600, 1600, 20, 20);
+	_armImage = IMAGEMANAGER->addFrameImage("利迫", "enemyImage/_enemy_gun.bmp", 1600, 800, 19, 10);
+	_enemyRC = RectMakeCenter(getX(), getY(), _bodyImage->getFrameWidth(), _bodyImage->getFrameHeight());
+	setEnemyStatus(IDLE_LEFT);
 	setSpeed(3.0f);
-	_enemyStatus = IDLE_LEFT;
+	setX(x), setY(y), setHP(hp);
 			
 	_isLeft = FALSE;
-	_isAlarm = TRUE;
-	_actionCount = _frameCount = _frameIndex = _frameIndex2 = RND->getFromIntTo(0, 5);
+	_actionCount = _frameCount = _frameIndex = 0;
 
 	return S_OK;
 }
@@ -28,14 +24,17 @@ void enemy::release(void)
 void enemy::update(void)
 {
 	this->move();
-	this->frameAnimate();		
+	this->frameAnimate();
+	
+	setEnemyRC(RectMakeCenter(getX(), getY(), _bodyImage->getFrameWidth(), _bodyImage->getFrameHeight()));
+	_bodyImage->setX(getEnemyRC().left);
+	_bodyImage->setY(getEnemyRC().top);
 }
 
 void enemy::render(void)
 {
-	IMAGEMANAGER->frameRender("利个烹", getMemDC(), _enemyRC.left - CAMERAMANAGER->getCamera().left, _enemyRC.top - CAMERAMANAGER->getCamera().top, _bodyImage->getFrameX(), _bodyImage->getFrameY());
-	IMAGEMANAGER->frameRender("利迫", getMemDC(), _enemyRC.left - CAMERAMANAGER->getCamera().left, _enemyRC.top - CAMERAMANAGER->getCamera().top, _armImage->getFrameX(), _armImage->getFrameY());
-	
+	IMAGEMANAGER->frameRender("利个烹", getMemDC(), _bodyImage->getX()-CAMERAMANAGER->getCamera().left, _bodyImage->getY()-CAMERAMANAGER->getCamera().top, _bodyImage->getFrameX(), _bodyImage->getFrameY());
+
 	if (KEYMANAGER->isToggleKey(VK_F5))
 	{
 		Rectangle(getMemDC(), _bodyImage->getX(), _bodyImage->getY(), _bodyImage->getX() + _bodyImage->getFrameWidth(), _bodyImage->getY() + _bodyImage->getFrameHeight());
@@ -45,156 +44,83 @@ void enemy::render(void)
 void enemy::move()
 {
 	++_actionCount;
-	
 	// 老沥矫埃 瘤唱搁 利 捞悼
-	if (_actionCount < RND->getInt(100))
+	if (_actionCount > 0 && _actionCount < 100)
 	{
-		_enemyStatus = WALK_LEFT;
-		_isLeft = true;
+		setEnemyStatus(WALK_LEFT);
 	}
-	else if (_actionCount > 200 && _actionCount < 400)
+	else if (_actionCount > 100 && _actionCount < 200)
 	{
-		_enemyStatus = WALK_RIGHT;
-		_isLeft = false;
+		setEnemyStatus(WALK_RIGHT);
 	}
-	else if (_actionCount > 400 && _actionCount < 600)
+	else if (_actionCount > 200 && _actionCount < 300)
 	{
-		_enemyStatus = IDLE_LEFT;
-		_isLeft = true;
+		if (_isLeft) setEnemyStatus(IDLE_LEFT);
+		else		 setEnemyStatus(IDLE_RIGHT);
 	}
-	else if (_actionCount > 600 && _actionCount < 800)
-	{
-		_enemyStatus = IDLE_RIGHT;
-		_isLeft = false;
-	}
-	else if (_actionCount > 800 && _actionCount < 1000)
-	{
-		_enemyStatus = WARNING_LEFT;
-		_isLeft = true;
-	}
-	else if (_actionCount > 1000 && _actionCount < 1200)
-	{
-		_enemyStatus = WARNING_RIGHT;
-		_isLeft = false;
-	}
-		
-	if      (_enemyStatus == WALK_LEFT)	 setX(getX() - getSpeed());
-	else if (_enemyStatus == WALK_RIGHT) setX(getX() + getSpeed());
 
-	setEnemyRC(RectMakeCenter(getX(), getY(), _bodyImage->getFrameWidth(), _bodyImage->getFrameHeight()));
-	_bodyImage->setX(getEnemyRC().left);
-	_bodyImage->setY(getEnemyRC().top);
-	_armImage->setX(getEnemyRC().left);
-	_armImage->setY(getEnemyRC().top);
+	if (_actionCount % 200 == 0)
+	{
+		if (_isLeft) _isLeft = false;
+		else         _isLeft = true;
+	}
 
-	if (_actionCount > 1200) _actionCount = 0;
+	if      (getEnemyStatus() == WALK_LEFT)	 setX(getX() - getSpeed());
+	else if (getEnemyStatus() == WALK_RIGHT) setX(getX() + getSpeed());
+
+	if (_actionCount > 1000) _actionCount = 0;
 }
 
 void enemy::frameAnimate()
 {
-	if (_enemyStatus == IDLE_LEFT)
+	if (getEnemyStatus() == IDLE_LEFT)
 	{
 		_bodyImage->setFrameY(3);
-		_armImage->setFrameY(7);
 		++_frameCount;
 		if (_frameCount % COOLTIME == 0)
 		{			
-			if (_frameIndex > 14) _frameIndex = 14;
+			//if (_frameIndex > 14) _frameIndex = 14;
 			_frameIndex--;
 			if (_frameIndex < 0) _frameIndex = 14;
-			
-			if (_frameIndex2 > 7) _frameIndex2 = 7;
-			_frameIndex2--;
-			if (_frameIndex2 < 0) _frameIndex2 = 7;
 		}
 		_bodyImage->setFrameX(_frameIndex);
-		_armImage->setFrameX(_frameIndex2);
 	}
-	else if (_enemyStatus == IDLE_RIGHT)
+	else if (getEnemyStatus() == IDLE_RIGHT)
 	{
 		_bodyImage->setFrameY(2);
-		_armImage->setFrameY(6);
 		++_frameCount;
 		if (_frameCount % COOLTIME == 0)
 		{
 			if (_frameIndex < 0) _frameIndex = 0;
 			_frameIndex++;
 			if (_frameIndex > 14) _frameIndex = 0;
-
-			if (_frameIndex2 < 0) _frameIndex2 = 0;
-			_frameIndex2++;
-			if (_frameIndex2 > 7) _frameIndex2 = 0;
 		}
 		_bodyImage->setFrameX(_frameIndex);
-		_armImage->setFrameX(_frameIndex2);
 	}	
-	else if (_enemyStatus == WALK_LEFT)
+	else if (getEnemyStatus() == WALK_LEFT)
 	{
 		_bodyImage->setFrameY(1);
-		_armImage->setFrameY(7);
 		++_frameCount;
 		if (_frameCount % COOLTIME == 0)
 		{
 			if (_frameIndex > 7) _frameIndex = 7;
 			_frameIndex--;
 			if (_frameIndex < 0) _frameIndex = 7;
-
-			if (_frameIndex2 > 7) _frameIndex2 = 7;
-			_frameIndex2--;
-			if (_frameIndex2 < 0) _frameIndex2 = 7;
-
 		}
 		_bodyImage->setFrameX(_frameIndex);
-		_armImage->setFrameX(_frameIndex2);
 	}
-	else if (_enemyStatus == WALK_RIGHT)
+	else if (getEnemyStatus() == WALK_RIGHT)
 	{
 		_bodyImage->setFrameY(0);
-		_armImage->setFrameY(6);
 		++_frameCount;
 		if (_frameCount % COOLTIME == 0)
 		{
-			if (_frameIndex < 0) _frameIndex = 0;
+			//if (_frameIndex < 0) _frameIndex = 0;
 			++_frameIndex;
 			if (_frameIndex > 7) _frameIndex = 0;
-
-			if (_frameIndex2 < 0) _frameIndex2 = 0;
-			_frameIndex2++;
-			if (_frameIndex2 > 7) _frameIndex2 = 0;
 		}
 		_bodyImage->setFrameX(_frameIndex);
-		_armImage->setFrameX(_frameIndex2);
-	}
-	else if (_enemyStatus == WARNING_LEFT)
-	{
-		_bodyImage->setFrameY(3);
-		_armImage->setFrameY(9);
-		++_frameCount;
-		if (_frameCount % COOLTIME == 0)
-		{
-			if (_frameIndex2 > 6) _frameIndex2 = 6;
-			_frameIndex2--;
-			if (_frameIndex2 < 0) _frameIndex2 = 6;
-		}
-		_bodyImage->setFrameX(6);
-		_armImage->setFrameX(_frameIndex2);
-	}
-	else if (_enemyStatus == WARNING_RIGHT)
-	{
-		_bodyImage->setFrameY(2);
-		_armImage->setFrameY(9);
-		++_frameCount;
-		if (_frameCount % COOLTIME == 0)
-		{
-			if (_frameIndex2 < 0) _frameIndex2 = 0;
-			_frameIndex2++;
-			if (_frameIndex2 > 6) _frameIndex2 = 0;
-		}
-		_bodyImage->setFrameX(6);
-		_armImage->setFrameX(_frameIndex2);
 	}
 
 	if (_frameCount > 1000) _frameCount = 0;
 }
-
-
