@@ -33,7 +33,7 @@ void enemy::update(void)
 
 void enemy::render(void)
 {
-	IMAGEMANAGER->frameRender("利个烹", getMemDC(), _bodyImage->getX(), _bodyImage->getY(), _bodyImage->getFrameX(), _bodyImage->getFrameY());
+	IMAGEMANAGER->frameRender("利个烹", getMemDC(), _bodyImage->getX()-CAMERAMANAGER->getCamera().left, _bodyImage->getY()-CAMERAMANAGER->getCamera().top, _bodyImage->getFrameX(), _bodyImage->getFrameY());
 
 	if (KEYMANAGER->isToggleKey(VK_F5))
 	{
