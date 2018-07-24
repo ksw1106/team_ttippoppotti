@@ -3,6 +3,7 @@
 #include "playerManager.h"
 #include "enemyManager.h"
 #include "mapData.h"
+#include "testScene_kmy.h"
 
 struct object
 {
@@ -18,6 +19,7 @@ private:
 	playerManager * _playerManager;
 	enemyManager* _enemyManager;
 	mapData* _mapData;
+	testScene_kmy* _test;
 
 	RECT _rcCamera;
 	object _backGround[3];

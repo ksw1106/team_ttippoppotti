@@ -11,4 +11,3 @@ public:
 	testScene_kmy() {}
 	~testScene_kmy() {}
 };
-

@@ -15,6 +15,9 @@ HRESULT stageScene::init(void)
 	_mapData = new mapData;
 	_mapData->init();
 
+	_test = new testScene_kmy;
+	_test->init();
+
 	_playerManager->setMap(_mapData);
 	_enemyManager->setMapData(_mapData);
 	_playerManager->setEnemyManager(_enemyManager);
@@ -72,7 +75,7 @@ void stageScene::update(void)
 {
 	_playerManager->update();
 	_enemyManager->update();
-
+	_test->update();
 	//이곳에서 계산식, 키보드, 마우스등등 업데이트를 한다
 	//간단하게 이곳에서 코딩한다고 생각하면 된다
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
@@ -199,4 +202,5 @@ void stageScene::render(void)
 
 	_playerManager->render();
 	_enemyManager->render();
+	_test->render();
 }

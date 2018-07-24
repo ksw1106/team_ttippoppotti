@@ -129,6 +129,9 @@
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
     <ClInclude Include="timeManager.h">
+      <Filter>GameFramework2D\매니져</Filter>
+    </ClInclude>
+    <ClInclude Include="testScene_kmy.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -212,6 +215,9 @@
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
     <ClCompile Include="timeManager.cpp">
+      <Filter>GameFramework2D\매니져</Filter>
+    </ClCompile>
+    <ClCompile Include="testScene_kmy.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
