@@ -398,7 +398,7 @@ for (int i = 0; i < 5; i++)
 			}
 		}
 
-		//3블록 -2 다리
+		//3블록 -2 다리 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
 			for (int j = 0; j < 8; j++)
@@ -408,6 +408,51 @@ for (int i = 0; i < 5; i++)
 				obj._width = 68;
 				obj._height = 78;
 				obj._rc = RectMake(3687 + j * obj._width, 1281 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+
+		//3블록 -2 오른쪽 다리
+		for (int i = 0; i < 1; i++)
+		{
+			for (int j = 0; j < 1; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 68;
+				obj._height = 102;
+				obj._rc = RectMake(4231 + j * obj._width, 1257 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+
+		//3블록 -3 왼쪽
+		for (int i = 0; i < 1; i++)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 68;
+				obj._height = 69;
+				obj._rc = RectMake(2875 + j * obj._width, 1358 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+
+		//3블록 -3 오른쪽
+		for (int i = 0; i < 1; i++)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 70;
+				obj._height = 69;
+				obj._rc = RectMake(4092+ j * obj._width, 1358 + i * obj._height, obj._width, obj._height);
 				obj._isActived = true;
 				_vObject.push_back(obj);
 			}
@@ -423,7 +468,6 @@ void mapData::release(void)
 
 void mapData::update(void)
 {
-
 }
 
 void mapData::render(void)

@@ -20,7 +20,7 @@ private:
 	mapData* _mapData;
 
 	RECT _rcCamera;
-	object _backGround[7];
+	object _backGround[3];
 	image* _helicopter;
 	image* _saveFlag;
 	image* _humanDead;

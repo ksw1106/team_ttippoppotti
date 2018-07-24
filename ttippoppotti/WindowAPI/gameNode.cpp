@@ -16,11 +16,12 @@ HRESULT gameNode::init(bool managerInit)
 
 	if (managerInit)
 	{
-		SetTimer(_hWnd, 1, 10, NULL);		//타이머 초기화
+		//SetTimer(_hWnd, 1, 10, NULL);		//타이머 초기화
 		KEYMANAGER->init();					//키매니져 초기화
 		RND->init();						//랜더펑션 초기화
 		IMAGEMANAGER->init();				//이미지매니져 초기화
 		SCENEMANAGER->init();				//씬매니져 초기화
+		TIMEMANAGER->init();				//타임매니져 초기화
 		SOUNDMANAGER->init();				//사운드매니져 초기화
 		EFFECTMANAGER->init();				//이펙트매니져 초기화
 
@@ -42,7 +43,7 @@ void gameNode::release(void)
 	if (_managerInit)
 	{
 		//타이머 해제
-		KillTimer(_hWnd, 1);
+		//KillTimer(_hWnd, 1);
 		//키매니져 싱글톤 해제
 		KEYMANAGER->release();
 		KEYMANAGER->releaseSingleton();
@@ -55,6 +56,9 @@ void gameNode::release(void)
 		//씬매니져 싱글톤 해제
 		SCENEMANAGER->release();
 		SCENEMANAGER->releaseSingleton();
+		//타임매니져 싱글톤 해제
+		TIMEMANAGER->release();
+		TIMEMANAGER->releaseSingleton();
 		//사운드매니져 싱글톤 해제
 		SOUNDMANAGER->release();
 		SOUNDMANAGER->releaseSingleton();
@@ -84,9 +88,6 @@ void gameNode::release(void)
 //=============================================================
 void gameNode::update(void)
 {
-	//새로고침 (나중에 고성능 타이머를 만든 후에는 사용하지 않는다)
-	//더블버퍼링 이후 사용하지 않는다(true => false)
-	InvalidateRect(_hWnd, NULL, FALSE);
 }
 
 //=============================================================
@@ -101,19 +102,8 @@ void gameNode::render(void)
 //=============================================================
 LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
-	HDC hdc;				
-	PAINTSTRUCT ps;			
-
 	switch (iMessage)
 	{
-	case WM_TIMER:
-		this->update();
-		break;
-	case WM_PAINT:			
-		hdc = BeginPaint(hWnd, &ps);
-		this->render();
-		EndPaint(hWnd, &ps);
-		break;
 	case WM_MOUSEMOVE:		
 		_ptMouse.x = LOWORD(lParam);
 		_ptMouse.y = HIWORD(lParam);
