@@ -49,7 +49,7 @@ private:
 	RECT temp;
 
 	bool _isActived;
-	bool _isLeft; 
+	bool _isLeft1; 
 	bool _isJump; 
 	bool _isFall;
 

@@ -28,10 +28,15 @@ HRESULT playerManager::init(void)
 
 	_oldX = _broforce.x;
 	_oldY = _broforce.y;
+	_pose = IDLE;
+
+
 	_index = _count = 0;
 	_speed = 0;
+
+
 	_isLeft = false;
-	_pose = IDLE;
+	
 
 	return S_OK;
 }
