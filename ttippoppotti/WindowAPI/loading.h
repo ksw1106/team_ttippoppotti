@@ -29,9 +29,13 @@ struct tagImageResource
 	COLORREF transColor;	//어떤색으로?
 };
 
+//사운드 리소스 구조체
 struct tagSoundResource
 {
-
+	string keyName;			//사운드 키값
+	const char* fileName;	//사운드 파일
+	bool bgm;				//BGM이냐?
+	bool loop;				//루프냐?
 };
 
 class loadItem
@@ -39,7 +43,7 @@ class loadItem
 private:
 	LOAD_KIND _kind;
 	tagImageResource _imageResource;
-
+	tagSoundResource _soundResource;
 public:
 	//빈 비트맵으로 초기화
 	HRESULT init(string keyName, int width, int height);
@@ -49,12 +53,14 @@ public:
 	//프레임 이미지 파일로 초기화 (주사용)
 	HRESULT init(string keyName, const char* fileName, int width, int height, int frameX, int frameY, bool isTrans = TRUE, COLORREF transColor = RGB(255, 0, 255));
 	HRESULT init(string keyName, const char* fileName, float x, float y, int width, int height, int frameX, int frameY, bool isTrans = TRUE, COLORREF transColor = RGB(255, 0, 255));
-
+	//사운드 초기화
+	HRESULT initForSound(string keyName, const char* fileName, bool bgm = FALSE, bool loop = FALSE);
 	//로딩아이템 종류 가져오기
 	LOAD_KIND getLoadingKind() { return _kind; }
 	//이미지 리소스 가져오기
 	tagImageResource getImageResource() { return _imageResource; }
-
+	//사운드 리소스 가져오기
+	tagSoundResource getSoundResource(void) { return _soundResource; }
 	loadItem() {}
 	~loadItem() {}
 };
@@ -74,7 +80,7 @@ private:
 
 	//이곳에 로딩화면에서 사용할 이미지와 로딩바 수정할것!!!
 	image* _background;
-	progressBar* _loadingBar;
+	//progressBar* _loadingBar;
 	int _currentGauge;
 
 public:
@@ -92,6 +98,8 @@ public:
 	void loadFrameImage(string keyName, const char* fileName, int width, int height, int frameX, int frameY, bool isTrans = TRUE, COLORREF transColor = RGB(255, 0, 255));
 	void loadFrameImage(string keyName, const char* fileName, float x, float y, int width, int height, int frameX, int frameY, bool isTrans = TRUE, COLORREF transColor = RGB(255, 0, 255));
 
+	//로드사운드(키값, 사운드파일, BGM?, 루프냐?)
+	void loadSound(string keyName, const char* fileName, bool bgm = FALSE, bool loop = FALSE);
 	/*중요함*/
 	//로딩완료 됐냐?(로딩완료후 화면전환)
 	BOOL loadingDone();

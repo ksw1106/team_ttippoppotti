@@ -101,7 +101,9 @@ void playerManager::update(void)
 			&& _img->getX() < _mapData->getObject()[i]._rc.left && (_player->getY() - _player->getOldY() > 0))
 		{
 			if (_player->getY() < _ground - _player->getImage(_player->getState())->getFrameHeight())
+			{
 				hit_left = true;
+			}
 			_player->setIsJump(false);
 			_player->setGravity(0.f);
 			_player->setSpeed(0.f);
@@ -112,7 +114,9 @@ void playerManager::update(void)
 			&& _img->getX() + _img->getFrameWidth() > _mapData->getObject()[i]._rc.right && (_player->getY() - _player->getOldY() > 0))
 		{
 			if (_player->getY() < _ground - _player->getImage(_player->getState())->getFrameHeight())
+			{
 				hit_right = true;
+			}		
 			_player->setIsJump(false);
 			_player->setGravity(0.f);
 			_player->setSpeed(0.f);
@@ -125,11 +129,11 @@ void playerManager::update(void)
 		}
 	}
 
-	//for (int i = 0; i < MAX_STATE; i++)
-	//{
-	//	_player->getImage(i)->setX(_player->getX());
-	//	_player->getImage(i)->setY(_player->getY());
-	//}
+	for (int i = 0; i < MAX_STATE; i++)
+	{
+		_player->getImage(i)->setX(_player->getX());
+		_player->getImage(i)->setY(_player->getY());
+	}
 	
 }
 
