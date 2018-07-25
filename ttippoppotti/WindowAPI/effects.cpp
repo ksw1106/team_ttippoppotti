@@ -68,7 +68,6 @@ void fragments::activate(float x, float y, float angle)
 		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
 			_vFragment[i].particleImg->getWidth(),
 			_vFragment[i].particleImg->getHeight());
-		break;
 	}
 }
 
@@ -84,9 +83,9 @@ void fragments::boom(float gravity)
 		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
 			_vFragment[i].particleImg->getWidth(),
 			_vFragment[i].particleImg->getHeight());
-		/*_vFragment[i].count++;
+		_vFragment[i].count++;
 		if (_vFragment[i].count == 2000)
-			_vFragment[i].fire = false;*/
+			_vFragment[i].fire = false;
 	}
 }
 
