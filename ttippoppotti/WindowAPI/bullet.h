@@ -145,9 +145,9 @@ public:
 	void fire(int x, int y, int fireSpeed, bool isLeft);
 	//ÃÑ¾Ë¹«ºê
 	void move();
-	void animation();
-
+	//ÃÑ¾ËÁ¦°Å
 	void removeBullet(int index);
+	void animation();
 
 	//ÃÑ¾Ëº¤ÅÍ °¡Á®¿À±â
 	vector<tagBullet> getVEnemybullet() { return _vEBullet; }

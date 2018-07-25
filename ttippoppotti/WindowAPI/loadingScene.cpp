@@ -32,15 +32,15 @@ void loadingScene::update(void)
 		SCENEMANAGER->loadScene("스테이지씬");
 	}
 
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-	{
-		float num = _loading->getLoadItem().size();
-		float cur = _loading->getCurrnetGauge();
-		float per = cur / num * 100;
-		cout << "전체 파일갯수 : " << num << endl;
-		cout << "현재 로딩갯수 : " << cur << endl;
-		cout << per << " %" << endl;
-	}
+	//if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	//{
+	//	float num = _loading->getLoadItem().size();
+	//	float cur = _loading->getCurrnetGauge();
+	//	float per = cur / num * 100;
+	//	cout << "전체 파일갯수 : " << num << endl;
+	//	cout << "현재 로딩갯수 : " << cur << endl;
+	//	cout << per << " %" << endl;
+	//}
 }
 
 void loadingScene::render(void)
@@ -48,7 +48,7 @@ void loadingScene::render(void)
 	//로딩클래스 렌더
 	_loading->render();
 
-	if (_loading->getCurrnetGauge() < _loading->getLoadItem().size())
+	/*if (_loading->getCurrnetGauge() < _loading->getLoadItem().size())
 	{
 		char str[128];
 		sprintf_s(str, "%s.bmp", _loading->getLoadItem()[_loading->getCurrnetGauge()]->getImageResource().keyName.c_str());
@@ -60,18 +60,19 @@ void loadingScene::render(void)
 	float per = cur / num * 100;
 	char str[128];
 	sprintf_s(str, "%.f %%", per);
-	TextOut(getMemDC(), 660, 430, str, strlen(str));
+	TextOut(getMemDC(), 660, 430, str, strlen(str));*/
 
 }
 
 //로딩이미지 함수(이곳에 이미지를 전부 넣어라)
 void loadingScene::loadingImage()
 {
+
 	Kim_Min_Young_addImage();
 	Kim_Sang_Won_addImage();
 	Lee_Moon_Gyu_addImage();
 	Lee_Ji_Woong_addImage();
-
+		
 	//_loading->loadImage();
 	//_loading->loadFrameImage();
 	//_loading->loadSound();
