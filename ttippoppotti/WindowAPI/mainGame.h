@@ -2,6 +2,7 @@
 #include "gameNode.h"
 /*앞으로는 씬 헤더파일만 추가해준다*/
 #include "stageScene.h"
+#include "loadingScene.h"
 
 class mainGame : public gameNode
 {

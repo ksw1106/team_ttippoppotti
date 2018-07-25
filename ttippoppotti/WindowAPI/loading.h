@@ -93,7 +93,7 @@ public:
 
 	//로드아이템 클래스를 담은 벡터 가져오기
 	arrLoadItem getLoadItem() { return _vLoadItem; }
-
+	int getCurrnetGauge() { return _currentGauge; }
 	loading() {}
 	~loading() {}
 };
