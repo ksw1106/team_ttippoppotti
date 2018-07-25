@@ -66,8 +66,8 @@ public:
 
 	virtual void move();
 	virtual void frameAnimate();
-	virtual void warning();
-	
+	virtual void knockBackMove();
+		
 	enemy() {}
 	virtual ~enemy() {}
 };

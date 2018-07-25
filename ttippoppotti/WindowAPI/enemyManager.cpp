@@ -5,7 +5,9 @@
 
 HRESULT enemyManager::init(void)
 {
+	// 플레이어매니저 클래스 가져오기
 	this->setPlayerManager(_playerManager);
+	// 맵데이터 가져오기
 	this->setMapData(_mapData);
 
 	//적 몸통, 팔 이미지 초기화
@@ -65,7 +67,8 @@ void enemyManager::render(void)
 
 void enemyManager::collision()
 {
-	
+	RECT rc;
+	if (IntersectRect(&rc, &_playerManager.)
 }
 
 //=====================================================================================================================================================================================
