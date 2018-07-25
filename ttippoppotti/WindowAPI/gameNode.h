@@ -2,7 +2,7 @@
 #include "image.h"
 
 //백버퍼 이미지를 정적변수로 만들어 두기
-static image* _backBuffer = IMAGEMANAGER->addImage("backBuffer", WINSIZEX, WINSIZEY);
+static image* _backBuffer = IMAGEMANAGER->addImage("backBuffer", WINSIZEX, WINSIZEY); 
 
 class gameNode
 {

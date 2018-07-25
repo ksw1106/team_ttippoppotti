@@ -12,6 +12,10 @@ void testScene_kmy::release(void)
 
 void testScene_kmy::update(void)
 {
+	if (KEYMANAGER->isOnceKeyDown('Q'))
+	{
+		EFFECTMANAGER->rockExplosion(WINSIZEX / 2, WINSIZEY / 2, PI);
+	}
 }
 
 void testScene_kmy::render(void)
