@@ -12,6 +12,7 @@ public:
 	void release(void);
 	void update(void);
 	void render(void);
+
 	void Kim_Min_Young_addImage();
 	void Kim_Min_Young_addSound();
 	void Kim_Sang_Won_addImage();

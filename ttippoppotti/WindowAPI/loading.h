@@ -29,6 +29,11 @@ struct tagImageResource
 	COLORREF transColor;	//어떤색으로?
 };
 
+struct tagSoundResource
+{
+
+};
+
 class loadItem
 {
 private:
