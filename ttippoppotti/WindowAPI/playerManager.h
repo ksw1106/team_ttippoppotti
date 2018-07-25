@@ -48,17 +48,21 @@ private:
 	pose _pose;
 	RECT temp;
 
-	RECT _isCollision[2];
-	bool _isLeftFall;
-	bool _isRightFall;
+	bool _isActived;
+	bool _isLeft; 
+	bool _isJump; 
+	bool _isFall;
 
-	int _index, _count;
+	float _oldX, _oldY;
+	int animationSpeed;
+
+	int _index, _count;		// 프레임 돌릴 변수들
 	int _speed;
 	bool _isLeft;
 
 public:
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }
-	void setMap(mapData* mapData) { _mapData = mapData; }
+	void setMapData(mapData* mapData) { _mapData = mapData; }
 
 	HRESULT init(void);
 	void release(void);

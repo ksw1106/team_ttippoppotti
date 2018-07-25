@@ -26,13 +26,12 @@ HRESULT playerManager::init(void)
 	_ramBro[JUMP] = IMAGEMANAGER->addFrameImage("broforce_jump", "broforce_jump.bmp", 177, 152, 3, 2, true, RGB(255, 0, 255));
 	//_ramBro[ROLL] = IMAGEMANAGER->addFrameImage("broforce_roll", "broforce_roll.bmp", 936, 136, 13, 2, true, RGB(255, 0, 255));
 
-	_isLeftFall = false;
-	_isRightFall = false;
-
+	_oldX = _broforce.x;
+	_oldY = _broforce.y;
 	_index = _count = 0;
 	_speed = 0;
 	_isLeft = false;
-	_state = RIGHT_IDLE;
+	_pose = IDLE;
 
 	return S_OK;
 }
