@@ -33,7 +33,7 @@ HRESULT stageScene::init(void)
 	_test = new testScene_kmy;
 	_test->init();
 
-	_playerManager->setMap(_mapData);
+	_playerManager->setMapData(_mapData);
 	_enemyManager->setMapData(_mapData);
 	_playerManager->setEnemyManager(_enemyManager);
 	_enemyManager->setPlayerManager(_playerManager);
@@ -62,7 +62,6 @@ HRESULT stageScene::init(void)
 	_flagCount = _flagIndex = 0;
 	_flagSpeed = 5;
 
-
 	_flagX = 3326.f;
 	_flagY = 870.f;
 	_isLeft = _isDown = false;
@@ -88,6 +87,7 @@ void stageScene::release(void)
 
 void stageScene::update(void)
 {
+	/*
 	switch (soundCount)
 	{
 	case 0:
@@ -119,6 +119,7 @@ void stageScene::update(void)
 		}
 		break;
 	}
+	*/
 
 	_playerManager->update();
 	_enemyManager->update();
