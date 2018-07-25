@@ -87,7 +87,7 @@ void stageScene::release(void)
 
 void stageScene::update(void)
 {
-	/*
+	
 	switch (soundCount)
 	{
 	case 0:
@@ -119,7 +119,8 @@ void stageScene::update(void)
 		}
 		break;
 	}
-	*/
+	
+	
 
 	_playerManager->update();
 	_enemyManager->update();
@@ -230,9 +231,9 @@ void stageScene::render(void)
 	{
 		char str[64];
 		sprintf_s(str, "%d", _ptMouse.x + _rcCamera.left);
-		TextOut(getMemDC(), 10, 10, str, strlen(str));
+		TextOut(getMemDC(), 10, 100, str, strlen(str));
 		sprintf_s(str, "%d", _ptMouse.y + _rcCamera.top);
-		TextOut(getMemDC(), 80, 10, str, strlen(str));
+		TextOut(getMemDC(), 80, 100, str, strlen(str));
 	}
 		
 	if (KEYMANAGER->isToggleKey(VK_F5))
