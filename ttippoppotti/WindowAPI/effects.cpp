@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "effects.h"
 
-
 HRESULT fragments::init(const char * imageName, int particleMax)
 {
 	//이미지 초기화
@@ -43,12 +42,12 @@ void fragments::update(void)
 	this->boom(_randGravity);
 }
 
-void fragments::render(void)
+void fragments::render(HDC hdc)
 {
 	for (int i = 0; _vFragment.size(); ++i)
 	{
 		if (!_vFragment[i].fire) continue;
-		_vFragment[i].particleImg->render(getMemDC(), _vFragment[i].rc.left, _vFragment[i].rc.top);
+		_vFragment[i].particleImg->render(hdc, _vFragment[i].rc.left, _vFragment[i].rc.top);
 	}
 }
 

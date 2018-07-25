@@ -28,7 +28,7 @@ void effectManager::release()
 {
 	for (int i = 0; i < 5; i++)
 	{
-		_fragments[i]->release;
+		_fragments[i]->release();
 		SAFE_DELETE(_fragments[i]);
 	}
 }

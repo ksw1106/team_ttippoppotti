@@ -1,5 +1,4 @@
 #pragma once
-#include "gameNode.h"
 
 //파편 구조체
 struct tagParticle
@@ -19,7 +18,7 @@ struct tagParticle
 //=============================================================
 //	## fragments ## (공용이펙트)
 //=============================================================
-class fragments : public gameNode
+class fragments
 {
 private:
 	//구조체를 담을 벡터, 반복자
@@ -33,7 +32,7 @@ public:
 	HRESULT init(const char* imageName, int particleMax);
 	void release(void);
 	void update(void);
-	void render(void);
+	void render(HDC hdc);
 
 	//이펙트 발사 설정
 	void activate(float x, float y, float angle, float speed, float gravity);
