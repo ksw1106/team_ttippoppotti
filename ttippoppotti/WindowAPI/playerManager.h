@@ -20,6 +20,7 @@ private:
 public:
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }
 	void setMapData(mapData* mapData) { _mapData = mapData; }
+	player* getPlayer() { return _player; }
 
 	HRESULT init(void);
 	void release(void);
