@@ -281,4 +281,110 @@ void missileM1::removeMissileM1(int index)
 	_vBullet.erase(_vBullet.begin() + index);
 }
 
+//=============================================================
+//	## eBullet ## (적 일반총알)
+//=============================================================
+HRESULT eBullet::init(int bulletMax, float range)
+{
+	//총알갯수, 사거리 초기화
+	_bulletMax = bulletMax;
+	_range = range;
+	_bulletCount = 0;
+
+	return S_OK;
+}
+
+void eBullet::release(void)
+{
+}
+
+void eBullet::update(void)
+{
+	move();
+	animation();
+}
+
+void eBullet::render(void)
+{
+	for (int i = 0; i < _vEBullet.size(); ++i)
+	{
+		_vEBullet[i].bulletImage->frameRender(getMemDC(), _vEBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
+			_vEBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
+			_vEBullet[i].bulletImage->getFrameX(), _vEBullet[i].bulletImage->getFrameY());
+	}
+}
+
+void eBullet::fire(int x, int y, bool isLeft)
+{
+	//총알 벡터에 담는것을 제한하자
+	if (_bulletMax < _vEBullet.size() + 1) return;
+
+	++_bulletCount;
+	if (_bulletCount % 10 != 0) return;
+
+	tagBullet ebullet;
+	ZeroMemory(&ebullet, sizeof(tagBullet));
+	ebullet.bulletImage = new image;
+	ebullet.bulletImage->init("enemyBullet/enemy_bullet.bmp", 320, 40, 5, 1);
+	ebullet.speed = 20.0f;
+	ebullet.isLeft = isLeft;
+	ebullet.x = ebullet.fireX = x;
+	ebullet.y = ebullet.fireY = y;
+	ebullet.rc = RectMakeCenter(ebullet.x, ebullet.y,
+		ebullet.bulletImage->getFrameWidth(),
+		ebullet.bulletImage->getFrameHeight());
+
+	//벡터에 담기
+	_vEBullet.push_back(ebullet);
+}
+
+void eBullet::move()
+{
+	for (int i = 0; i < _vEBullet.size();)
+	{
+		if (_vEBullet[i].isLeft)
+			_vEBullet[i].x -= _vEBullet[i].speed;
+
+		if (!_vEBullet[i].isLeft)
+			_vEBullet[i].x += _vEBullet[i].speed;
+
+		_vEBullet[i].rc = RectMakeCenter(_vEBullet[i].x, _vEBullet[i].y,
+			_vEBullet[i].bulletImage->getFrameWidth(),
+			_vEBullet[i].bulletImage->getFrameHeight());
+
+		float distance = getDistance(_vEBullet[i].x, _vEBullet[i].y, _vEBullet[i].fireX, _vEBullet[i].fireY);
+		if (distance > _range)
+		{
+			_vEBullet[i].bulletImage->release();
+			SAFE_DELETE(_vEBullet[i].bulletImage);
+			_vEBullet.erase(_vEBullet.begin() + i);
+		}
+		else
+		{
+			++i;
+		}
+	}
+}
+
+void eBullet::animation()
+{
+	for (int i = 0; i < _vEBullet.size(); ++i)
+	{
+		_vEBullet[i].bulletImage->setFrameY(0);
+		_vEBullet[i].frameCount++;
+		if (_vEBullet[i].frameCount % 3 == 0)
+		{
+			_vEBullet[i].frameIndex++;
+			if (_vEBullet[i].frameIndex > 4) _vEBullet[i].frameIndex = 0;
+		}
+		_vEBullet[i].bulletImage->setFrameX(_vEBullet[i].frameIndex);
+
+		if (_vEBullet[i].frameCount > 1000) _vEBullet[i].frameCount = 0;
+	}
+}
+
+void eBullet::removeBullet(int index)
+{
+	_vEBullet.erase(_vEBullet.begin() + index);
+}
 
