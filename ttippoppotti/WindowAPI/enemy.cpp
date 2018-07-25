@@ -9,14 +9,17 @@ HRESULT enemy::init(const char* bodyImage, const char* armImage, int x, int y, i
 
 	_bodyImage = IMAGEMANAGER->findImage(bodyImage);
 	_armImage = IMAGEMANAGER->findImage(armImage);
+	_warnSign = IMAGEMANAGER->findImage("알람");
+	_warnSign->setFrameX(0);
 	_enemyRC = RectMakeCenter(_x, _y, _bodyImage->getFrameWidth(), _bodyImage->getFrameHeight());
 
 	setSpeed(3.0f);
 	_enemyStatus = IDLE_LEFT;
+	_kbSpeed = 20.f;
 
 	_isLeft = FALSE;
 	_isAlarm = TRUE;
-	_actionCount = _frameCount = _frameIndex = _frameIndex2 = RND->getFromIntTo(0, 5);
+	_actionCount = _frameCount = _frameIndex = _frameIndex2 = _frameIndex3 = RND->getFromIntTo(0, 5);
 
 	return S_OK;
 }
@@ -29,17 +32,24 @@ void enemy::update(void)
 {
 	this->move();
 	this->frameAnimate();
-		
+	//this->		
 }
 
 void enemy::render(void)
 {
 	IMAGEMANAGER->frameRender("적몸통", getMemDC(), _enemyRC.left - CAMERAMANAGER->getCamera().left, _enemyRC.top - CAMERAMANAGER->getCamera().top, _bodyImage->getFrameX(), _bodyImage->getFrameY());
-	IMAGEMANAGER->frameRender("적팔", getMemDC(), _enemyRC.left - CAMERAMANAGER->getCamera().left, _enemyRC.top - CAMERAMANAGER->getCamera().top, _armImage->getFrameX(), _armImage->getFrameY());
+	if (_enemyStatus < 12)
+	{
+		IMAGEMANAGER->frameRender("적팔", getMemDC(), _enemyRC.left - 5 - CAMERAMANAGER->getCamera().left, _enemyRC.top + 3 - CAMERAMANAGER->getCamera().top, _armImage->getFrameX(), _armImage->getFrameY());
+	}
 
+	if (_isAlarm)	// 플레이어 발견했을때, 물음표 말풍선!
+	{
+		IMAGEMANAGER->frameRender("알람", getMemDC(), _enemyRC.left + 10 - CAMERAMANAGER->getCamera().left, _enemyRC.top - 50 - CAMERAMANAGER->getCamera().top, _warnSign->getFrameX(), _warnSign->getFrameY());
+	}
 	if (KEYMANAGER->isToggleKey(VK_F5))
 	{
-		Rectangle(getMemDC(), _bodyImage->getX(), _bodyImage->getY(), _bodyImage->getX() + _bodyImage->getFrameWidth(), _bodyImage->getY() + _bodyImage->getFrameHeight());
+		Rectangle(getMemDC(), getX() - _bodyImage->getFrameWidth()/2, getY() - _bodyImage->getFrameHeight()/2, getX() + _bodyImage->getFrameWidth()/2, getY() + _bodyImage->getFrameHeight()/2);
 	}
 }
 
@@ -78,9 +88,49 @@ void enemy::move()
 		_enemyStatus = WARNING_RIGHT;
 		_isLeft = false;
 	}
+	else if (_actionCount > 1200 && _actionCount < 1400)
+	{
+		_enemyStatus = FIRE_LEFT;
+		_isLeft = true;
+	}
+	else if (_actionCount > 1400 && _actionCount < 1600)
+	{
+		_enemyStatus = FIRE_RIGHT;
+		_isLeft = false;
+	}
+	else if (_actionCount > 1600 && _actionCount < 1800)
+	{
+		_enemyStatus = KNOCK_BACK_LEFT;
+		_isLeft = true;
+	}
+	else if (_actionCount > 1800 && _actionCount < 2000)
+	{
+		_enemyStatus = KNOCK_BACK_RIGHT;
+		_isLeft = false;
+	}
 
+	// 넉백됐을때, 뒤로 날라감
+	if (_enemyStatus == KNOCK_BACK_LEFT)
+	{
+		setX(getX() - _kbSpeed);
+		_kbSpeed -= 0.5f;
+		if (_kbSpeed < 0) _kbSpeed = 0;
+	}
+	else if (_enemyStatus == KNOCK_BACK_RIGHT)
+	{
+		setX(getX() + _kbSpeed);
+		_kbSpeed -= 0.5f;
+		if (_kbSpeed < 0) _kbSpeed = 0;
+	}
+	else
+	{
+		_kbSpeed = 20.f;
+	}
+	
 	if (_enemyStatus == WALK_LEFT)	 setX(getX() - getSpeed());
 	else if (_enemyStatus == WALK_RIGHT) setX(getX() + getSpeed());
+	if (_enemyStatus == RUN_LEFT) setX(getX() - getSpeed() * 2);
+	else if (_enemyStatus == RUN_RIGHT) setX(getX() + getSpeed() * 2);
 
 	setEnemyRC(RectMakeCenter(getX(), getY(), _bodyImage->getFrameWidth(), _bodyImage->getFrameHeight()));
 	_bodyImage->setX(getEnemyRC().left);
@@ -88,7 +138,7 @@ void enemy::move()
 	_armImage->setX(getEnemyRC().left);
 	_armImage->setY(getEnemyRC().top);
 
-	if (_actionCount > 1200) _actionCount = 0;
+	if (_actionCount > 2000) _actionCount = 0;
 }
 
 void enemy::frameAnimate()
@@ -175,7 +225,7 @@ void enemy::frameAnimate()
 		{
 			if (_frameIndex2 > 6) _frameIndex2 = 6;
 			_frameIndex2--;
-			if (_frameIndex2 < 0) _frameIndex2 = 6;
+			if (_frameIndex2 < 0) _frameIndex2 = 0;
 		}
 		_bodyImage->setFrameX(6);
 		_armImage->setFrameX(_frameIndex2);
@@ -183,17 +233,135 @@ void enemy::frameAnimate()
 	else if (_enemyStatus == WARNING_RIGHT)
 	{
 		_bodyImage->setFrameY(2);
-		_armImage->setFrameY(9);
+		_armImage->setFrameY(8);
 		++_frameCount;
 		if (_frameCount % COOLTIME == 0)
 		{
 			if (_frameIndex2 < 0) _frameIndex2 = 0;
 			_frameIndex2++;
-			if (_frameIndex2 > 6) _frameIndex2 = 0;
+			if (_frameIndex2 > 6) _frameIndex2 = 6;
+		}
+		_bodyImage->setFrameX(10);
+		_armImage->setFrameX(_frameIndex2);
+	}
+	else if (_enemyStatus == FIRE_LEFT)
+	{
+		_bodyImage->setFrameY(3);
+		_armImage->setFrameY(1);
+		++_frameCount;
+		if (_frameCount % COOLTIME == 0)
+		{
+			if (_frameIndex2 > 3) _frameIndex2 = 3;
+			_frameIndex2--;
+			if (_frameIndex2 < 0) _frameIndex2 = 3;
 		}
 		_bodyImage->setFrameX(6);
 		_armImage->setFrameX(_frameIndex2);
 	}
+	else if (_enemyStatus == FIRE_RIGHT)
+	{
+		_bodyImage->setFrameY(2);
+		_armImage->setFrameY(0);
+		++_frameCount;
+		if (_frameCount % COOLTIME == 0)
+		{
+			if (_frameIndex2 < 0) _frameIndex2 = 0;
+			_frameIndex2++;
+			if (_frameIndex2 > 3) _frameIndex2 = 0;
+		}
+		_bodyImage->setFrameX(10);
+		_armImage->setFrameX(_frameIndex2);
+	}
+	else if (_enemyStatus == KNOCK_BACK_RIGHT)
+	{
+		_bodyImage->setFrameY(5);
+		//_armImage->setFrameY(0);
+		++_frameCount;
+		if (_frameCount % COOLTIME == 0)
+		{
+			if (_frameIndex < 0) _frameIndex = 0;
+			_frameIndex++;
+			if (_frameIndex > 9)
+			{
+				_enemyStatus = DEAD_RIGHT;
+				_frameIndex = _frameIndex2 = 0;
+			};
+		}
+		_bodyImage->setFrameX(_frameIndex);
+		//_armImage->setFrameX(_frameIndex2);
+	}
+	else if (_enemyStatus == KNOCK_BACK_LEFT)
+	{
+		_bodyImage->setFrameY(4);
+		//_armImage->setFrameY(1);
+		++_frameCount;
+		if (_frameCount % COOLTIME == 0)
+		{
+			if (_frameIndex > 9) _frameIndex = 9;
+			_frameIndex--;
+			if (_frameIndex < 0)
+			{
+				_enemyStatus = DEAD_LEFT;
+				_frameIndex = _frameIndex2 = 0;
+			};
+		}
+		_bodyImage->setFrameX(_frameIndex);
+		//_armImage->setFrameX(_frameIndex2);
+	}
+	else if (_enemyStatus == DEAD_RIGHT)
+	{
+		_bodyImage->setFrameY(5);
+		//_armImage->setFrameY(0);
+		++_frameCount;
+		if (_frameCount % COOLTIME == 0)
+		{
+			if (_frameIndex < 0) _frameIndex = 0;
+			_frameIndex++;
+			if (_frameIndex > 9)
+			{
+
+			}			
+		}
+		_bodyImage->setFrameX(_frameIndex);
+		//_armImage->setFrameX(_frameIndex2);
+	}
+	else if (_enemyStatus == DEAD_LEFT)
+	{
+		_bodyImage->setFrameY(4);
+		//_armImage->setFrameY(1);
+		++_frameCount;
+		if (_frameCount % COOLTIME == 0)
+		{
+			if (_frameIndex > 9) _frameIndex = 9;
+			_frameIndex--;
+			if (_frameIndex < 0)
+			{
+
+			}
+		}
+		_bodyImage->setFrameX(_frameIndex);
+		//_armImage->setFrameX(_frameIndex2);
+	}
 
 	if (_frameCount > 1000) _frameCount = 0;
+
+	//=====================================================
+
+	if (_isAlarm)
+	{
+		_warnSign->setFrameY(0);
+		++_frameCount;
+		if (_frameCount % 5 == 0)
+		{
+			++_frameIndex3;
+			if (_frameIndex3 > 16) _frameIndex3 = 0;
+		}
+		_warnSign->setFrameX(_frameIndex3);
+		//_isAlarm = false;
+	}
+}
+
+void enemy::warning()
+{
+	
 }

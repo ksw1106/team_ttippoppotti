@@ -142,7 +142,7 @@ public:
 	void render(void);
 
 	//ÃÑ¾Ë¹ß»ç
-	void fire(int x, int y, bool isLeft);
+	void fire(int x, int y, int fireSpeed, bool isLeft);
 	//ÃÑ¾Ë¹«ºê
 	void move();
 	void animation();

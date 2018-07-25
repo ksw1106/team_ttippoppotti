@@ -18,16 +18,18 @@ public:
 	void setPlayerManager(playerManager* playerManager) { _playerManager = playerManager; }
 	void setMapData(mapData* mapData) { _mapData = mapData; }
 
+	// 적 벡터 가져오기
 	vector<enemy*> getVEnemy() { return _vSoldier; }
+	// 적 총알벡터 가져오기
 	eBullet* getVEBullet() { return _eBullet; }
 
 	HRESULT init(void);
 	void release(void);
 	void update(void);
 	void render(void);
-
+		
 	void collision();
-	void setEnemy();
+	void setEnemy(int x, int y);
 	
 	enemyManager() {}
 	~enemyManager() {}

@@ -5,11 +5,20 @@
 
 HRESULT enemyManager::init(void)
 {
+	this->setPlayerManager(_playerManager);
+	this->setMapData(_mapData);
+
 	//Àû ¸öÅë, ÆÈ ÀÌ¹ÌÁö ÃÊ±âÈ­
 	IMAGEMANAGER->addFrameImage("Àû¸öÅë", "enemyImage/_enemy_with_head.bmp", 1600, 1600, 20, 20);
 	IMAGEMANAGER->addFrameImage("ÀûÆÈ", "enemyImage/_enemy_gun.bmp", 1600, 800, 19, 10);
 
-	this->setEnemy();
+	//¾Ë¶÷ ÀÌ¹ÌÁö ÃÊ±âÈ­
+	IMAGEMANAGER->addFrameImage("¾Ë¶÷", "enemyImage/ExclamationMark.bmp", 1020, 60, 17, 1);
+
+	this->setEnemy(3856, 1450);
+	this->setEnemy(3300, 1244);
+	this->setEnemy(3188, 1655);
+	this->setEnemy(3700, 2190);
 
 	_eBullet = new eBullet;
 	_eBullet->init(20, 500.f);
@@ -27,18 +36,18 @@ void enemyManager::update(void)
 	{
 		_vSoldier[i]->update();
 
-		if (getVEnemy()[i]->getStatus() == WARNING_LEFT)
+		if (getVEnemy()[i]->getStatus() == FIRE_LEFT)
 		{
 			if (getVEnemy()[i]->getFrameIndex2() == 0)
 			{
-				_eBullet->fire(getVEnemy()[i]->getX(), getVEnemy()[i]->getY(), getVEnemy()[i]->getDirection());
+				_eBullet->fire(getVEnemy()[i]->getX() - 40, getVEnemy()[i]->getY() + 10, 3, getVEnemy()[i]->getDirection());
 			}
 		}
-		else if (getVEnemy()[i]->getStatus() == WARNING_RIGHT)
+		else if (getVEnemy()[i]->getStatus() == FIRE_RIGHT)
 		{
-			if (getVEnemy()[i]->getFrameIndex2() == 6)
+			if (getVEnemy()[i]->getFrameIndex2() == 3)
 			{
-				_eBullet->fire(getVEnemy()[i]->getX(), getVEnemy()[i]->getY(), getVEnemy()[i]->getDirection());
+				_eBullet->fire(getVEnemy()[i]->getX() + 40, getVEnemy()[i]->getY() + 10, 3, getVEnemy()[i]->getDirection());
 			}
 		}
 	}
@@ -49,24 +58,21 @@ void enemyManager::render(void)
 {
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
-		_vSoldier[i]->render();
+		_vSoldier[i]->render();		
 	}
 	_eBullet->render();
 }
 
 void enemyManager::collision()
 {
-
+	
 }
 
 //=====================================================================================================================================================================================
 
-void enemyManager::setEnemy()
+void enemyManager::setEnemy(int x, int y)
 {
-	for (int i = 0; i < 4; ++i)
-	{
-		enemy* _soldier = new soldier;
-		_soldier->init("Àû¸öÅë", "ÀûÆÈ", 3000 + i * 100, 2000, 100);
-		_vSoldier.push_back(_soldier);
-	}
+	enemy* _soldier = new soldier;
+	_soldier->init("Àû¸öÅë", "ÀûÆÈ", x, y, 100);
+	_vSoldier.push_back(_soldier);
 }

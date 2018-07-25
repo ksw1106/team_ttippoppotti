@@ -314,13 +314,13 @@ void eBullet::render(void)
 	}
 }
 
-void eBullet::fire(int x, int y, bool isLeft)
+void eBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 {
 	//총알 벡터에 담는것을 제한하자
 	if (_bulletMax < _vEBullet.size() + 1) return;
 
 	++_bulletCount;
-	if (_bulletCount % 10 != 0) return;
+	if (_bulletCount % fireSpeed != 0) return;
 
 	tagBullet ebullet;
 	ZeroMemory(&ebullet, sizeof(tagBullet));

@@ -1,7 +1,7 @@
 #pragma once
 #include "gameNode.h"
 
-#define COOLTIME 10	// _frameIndex 바뀌는 속도
+#define COOLTIME 7	// _frameIndex 바뀌는 속도
 
 enum enemyStatus
 {
@@ -10,9 +10,9 @@ enum enemyStatus
 	RUN_LEFT, RUN_RIGHT,
 	WARNING_LEFT, WARNING_RIGHT,
 	FIRE_LEFT, FIRE_RIGHT,
-	FIRE_IDLE_LEFT, FIRE_IDLE, RIGHT,
+	FIRE_IDLE_LEFT, FIRE_IDLE_RIGHT,
 	KNOCK_BACK_LEFT, KNOCK_BACK_RIGHT,
-	HIT_LEFT, HIT_RIGHT,
+	DEAD_LEFT, DEAD_RIGHT,
 };
 
 //부모클래스 => 이놈을 상속받아서 보스, 일반몬스터등을 만든다
@@ -22,17 +22,19 @@ private:
 	enemyStatus _enemyStatus;
 	image * _bodyImage;
 	image * _armImage;
+	image * _warnSign;
 	image* _deadImage;
 	RECT _enemyRC;
 	RECT _enemySightRC;
 	float _speed;
 	float _gravity;
+	float _kbSpeed;		// 맞았을 때 날아가는 속도
 	int _x, _y;
 	int _hp;
 	bool _isLeft;
 	bool _isAlarm;
 
-	int _frameCount, _frameIndex, _frameIndex2;
+	int _frameCount, _frameIndex, _frameIndex2, _frameIndex3;
 	int	_actionCount;
 	
 public:
@@ -64,6 +66,7 @@ public:
 
 	virtual void move();
 	virtual void frameAnimate();
+	virtual void warning();
 	
 	enemy() {}
 	virtual ~enemy() {}
