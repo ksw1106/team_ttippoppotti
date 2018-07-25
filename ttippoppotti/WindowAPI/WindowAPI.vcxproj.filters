@@ -137,6 +137,9 @@
     <ClInclude Include="loadingScene.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
+    <ClInclude Include="soldier.h">
+      <Filter>MainGame\브로포스</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -237,6 +240,9 @@
     </ClCompile>
     <ClCompile Include="Lee_Ji_Woong_addResource.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="soldier.cpp">
+      <Filter>MainGame\브로포스</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
