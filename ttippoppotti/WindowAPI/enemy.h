@@ -9,8 +9,8 @@ enum enemyStatus
 	WALK_LEFT, WALK_RIGHT,
 	RUN_LEFT, RUN_RIGHT,
 	WARNING_LEFT, WARNING_RIGHT,
-	FIRE_LEFT, FIRE_RIGHT,
 	FIRE_IDLE_LEFT, FIRE_IDLE_RIGHT,
+	FIRE_LEFT, FIRE_RIGHT,
 	KNOCK_BACK_LEFT, KNOCK_BACK_RIGHT,
 	DEAD_LEFT, DEAD_RIGHT,
 };
@@ -59,15 +59,18 @@ public:
 	virtual void setEnemyRC(RECT enemyRC) { _enemyRC = enemyRC; }
 	virtual void setEnemySightRC(RECT enemySightRC) { _enemySightRC = enemySightRC; }
 	virtual void setSpeed(float speed) { _speed = speed; }
-	virtual void sestGravity(float gravity) { _gravity = gravity; }
+	virtual void setGravity(float gravity) { _gravity = gravity; }
 	virtual void setX(int x) { _x = x; }
 	virtual void setY(int y) { _y = y; }
 	virtual void setHP(int hp) { _hp = hp; }
+	virtual void setAlarm(bool isAlarm) { _isAlarm = isAlarm; }
+	virtual void setStatus(enemyStatus enemyStat) { _enemyStatus = enemyStat; }
 
-	virtual void move();
+	virtual void move(enemyStatus enemyStat);
 	virtual void frameAnimate();
-	virtual void warning();
-	
+	virtual void fireToPlayer();
+	virtual void knockBackMove();	// 총알맞았을때 뒤로 날아감
+			
 	enemy() {}
 	virtual ~enemy() {}
 };
