@@ -14,7 +14,7 @@ public:
 	//이펙트매니져 해제
 	void release();
 	void update(void);
-	void render(void);
+	void render(HDC hdc);
 
 	//벽 폭파시 파편 떨어지는 효과
 	void rockExplosion(float x, float y, float angle);

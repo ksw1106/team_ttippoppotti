@@ -39,10 +39,10 @@ void effectManager::update(void)
 		_fragments[i]->update();
 }
 
-void effectManager::render(void)
+void effectManager::render(HDC hdc)
 {
 	for (int i = 0; i < 5; i++)
-		_fragments[i]->render();
+		_fragments[i]->render(HDC hdc);
 }
 
 void effectManager::rockExplosion(float x, float y, float angle)
