@@ -48,204 +48,223 @@ void playerManager::update(void)
 	//_isCollision[1] = RectMake(_broforce.x - 2, _broforce.y + 20, 5, 5);
 
 	_broforce.gravity += 0.98f;
-	
-	switch (_state)
+
+	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 	{
-	case RIGHT_IDLE:
-		_pose = IDLE;
-		_broforce.gravity = 0.0f;
-		if (KEYMANAGER->isStayKeyDown('A'))
-		{
-			_state = LEFT_RUN;
-		}
-		if (KEYMANAGER->isStayKeyDown('D'))
-		{
-			_state = RIGHT_RUN;
-		}
-		if (KEYMANAGER->isOnceKeyUp('A'))
-		{
-			_state = LEFT_IDLE;
-		}
-		if (KEYMANAGER->isOnceKeyUp('D'))
-		{
-			_state = RIGHT_IDLE;
-		}
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-		{
-			_state = RIGHT_JUMP;
-			_broforce.gravity = 0.0f;
-		}
-		break;
-	case LEFT_IDLE:
-		_pose = IDLE;
-		_broforce.gravity = 0.0f;
-		if (KEYMANAGER->isStayKeyDown('A'))
-		{
-			_state = LEFT_RUN;
-		}
-		if (KEYMANAGER->isStayKeyDown('D'))
-		{
-			_state = RIGHT_RUN;
-		}
-		if (KEYMANAGER->isOnceKeyUp('A'))
-		{
-			_state = LEFT_IDLE;
-		}
-		if (KEYMANAGER->isOnceKeyUp('D'))
-		{
-			_state = RIGHT_IDLE;
-		}
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-		{
-			_state = LEFT_JUMP;
-			_broforce.gravity = 0.0f;
-		}
-		break;
-	case RIGHT_RUN:
-		_pose = RUN;
-		_isLeft = false;
-		_broforce.gravity = 0.0f;
-		if (KEYMANAGER->isStayKeyDown('D'))
-		{
-			if (_broforce.rc.right < 5000)
-			{
-				_broforce.x += SPEED;
-			}
-		}
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-		{
-			_state = RIGHT_JUMP;
-			_broforce.gravity = 0.0f;
-		}
-		if (KEYMANAGER->isOnceKeyUp('D'))
-		{
-			_state = RIGHT_IDLE;
-		}
-		if (KEYMANAGER->isOnceKeyUp('A'))
-		{
-			_state = LEFT_IDLE;
-		}
-		break;
-	case LEFT_RUN:
-		_pose = RUN;
 		_isLeft = true;
-		_broforce.gravity = 0.0f;
-		if (KEYMANAGER->isStayKeyDown('A'))
-		{
-			if (_broforce.rc.left > 0)
-			{
-				_broforce.x -= SPEED;
-			}
-		}
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-		{
-			_state = LEFT_JUMP;
-			_broforce.gravity = 0.0f;
-		}
-		if (KEYMANAGER->isOnceKeyUp('D'))
-		{
-			_state = RIGHT_IDLE;
-		}
-		if (KEYMANAGER->isOnceKeyUp('A'))
-		{
-			_state = LEFT_IDLE;
-		}
-		break;
-	case RIGHT_JUMP:
-		_pose = JUMP;
-		_isLeft = false;
-		_broforce.y += -sinf(_broforce.angle) * _broforce.speed + _broforce.gravity;
-		for (int i = 0; i < map->getObject().size(); ++i)		 
-		{
-			if (_broforce.y >= map->getObject()[i]._rc.top && _broforce.x >= map->getObject()[i]._rc.left && _broforce.x <= map->getObject()[i]._rc.right) 
-			{
-				_broforce.y = map->getObject()[i]._rc.top - 76;
-				_broforce.gravity = 0.0f;
-				_state = RIGHT_IDLE;
-				break;
-			}
-		}
-	
-		if (KEYMANAGER->isStayKeyDown('A'))
-		{
-			if (_broforce.rc.left > 0)
-			{
-				_broforce.x -= SPEED;
-			}
-		}
-		if (KEYMANAGER->isStayKeyDown('D'))
-		{
-			if (_broforce.rc.right < 5000)
-			{
-				_broforce.x += SPEED;
-			}
-		}
-		break;
-	case LEFT_JUMP:
-		_pose = JUMP;
-		_isLeft = true;
-		_broforce.y += -sinf(_broforce.angle) * _broforce.speed + _broforce.gravity;
-		for (int i = 0; i < map->getObject().size(); ++i)		
-		{
-			if (_broforce.y >= map->getObject()[i]._rc.top && _broforce.x >= map->getObject()[i]._rc.left && _broforce.x <= map->getObject()[i]._rc.right)
-			{
-				_broforce.y = map->getObject()[i]._rc.top - 76;
-				_broforce.gravity = 0.0f;
-				_state = RIGHT_IDLE;
-				break;
-			}
-
-			if (i == map->getObject().size()-1)
-			{
-				this->_isLeftFall = true;
-			}
-		}
-		if (KEYMANAGER->isStayKeyDown('A'))
-		{
-			if (_broforce.rc.left > 0)
-			{
-				_broforce.x -= SPEED;
-			}
-		}
-		if (KEYMANAGER->isStayKeyDown('D'))
-		{
-			if (_broforce.rc.right < 5000)
-			{
-				_broforce.x += SPEED;
-			}
-		}
-		break;
-	case RIGHT_HANG:
-		break;
-	case LEFT_HANG:
-		break;
-	case LADDER:
-		break;
-	default:
-		break;
+		_pose = RUN;
 	}
-
-
-
-	FRAMEMANAGER->frameChange(_ramBro[_pose], _count, _index, _speed, _isLeft);
-	
-	for (int i = 0; i < map->getObject().size(); i++)
+	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
-		if (_broforce.y >= map->getObject()[i]._rc.top && _broforce.x >= map->getObject()[i]._rc.left && _broforce.x <= map->getObject()[i]._rc.right)
-		{
-			_broforce.y = map->getObject()[i]._rc.top - 76;
-			_broforce.gravity = 0.0f;
-			//_state = RIGHT_IDLE;
-			break;
-		}
-
-		if (i == map->getObject().size() - 1)
-		{
-			this->_isLeftFall = true;
-		}
-
-		
+		_isLeft = false;
+		_pose = RUN;
 	}
+	if (KEYMANAGER->isOnceKeyUp(VK_LEFT))
+	{
+		_pose = IDLE;
+	}
+	
+
+
+
+	
+	//switch (_state)
+	//{
+	//case RIGHT_IDLE:
+	//	_pose = IDLE;
+	//	_broforce.gravity = 0.0f;
+	//	if (KEYMANAGER->isStayKeyDown('A'))
+	//	{
+	//		_state = LEFT_RUN;
+	//	}
+	//	if (KEYMANAGER->isStayKeyDown('D'))
+	//	{
+	//		_state = RIGHT_RUN;
+	//	}
+	//	if (KEYMANAGER->isOnceKeyUp('A'))
+	//	{
+	//		_state = LEFT_IDLE;
+	//	}
+	//	if (KEYMANAGER->isOnceKeyUp('D'))
+	//	{
+	//		_state = RIGHT_IDLE;
+	//	}
+	//	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	//	{
+	//		_state = RIGHT_JUMP;
+	//		_broforce.gravity = 0.0f;
+	//	}
+	//	break;
+	//case LEFT_IDLE:
+	//	_pose = IDLE;
+	//	_broforce.gravity = 0.0f;
+	//	if (KEYMANAGER->isStayKeyDown('A'))
+	//	{
+	//		_state = LEFT_RUN;
+	//	}
+	//	if (KEYMANAGER->isStayKeyDown('D'))
+	//	{
+	//		_state = RIGHT_RUN;
+	//	}
+	//	if (KEYMANAGER->isOnceKeyUp('A'))
+	//	{
+	//		_state = LEFT_IDLE;
+	//	}
+	//	if (KEYMANAGER->isOnceKeyUp('D'))
+	//	{
+	//		_state = RIGHT_IDLE;
+	//	}
+	//	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	//	{
+	//		_state = LEFT_JUMP;
+	//		_broforce.gravity = 0.0f;
+	//	}
+	//	break;
+	//case RIGHT_RUN:
+	//	_pose = RUN;
+	//	_isLeft = false;
+	//	_broforce.gravity = 0.0f;
+	//	if (KEYMANAGER->isStayKeyDown('D'))
+	//	{
+	//		if (_broforce.rc.right < 5000)
+	//		{
+	//			_broforce.x += SPEED;
+	//		}
+	//	}
+	//	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	//	{
+	//		_state = RIGHT_JUMP;
+	//		_broforce.gravity = 0.0f;
+	//	}
+	//	if (KEYMANAGER->isOnceKeyUp('D'))
+	//	{
+	//		_state = RIGHT_IDLE;
+	//	}
+	//	if (KEYMANAGER->isOnceKeyUp('A'))
+	//	{
+	//		_state = LEFT_IDLE;
+	//	}
+	//	break;
+	//case LEFT_RUN:
+	//	_pose = RUN;
+	//	_isLeft = true;
+	//	_broforce.gravity = 0.0f;
+	//	if (KEYMANAGER->isStayKeyDown('A'))
+	//	{
+	//		if (_broforce.rc.left > 0)
+	//		{
+	//			_broforce.x -= SPEED;
+	//		}
+	//	}
+	//	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	//	{
+	//		_state = LEFT_JUMP;
+	//		_broforce.gravity = 0.0f;
+	//	}
+	//	if (KEYMANAGER->isOnceKeyUp('D'))
+	//	{
+	//		_state = RIGHT_IDLE;
+	//	}
+	//	if (KEYMANAGER->isOnceKeyUp('A'))
+	//	{
+	//		_state = LEFT_IDLE;
+	//	}
+	//	break;
+	//case RIGHT_JUMP:
+	//	_pose = JUMP;
+	//	_isLeft = false;
+	//	_broforce.y += -sinf(_broforce.angle) * _broforce.speed + _broforce.gravity;
+	//	for (int i = 0; i < map->getObject().size(); ++i)		 
+	//	{
+	//		if (_broforce.y >= map->getObject()[i]._rc.top && _broforce.x >= map->getObject()[i]._rc.left && _broforce.x <= map->getObject()[i]._rc.right) 
+	//		{
+	//			_broforce.y = map->getObject()[i]._rc.top - 76;
+	//			_broforce.gravity = 0.0f;
+	//			_state = RIGHT_IDLE;
+	//			break;
+	//		}
+	//	}
+	//
+	//	if (KEYMANAGER->isStayKeyDown('A'))
+	//	{
+	//		if (_broforce.rc.left > 0)
+	//		{
+	//			_broforce.x -= SPEED;
+	//		}
+	//	}
+	//	if (KEYMANAGER->isStayKeyDown('D'))
+	//	{
+	//		if (_broforce.rc.right < 5000)
+	//		{
+	//			_broforce.x += SPEED;
+	//		}
+	//	}
+	//	break;
+	//case LEFT_JUMP:
+	//	_pose = JUMP;
+	//	_isLeft = true;
+	//	_broforce.y += -sinf(_broforce.angle) * _broforce.speed + _broforce.gravity;
+	//	for (int i = 0; i < map->getObject().size(); ++i)		
+	//	{
+	//		if (_broforce.y >= map->getObject()[i]._rc.top && _broforce.x >= map->getObject()[i]._rc.left && _broforce.x <= map->getObject()[i]._rc.right)
+	//		{
+	//			_broforce.y = map->getObject()[i]._rc.top - 76;
+	//			_broforce.gravity = 0.0f;
+	//			_state = RIGHT_IDLE;
+	//			break;
+	//		}
+	//
+	//		if (i == map->getObject().size()-1)
+	//		{
+	//			this->_isLeftFall = true;
+	//		}
+	//	}
+	//	if (KEYMANAGER->isStayKeyDown('A'))
+	//	{
+	//		if (_broforce.rc.left > 0)
+	//		{
+	//			_broforce.x -= SPEED;
+	//		}
+	//	}
+	//	if (KEYMANAGER->isStayKeyDown('D'))
+	//	{
+	//		if (_broforce.rc.right < 5000)
+	//		{
+	//			_broforce.x += SPEED;
+	//		}
+	//	}
+	//	break;
+	//case RIGHT_HANG:
+	//	break;
+	//case LEFT_HANG:
+	//	break;
+	//case LADDER:
+	//	break;
+	//default:
+	//	break;
+	//}
+
+
+
+	//FRAMEMANAGER->frameChange(_ramBro[_pose], _count, _index, _speed, _isLeft);
+	//
+	//for (int i = 0; i < map->getObject().size(); i++)
+	//{
+	//	if (_broforce.y >= map->getObject()[i]._rc.top && _broforce.x >= map->getObject()[i]._rc.left && _broforce.x <= map->getObject()[i]._rc.right)
+	//	{
+	//		_broforce.y = map->getObject()[i]._rc.top - 76;
+	//		_broforce.gravity = 0.0f;
+	//		//_state = RIGHT_IDLE;
+	//		break;
+	//	}
+	//
+	//	if (i == map->getObject().size() - 1)
+	//	{
+	//		this->_isLeftFall = true;
+	//	}
+	//
+	//	
+	//}
 
 	
 	//for (int i = 0; i < map->getObject().size(); ++i)

@@ -40,7 +40,7 @@ class playerManager : public gameNode
 private:
 	enemyManager * _enemyManager;
 	player _player;
-	mapData* map;
+	mapData* _mapData;
 	image * _ramBro[MAX_POSE];
 
 	playerState _state;
@@ -58,13 +58,14 @@ private:
 
 public:
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }
-	
+	void setMap(mapData* mapData) { _mapData = mapData; }
+
 	HRESULT init(void);
 	void release(void);
 	void update(void);
 	void render(void);
 
-	void setMap(mapData* _map) { map = _map; }
+
 
 	playerManager();
 	~playerManager();
