@@ -53,7 +53,6 @@ void playerManager::update(void)
 	
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE)&& !_player->getIsJump())
 	{
-		_player->setIsLeft(true);
 		_player->setState(JUMP);
 		_player->setGravity(0.0f);
 		_player->setSpeed(20.f);
@@ -68,10 +67,10 @@ void playerManager::update(void)
 		_player->setY(_player->getY() + (-sin(_player->getAngle())*_player->getSpeed() + _player->getGravity()));
 	}
 	
-	if (hit_left || hit_right)
-	{
-		_player->setY(_player->getY() + 2.f);
-	}
+	//if (hit_left || hit_right)
+	//{
+	//	_player->setY(_player->getY() + 2.f);
+	//}
 
 	if (_player->getY() >= _ground - _player->getImage(_player->getState())->getFrameHeight())
 	{
@@ -96,7 +95,7 @@ void playerManager::update(void)
 	for (int i = 0; i < _mapData->getObject().size(); i++)
 	{
 		if (!_mapData->getObject()[i]._isActived) continue;
-		if (IntersectRect(&rcTemp, &rcPlayer, &_mapData->getObject()[i]._rc)
+		if (IntersectRect(&rcTemp, &rcPlayer, &_mapData->getObject()[i]._rc)											
 			&& _img->getY() > _mapData->getObject()[i]._rc.top && _img->getY() < _mapData->getObject()[i]._rc.bottom
 			&& _img->getX() < _mapData->getObject()[i]._rc.left && (_player->getY() - _player->getOldY() > 0))
 		{
@@ -111,7 +110,7 @@ void playerManager::update(void)
 		}
 		else if (IntersectRect(&rcTemp, &rcPlayer, &_mapData->getObject()[i]._rc)
 			&& _img->getY() > _mapData->getObject()[i]._rc.top && _img->getY() < _mapData->getObject()[i]._rc.bottom
-			&& _img->getX() + _img->getFrameWidth() > _mapData->getObject()[i]._rc.right && (_player->getY() - _player->getOldY() > 0))
+			&& _img->getX() + _img->getFrameWidth() > _mapData->getObject()[i]._rc.left && (_player->getY() - _player->getOldY() > 0))
 		{
 			if (_player->getY() < _ground - _player->getImage(_player->getState())->getFrameHeight())
 			{
@@ -127,6 +126,44 @@ void playerManager::update(void)
 			hit_left = false;
 			hit_right = false;
 		}
+
+		if (IntersectRect(&rcTemp, &rcPlayer, &_mapData->getObject()[i]._rc))				// 람브로가 오른쪽벽을 몬지나갑니다
+		{
+			if (_img->getY() < _mapData->getObject()[i]._rc.top									
+				&& _img->getY() <= _mapData->getObject()[i]._rc.bottom
+				&& _img->getX() + _img->getFrameWidth() > _mapData->getObject()[i]._rc.left
+				&& _img->getX() + _img->getFrameWidth() < _mapData->getObject()[i]._rc.right)
+			{
+				_player->setX(_mapData->getObject()[i]._rc.left - _img->getFrameWidth());
+			}
+		}
+		if (IntersectRect(&rcTemp, &rcPlayer, &_mapData->getObject()[i]._rc))
+		{
+			if (_img->getY() < _mapData->getObject()[i]._rc.top
+				&& _img->getY() <= _mapData->getObject()[i]._rc.bottom
+				&& _img->getX() > _mapData->getObject()[i]._rc.left
+				&& _img->getX() < _mapData->getObject()[i]._rc.right)
+			{
+				_player->setX(_mapData->getObject()[i]._rc.right);
+			}
+		}
+		if (_img->getX() < CAMERAMANAGER->getCamera().left)									// 밖으로 탈주못함
+		{
+			_player->setX(CAMERAMANAGER->getCamera().left);
+		}
+		//if (IntersectRect(&rcTemp, &rcPlayer, &_mapData->getObject()[i]._rc))				// 땅에 충돌 했을때 땅위로 올려버리기~
+		//{
+		//	if (_img->getY() <= _mapData->getObject()[i]._rc.top 
+		//		&& _img->getY() <= _mapData->getObject()[i]._rc.bottom 
+		//		&& _img->getX() >= _mapData->getObject()[i]._rc.left 
+		//		&& _img->getX() <= _mapData->getObject()[i]._rc.right)		
+		//	{
+		//		_player->setY(_mapData->getObject()[i]._rc.top - _img->getFrameHeight());
+		//		_player->setGravity(0.f);
+		//		_player->setSpeed(0.f);
+		//		_player->setState(IDLE);
+		//	}
+		//}
 	}
 
 	for (int i = 0; i < MAX_STATE; i++)
