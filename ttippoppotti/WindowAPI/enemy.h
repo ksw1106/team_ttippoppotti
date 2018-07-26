@@ -67,7 +67,7 @@ public:
 	virtual void setAlarm(bool isAlarm) { _isAlarm = isAlarm; }
 	virtual void setStatus(enemyStatus enemyStat) { _enemyStatus = enemyStat; }
 
-	virtual void move(bool isLeft);
+	virtual void move(enemyStatus enemyStat);
 	virtual int AI(int speed);
 	virtual void frameAnimate(int num);
 	virtual void fireToPlayer();

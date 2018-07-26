@@ -30,8 +30,8 @@ void enemy::release(void)
 
 void enemy::update(void)
 {
-	this->move(getDirection());
-	this->frameAnimate(AI(5));
+	this->move(_enemyStatus);
+	this->frameAnimate(AI(200));
 	this->knockBackMove();		
 }
 
@@ -55,30 +55,39 @@ void enemy::render(void)
 	}
 }
 
-void enemy::move(bool isLeft)
+void enemy::move(enemyStatus enemyStat)
 {	
+	if (enemyStat % 2 == 1)
+	{
+		_isLeft = false;
+	}
+	else if (enemyStat % 2 == 0)
+	{
+		_isLeft = true;
+	}
+
 	
 	// 좌우 이동
-	if (_enemyStatus == WALK_LEFT) setX(getX() - getSpeed());
-	else if (_enemyStatus == WALK_RIGHT) setX(getX() + getSpeed());
-	if (_enemyStatus == RUN_LEFT) setX(getX() - getSpeed() * 1.5f);
-	else if (_enemyStatus == RUN_RIGHT) setX(getX() + getSpeed() * 1.5f);
+	if (enemyStat == WALK_LEFT) setX(getX() - getSpeed());
+	else if (enemyStat == WALK_RIGHT) setX(getX() + getSpeed());
+	if (enemyStat == RUN_LEFT) setX(getX() - getSpeed() * 1.5f);
+	else if (enemyStat == RUN_RIGHT) setX(getX() + getSpeed() * 1.5f);
 	
 	// 플레이어 발견시 움직임
 	if (_isAlarm)
 	{
-		if (_enemyStatus == WARNING_LEFT)
+		if (enemyStat == WARNING_LEFT)
 		{
 			if (_frameIndex2 > 6)
 			{
-				_enemyStatus = FIRE_LEFT;
+				enemyStat = FIRE_LEFT;
 			}
 		}
-		else if (_enemyStatus == WARNING_RIGHT)
+		else if (enemyStat == WARNING_RIGHT)
 		{
 			if (_frameIndex2 < 0)
 			{
-				_enemyStatus = FIRE_RIGHT;
+				enemyStat = FIRE_RIGHT;
 			}
 		}
 	}	
@@ -168,13 +177,15 @@ void enemy::move(bool isLeft)
 
 int enemy::AI(int speed)
 {
-	_coolCount = 1000;
+	_coolCount++;
+	if (_coolCount > 10000) _coolCount = 0;
 
 	if (_coolCount % speed == 0)
 	{
 		_actionCount = RND->getInt(sizeof(enemyStatus));
 		return _actionCount;
 	}	
+
 }
 
 void enemy::frameAnimate(int num)
