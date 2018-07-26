@@ -16,7 +16,7 @@ private:
 	RECT temp;
 	bool hit_left, hit_right;
 	float _ground;
-
+	int count = 0;
 public:
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }
 	void setMapData(mapData* mapData) { _mapData = mapData; }

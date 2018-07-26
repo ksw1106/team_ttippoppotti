@@ -45,7 +45,7 @@ public:
 	//¿Ã∆Â∆Æ πﬂªÁ º≥¡§
 	void activate(float x, float y, float angle);
 	//¿Ã∆Â∆Æ πﬂªÁ!
-	void boom(float gravity);
+	void boom();
 
 	//¿Ã∆Â∆Æ ∏ÿ√ﬂ±‚
 	void stopEffect();
@@ -57,7 +57,7 @@ public:
 
 	//¿Ã∆Â∆Æ∫§≈Õ ∞°¡Æø¿±‚
 	vector<tagParticle> getVFragment() { return _vFragment; }
-	
+
 	fragments() : _isRunning(false), _x(0), _y(0) {}
 	~fragments() {}
 
