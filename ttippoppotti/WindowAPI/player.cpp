@@ -12,7 +12,7 @@ HRESULT player::init(void)
 
 	_state = IDLE;
 	_x = 100.f;
-	_y = 2085.f;
+	_y = 1900.f;
 	_oldX = _x;
 	_oldY = _y;
 	_angle = 90.f *3.14 / 180;
