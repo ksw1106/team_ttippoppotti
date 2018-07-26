@@ -16,10 +16,10 @@ HRESULT enemyManager::init(void)
 	IMAGEMANAGER->addFrameImage("의문", "enemyImage/QuestionMark.bmp", 960, 60, 16, 1);
 
 	//에너미 클래스 객체 생성 및 초기화
-	this->setEnemy(3700, 1450, 1);
-	this->setEnemy(3700, 1244, 2);
+	this->setEnemy(3700, 1450, 3);
+	this->setEnemy(3700, 1244, 3);
 	this->setEnemy(3600, 1655, 3);
-	this->setEnemy(3600, 2190, 4);
+	this->setEnemy(3600, 2190, 3);
 	
 
 	_eBullet = new eBullet;
@@ -78,6 +78,7 @@ void enemyManager::collision()
 
 			// 적 상태 변경 ( 경고 )
 			getVEnemy()[i]->setBodyStatus(E_DOUBT);
+			getVEnemy()[i]->setArmStatus(G_TARGETING);
 		}
 	}
 
@@ -110,10 +111,26 @@ void enemyManager::collision()
 	//	}
 	//}
 
-	/*for (int i = 386; i < _mapData->getObject().size(); i++)
+	for (int j = 0; j < getVEnemy().size(); ++j)
 	{
-
-	}*/
+		if (!CAMERAMANAGER->CameraIn(getVEnemy()[j]->getEnemyRC())) continue;
+		
+		for (int i = 386; i < _mapData->getObject().size(); i++)
+		{
+			RECT rc;
+			if (IntersectRect(&rc, &getVEnemy()[j]->getEnemyRC(), &_mapData->getObject()[i]._rc))
+			{
+				if (getVEnemy()[j]->getDirection())
+				{
+					getVEnemy()[j]->setDirection(false);
+				}
+				else
+					getVEnemy()[j]->setDirection(true);
+			}			
+		}
+	}
+	
+	
 }
 
 //=====================================================================================================================================================================================

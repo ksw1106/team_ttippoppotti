@@ -37,6 +37,7 @@ private:
 	RECT _enemyRC;
 	RECT _enemySightRC;
 
+	float _angle;
 	float _speed;
 	float _gravity;
 	float _kbSpeed;		// 맞았을 때 날아가는 속도
@@ -71,6 +72,7 @@ public:
 	virtual gunStatus getArmStatus() { return _gunStatus; }
 	virtual int getFrameIndex() { return _frameIndex; }
 	virtual int getFrameIndex2() { return _frameIndex2; }
+	virtual float getEnemyAngle() { return _angle; }
 
 	virtual void setBodyImage(image* bodyImage) { _bodyImage[_enemyStatus] = bodyImage; }
 	virtual void setArmImage(image* armImage) { _armImage[_gunStatus] = armImage; }
@@ -85,8 +87,10 @@ public:
 	virtual void setBodyStatus(enemyStatus enemyStat) { _enemyStatus = enemyStat; }
 	virtual void setArmStatus(gunStatus gunStat) { _gunStatus = gunStat; }
 	virtual void setDirection(bool isLeft) { _isLeft = isLeft; }
+	virtual void setEnemyAngle(float angle) { _angle = angle; }
 
 	virtual void move();
+	virtual void flyAway();
 	virtual void controlAI(int randomNum);
 	
 	virtual void frameAnimate();	
