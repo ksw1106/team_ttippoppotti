@@ -33,7 +33,7 @@ HRESULT stageScene::init(void)
 	for (int i = 0; i < 3; i++)
 	{
 		ZeroMemory(&_backGround[i], sizeof(object));
-		_backGround[i]._rc = RectMake(0, 2878 - 1080, 5755, 1080);
+		_backGround[i]._rc = RectMake(0, 2878 - WINSIZEY, 5755, WINSIZEY);
 	}
 
 	_backGround[0]._image = IMAGEMANAGER->findImage("backGround");
@@ -61,7 +61,7 @@ HRESULT stageScene::init(void)
 	_hspeed = 5;
 	_x = 3400.f;
 	_y = 500.f;
-	_rcCamera = RectMake(0, 2878 - 1080, 5755, 1080);
+	_rcCamera = RectMake(0, 2878 - WINSIZEY, 5755, WINSIZEY);
 
 	return S_OK;
 }
@@ -112,8 +112,9 @@ void stageScene::update(void)
 	}*/
 	
 	
-
+	
 	_playerManager->update();
+
 	_enemyManager->update();
 	_test->update();
 	//이곳에서 계산식, 키보드, 마우스등등 업데이트를 한다
@@ -127,7 +128,7 @@ void stageScene::update(void)
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 	{
-		if (_rcCamera.right >= _rcCamera.left + 10 + 1920)
+		if (_rcCamera.right >= _rcCamera.left + 10 + WINSIZEX)
 		{
 			_rcCamera.left += 10;
 		}
@@ -142,7 +143,7 @@ void stageScene::update(void)
 
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
 	{
-		if (_rcCamera.bottom > _rcCamera.top + 10 + 1080)
+		if (_rcCamera.bottom > _rcCamera.top + 10 + WINSIZEY)
 		{
 			_rcCamera.top += 10;
 		}
@@ -199,6 +200,7 @@ void stageScene::update(void)
 	}
 
 	CAMERAMANAGER->setCamera(_rcCamera);
+	
 }
 
 void stageScene::render(void)
@@ -220,7 +222,7 @@ void stageScene::render(void)
 	if (CAMERAMANAGER->CameraIn(RectMake(_humanDead->getX(), _humanDead->getY(), _humanDead->getWidth(), _humanDead->getHeight())))
 		_humanDead->frameRender(getMemDC(), _humanDead->getX() - _rcCamera.left, _humanDead->getY() - _rcCamera.top);
 	if (CAMERAMANAGER->CameraIn(RectMake(_flag->getX(), _flag->getY(), _flag->getWidth(), _flag->getHeight())))
-	_flag->frameRender(getMemDC(), _flag->getX() - _rcCamera.left, _flag->getY() - _rcCamera.top);
+		_flag->frameRender(getMemDC(), _flag->getX() - _rcCamera.left, _flag->getY() - _rcCamera.top);
 	
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
@@ -243,7 +245,7 @@ void stageScene::render(void)
 			if (!_mapData->getObject()[i]._isActived) continue;
 
 			if (!CAMERAMANAGER->CameraIn(_mapData->getObject()[i]._rc)) continue;
-			//맵이 화면안에 없다면 컨티뉴
+			
 			RectangleMake(getMemDC(), _mapData->getObject()[i]._rc.left-_rcCamera.left, _mapData->getObject()[i]._rc.top-_rcCamera.top, _mapData->getObject()[i]._width, _mapData->getObject()[i]._height);
 			sprintf(str, "%d", i);
 			TextOut(getMemDC(), (_mapData->getObject()[i]._rc.left + (_mapData->getObject()[i]._rc.right - _mapData->getObject()[i]._rc.left) / 2) - _rcCamera.left,

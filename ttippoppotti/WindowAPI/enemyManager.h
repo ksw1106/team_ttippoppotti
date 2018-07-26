@@ -32,7 +32,7 @@ public:
 	
 	void isNotice();
 	void collision();	// 충돌함수
-	void setEnemy(int x, int y);
+	void setEnemy(int x, int y, int randomNum);
 	
 	enemyManager() {}
 	~enemyManager() {}

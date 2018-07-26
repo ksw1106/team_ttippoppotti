@@ -9,18 +9,18 @@ HRESULT enemyManager::init(void)
 	this->setPlayerManager(_playerManager);
 	// 맵데이터 가져오기
 	this->setMapData(_mapData);
-
-	//적 몸통, 팔 이미지 초기화
-	IMAGEMANAGER->addFrameImage("적몸통", "enemyImage/_enemy_with_head.bmp", 1600, 1600, 20, 20);
-	IMAGEMANAGER->addFrameImage("적팔", "enemyImage/_enemy_gun.bmp", 1600, 800, 19, 10);
+	
 	//알람 이미지 초기화
 	IMAGEMANAGER->addFrameImage("알람", "enemyImage/ExclamationMark.bmp", 1020, 60, 17, 1);
+	//의문 이미지 초기화
+	IMAGEMANAGER->addFrameImage("의문", "enemyImage/QuestionMark.bmp", 960, 60, 16, 1);
 
-	//에너미 위치 초기화
-	this->setEnemy(3700, 1450);
-	this->setEnemy(3700, 1244);
-	this->setEnemy(3600, 1655);
-	this->setEnemy(3600, 2190);
+	//에너미 클래스 객체 생성 및 초기화
+	this->setEnemy(3700, 1450, 1);
+	this->setEnemy(3700, 1244, 2);
+	this->setEnemy(3600, 1655, 3);
+	this->setEnemy(3600, 2190, 4);
+	
 
 	_eBullet = new eBullet;
 	_eBullet->init(20, 500.f);
@@ -39,15 +39,12 @@ void enemyManager::update(void)
 		_vSoldier[i]->update();
 
 		// 총알발사
-		if (getVEnemy()[i]->getStatus() == FIRE_LEFT)
+		if (getVEnemy()[i]->getArmStatus() == G_FIRE)
 		{
-			_eBullet->fire(getVEnemy()[i]->getX() - 40, getVEnemy()[i]->getY() + 10, 3, getVEnemy()[i]->getDirection());
-		}
-		else if (getVEnemy()[i]->getStatus() == FIRE_RIGHT)
-		{
-			_eBullet->fire(getVEnemy()[i]->getX() + 40, getVEnemy()[i]->getY() + 10, 3, getVEnemy()[i]->getDirection());
-		}
+			_eBullet->fire(getVEnemy()[i]->getX(), getVEnemy()[i]->getY(), 10, getVEnemy()[i]->getDirection());
+		}		
 	}
+
 	_eBullet->update();		
 
 	this->collision();
@@ -78,12 +75,9 @@ void enemyManager::collision()
 		{
 			// 말풍선 띄우기
 			getVEnemy()[i]->setAlarm(true);
-			
+
 			// 적 상태 변경 ( 경고 )
-			if (getVEnemy()[i]->getDirection() == true)
-				getVEnemy()[i]->setStatus(WARNING_LEFT);
-			else
-				getVEnemy()[i]->setStatus(WARNING_RIGHT);
+			getVEnemy()[i]->setBodyStatus(E_DOUBT);
 		}
 	}
 
@@ -91,7 +85,7 @@ void enemyManager::collision()
 	for (int i = 0; i < getEBullet()->getVEnemybullet().size();)
 	{
 		if (IntersectRect(&rc, &getEBullet()->getVEnemybullet()[i].rc, &rcPlayer))
-		{		
+		{
 			// 총알 제거
 			getEBullet()->getVEnemybullet()[i].bulletImage->release();
 			SAFE_DELETE(getEBullet()->getVEnemybullet()[i].bulletImage);
@@ -103,25 +97,30 @@ void enemyManager::collision()
 		}
 	}
 
-	// 맵과 충돌 (타일)
-	for (int i = 386 ; i < 470; ++i)
+	//for (int j = 0; j < getVEnemy().size(); ++j)
+	//{
+	//	// 맵과 충돌 (타일)
+	//	for (int i = 0; i < 470; ++i)
+	//	{			
+	//		if (IntersectRect(&rc, &_mapData->getObject()[i]._rc, &getVEnemy()[j]->getEnemyRC()))
+	//		{
+	//			if (getVEnemy()[j]->getDirection() == true) getVEnemy()[j]->setDirection(false);
+	//			else getVEnemy()[j]->setDirection(true);
+	//		}
+	//	}
+	//}
+
+	/*for (int i = 386; i < _mapData->getObject().size(); i++)
 	{
-		for (int j = 0; j < getVEnemy().size(); ++j)
-		{
-			if (IntersectRect(&rc, &_mapData->getObject()[i]._rc, &getVEnemy()[j]->getEnemyRC()))
-			{
-				if (getVEnemy()[j]->getDirection() == true) getVEnemy()[j]->setDirection(false);
-				else getVEnemy()[j]->setDirection(true);
-			}
-		}
-	}
+
+	}*/
 }
 
 //=====================================================================================================================================================================================
 
-void enemyManager::setEnemy(int x, int y)
+void enemyManager::setEnemy(int x, int y, int randomNum)
 {
 	enemy* _soldier = new soldier;
-	_soldier->init("적몸통", "적팔", x, y, 100);
+	_soldier->init(x, y, 100, randomNum);
 	_vSoldier.push_back(_soldier);
 }
