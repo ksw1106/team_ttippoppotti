@@ -30,9 +30,15 @@ void enemy::release(void)
 
 void enemy::update(void)
 {
-	this->move(_enemyStatus);
+	this->move();
 	this->frameAnimate();
 	this->knockBackMove();		
+
+	_bodyImage->setX(getEnemyRC().left);
+	_bodyImage->setY(getEnemyRC().top);
+	_armImage->setX(getEnemyRC().left);
+	_armImage->setY(getEnemyRC().top);
+	setEnemyRC(RectMakeCenter(getX(), getY(), _bodyImage->getFrameWidth(), _bodyImage->getFrameHeight()));
 }
 
 void enemy::render(void)
@@ -48,53 +54,22 @@ void enemy::render(void)
 		IMAGEMANAGER->frameRender("알람", getMemDC(), _enemyRC.left + 10 - CAMERAMANAGER->getCamera().left, _enemyRC.top - 50 - CAMERAMANAGER->getCamera().top, _warnSign->getFrameX(), _warnSign->getFrameY());
 		
 	}
-	if (KEYMANAGER->isToggleKey(VK_F5))
+	if (KEYMANAGER->isToggleKey(VK_F4))
 	{
 		Rectangle(getMemDC(), getX() - _bodyImage->getFrameWidth()/2, getY() - _bodyImage->getFrameHeight()/2, getX() + _bodyImage->getFrameWidth()/2, getY() + _bodyImage->getFrameHeight()/2);
 		RectangleMake(getMemDC(), _enemySightRC.left - CAMERAMANAGER->getCamera().left, _enemySightRC.top - CAMERAMANAGER->getCamera().top, 500, 100);
 	}
 }
 
-void enemy::move(enemyStatus enemyStat)
-{
-	++_actionCount;
-	// 적 방향에 따른 왼쪽, 오른쪽 불변수 변화
-	if (enemyStat % 2 == 0) // 짝수면은 왼쪽
-		_isLeft = true;
-	else if (enemyStat % 2 == 1) // 홀수면은 오른쪽
-		_isLeft = false;
+void enemy::move()
+{			
+	// 좌우 이동
+	if (_enemyStatus == WALK_LEFT) setX(getX() - getSpeed());
+	else if (_enemyStatus == WALK_RIGHT) setX(getX() + getSpeed());
+	if (_enemyStatus == RUN_LEFT) setX(getX() - getSpeed() * 1.5f);
+	else if (_enemyStatus == RUN_RIGHT) setX(getX() + getSpeed() * 1.5f);
 	
-	if (enemyStat == WALK_LEFT)	 setX(getX() - getSpeed());
-	else if (enemyStat == WALK_RIGHT) setX(getX() + getSpeed());
-	if (enemyStat == RUN_LEFT) setX(getX() - getSpeed() * 2);
-	else if (enemyStat == RUN_RIGHT) setX(getX() + getSpeed() * 2);
 	
-	// 플레이어 발견시 움직임
-	if (_isAlarm)
-	{
-		if (_isLeft) _enemyStatus = WARNING_LEFT;
-		else _enemyStatus = WARNING_RIGHT;
-
-		if (enemyStat == WARNING_LEFT)
-		{
-			if (_frameIndex2 > 6)
-			{
-				_frameIndex2 = 0;
-				_enemyStatus = FIRE_LEFT;
-			}
-		}
-		else if (enemyStat == WARNING_RIGHT)
-		{
-			if (_frameIndex2 < 0)
-			{
-				_frameIndex2 = 0;
-				_enemyStatus = FIRE_RIGHT;
-			}
-		}
-	}	
-
-	setEnemyRC(RectMakeCenter(getX(), getY(), _bodyImage->getFrameWidth(), _bodyImage->getFrameHeight()));
-
 	// 적 시야 렉트 변화
 	if (_isLeft)
 	{
@@ -104,76 +79,8 @@ void enemy::move(enemyStatus enemyStat)
 	{
 		_enemySightRC = RectMake(getX() - _bodyImage->getFrameWidth() / 2, getY() - _bodyImage->getFrameHeight() / 2, 500 + _bodyImage->getFrameWidth() / 2, _bodyImage->getFrameHeight());
 	}
-
-	_bodyImage->setX(getEnemyRC().left);
-	_bodyImage->setY(getEnemyRC().top);
-	_armImage->setX(getEnemyRC().left);
-	_armImage->setY(getEnemyRC().top);
-
-	if (_actionCount > 2800) _actionCount = 0;
-	// 일정시간 지나면 적 이동
-	//if (_actionCount < 200)
-	//{
-	//	_enemyStatus = WALK_LEFT;
-	//	_isLeft = true;
-	//}
-	//else if (_actionCount > 200 && _actionCount < 400)
-	//{
-	//	_enemyStatus = WALK_RIGHT;
-	//	_isLeft = false;
-	//}
-	//else if (_actionCount > 400 && _actionCount < 600)
-	//{
-	//	_enemyStatus = IDLE_LEFT;
-	//	_isLeft = true;
-	//}
-	//else if (_actionCount > 600 && _actionCount < 800)
-	//{
-	//	_enemyStatus = IDLE_RIGHT;
-	//	_isLeft = false;
-	//}
-	//else if (_actionCount > 800 && _actionCount < 1000)
-	//{
-	//	_enemyStatus = WARNING_LEFT;
-	//	_isLeft = true;
-	//}
-	//else if (_actionCount > 1000 && _actionCount < 1200)
-	//{
-	//	_enemyStatus = WARNING_RIGHT;
-	//	_isLeft = false;
-	//}
-	//else if (_actionCount > 1200 && _actionCount < 1400)
-	//{
-	//	_enemyStatus = FIRE_LEFT;
-	//	_isLeft = true;
-	//}
-	//else if (_actionCount > 1400 && _actionCount < 1600)
-	//{
-	//	_enemyStatus = FIRE_RIGHT;
-	//	_isLeft = false;
-	//}
-	//else if (_actionCount > 1600 && _actionCount < 1800)
-	//{
-	//	_enemyStatus = KNOCK_BACK_LEFT;
-	//	_isLeft = true;
-	//}
-	//else if (_actionCount > 1800 && _actionCount < 2000)
-	//{
-	//	_enemyStatus = KNOCK_BACK_RIGHT;
-	//	_isLeft = false;				
-	//}
-	//else if (_actionCount > 2000 && _actionCount < 2200)
-	//{
-	//	_enemyStatus = DEAD_LEFT;
-	//	_isLeft = true;		
-	//}
-	//else if (_actionCount > 2200 && _actionCount < 2400)
-	//{
-	//	_enemyStatus = DEAD_RIGHT;
-	//	_isLeft = false;
-	//}
 	
-	
+	if (_actionCount > 2800) _actionCount = 0;		
 }
 
 void enemy::frameAnimate()
@@ -372,10 +279,6 @@ void enemy::frameAnimate()
 	}
 }
 
-void enemy::fireToPlayer()
-{
-}
-
 void enemy::knockBackMove()
 {
 	// 넉백됐을때, 뒤로 날라감
@@ -383,12 +286,18 @@ void enemy::knockBackMove()
 	{
 		setX(getX() - _kbSpeed);
 		_kbSpeed -= 0.5f;
-		if (_kbSpeed < 0) _kbSpeed = 0;
+		if (_kbSpeed < 0)
+		{
+			_enemyStatus = DEAD_LEFT;
+		}
 	}	
 	if (_enemyStatus == KNOCK_BACK_RIGHT)
 	{
 		setX(getX() + _kbSpeed);
 		_kbSpeed -= 0.5f;
-		if (_kbSpeed < 0) _kbSpeed = 0;
+		if (_kbSpeed < 0)
+		{			
+			_enemyStatus = DEAD_RIGHT;
+		}
 	}	
 }

@@ -12,17 +12,11 @@
     <Filter Include="GameFramework2D">
       <UniqueIdentifier>{9fbd4086-f21e-4a3b-b3d1-8ac4c5f5fa1b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameFramework2D\매니져">
-      <UniqueIdentifier>{5ce72af8-e27e-4d87-81a9-202553e2a4fc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame">
       <UniqueIdentifier>{0197a609-4f17-4b09-bb41-10cc33d95d87}</UniqueIdentifier>
     </Filter>
     <Filter Include="GameFramework2D\유틸">
       <UniqueIdentifier>{0e047507-cff2-4a5e-8198-0c562e8e0211}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameFramework2D\이미지">
-      <UniqueIdentifier>{1851a966-ba68-4f2f-8ebc-640729b7e225}</UniqueIdentifier>
     </Filter>
     <Filter Include="GameFramework2D\WinMain">
       <UniqueIdentifier>{4a79707c-1728-49f2-ba7d-dc17dad14387}</UniqueIdentifier>
@@ -41,6 +35,12 @@
     </Filter>
     <Filter Include="GameFramework2D\체력바">
       <UniqueIdentifier>{1185f067-cd46-4aa5-8732-1db0fde93c3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework2D\매니져">
+      <UniqueIdentifier>{5ce72af8-e27e-4d87-81a9-202553e2a4fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework2D\이미지">
+      <UniqueIdentifier>{1851a966-ba68-4f2f-8ebc-640729b7e225}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

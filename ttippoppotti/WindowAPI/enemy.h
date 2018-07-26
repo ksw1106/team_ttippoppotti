@@ -35,7 +35,8 @@ private:
 	bool _isAlarm;
 
 	int _frameCount, _frameIndex, _frameIndex2, _frameIndex3;
-	int	_actionCount;
+	int	_actionCount;		// 행동 바뀔 변수
+	int _coolCount;			// 행동 바뀌는 시간
 	
 public:
 	virtual HRESULT init(const char* bodyImage, const char* armImage, int x, int y, int hp);
@@ -65,10 +66,11 @@ public:
 	virtual void setHP(int hp) { _hp = hp; }
 	virtual void setAlarm(bool isAlarm) { _isAlarm = isAlarm; }
 	virtual void setStatus(enemyStatus enemyStat) { _enemyStatus = enemyStat; }
+	virtual void setDirection(bool isLeft) { _isLeft = isLeft; }
 
-	virtual void move(enemyStatus enemyStat);
-	virtual void frameAnimate();
-	virtual void fireToPlayer();
+	virtual void move();
+	
+	virtual void frameAnimate();	
 	virtual void knockBackMove();	// 총알맞았을때 뒤로 날아감
 			
 	enemy() {}
