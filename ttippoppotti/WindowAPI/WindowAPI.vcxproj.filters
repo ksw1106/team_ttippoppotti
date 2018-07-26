@@ -39,7 +39,7 @@
     <Filter Include="GameFramework2D\체력바">
       <UniqueIdentifier>{1185f067-cd46-4aa5-8732-1db0fde93c3d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameFramework2D\로딩\매니져">
+    <Filter Include="GameFramework2D\매니져">
       <UniqueIdentifier>{5ce72af8-e27e-4d87-81a9-202553e2a4fc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -51,10 +51,10 @@
       <Filter>MainGame</Filter>
     </ClInclude>
     <ClInclude Include="singletonBase.h">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
     <ClInclude Include="keyManager.h">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
     <ClInclude Include="gameNode.h">
       <Filter>GameFramework2D\WinMain</Filter>
@@ -69,7 +69,7 @@
       <Filter>GameFramework2D\이미지</Filter>
     </ClInclude>
     <ClInclude Include="imageManager.h">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
     <ClInclude Include="util.h">
       <Filter>GameFramework2D\유틸</Filter>
@@ -78,25 +78,25 @@
       <Filter>GameFramework2D\총알</Filter>
     </ClInclude>
     <ClInclude Include="frameManager.h">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
     <ClInclude Include="saveData.h">
       <Filter>GameFramework2D\Data</Filter>
     </ClInclude>
     <ClInclude Include="effectManager.h">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
     <ClInclude Include="soundManager.h">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
     <ClInclude Include="txtData.h">
       <Filter>GameFramework2D\Data</Filter>
     </ClInclude>
     <ClInclude Include="objectManager.h">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
     <ClInclude Include="sceneManager.h">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
     <ClInclude Include="stageScene.h">
       <Filter>MainGame\브로포스</Filter>
@@ -120,13 +120,13 @@
       <Filter>GameFramework2D\로딩</Filter>
     </ClInclude>
     <ClInclude Include="cameraManager.h">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
     <ClInclude Include="effects.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
     <ClInclude Include="timeManager.h">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
     <ClInclude Include="testScene_kmy.h">
       <Filter>헤더 파일</Filter>
@@ -152,7 +152,7 @@
       <Filter>MainGame</Filter>
     </ClCompile>
     <ClCompile Include="keyManager.cpp">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
     <ClCompile Include="gameNode.cpp">
       <Filter>GameFramework2D\WinMain</Filter>
@@ -161,7 +161,7 @@
       <Filter>GameFramework2D\이미지</Filter>
     </ClCompile>
     <ClCompile Include="imageManager.cpp">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
     <ClCompile Include="util.cpp">
       <Filter>GameFramework2D\유틸</Filter>
@@ -170,25 +170,25 @@
       <Filter>GameFramework2D\총알</Filter>
     </ClCompile>
     <ClCompile Include="frameManager.cpp">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
     <ClCompile Include="saveData.cpp">
       <Filter>GameFramework2D\Data</Filter>
     </ClCompile>
     <ClCompile Include="soundManager.cpp">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
     <ClCompile Include="effectManager.cpp">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
     <ClCompile Include="txtData.cpp">
       <Filter>GameFramework2D\Data</Filter>
     </ClCompile>
     <ClCompile Include="objectManager.cpp">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
     <ClCompile Include="sceneManager.cpp">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
     <ClCompile Include="stageScene.cpp">
       <Filter>MainGame\브로포스</Filter>
@@ -212,13 +212,13 @@
       <Filter>GameFramework2D\로딩</Filter>
     </ClCompile>
     <ClCompile Include="cameraManager.cpp">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
     <ClCompile Include="effects.cpp">
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
     <ClCompile Include="timeManager.cpp">
-      <Filter>GameFramework2D\로딩\매니져</Filter>
+      <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
     <ClCompile Include="testScene_kmy.cpp">
       <Filter>소스 파일</Filter>
