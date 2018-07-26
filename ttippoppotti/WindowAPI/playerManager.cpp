@@ -95,6 +95,10 @@ void playerManager::update(void)
 	for (int i = 0; i < _mapData->getObject().size(); i++)
 	{
 		if (!_mapData->getObject()[i]._isActived) continue;
+
+		if (!CAMERAMANAGER->CameraIn(_mapData->getObject()[i]._rc)) continue;
+		
+		count++;
 		if (IntersectRect(&rcTemp, &rcPlayer, &_mapData->getObject()[i]._rc)											
 			&& _img->getY() > _mapData->getObject()[i]._rc.top && _img->getY() < _mapData->getObject()[i]._rc.bottom
 			&& _img->getX() < _mapData->getObject()[i]._rc.left && (_player->getY() - _player->getOldY() > 0))
@@ -126,7 +130,6 @@ void playerManager::update(void)
 			hit_left = false;
 			hit_right = false;
 		}
-
 		if (IntersectRect(&rcTemp, &rcPlayer, &_mapData->getObject()[i]._rc))				// 람브로가 오른쪽벽을 몬지나갑니다
 		{
 			if (_img->getY() < _mapData->getObject()[i]._rc.top									
@@ -135,6 +138,7 @@ void playerManager::update(void)
 				&& _img->getX() + _img->getFrameWidth() < _mapData->getObject()[i]._rc.right)
 			{
 				_player->setX(_mapData->getObject()[i]._rc.left - _img->getFrameWidth());
+				break;
 			}
 		}
 		if (IntersectRect(&rcTemp, &rcPlayer, &_mapData->getObject()[i]._rc))
@@ -145,11 +149,13 @@ void playerManager::update(void)
 				&& _img->getX() < _mapData->getObject()[i]._rc.right)
 			{
 				_player->setX(_mapData->getObject()[i]._rc.right);
+				break;
 			}
 		}
 		if (_img->getX() < CAMERAMANAGER->getCamera().left)									// 밖으로 탈주못함
 		{
 			_player->setX(CAMERAMANAGER->getCamera().left);
+			break;
 		}
 		//if (IntersectRect(&rcTemp, &rcPlayer, &_mapData->getObject()[i]._rc))				// 땅에 충돌 했을때 땅위로 올려버리기~
 		//{
@@ -177,6 +183,11 @@ void playerManager::update(void)
 void playerManager::render(void)
 {
 	_player->render();
+
+	char str[64];
+	sprintf_s(str, "%d", count);
+	TextOut(getMemDC(), 100, 100, str, strlen(str));
+	count = 0;
 }
 
 playerManager::playerManager()
