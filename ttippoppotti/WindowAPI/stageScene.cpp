@@ -5,7 +5,7 @@ HRESULT stageScene::init(void)
 {
 	gameNode::init(TRUE);
 	//이곳에서 초기화를 한다
-\
+
 	soundName[0] = "3";
 	soundName[1] = "2";
 	soundName[2] = "1";
@@ -207,17 +207,20 @@ void stageScene::render(void)
 	{
 		_backGround[i]._image->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	}
-	/*
+	
 	//헬기 등 오브젝트
-	_helicopter->frameRender(getMemDC(), _x - _rcCamera.left, _y - _rcCamera.top);
-	IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x + 169 - _rcCamera.left, _y + 181 - _rcCamera.top);
+	if(CAMERAMANAGER->CameraIn(RectMake(_x, _y, _helicopter->getWidth(), _helicopter->getHeight())))
+		_helicopter->frameRender(getMemDC(), _x - _rcCamera.left, _y - _rcCamera.top);
+	if (CAMERAMANAGER->CameraIn(RectMake(_x+169, _y+181, _helicopter->getWidth(), _helicopter->getHeight())))
+		IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x + 169 - _rcCamera.left, _y + 181 - _rcCamera.top);
+	if (CAMERAMANAGER->CameraIn(RectMake(_x + 169, _y + 181, _helicopter->getWidth(), _helicopter->getHeight())))
 	_saveFlag->frameRender(getMemDC(), _flagX - _rcCamera.left, _flagY - _rcCamera.top);
 
 	IMAGEMANAGER->findImage("spike")->render(getMemDC(), IMAGEMANAGER->findImage("spike")->getX() - _rcCamera.left, IMAGEMANAGER->findImage("spike")->getY() - _rcCamera.top);
 	_humanDead->frameRender(getMemDC(), _humanDead->getX() - _rcCamera.left, _humanDead->getY() - _rcCamera.top);
 
 	_flag->frameRender(getMemDC(), _flag->getX() - _rcCamera.left, _flag->getY() - _rcCamera.top);
-	*/
+	
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
 		char str[64];
@@ -236,9 +239,10 @@ void stageScene::render(void)
 		char str[64];
 		for (int i = 0; i < _mapData->getObject().size(); i++)
 		{
-			//Rectangle(getMemDC(), _mapData->getObject()[i]._rc);
 			if (!_mapData->getObject()[i]._isActived) continue;
 
+			if (!CAMERAMANAGER->CameraIn(_mapData->getObject()[i]._rc)) continue;
+			//맵이 화면안에 없다면 컨티뉴
 			RectangleMake(getMemDC(), _mapData->getObject()[i]._rc.left-_rcCamera.left, _mapData->getObject()[i]._rc.top-_rcCamera.top, _mapData->getObject()[i]._width, _mapData->getObject()[i]._height);
 			sprintf(str, "%d", i);
 			TextOut(getMemDC(), (_mapData->getObject()[i]._rc.left + (_mapData->getObject()[i]._rc.right - _mapData->getObject()[i]._rc.left) / 2) - _rcCamera.left,
