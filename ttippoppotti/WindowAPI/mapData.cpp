@@ -487,6 +487,170 @@ for (int i = 0; i < 5; i++)
 				_vObject.push_back(obj);
 			}
 		}
+
+		//3블록 -5 왼쪽
+		for (int i = 0; i < 1; i++)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 73;
+				obj._height = 69;
+				obj._rc = RectMake(2937 + j * obj._width, 1489 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+
+		//3블록 -5 다리 왼쪽
+		for (int i = 0; i < 1; i++)
+		{
+			for (int j = 0; j < 5; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 69;
+				obj._height = 74;
+				obj._rc = RectMake(3139 + j * obj._width, 1484 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+
+		//3블록 -5 다리
+		for (int i = 0; i < 1; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 68;
+				obj._height = 102;
+				obj._rc = RectMake(3483 + j * obj._width, 1460 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+
+		//3블록 -5 다리 오른쪽
+		for (int i = 0; i < 1; i++)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 70;
+				obj._height = 78;
+				obj._rc = RectMake(3687 + j * obj._width, 1484 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+
+		//3블록 -5 오른쪽
+		for (int i = 0; i < 1; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 69;
+				obj._height = 76;
+				obj._rc = RectMake(3884 + j * obj._width, 1484 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+
+		//3블록 -5 오른쪽
+		for (int i = 0; i < 1; i++)
+		{
+			for (int j = 0; j < 1; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 73;
+				obj._height = 72;
+				obj._rc = RectMake(4091 + j * obj._width, 1488 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+
+		//3블록 -6,7 왼쪽
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < 1; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 73;
+				obj._height = 68;
+				obj._rc = RectMake(2937 + j * obj._width, 1557 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+
+		//3블록 -6,7 중앙`	
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < 1; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 73;
+				obj._height = 68;
+				obj._rc = RectMake(3415 + j * obj._width, 1557 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+
+		//3블록 -6,7 중앙
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < 1; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 73;
+				obj._height = 68;
+				obj._rc = RectMake(4091 + j * obj._width, 1559 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+		//3블록 -8 왼쪽
+		for (int i = 0; i < 1; i++)
+		{
+			for (int j = 0; j < 9; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 69;
+				obj._height = 68;
+				obj._rc = RectMake(2937 + j * obj._width, 1693 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
+
+		//3블록 -8 오른쪽
+		for (int i = 0; i < 1; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				mapObject obj;
+				ZeroMemory(&obj, sizeof(mapObject));
+				obj._width = 69;
+				obj._height = 68;
+				obj._rc = RectMake(3613 + j * obj._width, 1693 + i * obj._height, obj._width, obj._height);
+				obj._isActived = true;
+				_vObject.push_back(obj);
+			}
+		}
 	}
 
 	return S_OK;

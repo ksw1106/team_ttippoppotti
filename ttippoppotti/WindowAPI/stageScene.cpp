@@ -207,7 +207,7 @@ void stageScene::render(void)
 	{
 		_backGround[i]._image->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	}
-
+	/*
 	//헬기 등 오브젝트
 	_helicopter->frameRender(getMemDC(), _x - _rcCamera.left, _y - _rcCamera.top);
 	IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x + 169 - _rcCamera.left, _y + 181 - _rcCamera.top);
@@ -217,7 +217,7 @@ void stageScene::render(void)
 	_humanDead->frameRender(getMemDC(), _humanDead->getX() - _rcCamera.left, _humanDead->getY() - _rcCamera.top);
 
 	_flag->frameRender(getMemDC(), _flag->getX() - _rcCamera.left, _flag->getY() - _rcCamera.top);
-
+	*/
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
 		char str[64];
