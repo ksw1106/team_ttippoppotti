@@ -13,7 +13,6 @@ HRESULT enemyManager::init(void)
 	//적 몸통, 팔 이미지 초기화
 	IMAGEMANAGER->addFrameImage("적몸통", "enemyImage/_enemy_with_head.bmp", 1600, 1600, 20, 20);
 	IMAGEMANAGER->addFrameImage("적팔", "enemyImage/_enemy_gun.bmp", 1600, 800, 19, 10);
-
 	//알람 이미지 초기화
 	IMAGEMANAGER->addFrameImage("알람", "enemyImage/ExclamationMark.bmp", 1020, 60, 17, 1);
 
@@ -104,20 +103,15 @@ void enemyManager::collision()
 		}
 	}
 
-	for (int i = 0; i < _mapData->getObject().size(); ++i)
+	// 맵과 충돌 (타일)
+	for (int i = 386 ; i < 470; ++i)
 	{
 		for (int j = 0; j < getVEnemy().size(); ++j)
 		{
 			if (IntersectRect(&rc, &_mapData->getObject()[i]._rc, &getVEnemy()[j]->getEnemyRC()))
 			{
-				if (getVEnemy()[j]->getStatus() == WALK_LEFT)
-				{
-					getVEnemy()[j]->setStatus(WALK_RIGHT);
-				}
-				else if (getVEnemy()[j]->getStatus() == WALK_RIGHT)
-				{
-					getVEnemy()[j]->setStatus(WALK_LEFT);
-				}
+				if (getVEnemy()[j]->getDirection() == true) getVEnemy()[j]->setDirection(false);
+				else getVEnemy()[j]->setDirection(true);
 			}
 		}
 	}

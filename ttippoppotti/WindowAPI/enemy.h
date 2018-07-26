@@ -66,11 +66,11 @@ public:
 	virtual void setHP(int hp) { _hp = hp; }
 	virtual void setAlarm(bool isAlarm) { _isAlarm = isAlarm; }
 	virtual void setStatus(enemyStatus enemyStat) { _enemyStatus = enemyStat; }
+	virtual void setDirection(bool isLeft) { _isLeft = isLeft; }
 
-	virtual void move(enemyStatus enemyStat);
-	virtual int AI(int speed);
-	virtual void frameAnimate(int num);
-	virtual void fireToPlayer();
+	virtual void move();
+	
+	virtual void frameAnimate();	
 	virtual void knockBackMove();	// 총알맞았을때 뒤로 날아감
 			
 	enemy() {}
