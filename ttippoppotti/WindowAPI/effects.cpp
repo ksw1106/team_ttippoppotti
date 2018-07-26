@@ -8,7 +8,7 @@ HRESULT fragments::init(const char * imageName, int particleMax)
 	_imageName = imageName;
 	//갯수 초기화
 	_particleMax = particleMax;
-	
+
 	_randGravity = -1;
 
 	//총알의 갯수만큼 구조체를 초기화 한 후 벡터에 담기
@@ -24,7 +24,7 @@ HRESULT fragments::init(const char * imageName, int particleMax)
 		fragment.fire = false;
 
 		//벡터에 담기
-		_vFragment.push_back(fragment);                                                                     
+		_vFragment.push_back(fragment);
 	}
 
 	return S_OK;
@@ -38,15 +38,12 @@ void fragments::update(void)
 {
 	if (_isRunning)
 	{
-		if (_randGravity == -1)
-			_randGravity = RND->getFromFloatTo(0.1f, 0.5f);
-
-		this->boom(_randGravity);
+		this->boom();
 		this->collisionProcess();
 	}
 	else
 	{
-		_randGravity = -1;
+		//_randGravity = -1;
 	}
 }
 
@@ -80,15 +77,16 @@ void fragments::activate(float x, float y, float angle)
 
 		//벡터에 담기
 		_vFragment.push_back(fragment);
-		
+
 		_vFragment[i].fire = true;
 		if (angle == PI) //플레이어가 총알을 왼편으로 쐈을 때
-			_vFragment[i].angle = PI - 45.0f - RND->getFromFloatTo(0.1f, 0.5f);
+			_vFragment[i].angle = PI + RND->getFromFloatTo(0.1f, 1.5f) - 0.75f;
 		else if (angle == 0.0f) //플레이어 총알 오른
-			_vFragment[i].angle = 45.0f + RND->getFromFloatTo(0.1f, 0.5f);
+			_vFragment[i].angle = RND->getFromFloatTo(0.1f, 1.5f) - 0.75;
 		_vFragment[i].gravity = 0.0f;
 		_vFragment[i].x = x;
 		_vFragment[i].y = y;
+		_vFragment[i].speed = RND->getFromFloatTo(1.0f, 10.0f);
 		_vFragment[i].count = 0;
 		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
 			_vFragment[i].particleImg->getWidth(),
@@ -96,13 +94,13 @@ void fragments::activate(float x, float y, float angle)
 	}
 }
 
-void fragments::boom(float gravity)
+void fragments::boom()
 {
 	for (int i = 0; i < _vFragment.size(); ++i)
 	{
 		if (!_vFragment[i].fire) continue;
 
-		_vFragment[i].gravity += gravity;
+		_vFragment[i].gravity += 0.55f;
 		_vFragment[i].x += cosf(_vFragment[i].angle) * _vFragment[i].speed;
 		_vFragment[i].y += -sinf(_vFragment[i].angle) * _vFragment[i].speed + _vFragment[i].gravity;
 		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
