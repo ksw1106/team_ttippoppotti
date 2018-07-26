@@ -3,19 +3,10 @@
 
 bool cameraManager::CameraIn(RECT rc)
 {
-	if (_rcCamera.left >= rc.right)
+	if (IntersectRect(&_rcTemp, &RectMake(_rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY), &rc))
 		return true;
-
-	if (_rcCamera.left+WINSIZEY >= rc.left)
-		return true;
-
-	if (_rcCamera.top <= rc.bottom)
-		return true;
-
-	if (_rcCamera.top+WINSIZEY <= rc.top)
-		return true;
-
-	return false;
+	else
+		return false;
 }
 
 HRESULT cameraManager::init()
