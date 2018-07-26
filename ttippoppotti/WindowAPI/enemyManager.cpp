@@ -18,10 +18,10 @@ HRESULT enemyManager::init(void)
 	IMAGEMANAGER->addFrameImage("알람", "enemyImage/ExclamationMark.bmp", 1020, 60, 17, 1);
 
 	//에너미 위치 초기화
-	this->setEnemy(2000, 1450);
-	this->setEnemy(2000, 1244);
-	this->setEnemy(3188, 1655);
-	this->setEnemy(3700, 2190);
+	this->setEnemy(3700, 1450);
+	this->setEnemy(3700, 1244);
+	this->setEnemy(3600, 1655);
+	this->setEnemy(3600, 2190);
 
 	_eBullet = new eBullet;
 	_eBullet->init(20, 500.f);
@@ -49,12 +49,12 @@ void enemyManager::update(void)
 			_eBullet->fire(getVEnemy()[i]->getX() + 40, getVEnemy()[i]->getY() + 10, 3, getVEnemy()[i]->getDirection());
 		}
 	}
-	_eBullet->update();	
-		
+	_eBullet->update();		
+
+	this->collision();
 }
 
 void enemyManager::render(void)
-
 {
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
@@ -79,6 +79,7 @@ void enemyManager::collision()
 		{
 			// 말풍선 띄우기
 			getVEnemy()[i]->setAlarm(true);
+			
 			// 적 상태 변경 ( 경고 )
 			if (getVEnemy()[i]->getDirection() == true)
 				getVEnemy()[i]->setStatus(WARNING_LEFT);

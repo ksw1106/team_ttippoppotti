@@ -30,8 +30,8 @@ void enemy::release(void)
 
 void enemy::update(void)
 {
-	this->move(_enemyStatus);
-	this->frameAnimate();
+	this->move(getDirection());
+	this->frameAnimate(AI(5));
 	this->knockBackMove();		
 }
 
@@ -48,46 +48,36 @@ void enemy::render(void)
 		IMAGEMANAGER->frameRender("알람", getMemDC(), _enemyRC.left + 10 - CAMERAMANAGER->getCamera().left, _enemyRC.top - 50 - CAMERAMANAGER->getCamera().top, _warnSign->getFrameX(), _warnSign->getFrameY());
 		
 	}
-	if (KEYMANAGER->isToggleKey(VK_F5))
+	if (KEYMANAGER->isToggleKey(VK_F4))
 	{
 		Rectangle(getMemDC(), getX() - _bodyImage->getFrameWidth()/2, getY() - _bodyImage->getFrameHeight()/2, getX() + _bodyImage->getFrameWidth()/2, getY() + _bodyImage->getFrameHeight()/2);
 		RectangleMake(getMemDC(), _enemySightRC.left - CAMERAMANAGER->getCamera().left, _enemySightRC.top - CAMERAMANAGER->getCamera().top, 500, 100);
 	}
 }
 
-void enemy::move(enemyStatus enemyStat)
-{
-	++_actionCount;
-	// 적 방향에 따른 왼쪽, 오른쪽 불변수 변화
-	if (enemyStat % 2 == 0) // 짝수면은 왼쪽
-		_isLeft = true;
-	else if (enemyStat % 2 == 1) // 홀수면은 오른쪽
-		_isLeft = false;
+void enemy::move(bool isLeft)
+{	
 	
-	if (enemyStat == WALK_LEFT)	 setX(getX() - getSpeed());
-	else if (enemyStat == WALK_RIGHT) setX(getX() + getSpeed());
-	if (enemyStat == RUN_LEFT) setX(getX() - getSpeed() * 2);
-	else if (enemyStat == RUN_RIGHT) setX(getX() + getSpeed() * 2);
+	// 좌우 이동
+	if (_enemyStatus == WALK_LEFT) setX(getX() - getSpeed());
+	else if (_enemyStatus == WALK_RIGHT) setX(getX() + getSpeed());
+	if (_enemyStatus == RUN_LEFT) setX(getX() - getSpeed() * 1.5f);
+	else if (_enemyStatus == RUN_RIGHT) setX(getX() + getSpeed() * 1.5f);
 	
 	// 플레이어 발견시 움직임
 	if (_isAlarm)
 	{
-		if (_isLeft) _enemyStatus = WARNING_LEFT;
-		else _enemyStatus = WARNING_RIGHT;
-
-		if (enemyStat == WARNING_LEFT)
+		if (_enemyStatus == WARNING_LEFT)
 		{
 			if (_frameIndex2 > 6)
 			{
-				_frameIndex2 = 0;
 				_enemyStatus = FIRE_LEFT;
 			}
 		}
-		else if (enemyStat == WARNING_RIGHT)
+		else if (_enemyStatus == WARNING_RIGHT)
 		{
 			if (_frameIndex2 < 0)
 			{
-				_frameIndex2 = 0;
 				_enemyStatus = FIRE_RIGHT;
 			}
 		}
@@ -176,9 +166,20 @@ void enemy::move(enemyStatus enemyStat)
 	
 }
 
-void enemy::frameAnimate()
+int enemy::AI(int speed)
 {
-	if (_enemyStatus == IDLE_LEFT)
+	_coolCount = 1000;
+
+	if (_coolCount % speed == 0)
+	{
+		_actionCount = RND->getInt(sizeof(enemyStatus));
+		return _actionCount;
+	}	
+}
+
+void enemy::frameAnimate(int num)
+{
+	if (num == IDLE_LEFT)
 	{
 		_bodyImage->setFrameY(3);
 		_armImage->setFrameY(7);
@@ -196,7 +197,7 @@ void enemy::frameAnimate()
 		_bodyImage->setFrameX(_frameIndex);
 		_armImage->setFrameX(_frameIndex2);
 	}
-	else if (_enemyStatus == IDLE_RIGHT)
+	else if (num == IDLE_RIGHT)
 	{
 		_bodyImage->setFrameY(2);
 		_armImage->setFrameY(6);
@@ -214,7 +215,7 @@ void enemy::frameAnimate()
 		_bodyImage->setFrameX(_frameIndex);
 		_armImage->setFrameX(_frameIndex2);
 	}
-	else if (_enemyStatus == WALK_LEFT)
+	else if (num == WALK_LEFT)
 	{
 		_bodyImage->setFrameY(1);
 		_armImage->setFrameY(7);
@@ -233,7 +234,7 @@ void enemy::frameAnimate()
 		_bodyImage->setFrameX(_frameIndex);
 		_armImage->setFrameX(_frameIndex2);
 	}
-	else if (_enemyStatus == WALK_RIGHT)
+	else if (num == WALK_RIGHT)
 	{
 		_bodyImage->setFrameY(0);
 		_armImage->setFrameY(6);
@@ -251,7 +252,7 @@ void enemy::frameAnimate()
 		_bodyImage->setFrameX(_frameIndex);
 		_armImage->setFrameX(_frameIndex2);
 	}
-	else if (_enemyStatus == WARNING_LEFT)
+	else if (num == WARNING_LEFT)
 	{
 		_bodyImage->setFrameY(3);
 		_armImage->setFrameY(9);
@@ -265,7 +266,7 @@ void enemy::frameAnimate()
 		_bodyImage->setFrameX(6);
 		_armImage->setFrameX(_frameIndex2);
 	}
-	else if (_enemyStatus == WARNING_RIGHT)
+	else if (num == WARNING_RIGHT)
 	{
 		_bodyImage->setFrameY(2);
 		_armImage->setFrameY(8);
@@ -279,7 +280,7 @@ void enemy::frameAnimate()
 		_bodyImage->setFrameX(10);
 		_armImage->setFrameX(_frameIndex2);
 	}
-	else if (_enemyStatus == FIRE_LEFT)
+	else if (num == FIRE_LEFT)
 	{
 		_bodyImage->setFrameY(3);
 		_armImage->setFrameY(1);
@@ -293,7 +294,7 @@ void enemy::frameAnimate()
 		_bodyImage->setFrameX(6);
 		_armImage->setFrameX(_frameIndex2);
 	}
-	else if (_enemyStatus == FIRE_RIGHT)
+	else if (num == FIRE_RIGHT)
 	{
 		_bodyImage->setFrameY(2);
 		_armImage->setFrameY(0);
@@ -307,7 +308,7 @@ void enemy::frameAnimate()
 		_bodyImage->setFrameX(10);
 		_armImage->setFrameX(_frameIndex2);
 	}
-	else if (_enemyStatus == KNOCK_BACK_RIGHT)
+	else if (num == KNOCK_BACK_RIGHT)
 	{
 		_bodyImage->setFrameY(5);
 		//_armImage->setFrameY(0);
@@ -324,7 +325,7 @@ void enemy::frameAnimate()
 		_bodyImage->setFrameX(_frameIndex);
 		//_armImage->setFrameX(_frameIndex2);
 	}
-	else if (_enemyStatus == KNOCK_BACK_LEFT)
+	else if (num == KNOCK_BACK_LEFT)
 	{
 		_bodyImage->setFrameY(4);
 		//_armImage->setFrameY(1);
@@ -341,7 +342,7 @@ void enemy::frameAnimate()
 		_bodyImage->setFrameX(_frameIndex);
 		//_armImage->setFrameX(_frameIndex2);
 	}
-	else if (_enemyStatus == DEAD_RIGHT)
+	else if (num == DEAD_RIGHT)
 	{
 		_bodyImage->setFrameY(12);
 		_bodyImage->setFrameX(1);
