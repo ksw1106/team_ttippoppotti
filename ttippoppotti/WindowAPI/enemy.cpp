@@ -2,24 +2,42 @@
 #include "enemy.h"
 
 
-HRESULT enemy::init(const char* bodyImage, const char* armImage, int x, int y, int hp)
+HRESULT enemy::init(int x, int y, int hp, int randomNum)
 {
 	_x = x, _y = y;
 	_hp = hp;
 
-	_bodyImage = IMAGEMANAGER->findImage(bodyImage);
-	_armImage = IMAGEMANAGER->findImage(armImage);
-	_warnSign = IMAGEMANAGER->findImage("알람");
-	_warnSign->setFrameX(0);
-	_enemyRC = RectMakeCenter(_x, _y, _bodyImage->getFrameWidth(), _bodyImage->getFrameHeight());
-	
-	setSpeed(3.0f);
-	_enemyStatus = IDLE_LEFT;
-	_kbSpeed = 20.f;
+	_bodyImage[E_IDLE] = IMAGEMANAGER->findImage("군인평상시");
+	_bodyImage[E_WALK] = IMAGEMANAGER->findImage("군인걸음");
+	_bodyImage[E_DOUBT] = IMAGEMANAGER->findImage("군인의심");
+	_bodyImage[E_KNOCK_BACK] = IMAGEMANAGER->findImage("군인넉백");
+	_bodyImage[E_FLY_AWAY] = IMAGEMANAGER->findImage("군인점프");
+	_bodyImage[E_DEAD] = IMAGEMANAGER->findImage("군인시체");
 
-	_isLeft = FALSE;
-	_isAlarm = FALSE;
-	_actionCount = _frameCount = _frameIndex = _frameIndex2 = _frameIndex3 = 0;
+	_armImage[G_IDLE] = IMAGEMANAGER->findImage("총평상시");
+	_armImage[G_TARGETING] = IMAGEMANAGER->findImage("총조준");
+	_armImage[G_READY] = IMAGEMANAGER->findImage("총발사대기");
+	_armImage[G_FIRE] = IMAGEMANAGER->findImage("총발사");
+	_armImage[G_RELOAD] = IMAGEMANAGER->findImage("총장전");
+				
+	_warnSign = IMAGEMANAGER->findImage("알람");
+	_doubtSign = IMAGEMANAGER->findImage("의문");
+
+	_warnSign->setFrameX(0);
+	_doubtSign->setFrameY(0);
+		
+	setSpeed(3.0f);
+	setBodyStatus(E_IDLE);
+	setArmStatus(G_IDLE);
+	_frameCount = _frameIndex = _frameIndex2 = _frameIndex3 = _frameIndex4 = 0;
+	_actionSpeed = 5;
+
+	_randomNumber = randomNum;
+
+	_kbSpeed = 20.f;
+	_isLeft = true;
+	_isAlarm = false;
+	_enemyRC = RectMakeCenter(_x, _y, _bodyImage[getBodyStatus()]->getFrameWidth(), _bodyImage[getBodyStatus()]->getFrameHeight());
 
 	return S_OK;
 }
@@ -30,274 +48,114 @@ void enemy::release(void)
 
 void enemy::update(void)
 {
+	this->controlAI(_randomNumber);
 	this->move();
 	this->frameAnimate();
 	this->knockBackMove();		
 
-	_bodyImage->setX(getEnemyRC().left);
-	_bodyImage->setY(getEnemyRC().top);
-	_armImage->setX(getEnemyRC().left);
-	_armImage->setY(getEnemyRC().top);
-	setEnemyRC(RectMakeCenter(getX(), getY(), _bodyImage->getFrameWidth(), _bodyImage->getFrameHeight()));
+	_bodyImage[getBodyStatus()]->setX(getEnemyRC().left);
+	_bodyImage[getBodyStatus()]->setY(getEnemyRC().top);
+	_armImage[getArmStatus()]->setX(getEnemyRC().left);
+	_armImage[getArmStatus()]->setY(getEnemyRC().top);
+	
+	setEnemyRC(RectMakeCenter(getX(), getY(), _bodyImage[_enemyStatus]->getFrameWidth(), _bodyImage[_enemyStatus]->getFrameHeight()));
 }
 
 void enemy::render(void)
 {
-	IMAGEMANAGER->frameRender("적몸통", getMemDC(), _enemyRC.left - CAMERAMANAGER->getCamera().left, _enemyRC.top - CAMERAMANAGER->getCamera().top, _bodyImage->getFrameX(), _bodyImage->getFrameY());
-	if (_enemyStatus < 12)
+	if (CAMERAMANAGER->CameraIn(getEnemyRC()))
 	{
-		IMAGEMANAGER->frameRender("적팔", getMemDC(), _enemyRC.left - 5 - CAMERAMANAGER->getCamera().left, _enemyRC.top + 3 - CAMERAMANAGER->getCamera().top, _armImage->getFrameX(), _armImage->getFrameY());
-	}
-
-	if (_isAlarm && _warnSign->getFrameX() <= _warnSign->getMaxFrameX())	// 플레이어 발견했을때, 느낌표 말풍선!
-	{
-		IMAGEMANAGER->frameRender("알람", getMemDC(), _enemyRC.left + 10 - CAMERAMANAGER->getCamera().left, _enemyRC.top - 50 - CAMERAMANAGER->getCamera().top, _warnSign->getFrameX(), _warnSign->getFrameY());
+		//몸통 이미지 렌더
+		_bodyImage[getBodyStatus()]->frameRender(getMemDC(), _enemyRC.left - CAMERAMANAGER->getCamera().left, _enemyRC.top - CAMERAMANAGER->getCamera().top,
+			_bodyImage[getBodyStatus()]->getFrameX(), _bodyImage[getBodyStatus()]->getFrameY());
+		//팔 이미지 렌더
+		_armImage[getArmStatus()]->frameRender(getMemDC(), _enemyRC.left - CAMERAMANAGER->getCamera().left, _enemyRC.top - CAMERAMANAGER->getCamera().top,
+			_armImage[getArmStatus()]->getFrameX(), _armImage[getArmStatus()]->getFrameY());
 		
+		// 플레이어 발견했을때, 느낌표 말풍선!
+		if (_isAlarm && _warnSign->getFrameX() <= _warnSign->getMaxFrameX())	
+		{
+			IMAGEMANAGER->frameRender("알람", getMemDC(), _enemyRC.left + 10 - CAMERAMANAGER->getCamera().left, _enemyRC.top - 50 - CAMERAMANAGER->getCamera().top, _warnSign->getFrameX(), _warnSign->getFrameY());
+		}
+		//if ()
 	}
+	
 	if (KEYMANAGER->isToggleKey(VK_F4))
 	{
-		Rectangle(getMemDC(), getX() - _bodyImage->getFrameWidth()/2, getY() - _bodyImage->getFrameHeight()/2, getX() + _bodyImage->getFrameWidth()/2, getY() + _bodyImage->getFrameHeight()/2);
+		//Rectangle(getMemDC(), getX() - _bodyImage[getBodyStatus()]->getFrameWidth()/2, getY() - _bodyImage[getBodyStatus()]->getFrameHeight()/2,
+		//	getX() + _bodyImage[getBodyStatus()]->getFrameWidth()/2, getY() + _bodyImage[getBodyStatus()]->getFrameHeight()/2);
+
+		// 적 시야 렉트 렌더
 		RectangleMake(getMemDC(), _enemySightRC.left - CAMERAMANAGER->getCamera().left, _enemySightRC.top - CAMERAMANAGER->getCamera().top, 500, 100);
 	}
 }
 
 void enemy::move()
-{			
+{
 	// 좌우 이동
-	if (_enemyStatus == WALK_LEFT) setX(getX() - getSpeed());
-	else if (_enemyStatus == WALK_RIGHT) setX(getX() + getSpeed());
-	if (_enemyStatus == RUN_LEFT) setX(getX() - getSpeed() * 1.5f);
-	else if (_enemyStatus == RUN_RIGHT) setX(getX() + getSpeed() * 1.5f);
-	
+	if (getBodyStatus() == E_WALK)
+	{
+		if (_isLeft)
+			setX(getX() - getSpeed());
+		else 
+			setX(getX() + getSpeed());
+	}	
 	
 	// 적 시야 렉트 변화
 	if (_isLeft)
 	{
-		_enemySightRC = RectMake(getX() - 500, getY() - _bodyImage->getFrameHeight() / 2, 500 + _bodyImage->getFrameWidth() / 2, _bodyImage->getFrameHeight());
+		_enemySightRC = RectMake(getX() - 500, getY() - _bodyImage[getBodyStatus()]->getFrameHeight() / 2,
+			500 + _bodyImage[getBodyStatus()]->getFrameWidth() / 2, _bodyImage[getBodyStatus()]->getFrameHeight());
 	}
 	else
 	{
-		_enemySightRC = RectMake(getX() - _bodyImage->getFrameWidth() / 2, getY() - _bodyImage->getFrameHeight() / 2, 500 + _bodyImage->getFrameWidth() / 2, _bodyImage->getFrameHeight());
+		_enemySightRC = RectMake(getX() - _bodyImage[getBodyStatus()]->getFrameWidth() / 2, getY() - _bodyImage[getBodyStatus()]->getFrameHeight() / 2,
+			500 + _bodyImage[getBodyStatus()]->getFrameWidth() / 2, _bodyImage[getBodyStatus()]->getFrameHeight());
+	}	
+}
+
+void enemy::controlAI(int randomNum)
+{
+	if (randomNum % 2 == 1)
+	{
+		setBodyStatus(E_WALK);
+		setArmStatus(G_FIRE);
+		setDirection(false);
 	}
-	
-	if (_actionCount > 2800) _actionCount = 0;		
+	else if (randomNum % 2 == 0)
+	{
+		setBodyStatus(E_IDLE);
+	}
 }
 
 void enemy::frameAnimate()
 {
-	if (_enemyStatus == IDLE_LEFT)
-	{
-		_bodyImage->setFrameY(3);
-		_armImage->setFrameY(7);
-		++_frameCount;
-		if (_frameCount % COOLTIME == 0)
-		{
-			if (_frameIndex > 14) _frameIndex = 14;
-			_frameIndex--;
-			if (_frameIndex < 0) _frameIndex = 14;
-
-			if (_frameIndex2 > 7) _frameIndex2 = 7;
-			_frameIndex2--;
-			if (_frameIndex2 < 0) _frameIndex2 = 7;
-		}
-		_bodyImage->setFrameX(_frameIndex);
-		_armImage->setFrameX(_frameIndex2);
-	}
-	else if (_enemyStatus == IDLE_RIGHT)
-	{
-		_bodyImage->setFrameY(2);
-		_armImage->setFrameY(6);
-		++_frameCount;
-		if (_frameCount % COOLTIME == 0)
-		{
-			if (_frameIndex < 0) _frameIndex = 0;
-			_frameIndex++;
-			if (_frameIndex > 14) _frameIndex = 0;
-
-			if (_frameIndex2 < 0) _frameIndex2 = 0;
-			_frameIndex2++;
-			if (_frameIndex2 > 7) _frameIndex2 = 0;
-		}
-		_bodyImage->setFrameX(_frameIndex);
-		_armImage->setFrameX(_frameIndex2);
-	}
-	else if (_enemyStatus == WALK_LEFT)
-	{
-		_bodyImage->setFrameY(1);
-		_armImage->setFrameY(7);
-		++_frameCount;
-		if (_frameCount % COOLTIME == 0)
-		{
-			if (_frameIndex > 7) _frameIndex = 7;
-			_frameIndex--;
-			if (_frameIndex < 0) _frameIndex = 7;
-
-			if (_frameIndex2 > 7) _frameIndex2 = 7;
-			_frameIndex2--;
-			if (_frameIndex2 < 0) _frameIndex2 = 7;
-
-		}
-		_bodyImage->setFrameX(_frameIndex);
-		_armImage->setFrameX(_frameIndex2);
-	}
-	else if (_enemyStatus == WALK_RIGHT)
-	{
-		_bodyImage->setFrameY(0);
-		_armImage->setFrameY(6);
-		++_frameCount;
-		if (_frameCount % COOLTIME == 0)
-		{
-			if (_frameIndex < 0) _frameIndex = 0;
-			++_frameIndex;
-			if (_frameIndex > 7) _frameIndex = 0;
-
-			if (_frameIndex2 < 0) _frameIndex2 = 0;
-			_frameIndex2++;
-			if (_frameIndex2 > 7) _frameIndex2 = 0;
-		}
-		_bodyImage->setFrameX(_frameIndex);
-		_armImage->setFrameX(_frameIndex2);
-	}
-	else if (_enemyStatus == WARNING_LEFT)
-	{
-		_bodyImage->setFrameY(3);
-		_armImage->setFrameY(9);
-		++_frameCount;
-		if (_frameCount % COOLTIME == 0)
-		{
-			if (_frameIndex2 > 6) _frameIndex2 = 6;
-			_frameIndex2--;
-			if (_frameIndex2 < 0) _frameIndex2 = 0;
-		}
-		_bodyImage->setFrameX(6);
-		_armImage->setFrameX(_frameIndex2);
-	}
-	else if (_enemyStatus == WARNING_RIGHT)
-	{
-		_bodyImage->setFrameY(2);
-		_armImage->setFrameY(8);
-		++_frameCount;
-		if (_frameCount % COOLTIME == 0)
-		{
-			if (_frameIndex2 < 0) _frameIndex2 = 0;
-			_frameIndex2++;
-			if (_frameIndex2 > 6) _frameIndex2 = 6;
-		}
-		_bodyImage->setFrameX(10);
-		_armImage->setFrameX(_frameIndex2);
-	}
-	else if (_enemyStatus == FIRE_LEFT)
-	{
-		_bodyImage->setFrameY(3);
-		_armImage->setFrameY(1);
-		++_frameCount;
-		if (_frameCount % COOLTIME == 0)
-		{
-			if (_frameIndex2 > 3) _frameIndex2 = 3;
-			_frameIndex2--;
-			if (_frameIndex2 < 0) _frameIndex2 = 3;
-		}
-		_bodyImage->setFrameX(6);
-		_armImage->setFrameX(_frameIndex2);
-	}
-	else if (_enemyStatus == FIRE_RIGHT)
-	{
-		_bodyImage->setFrameY(2);
-		_armImage->setFrameY(0);
-		++_frameCount;
-		if (_frameCount % COOLTIME == 0)
-		{
-			if (_frameIndex2 < 0) _frameIndex2 = 0;
-			_frameIndex2++;
-			if (_frameIndex2 > 3) _frameIndex2 = 0;
-		}
-		_bodyImage->setFrameX(10);
-		_armImage->setFrameX(_frameIndex2);
-	}
-	else if (_enemyStatus == KNOCK_BACK_RIGHT)
-	{
-		_bodyImage->setFrameY(5);
-		//_armImage->setFrameY(0);
-		++_frameCount;
-		if (_frameCount % COOLTIME == 0)
-		{
-			if (_frameIndex < 0) _frameIndex = 0;
-			_frameIndex++;
-			if (_frameIndex > 9)
-			{					
-				_frameIndex = 0;
-			};
-		}
-		_bodyImage->setFrameX(_frameIndex);
-		//_armImage->setFrameX(_frameIndex2);
-	}
-	else if (_enemyStatus == KNOCK_BACK_LEFT)
-	{
-		_bodyImage->setFrameY(4);
-		//_armImage->setFrameY(1);
-		++_frameCount;
-		if (_frameCount % COOLTIME == 0)
-		{
-			if (_frameIndex > 9) _frameIndex = 9;
-			_frameIndex--;
-			if (_frameIndex < 0)
-			{						
-				_frameIndex = 9;
-			};
-		}
-		_bodyImage->setFrameX(_frameIndex);
-		//_armImage->setFrameX(_frameIndex2);
-	}
-	else if (_enemyStatus == DEAD_RIGHT)
-	{
-		_bodyImage->setFrameY(12);
-		_bodyImage->setFrameX(1);
+	FRAMEMANAGER->frameChange(_bodyImage[getBodyStatus()], _frameCount, _frameIndex, _actionSpeed, _isLeft);
+	FRAMEMANAGER->frameChange(_armImage[getArmStatus()], _frameCount, _frameIndex2, _actionSpeed, _isLeft);
+	FRAMEMANAGER->frameChange(_warnSign, _frameCount, _frameIndex3, _actionSpeed, _isLeft);
+	FRAMEMANAGER->frameChange(_doubtSign, _frameCount, _frameIndex4, _actionSpeed, _isLeft);
 		
-	}
-	else if (_enemyStatus == DEAD_LEFT)
-	{
-		_bodyImage->setFrameY(13);
-		_bodyImage->setFrameX(1);		
-	}
-
-	if (_frameCount > 100) _frameCount = 0;	
-
-	//===================================================================================================================================================
-
-	// 느낌표 말풍선 애니메이션
-	if (_isAlarm)
-	{
-		_warnSign->setFrameY(0);
-		++_frameCount;
-		if (_frameCount % 5 == 0)
-		{
-			++_frameIndex3;
-			if (_frameIndex3 > 16) _frameIndex3 = 0;
-			//_isAlarm = false;
-		}
-		_warnSign->setFrameX(_frameIndex3);
-	}
 }
 
 void enemy::knockBackMove()
 {
 	// 넉백됐을때, 뒤로 날라감
-	if (_enemyStatus == KNOCK_BACK_LEFT)
+	if (_enemyStatus == E_KNOCK_BACK)
 	{
 		setX(getX() - _kbSpeed);
 		_kbSpeed -= 0.5f;
 		if (_kbSpeed < 0)
 		{
-			_enemyStatus = DEAD_LEFT;
+			_enemyStatus = E_DEAD;
 		}
 	}	
-	if (_enemyStatus == KNOCK_BACK_RIGHT)
+	if (_enemyStatus == E_KNOCK_BACK)
 	{
 		setX(getX() + _kbSpeed);
 		_kbSpeed -= 0.5f;
 		if (_kbSpeed < 0)
 		{			
-			_enemyStatus = DEAD_RIGHT;
+			_enemyStatus = E_DEAD;
 		}
 	}	
 }
