@@ -233,16 +233,18 @@ void stageScene::render(void)
 	SetDCPenColor(getMemDC(), RGB(0, 0, 0));
 	if (KEYMANAGER->isToggleKey(VK_F5))
 	{
+		char str[64];
 		for (int i = 0; i < _mapData->getObject().size(); i++)
 		{
 			//Rectangle(getMemDC(), _mapData->getObject()[i]._rc);
 			if (!_mapData->getObject()[i]._isActived) continue;
 
 			RectangleMake(getMemDC(), _mapData->getObject()[i]._rc.left-_rcCamera.left, _mapData->getObject()[i]._rc.top-_rcCamera.top, _mapData->getObject()[i]._width, _mapData->getObject()[i]._height);
+			sprintf(str, "%d", i);
+			TextOut(getMemDC(), (_mapData->getObject()[i]._rc.left + (_mapData->getObject()[i]._rc.right - _mapData->getObject()[i]._rc.left) / 2) - _rcCamera.left,
+				(_mapData->getObject()[i]._rc.top + (_mapData->getObject()[i]._rc.bottom - _mapData->getObject()[i]._rc.top) / 2) - _rcCamera.top, str, strlen(str));
 		}
 	}
-
-
 
 	_playerManager->render();
 	_enemyManager->render();
