@@ -211,14 +211,15 @@ void stageScene::render(void)
 	//헬기 등 오브젝트
 	if(CAMERAMANAGER->CameraIn(RectMake(_x, _y, _helicopter->getWidth(), _helicopter->getHeight())))
 		_helicopter->frameRender(getMemDC(), _x - _rcCamera.left, _y - _rcCamera.top);
-	if (CAMERAMANAGER->CameraIn(RectMake(_x+169, _y+181, _helicopter->getWidth(), _helicopter->getHeight())))
+	if (CAMERAMANAGER->CameraIn(RectMake(_x+169, _y+181, IMAGEMANAGER->findImage("ladder")->getWidth(), IMAGEMANAGER->findImage("ladder")->getHeight())))
 		IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x + 169 - _rcCamera.left, _y + 181 - _rcCamera.top);
-	if (CAMERAMANAGER->CameraIn(RectMake(_x + 169, _y + 181, _helicopter->getWidth(), _helicopter->getHeight())))
-	_saveFlag->frameRender(getMemDC(), _flagX - _rcCamera.left, _flagY - _rcCamera.top);
-
-	IMAGEMANAGER->findImage("spike")->render(getMemDC(), IMAGEMANAGER->findImage("spike")->getX() - _rcCamera.left, IMAGEMANAGER->findImage("spike")->getY() - _rcCamera.top);
-	_humanDead->frameRender(getMemDC(), _humanDead->getX() - _rcCamera.left, _humanDead->getY() - _rcCamera.top);
-
+	if (CAMERAMANAGER->CameraIn(RectMake(_flagX, _flagY, _saveFlag->getWidth(), _saveFlag->getHeight())))
+		_saveFlag->frameRender(getMemDC(), _flagX - _rcCamera.left, _flagY - _rcCamera.top);
+	if (CAMERAMANAGER->CameraIn(RectMake(IMAGEMANAGER->findImage("spike")->getX(), IMAGEMANAGER->findImage("spike")->getY(), IMAGEMANAGER->findImage("spike")->getWidth(), IMAGEMANAGER->findImage("spike")->getHeight())))
+		IMAGEMANAGER->findImage("spike")->render(getMemDC(), IMAGEMANAGER->findImage("spike")->getX() - _rcCamera.left, IMAGEMANAGER->findImage("spike")->getY() - _rcCamera.top);
+	if (CAMERAMANAGER->CameraIn(RectMake(_humanDead->getX(), _humanDead->getY(), _humanDead->getWidth(), _humanDead->getHeight())))
+		_humanDead->frameRender(getMemDC(), _humanDead->getX() - _rcCamera.left, _humanDead->getY() - _rcCamera.top);
+	if (CAMERAMANAGER->CameraIn(RectMake(_flag->getX(), _flag->getY(), _flag->getWidth(), _flag->getHeight())))
 	_flag->frameRender(getMemDC(), _flag->getX() - _rcCamera.left, _flag->getY() - _rcCamera.top);
 	
 	if (KEYMANAGER->isToggleKey(VK_F1))

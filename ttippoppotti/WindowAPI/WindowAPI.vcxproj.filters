@@ -18,9 +18,6 @@
     <Filter Include="GameFramework2D\유틸">
       <UniqueIdentifier>{0e047507-cff2-4a5e-8198-0c562e8e0211}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameFramework2D\이미지">
-      <UniqueIdentifier>{1851a966-ba68-4f2f-8ebc-640729b7e225}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameFramework2D\WinMain">
       <UniqueIdentifier>{4a79707c-1728-49f2-ba7d-dc17dad14387}</UniqueIdentifier>
     </Filter>
@@ -41,6 +38,9 @@
     </Filter>
     <Filter Include="GameFramework2D\매니져">
       <UniqueIdentifier>{5ce72af8-e27e-4d87-81a9-202553e2a4fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework2D\이미지">
+      <UniqueIdentifier>{1851a966-ba68-4f2f-8ebc-640729b7e225}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
