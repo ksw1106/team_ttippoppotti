@@ -5,7 +5,6 @@
 class testScene_kmy : public gameNode
 {
 private:
-	fragments * _fragments[5];
 
 public:
 	HRESULT init(void);

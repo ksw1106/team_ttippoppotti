@@ -49,14 +49,14 @@ void effectManager::render(void)
 	}
 }
 
-void effectManager::addEffect(string effectName, const char * imageName, float effectFPS, int buffer)
+void effectManager::addEffect(string effectName, const char * imageName, int count, int buffer, bool isFrameImg)
 {
 	vEffect vEffectBuffer;
 
 	for (int i = 0; i < buffer; i++)
 	{
-		vEffectBuffer.push_back(new fragments);
-		vEffectBuffer[i]->init(imageName, 10);
+		vEffectBuffer.push_back(new effects);
+		vEffectBuffer[i]->init(imageName, count, isFrameImg);
 	}
 
 	//이펙트버퍼 백터를 맵에 담기
@@ -69,7 +69,6 @@ void effectManager::play(string effectName, int x, int y, float angle)
 
 	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
 	{
-		
 		if (!(mIter->first == effectName)) continue;
 
 		//이펙트키와 일치하면 이펙트 실행
