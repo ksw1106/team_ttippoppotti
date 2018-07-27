@@ -25,9 +25,9 @@ void loadingScene::Lee_Ji_Woong_addImage()
 
 	_loading->loadFrameImage("ºê·Îºô½ÃÃ¼", "enemyImage/brovil_dead.bmp", 80, 160, 1, 2);
 	_loading->loadFrameImage("ºê·Îºô°ÉÀ½", "enemyImage/brovil_walk.bmp", 960, 160, 12, 2);
-	_loading->loadFrameImage("ºê·Îºô°ÉÀ½", "enemyImage/brovil_run.bmp", 1280, 160, 16, 2);
-	_loading->loadFrameImage("ºê·Îºô°ÉÀ½", "enemyImage/brovil_knock_back.bmp", 800, 160, 10, 2);
-	_loading->loadFrameImage("ºê·Îºô½ÂÈ­", "enemyImage/brovil_disappear.bmp", 1680, 160, 21, 2);
+	_loading->loadFrameImage("ºê·ÎºôÆò»ó½Ã", "enemyImage/brovil_idle.bmp", 320, 160, 4, 2);
+	_loading->loadFrameImage("ºê·Îºô³Ë¹é", "enemyImage/brovil_knock_back.bmp", 800, 160, 10, 2);
+	_loading->loadFrameImage("ºê·Îºô½ÂÈ­", "enemyImage/brovil_disappear.bmp", 1680, 160, 21, 2);	
 }
 
 void loadingScene::Lee_Ji_Woong_addSound()
