@@ -62,6 +62,7 @@ private:
 	BLENDFUNCTION		_blendFunc;		//알파블렌드 기능
 
 	LPIMAGE_INFO		_stretchImage;	//스트레치이미지
+	LPIMAGE_INFO		_rotateImage;	//로테이트이미지
 
 public:
 	image();
@@ -115,6 +116,12 @@ public:
 //=============================================================
 	void stretchRender(HDC hdc, int destX, int destY, float scale = 1.0f);
 	void stretchFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float scale = 1.0f);
+
+//=============================================================
+//	## 로테이트렌더 ## (이미지 회전)
+//=============================================================
+	void rotateRender(HDC hdc, float centerX, float centerY, float angle);
+	void rotateFrameRender(HDC hdc, float centerX, float centerY, float angle);
 
 //=============================================================
 //	## inline ## (인라인 함수들 - 겟터, 셋터)

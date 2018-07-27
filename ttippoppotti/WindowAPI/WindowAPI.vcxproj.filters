@@ -42,6 +42,9 @@
     <Filter Include="GameFramework2D\이미지">
       <UniqueIdentifier>{1851a966-ba68-4f2f-8ebc-640729b7e225}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameFramework2D\이펙트">
+      <UniqueIdentifier>{06bb6691-b0cb-4035-a27f-047993285ae4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commonMacroFunction.h">
@@ -122,9 +125,6 @@
     <ClInclude Include="cameraManager.h">
       <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
-    <ClInclude Include="effects.h">
-      <Filter>MainGame\브로포스</Filter>
-    </ClInclude>
     <ClInclude Include="timeManager.h">
       <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
@@ -139,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="soldier.h">
       <Filter>MainGame\브로포스</Filter>
+    </ClInclude>
+    <ClInclude Include="effects.h">
+      <Filter>GameFramework2D\이펙트</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -214,9 +217,6 @@
     <ClCompile Include="cameraManager.cpp">
       <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
-    <ClCompile Include="effects.cpp">
-      <Filter>MainGame\브로포스</Filter>
-    </ClCompile>
     <ClCompile Include="timeManager.cpp">
       <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
@@ -243,6 +243,9 @@
     </ClCompile>
     <ClCompile Include="soldier.cpp">
       <Filter>MainGame\브로포스</Filter>
+    </ClCompile>
+    <ClCompile Include="effects.cpp">
+      <Filter>GameFramework2D\이펙트</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
