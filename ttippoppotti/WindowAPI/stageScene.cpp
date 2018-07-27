@@ -62,7 +62,7 @@ HRESULT stageScene::init(void)
 	_x = 3400.f;
 	_y = 500.f;
 	_rcCamera = RectMake(0, 2878 - WINSIZEY, 5755, WINSIZEY);
-
+	CAMERAMANAGER->setCamera(_rcCamera);
 	return S_OK;
 }
 
