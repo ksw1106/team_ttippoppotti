@@ -2,14 +2,12 @@
 #include "gameNode.h"
 /*앞으로는 씬 헤더파일만 추가해준다*/
 #include "stageScene.h"
+#include "stage2Scene.h"
 #include "loadingScene.h"
 
 class mainGame : public gameNode
 {
 private:
-	playerManager* _playerManager;
-	enemyManager* _enemyManager;
-
 	RECT _rcCamera;
 	image* _backGround;
 	image* _helicopter;

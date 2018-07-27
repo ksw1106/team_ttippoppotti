@@ -16,7 +16,10 @@ class mapData : public gameNode
 public:
 	vector<mapObject> getObject() { return _vObject; }
 	void setObject(mapObject obj, int index) { _vObject[index] = obj; }
-	HRESULT init(void);
+
+	void stage1_setting();
+	void stage2_setting();
+	HRESULT init(int stage);
 	void release(void);
 	void update(void);
 	void render(void);
