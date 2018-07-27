@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "bullet.h"
 #include "soldier.h"
+#include "brovil.h"
 
 class playerManager;
 class mapData;
@@ -11,10 +12,12 @@ class enemyManager : public gameNode
 private:
 	playerManager* _playerManager;
 	mapData* _mapData;
-	vector<enemy*> _vSoldier;
-	eBullet* _eBullet;
-
-	bool _isSeen;
+	
+	vector<enemy*> _vSoldier;	// 일반적
+	brovil* _brovil;			// 브로빌 ( 보스 )
+	
+	eBullet* _eBullet;			// 총알 클래스
+		
 
 public:
 	void setPlayerManager(playerManager* playerManager) { _playerManager = playerManager; }
@@ -24,16 +27,15 @@ public:
 	vector<enemy*> getVEnemy() { return _vSoldier; }
 	// 적 총알클래스 총알벡터 가져오기
 	eBullet* getEBullet() { return _eBullet; }
-
+	
 	HRESULT init(void);
 	void release(void);
 	void update(void);
 	void render(void);
-	
-	void isNotice();
+		
 	void collision();	// 충돌함수
 	void setEnemy(int x, int y, int randomNum);
-	
+		
 	enemyManager() {}
 	~enemyManager() {}
 };

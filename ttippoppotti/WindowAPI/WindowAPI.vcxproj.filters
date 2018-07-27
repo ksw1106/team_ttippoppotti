@@ -140,6 +140,9 @@
     <ClInclude Include="soldier.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
+    <ClInclude Include="brovil.h">
+      <Filter>MainGame\브로포스</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -242,6 +245,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="soldier.cpp">
+      <Filter>MainGame\브로포스</Filter>
+    </ClCompile>
+    <ClCompile Include="brovil.cpp">
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
   </ItemGroup>
