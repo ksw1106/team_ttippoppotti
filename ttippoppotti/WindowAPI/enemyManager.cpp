@@ -126,7 +126,9 @@ void enemyManager::collision()
 				}
 				else
 					getVEnemy()[j]->setDirection(true);
-			}			
+			}
+
+			//if (getVEnemy)
 		}
 	}
 	

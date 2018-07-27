@@ -80,7 +80,7 @@ void enemy::render(void)
 			_armImage[getArmStatus()]->getFrameX(), _armImage[getArmStatus()]->getFrameY());
 		
 		// 플레이어 발견했을때, 느낌표 말풍선!
-		if (_isAlarm && _warnSign->getFrameX() <= _warnSign->getMaxFrameX())	
+		if (_isAlarm && _warnSign->getFrameX() <= _warnSign->getMaxFrameX())
 		{
 			IMAGEMANAGER->frameRender("알람", getMemDC(), _enemyRC.left + 10 - CAMERAMANAGER->getCamera().left, _enemyRC.top - 50 - CAMERAMANAGER->getCamera().top, _warnSign->getFrameX(), _warnSign->getFrameY());
 		}
@@ -89,8 +89,7 @@ void enemy::render(void)
 	
 	if (KEYMANAGER->isToggleKey(VK_F4))
 	{
-		//Rectangle(getMemDC(), getX() - _bodyImage[getBodyStatus()]->getFrameWidth()/2, getY() - _bodyImage[getBodyStatus()]->getFrameHeight()/2,
-		//	getX() + _bodyImage[getBodyStatus()]->getFrameWidth()/2, getY() + _bodyImage[getBodyStatus()]->getFrameHeight()/2);
+		Rectangle(getMemDC(), getX() - 30 - CAMERAMANAGER->getCamera().left, getY() - 30 - CAMERAMANAGER->getCamera().top, getX() + 30 - CAMERAMANAGER->getCamera().left, getY() + 30 - CAMERAMANAGER->getCamera().top);
 
 		// 적 시야 렉트 렌더
 		RectangleMake(getMemDC(), _enemySightRC.left - CAMERAMANAGER->getCamera().left, _enemySightRC.top - CAMERAMANAGER->getCamera().top, 500, 100);
@@ -113,6 +112,7 @@ void enemy::move()
 			setY(getY() + _gravity);
 		}
 	}
+
 	//날라갈때
 	if (getBodyStatus() == E_FLY_AWAY)
 	{
@@ -170,7 +170,7 @@ void enemy::controlAI(int randomNum)
 void enemy::frameAnimate()
 {
 	FRAMEMANAGER->frameChange(_bodyImage[getBodyStatus()], _frameCount, _frameIndex, _actionSpeed, getDirection());
-	//FRAMEMANAGER->frameChange(_armImage[getArmStatus()], _frameCount, _frameIndex2, _actionSpeed, getDirection());
+	FRAMEMANAGER->frameChange(_armImage[getArmStatus()], _frameCount, _frameIndex2, _actionSpeed, getDirection());
 	FRAMEMANAGER->frameChange(_warnSign, _frameCount, _frameIndex3, _actionSpeed, getDirection());
 	FRAMEMANAGER->frameChange(_doubtSign, _frameCount, _frameIndex4, _actionSpeed, getDirection());
 }

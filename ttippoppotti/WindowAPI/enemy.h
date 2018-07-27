@@ -57,8 +57,8 @@ public:
 	virtual void update(void);
 	virtual void render(void);
 
-	//virtual image* getBodyImage() { return _bodyImage[_enemyStatus]; }
-	//virtual image* getArmImage() { return _armImage[_gunStatus]; }
+	virtual image* getBodyImage() { return _bodyImage[_enemyStatus]; }
+	virtual image* getArmImage() { return _armImage[_gunStatus]; }
 	virtual RECT getEnemyRC() { return _enemyRC; }
 	virtual RECT getEnemySightRC() { return _enemySightRC; }
 	virtual float getSpeed() { return _speed; }
