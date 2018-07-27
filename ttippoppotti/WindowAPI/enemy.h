@@ -37,13 +37,17 @@ private:
 	RECT _enemyRC;
 	RECT _enemySightRC;
 
+	float _angle;
 	float _speed;
 	float _gravity;
+	float _accel;
 	float _kbSpeed;		// 맞았을 때 날아가는 속도
 	int _x, _y;
 	int _hp;
 	bool _isLeft;
+	bool _isOn;
 	bool _isAlarm;
+	bool _isAlarm2;
 
 	int _frameCount, _frameIndex, _frameIndex2, _frameIndex3, _frameIndex4;
 	int	_actionSpeed;		// 행동 바뀔 변수
@@ -56,8 +60,8 @@ public:
 	virtual void update(void);
 	virtual void render(void);
 
-	//virtual image* getBodyImage() { return _bodyImage[_enemyStatus]; }
-	//virtual image* getArmImage() { return _armImage[_gunStatus]; }
+	virtual image* getBodyImage() { return _bodyImage[_enemyStatus]; }
+	virtual image* getArmImage() { return _armImage[_gunStatus]; }
 	virtual RECT getEnemyRC() { return _enemyRC; }
 	virtual RECT getEnemySightRC() { return _enemySightRC; }
 	virtual float getSpeed() { return _speed; }
@@ -67,10 +71,15 @@ public:
 	virtual int getHP() { return _hp; }
 	virtual bool getDirection() { return _isLeft; }
 	virtual bool getAlarm() { return _isAlarm; }
+	virtual bool getAlarm2() { return _isAlarm2; }
 	virtual enemyStatus getBodyStatus() { return _enemyStatus; }
 	virtual gunStatus getArmStatus() { return _gunStatus; }
 	virtual int getFrameIndex() { return _frameIndex; }
 	virtual int getFrameIndex2() { return _frameIndex2; }
+	virtual float getEnemyAngle() { return _angle; }
+	virtual int getRandomNum() { return _randomNumber; }
+	virtual float getAccel() { return _accel; }
+	virtual bool getIsOn() { return _isOn; }
 
 	virtual void setBodyImage(image* bodyImage) { _bodyImage[_enemyStatus] = bodyImage; }
 	virtual void setArmImage(image* armImage) { _armImage[_gunStatus] = armImage; }
@@ -82,11 +91,17 @@ public:
 	virtual void setY(int y) { _y = y; }
 	virtual void setHP(int hp) { _hp = hp; }
 	virtual void setAlarm(bool isAlarm) { _isAlarm = isAlarm; }
+	virtual void setAlarm2(bool isAlarm2) { _isAlarm2 = isAlarm2; }
 	virtual void setBodyStatus(enemyStatus enemyStat) { _enemyStatus = enemyStat; }
 	virtual void setArmStatus(gunStatus gunStat) { _gunStatus = gunStat; }
 	virtual void setDirection(bool isLeft) { _isLeft = isLeft; }
+	virtual void setEnemyAngle(float angle) { _angle = angle; }
+	virtual void setRandomNum(int randomNum) { _randomNumber = randomNum; }
+	virtual void setAccel(float accel) { _accel = accel; }
+	virtual void setIsOn(bool isOn) { _isOn = isOn; }
 
 	virtual void move();
+	virtual void flyAway();
 	virtual void controlAI(int randomNum);
 	
 	virtual void frameAnimate();	

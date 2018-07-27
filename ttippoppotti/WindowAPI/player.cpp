@@ -8,11 +8,15 @@ HRESULT player::init(void)
 	_ramBro[RUN] = IMAGEMANAGER->findImage("broforce_run (1)");
 	//_ramBro[FAST_RUN] = IMAGEMANAGER->addFrameImage("broforce_run (2)", "broforce_run (2).bmp", 448, 128, 8, 2, true, RGB(255, 0, 255));
 	_ramBro[JUMP] = IMAGEMANAGER->findImage("broforce_jump");
+	_ramBro[HANG_FORNT] = IMAGEMANAGER->findImage("broforce_hangFornt");
+	_ramBro[HANG_BACK] = IMAGEMANAGER->findImage("broforce_hangBack");
+	_ramBro[HANG_FORNT_HOLD] = IMAGEMANAGER->findImage("broforce_hang_forntHold");
+	_ramBro[HANG_BACK_HOLD] = IMAGEMANAGER->findImage("broforce_hang_backHold");
 	//_ramBro[ROLL] = IMAGEMANAGER->addFrameImage("broforce_roll", "broforce_roll.bmp", 936, 136, 13, 2, true, RGB(255, 0, 255));
 
 	_state = IDLE;
 	_x = 100.f;
-	_y = 2085.f;
+	_y = 1900.f;
 	_oldX = _x;
 	_oldY = _y;
 	_angle = 90.f *3.14 / 180;

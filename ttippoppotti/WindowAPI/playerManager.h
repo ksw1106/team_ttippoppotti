@@ -15,6 +15,7 @@ private:
 	
 	RECT temp;
 	bool hit_left, hit_right;
+	bool _isCollision;
 	float _ground;
 	int count = 0;
 public:
