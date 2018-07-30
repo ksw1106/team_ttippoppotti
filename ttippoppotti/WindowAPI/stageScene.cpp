@@ -194,6 +194,11 @@ void stageScene::update(void)
 				SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_PEN));
 				SetDCPenColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
 				RectangleMake(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), obj._rc.left, obj._rc.top, obj._width, obj._height);
+				SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_BRUSH));
+				SetDCBrushColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
+				SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_PEN));
+				SetDCPenColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
+				RectangleMake(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), obj._rc.left, obj._rc.top, obj._width, obj._height);
 
 				obj._isActived = false;
 				_mapData->setObject(obj, i);

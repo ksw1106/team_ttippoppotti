@@ -11,6 +11,8 @@ enum STATE
 	FAST_RUN, ROLL
 };
 
+enum {PLAYER_LEFT, PLAYER_RIGHT, PLAYER_TOP, PLAYER_BOTTOM};
+
 class player : public gameNode
 {
 private:

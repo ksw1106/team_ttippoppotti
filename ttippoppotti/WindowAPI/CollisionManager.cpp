@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "CollisionManager.h"
 
-void CollisionManager::pixelCollision(RECT rc, int& x, int& y, int dir)
+bool CollisionManager::pixelCollision(image* img, float& x, float& y, int dir)
 {
+	RECT rc = img->boudingBoxWithFrame();
+
 	switch (dir)
 	{
 	case 0: //left
@@ -16,7 +18,7 @@ void CollisionManager::pixelCollision(RECT rc, int& x, int& y, int dir)
 			if (!(r == 255 && g == 0 && b == 255))
 			{
 				x = i + 1;
-				break;
+				return true;
 			}
 		}
 		break;
@@ -30,8 +32,8 @@ void CollisionManager::pixelCollision(RECT rc, int& x, int& y, int dir)
 
 			if (!(r == 255 && g == 0 && b == 255))
 			{
-				x = i - 1;//
-				break;
+				x = i - 1 - img->getFrameWidth();//
+				return true;
 			}
 		}
 		break;
@@ -46,7 +48,7 @@ void CollisionManager::pixelCollision(RECT rc, int& x, int& y, int dir)
 			if (!(r == 255 && g == 0 && b == 255))
 			{
 				y = i + 1;
-				break;
+				return true;
 			}
 		}
 		break;
@@ -60,11 +62,21 @@ void CollisionManager::pixelCollision(RECT rc, int& x, int& y, int dir)
 
 			if (!(r == 255 && g == 0 && b == 255))
 			{
-				y = i - 1; //
-				break;
+				y = i - 1 - img->getFrameHeight(); //
+				return true;
 			}
 		}
 		break;
 	}
 	
+	return false;
+}
+
+HRESULT CollisionManager::init()
+{
+	return S_OK;
+}
+
+void CollisionManager::release()
+{
 }

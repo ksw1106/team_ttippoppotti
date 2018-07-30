@@ -24,6 +24,8 @@ private:
 	int _fireCount;
 	bool _change;
 
+	RECT _rcPlyaer;
+
 public:
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }
 	void setMapData(mapData* mapData) { _mapData = mapData; }
