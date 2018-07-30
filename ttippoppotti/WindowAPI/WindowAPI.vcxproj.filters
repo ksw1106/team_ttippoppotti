@@ -149,6 +149,9 @@
     <ClInclude Include="stage2Scene.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>GameFramework2D\매니져</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -258,6 +261,9 @@
     </ClCompile>
     <ClCompile Include="stage2Scene.cpp">
       <Filter>MainGame\브로포스</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
