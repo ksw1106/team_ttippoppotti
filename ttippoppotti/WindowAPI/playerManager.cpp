@@ -30,8 +30,6 @@ void playerManager::update(void)
 	_player->setOldX(_player->getX());
 	_player->setOldY(_player->getY());
 
-	
-
 	if (KEYMANAGER->isStayKeyDown('A'))
 	{
 		_player->setIsLeft(true);
@@ -116,8 +114,15 @@ void playerManager::update(void)
 	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, PLAYER_BOTTOM))
 	{
 		_player->setGravity(0.f);
+		_player->setSpeed(0.f);
+		_player->setIsJump(false);
+		hit_left = false;
+		hit_right = false;
+		if (_player->getState() != RUN)
+		{
+			_player->setState(IDLE);
+		}
 	}
-
 
 	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, PLAYER_RIGHT))
 	{
@@ -125,8 +130,24 @@ void playerManager::update(void)
 		_player->setIsJump(false);
 		_player->setGravity(0.f);
 		_player->setSpeed(0.f);
+		if (_player->getState() != RUN)
+		{
+			_player->setState(HANG_FORNT_HOLD);
+		}
+
+	}
+
+	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, PLAYER_LEFT))
+	{
+		hit_right = true;
+		_player->setIsJump(false);
+		_player->setIsLeft(true);
+		_player->setGravity(0.f);
+		_player->setSpeed(0.f);
 		_player->setState(HANG_FORNT_HOLD);
 	}
+
+
 	_player->setX(tempX);
 	_player->setY(tempY);
 	/*
