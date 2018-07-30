@@ -30,13 +30,17 @@ HRESULT stageScene::init(void)
 	_playerManager->setEnemyManager(_enemyManager);
 	_enemyManager->setPlayerManager(_playerManager);
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 7; i++)
 	{
 		ZeroMemory(&_backGround[i], sizeof(object));
 		_backGround[i]._rc = RectMake(0, 2878 - WINSIZEY, 5755, WINSIZEY);
 	}
 
 	_backGround[0]._image = IMAGEMANAGER->findImage("backGround");
+	//_backGround[1]._image = IMAGEMANAGER->findImage("backGround_tree4");
+	//_backGround[2]._image = IMAGEMANAGER->findImage("backGround_tree3");
+	//_backGround[3]._image = IMAGEMANAGER->findImage("backGround_tree2");
+	//_backGround[4]._image = IMAGEMANAGER->findImage("backGround_tree1");
 	_backGround[1]._image = IMAGEMANAGER->findImage("backGround_rock");
 	_backGround[2]._image = IMAGEMANAGER->findImage("backGround_object");
 
@@ -114,7 +118,6 @@ void stageScene::update(void)
 	
 	
 	_playerManager->update();
-
 	_enemyManager->update();
 	_test->update();
 	//이곳에서 계산식, 키보드, 마우스등등 업데이트를 한다
@@ -191,6 +194,11 @@ void stageScene::update(void)
 				SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_PEN));
 				SetDCPenColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
 				RectangleMake(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), obj._rc.left, obj._rc.top, obj._width, obj._height);
+				SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_BRUSH));
+				SetDCBrushColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
+				SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_PEN));
+				SetDCPenColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
+				RectangleMake(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), obj._rc.left, obj._rc.top, obj._width, obj._height);
 
 				obj._isActived = false;
 				_mapData->setObject(obj, i);
@@ -209,6 +217,8 @@ void stageScene::render(void)
 	{
 		_backGround[i]._image->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	}
+
+	//IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	
 	//헬기 등 오브젝트
 	if(CAMERAMANAGER->CameraIn(RectMake(_x, _y, _helicopter->getWidth(), _helicopter->getHeight())))

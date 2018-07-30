@@ -152,6 +152,9 @@
     <ClInclude Include="soldier.h">
       <Filter>MainGame\브로포스\enemy</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>GameFramework2D\매니져</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -261,6 +264,9 @@
     </ClCompile>
     <ClCompile Include="soldier.cpp">
       <Filter>MainGame\브로포스\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

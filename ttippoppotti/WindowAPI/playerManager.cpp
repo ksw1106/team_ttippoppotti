@@ -10,6 +10,7 @@ HRESULT playerManager::init(void)
 	_pBullet = new pBullet;
 	_pBullet->init(500.f);
 
+	//_rcPlyaer = RectMake(_player->getX(),_player->getY(),,)
 	hit_left = hit_right = false;
 	_isCollision = false;
 	_fireCount = 0;
@@ -28,6 +29,8 @@ void playerManager::update(void)
 	_player->update();
 	_player->setOldX(_player->getX());
 	_player->setOldY(_player->getY());
+
+	
 
 	if (KEYMANAGER->isStayKeyDown('A'))
 	{
@@ -107,6 +110,26 @@ void playerManager::update(void)
 	RECT rcPlayer = _player->getImage(_player->getState())->boudingBoxWithFrame();
 	image* _img = _player->getImage(_player->getState());
 
+	float tempX = _player->getX();
+	float tempY = _player->getY();
+
+	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, PLAYER_BOTTOM))
+	{
+		_player->setGravity(0.f);
+	}
+
+
+	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, PLAYER_RIGHT))
+	{
+		hit_left = true;
+		_player->setIsJump(false);
+		_player->setGravity(0.f);
+		_player->setSpeed(0.f);
+		_player->setState(HANG_FORNT_HOLD);
+	}
+	_player->setX(tempX);
+	_player->setY(tempY);
+	/*
 	for (int i = 0; i < _mapData->getObject().size(); i++)
 	{
 		count++;
@@ -210,7 +233,7 @@ void playerManager::update(void)
 			break;
 		}
 	}
-
+	*/
 	for (int i = 0; i < MAX_STATE; i++)
 	{
 		_player->getImage(i)->setX(_player->getX());
