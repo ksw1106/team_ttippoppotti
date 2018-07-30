@@ -156,7 +156,41 @@ public:
 	~eBullet() {}
 };
 
+//=============================================================
+//	## pBullet ## (ÇÃ·¹ÀÌ¾î ÀÏ¹ÝÃÑ¾Ë)
+//=============================================================
+class pBullet : public gameNode
+{
+private:
+	// ÃÑ¾Ë ±¸Á¶Ã¼¸¦ ´ãÀ» º¤ÅÍ
+	vector<tagBullet> _vBullet;
 
+private:
+	float _range;				// ÃÑ¾Ë »ç°Å¸®
+	int _bulletMax;				// ÃÑ¾Ë ÃÖ´ë°¹¼ö
+
+public:
+
+	HRESULT init(float range);
+	void release(void);
+	void update(void);
+	void render(void);
+
+	// ÃÑ¾Ë ¹ß»ç
+	void fire(int x, int y, int fireSpeed, bool isLeft);
+	// ÃÑ¾Ë ¹«ºê
+	void move();
+	// ÃÑ¾ËÁ¦°Å
+	void removeBullet(int index);
+	// ÃÑ¾Ëº¤ÅÍ °¡Á®¿À±â
+	vector<tagBullet> getVPlayerBullet() { return _vBullet; }
+
+	pBullet() {}
+	~pBullet() {}
+
+
+
+};
 
 
 

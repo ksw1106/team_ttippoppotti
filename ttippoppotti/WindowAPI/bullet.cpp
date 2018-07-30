@@ -388,3 +388,86 @@ void eBullet::removeBullet(int index)
 	_vEBullet.erase(_vEBullet.begin() + index);
 }
 
+//=============================================================
+//	## pBullet ## (ÇÃ·¹ÀÌ¾î ÀÏ¹ÝÃÑ¾Ë)
+//=============================================================
+HRESULT pBullet::init(float range)
+{
+	_range = range;
+
+	return S_OK;
+};
+void pBullet::release(void)
+{
+
+};
+void pBullet::update(void)
+{
+	move();
+};
+void pBullet::render(void)
+{
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		_vBullet[i].bulletImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
+			_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
+			_vBullet[i].bulletImage->getFrameX(), _vBullet[i].bulletImage->getFrameY());
+	}
+};
+
+// ÃÑ¾Ë ¹ß»ç
+void pBullet::fire(int x, int y, int fireSpeed, bool isLeft)
+{
+	//if (_bulletMax < _vBullet.size() + 1)return;
+
+	tagBullet pBullet;
+	ZeroMemory(&pBullet, sizeof(tagBullet));
+	pBullet.bulletImage = new image;
+	pBullet.bulletImage->init("broforce_ramBro/rambro_bullet.bmp", 50, 40, 1, 1, true, RGB(255, 0, 255));
+	pBullet.speed = fireSpeed;
+	pBullet.isLeft = isLeft;
+	pBullet.x = pBullet.fireX = x;
+	pBullet.y = pBullet.fireY = y;
+	pBullet.rc = RectMakeCenter(pBullet.x, pBullet.y, 
+		pBullet.bulletImage->getFrameWidth(), 
+		pBullet.bulletImage->getFrameHeight());
+
+	// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
+	_vBullet.push_back(pBullet);
+}
+// ÃÑ¾Ë ¹«ºê
+void pBullet::move()
+{
+	for (int i = 0; i < _vBullet.size();)
+	{
+		if (_vBullet[i].isLeft)
+		{
+			_vBullet[i].x -= _vBullet[i].speed;
+		}
+		if (!_vBullet[i].isLeft)
+		{
+			_vBullet[i].x += _vBullet[i].speed;
+		}
+
+		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y, 
+			_vBullet[i].bulletImage->getFrameWidth(), 
+			_vBullet[i].bulletImage->getFrameHeight());
+
+		float distance = getDistance(_vBullet[i].x, _vBullet[i].y, _vBullet[i].fireX, _vBullet[i].fireY);
+		if (distance > _range)
+		{
+			_vBullet[i].bulletImage->release();
+			SAFE_DELETE(_vBullet[i].bulletImage);
+			_vBullet.erase(_vBullet.begin() + i);
+		}
+		else
+		{
+			++i;
+		}
+	}
+}
+// ÃÑ¾ËÁ¦°Å
+void pBullet::removeBullet(int index)
+{
+	_vBullet.erase(_vBullet.begin() + index);
+}

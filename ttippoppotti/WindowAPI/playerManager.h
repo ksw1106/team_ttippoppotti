@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "player.h"
+#include "bullet.h"
 
 class enemyManager;
 class mapData;
@@ -12,16 +13,23 @@ private:
 	enemyManager * _enemyManager;
 	player* _player;
 	mapData* _mapData;
+
+	pBullet* _pBullet;
 	
 	RECT temp;
 	bool hit_left, hit_right;
 	bool _isCollision;
 	float _ground;
 	int count = 0;
+	int _fireCount;
+	bool _change;
+
 public:
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }
 	void setMapData(mapData* mapData) { _mapData = mapData; }
 	player* getPlayer() { return _player; }
+
+	pBullet* getPBullet() { return _pBullet; }
 
 	HRESULT init(void);
 	void release(void);
