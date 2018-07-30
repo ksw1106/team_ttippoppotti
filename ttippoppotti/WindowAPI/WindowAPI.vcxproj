@@ -150,6 +150,7 @@
     <ClInclude Include="brovil.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="cameraManager.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="effects.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="brovil.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="cameraManager.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="effects.cpp" />
     <ClCompile Include="enemy.cpp" />

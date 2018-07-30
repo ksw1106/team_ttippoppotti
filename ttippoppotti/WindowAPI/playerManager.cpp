@@ -7,16 +7,21 @@ HRESULT playerManager::init(void)
 {
 	_player = new player;
 	_player->init();
+	_pBullet = new pBullet;
+	_pBullet->init(500.f);
 
+	//_rcPlyaer = RectMake(_player->getX(),_player->getY(),,)
 	hit_left = hit_right = false;
 	_isCollision = false;
-
+	_fireCount = 0;
+	_change = false;
 	return S_OK;
 }
 
 void playerManager::release(void)
 {
 	SAFE_DELETE(_player);
+	_pBullet->release();
 }
 
 void playerManager::update(void)
@@ -25,11 +30,13 @@ void playerManager::update(void)
 	_player->setOldX(_player->getX());
 	_player->setOldY(_player->getY());
 
+	
+
 	if (KEYMANAGER->isStayKeyDown('A'))
 	{
 		_player->setIsLeft(true);
 		if (JUMP != _player->getState() 
-			&& HANG_BACK_HOLD != _player->getState())
+			&& HANG_FORNT_HOLD != _player->getState())
 		{
 			_player->setState(RUN);
 		}
@@ -53,7 +60,22 @@ void playerManager::update(void)
 		}
 		hit_right = false;
 	}
-	
+	_fireCount++;
+	if (KEYMANAGER->isStayKeyDown('Z'))
+	{	
+		if (_fireCount % 5 == 0)
+		{
+			if (_player->getIsLeft() == false)
+			{
+				_pBullet->fire(_player->getX() + 60, _player->getY() + 38, 20, _player->getIsLeft());
+			}
+			if (_player->getIsLeft() == true)
+			{
+				_pBullet->fire(_player->getX(), _player->getY() + 38, 20, _player->getIsLeft());
+			}
+		}
+	}
+	_pBullet->update();
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE)&& !_player->getIsJump())
 	{
 		_player->setState(JUMP);
@@ -62,13 +84,6 @@ void playerManager::update(void)
 		_player->setIsJump(true);
 		hit_left = false;
 		hit_right = false;
-		if (_player->getState()==HANG_FORNT_HOLD)
-		{
-			if (KEYMANAGER->isOnceKeyDown(VK_SPACE) && !_player->getIsJump())
-			{
-				_player->setState(HANG_BACK_HOLD);
-			}
-		}
 	}
 
 	if (KEYMANAGER->isOnceKeyUp('A') || KEYMANAGER->isOnceKeyUp('D'))
@@ -95,6 +110,26 @@ void playerManager::update(void)
 	RECT rcPlayer = _player->getImage(_player->getState())->boudingBoxWithFrame();
 	image* _img = _player->getImage(_player->getState());
 
+	float tempX = _player->getX();
+	float tempY = _player->getY();
+
+	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, PLAYER_BOTTOM))
+	{
+		_player->setGravity(0.f);
+	}
+
+
+	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, PLAYER_RIGHT))
+	{
+		hit_left = true;
+		_player->setIsJump(false);
+		_player->setGravity(0.f);
+		_player->setSpeed(0.f);
+		_player->setState(HANG_FORNT_HOLD);
+	}
+	_player->setX(tempX);
+	_player->setY(tempY);
+	/*
 	for (int i = 0; i < _mapData->getObject().size(); i++)
 	{
 		count++;
@@ -123,16 +158,12 @@ void playerManager::update(void)
 			&& _img->getX() < _mapData->getObject()[i]._rc.left 
 			&& (_player->getY() - _player->getOldY() > 0))
 		{
-			_isCollision = true;
 			hit_left = true;
 			_player->setIsJump(false);
 			_player->setGravity(0.f);
 			_player->setSpeed(0.f);
-			if (_isCollision)
-			{
-				_player->setState(HANG_FORNT_HOLD);
-			}
-
+			_player->setState(HANG_FORNT_HOLD);
+			
 			if (_img->getY() + _img->getFrameHeight() >= _mapData->getObject()[i]._rc.top
 				&& _img->getY() + _img->getFrameHeight() <= _mapData->getObject()[i]._rc.bottom
 				&& _img->getX() >= _mapData->getObject()[i]._rc.left
@@ -143,7 +174,6 @@ void playerManager::update(void)
 				_player->setSpeed(0.f);
 				_player->setState(IDLE);
 				//_player->setIsJump(false);
-				_isCollision = false;
 				hit_left = false;
 				hit_right = false;
 				break;
@@ -157,12 +187,10 @@ void playerManager::update(void)
 		{
 			hit_right = true;
 			_player->setIsJump(false);
+			_player->setIsLeft(true);
 			_player->setGravity(0.f);
 			_player->setSpeed(0.f);
-			if (_isCollision)
-			{
-				_player->setState(HANG_BACK_HOLD);
-			}
+			_player->setState(HANG_FORNT_HOLD);
 
 			if (_img->getY() + _img->getFrameHeight() >= _mapData->getObject()[i]._rc.top
 				&& _img->getY() + _img->getFrameHeight() <= _mapData->getObject()[i]._rc.bottom
@@ -174,7 +202,6 @@ void playerManager::update(void)
 				_player->setSpeed(0.f);
 				_player->setState(IDLE);
 				//_player->setIsJump(false);
-				_isCollision = false;
 				hit_left = false;
 				hit_right = false;
 				break;
@@ -206,7 +233,7 @@ void playerManager::update(void)
 			break;
 		}
 	}
-
+	*/
 	for (int i = 0; i < MAX_STATE; i++)
 	{
 		_player->getImage(i)->setX(_player->getX());
@@ -218,6 +245,7 @@ void playerManager::update(void)
 void playerManager::render(void)
 {
 	_player->render();
+	_pBullet->render();
 
 	char str[64];
 	sprintf_s(str, "%d", _player->getIsJump());
