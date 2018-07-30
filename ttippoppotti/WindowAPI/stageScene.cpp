@@ -187,28 +187,13 @@ void stageScene::update(void)
 			if (PtInRect(&_mapData->getObject()[i]._rc, ptTemp))
 			{
 				
-				mapObject obj = _mapData->getObject()[i];
-
-				SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_BRUSH));
-				SetDCBrushColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
-				SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_PEN));
-				SetDCPenColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
-				RectangleMake(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), obj._rc.left, obj._rc.top, obj._width, obj._height);
-				SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_BRUSH));
-				SetDCBrushColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
-				SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_PEN));
-				SetDCPenColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
-				RectangleMake(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), obj._rc.left, obj._rc.top, obj._width, obj._height);
-
-				obj._isActived = false;
-				_mapData->setObject(obj, i);
+				_mapData->deleteMap(i);
 				break; //임시
 			}
 		}
 	}
 
 	CAMERAMANAGER->setCamera(_rcCamera);
-	
 }
 
 void stageScene::render(void)
@@ -218,7 +203,7 @@ void stageScene::render(void)
 		_backGround[i]._image->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	}
 
-	//IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+	IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	
 	//헬기 등 오브젝트
 	if(CAMERAMANAGER->CameraIn(RectMake(_x, _y, _helicopter->getWidth(), _helicopter->getHeight())))
