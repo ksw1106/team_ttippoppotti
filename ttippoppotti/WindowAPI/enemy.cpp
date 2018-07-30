@@ -48,7 +48,7 @@ HRESULT enemy::initSoldier(int x, int y, int hp, int randomNum)
 	_isOn = false;
 	_isUncovered = false;
 	_isStrange = false;
-	_rcEnemy = RectMakeCenter(_x, _y, _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());
+	_rcEnemy = RectMake(_x, _y, _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());
 
 	return S_OK;
 }
@@ -159,7 +159,7 @@ void enemy::update(void)
 	_enemyImage.armImage[getArmStatus()]->setX(getRcEnemy().left);
 	_enemyImage.armImage[getArmStatus()]->setY(getRcEnemy().top);
 	
-	setRcEnemy(RectMakeCenter(getX(), getY(), _enemyImage.bodyImage[getBodyStatus()]->getFrameWidth(), _enemyImage.bodyImage[getBodyStatus()]->getFrameHeight()));
+	setRcEnemy(RectMake(getX(), getY(), _enemyImage.bodyImage[getBodyStatus()]->getFrameWidth(), _enemyImage.bodyImage[getBodyStatus()]->getFrameHeight()));
 }
 
 void enemy::render(void)

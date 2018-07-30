@@ -31,6 +31,8 @@ enum brovilStatus
 	BROVIL_DISAPPEAR,
 };
 
+enum {ENEMY_LEFT, ENEMY_RIGHT, ENEMY_TOP, ENEMY_BOTTOM};
+
 struct enemyImage
 {
 	image* bodyImage[6];
@@ -96,9 +98,9 @@ public:
 	void update(void);
 	void render(void);
 
-	//image* getEnemyBodyImage() { return _enemyImage.bodyImage[_enemyStatus]; }
-	//image* getEnemyArmImage() { return _enemyImage.armImage[_gunStatus]; }
-	//image* getBrovilImage() { return _brovilImage.brovilImage[_brovilStatus]; }
+	image* getEnemyBodyImage() { return _enemyImage.bodyImage[_enemyStatus]; }
+	image* getEnemyArmImage() { return _enemyImage.armImage[_gunStatus]; }
+	image* getBrovilImage() { return _brovilImage.brovilImg[_brovilStatus]; }
 		
 	RECT getRcEnemy() { return _rcEnemy; }
 	RECT getRcEnemySight() { return _rcEnemySight; }
