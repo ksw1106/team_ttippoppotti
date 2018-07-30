@@ -2,7 +2,7 @@
 #include "effects.h"
 #include "mapData.h"
 
-HRESULT fragments::init(const char * imageName, int particleMax)
+HRESULT effects::init(const char * imageName, int particleMax, bool isFrameImg)
 {
 	//이미지 초기화
 	_imageName = imageName;
@@ -11,57 +11,62 @@ HRESULT fragments::init(const char * imageName, int particleMax)
 
 	_randGravity = -1;
 
+	_isFrameImg = isFrameImg;
+
+	_count = _index = 0;
+	_animationSpeed = 5;
+
 	//총알의 갯수만큼 구조체를 초기화 한 후 벡터에 담기
 	for (int i = 0; i < _particleMax; i++)
 	{
 		//총알 구조체 선언
-		tagParticle fragment;
+		tagParticle particle;
 		//제로메모리 또는 멤셋
 		//구조체의 변수들의 값을 한번에 0으로 초기화 시켜준다
-		ZeroMemory(&fragment, sizeof(tagParticle));
-		fragment.particleImg = IMAGEMANAGER->findImage(_imageName);
-		fragment.speed = 5.0f;
-		fragment.fire = false;
+		ZeroMemory(&particle, sizeof(tagParticle));
+		particle.particleImg = IMAGEMANAGER->findImage(_imageName);
+		particle.speed = 5.0f;
+		particle.fire = false;
 
 		//벡터에 담기
-		_vFragment.push_back(fragment);
+		_vFragment.push_back(particle);
 	}
 
 	return S_OK;
 }
 
-void fragments::release(void)
+void effects::release(void)
 {
 }
 
-void fragments::update(void)
+void effects::update(void)
 {
 	if (_isRunning)
 	{
 		this->boom();
 		this->collisionProcess();
-	}
-	else
-	{
-		//_randGravity = -1;
+		this->frameChange();
 	}
 }
 
-void fragments::render(void)
+void effects::render(void)
 {
 	for (int i = 0; i < _vFragment.size(); ++i)
 	{
 		if (!_vFragment[i].fire) continue;
-		_vFragment[i].particleImg->render(getMemDC(), _vFragment[i].rc.left, _vFragment[i].rc.top);
+		if(_isFrameImg)
+			_vFragment[i].particleImg->frameRender(getMemDC(), _vFragment[i].rc.left, _vFragment[i].rc.top);
+		else
+			_vFragment[i].particleImg->render(getMemDC(), _vFragment[i].rc.left, _vFragment[i].rc.top);
 	}
 }
 
-void fragments::stopEffect()
+void effects::stopEffect()
 {
 	_isRunning = false;
 }
 
-void fragments::activate(float x, float y, float angle)
+void effects::activate(float x, float y, float angle)
 {
 	_isRunning = true;
 	for (int i = 0; i < _particleMax; i++)
@@ -72,7 +77,6 @@ void fragments::activate(float x, float y, float angle)
 		//구조체의 변수들의 값을 한번에 0으로 초기화 시켜준다
 		ZeroMemory(&fragment, sizeof(tagParticle));
 		fragment.particleImg = IMAGEMANAGER->findImage(_imageName);
-		fragment.speed = RND->getFromFloatTo(3.0f, 6.0f);
 		fragment.fire = false;
 
 		//벡터에 담기
@@ -83,10 +87,12 @@ void fragments::activate(float x, float y, float angle)
 			_vFragment[i].angle = PI + RND->getFromFloatTo(0.1f, 1.5f) - 0.75f;
 		else if (angle == 0.0f) //플레이어 총알 오른
 			_vFragment[i].angle = RND->getFromFloatTo(0.1f, 1.5f) - 0.75;
+		else
+			_vFragment[i].angle = angle;
 		_vFragment[i].gravity = 0.0f;
 		_vFragment[i].x = x;
 		_vFragment[i].y = y;
-		_vFragment[i].speed = RND->getFromFloatTo(1.0f, 10.0f);
+		_vFragment[i].speed = RND->getFromFloatTo(1.0f, 20.0f);
 		_vFragment[i].count = 0;
 		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
 			_vFragment[i].particleImg->getWidth(),
@@ -94,8 +100,9 @@ void fragments::activate(float x, float y, float angle)
 	}
 }
 
-void fragments::boom()
+void effects::boom()
 {
+	_falseCount = 0;
 	for (int i = 0; i < _vFragment.size(); ++i)
 	{
 		if (!_vFragment[i].fire) continue;
@@ -108,14 +115,46 @@ void fragments::boom()
 			_vFragment[i].particleImg->getHeight());
 		_vFragment[i].count++;
 		if (_vFragment[i].count == 1000)
+		{
 			_vFragment[i].fire = false;
+			_falseCount++;
+			if (_falseCount >= _vFragment.size())
+				stopEffect();
+		}
 	}
 }
 
-void fragments::collisionProcess()
+void effects::collisionProcess()
 {
 	for (int i = 0; i < _vFragment.size(); ++i)
 	{
 		//for (int j = 0; j < )
+	}
+}
+
+void effects::frameChange()
+{
+	for (int i = 0; i < _vFragment.size(); i++)
+	{
+		if (_isFrameImg)
+		{
+			_count++;
+			if (_count % 20 == 0)
+			{
+				if (_vFragment[i].index > _vFragment[i].particleImg->getMaxFrameX())
+				{
+					_vFragment[i].fire = false;
+				}
+				else
+				{
+					_vFragment[i].index++;
+					_vFragment[i].particleImg->setFrameX(_vFragment[i].index);
+				}
+			}
+		}
+		else
+		{
+			_vFragment[i].index = 0;
+		}
 	}
 }

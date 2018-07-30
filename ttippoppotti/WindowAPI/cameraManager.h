@@ -8,6 +8,8 @@ public:
 	RECT getCamera() { return _rcCamera; }
 	void setCamera(RECT rc) { _rcCamera = rc; }
 
+	//임시 고쳐야함
+	RECT CameraPosSetting(RECT rc);
 	bool CameraIn(RECT rc);
 	//카메라매니져 초기화
 	HRESULT init();
@@ -17,4 +19,3 @@ public:
 	cameraManager() {}
 	~cameraManager() {}
 };
-

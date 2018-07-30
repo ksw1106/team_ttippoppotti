@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="GameFramework2D">
       <UniqueIdentifier>{9fbd4086-f21e-4a3b-b3d1-8ac4c5f5fa1b}</UniqueIdentifier>
     </Filter>
@@ -41,6 +37,13 @@
     </Filter>
     <Filter Include="GameFramework2D\이미지">
       <UniqueIdentifier>{1851a966-ba68-4f2f-8ebc-640729b7e225}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework2D\이펙트">
+      <UniqueIdentifier>{06bb6691-b0cb-4035-a27f-047993285ae4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -122,9 +125,6 @@
     <ClInclude Include="cameraManager.h">
       <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
-    <ClInclude Include="effects.h">
-      <Filter>MainGame\브로포스</Filter>
-    </ClInclude>
     <ClInclude Include="timeManager.h">
       <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
@@ -140,7 +140,13 @@
     <ClInclude Include="soldier.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
+    <ClInclude Include="effects.h">
+      <Filter>GameFramework2D\이펙트</Filter>
+    </ClInclude>
     <ClInclude Include="brovil.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="stage2Scene.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
   </ItemGroup>
@@ -217,9 +223,6 @@
     <ClCompile Include="cameraManager.cpp">
       <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
-    <ClCompile Include="effects.cpp">
-      <Filter>MainGame\브로포스</Filter>
-    </ClCompile>
     <ClCompile Include="timeManager.cpp">
       <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
@@ -247,7 +250,13 @@
     <ClCompile Include="soldier.cpp">
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
+    <ClCompile Include="effects.cpp">
+      <Filter>GameFramework2D\이펙트</Filter>
+    </ClCompile>
     <ClCompile Include="brovil.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="stage2Scene.cpp">
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
   </ItemGroup>

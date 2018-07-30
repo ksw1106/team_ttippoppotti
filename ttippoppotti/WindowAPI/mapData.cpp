@@ -1,12 +1,8 @@
 #include "stdafx.h"
 #include "mapData.h"
 
-HRESULT mapData::init(void)
+void mapData::stage1_setting()
 {
-	//=============================================================
-	//	## 1스테이지
-	//=============================================================
-
 	//1블록 + 다리
 	{
 		//1블록 - 1
@@ -81,7 +77,7 @@ HRESULT mapData::init(void)
 			}
 		}
 	}
-	
+
 	//2블록
 	{
 		//2블록 - 1 왼쪽
@@ -311,7 +307,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -1 다리 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -326,7 +321,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -1 사다리 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -341,7 +335,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -2 왼쪽 다리
 		for (int i = 0; i < 1; i++)
 		{
@@ -356,7 +349,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -2 사다리 왼쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -371,7 +363,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -2 사다리 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -386,7 +377,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -2 다리
 		for (int i = 0; i < 1; i++)
 		{
@@ -401,7 +391,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -2 다리 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -416,7 +405,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -2 오른쪽 다리
 		for (int i = 0; i < 1; i++)
 		{
@@ -431,7 +419,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -3 왼쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -446,7 +433,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -3 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -461,7 +447,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -4 왼쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -476,7 +461,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -4 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -491,7 +475,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -5 왼쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -506,7 +489,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -5 다리 왼쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -521,7 +503,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -5 다리
 		for (int i = 0; i < 1; i++)
 		{
@@ -536,7 +517,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -5 다리 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -551,7 +531,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -5 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -566,7 +545,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -5 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -581,7 +559,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -6,7 왼쪽
 		for (int i = 0; i < 2; i++)
 		{
@@ -596,7 +573,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -6,7 중앙`	
 		for (int i = 0; i < 2; i++)
 		{
@@ -611,7 +587,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -6,7 중앙
 		for (int i = 0; i < 2; i++)
 		{
@@ -640,7 +615,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -8 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -655,7 +629,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -9 왼쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -670,7 +643,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -9 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -685,7 +657,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -10 왼쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -700,7 +671,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -10 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -715,7 +685,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -11 왼쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -730,7 +699,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -11 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -745,7 +713,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -12 왼쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -760,7 +727,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -12 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -775,7 +741,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -13 왼쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -790,7 +755,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -13 오른쪽
 		for (int i = 0; i < 1; i++)
 		{
@@ -805,9 +769,7 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//나무
-
 		//3블록 -14, 15 오른쪽
 		for (int i = 0; i < 2; i++)
 		{
@@ -822,7 +784,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -16
 		for (int i = 0; i < 1; i++)
 		{
@@ -837,7 +798,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -17, 18
 		for (int i = 0; i < 2; i++)
 		{
@@ -852,7 +812,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -19
 		for (int i = 0; i < 1; i++)
 		{
@@ -867,7 +826,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -20
 		for (int i = 0; i < 1; i++)
 		{
@@ -882,7 +840,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -21
 		for (int i = 0; i < 1; i++)
 		{
@@ -897,7 +854,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -22
 		for (int i = 0; i < 2; i++)
 		{
@@ -912,7 +868,6 @@ HRESULT mapData::init(void)
 				_vObject.push_back(obj);
 			}
 		}
-
 		//3블록 -23
 		for (int i = 0; i < 1; i++)
 		{
@@ -928,8 +883,750 @@ HRESULT mapData::init(void)
 			}
 		}
 	}
+}
 
-	//2스테이지
+void mapData::stage2_setting()
+{
+	//=============================================================
+	//	## 2스테이지
+	//=============================================================
+
+	//1블록 -1 왼쪽 다리
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 71;
+			obj._rc = RectMake(-36 + j * obj._width, 1505 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//1블록 -1
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 72;
+			obj._rc = RectMake(168 + j * obj._width, 1505 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//1블록 -2
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(168 + j * obj._width, 1577 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//1블록 -3
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 6; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(168 + j * obj._width, 1645 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//1블록 -4, 5
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(236 + j * obj._width, 1713 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//1블록 -6
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(236 + j * obj._width, 1849 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//1블록 -7. 8
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(168 + j * obj._width, 1917 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//1블록 -9, 10, 11, 12
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 6; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(168 + j * obj._width, 2053 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//1블록 -13
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(100 + j * obj._width, 2325 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//1블록 -13
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(100 + j * obj._width, 2393 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//1블록 -1 오른쪽 다리
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 67;
+			obj._height = 72;
+			obj._rc = RectMake(644 + j * obj._width, 1505 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//2블록 -1
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 72;
+			obj._rc = RectMake(979 + j * obj._width, 1505 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//2블록 -2
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(979 + j * obj._width, 1577 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//2블록 -3
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(1047 + j * obj._width, 1645 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//2블록 -4, 5, 6, 7
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(1115 + j * obj._width, 1713 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//2블록 -8, 9, 10, 11
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 6; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(1251 + j * obj._width, 1985 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//2블록 -12
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(1319 + j * obj._width, 2257 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//2블록 -13
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(1455 + j * obj._width, 2325 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//2블록 -14
+	for (int i = 0; i < 15; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(1659 + j * obj._width, 1645 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//3블록 -1
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 69;
+			obj._height = 73;
+			obj._rc = RectMake(1721 + j * obj._width, 624 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//3블록 -2 왼쪽 다리
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 1; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 67;
+			obj._height = 73;
+			obj._rc = RectMake(1658 + j * obj._width, 896 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -2 사다리 왼쪽
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 70;
+			obj._height = 73;
+			obj._rc = RectMake(1725 + j * obj._width, 896 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -2 사다리 오른쪽
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 73;
+			obj._rc = RectMake(1925 + j * obj._width, 896 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -2 오른쪽 다리
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 1; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 70;
+			obj._height = 73;
+			obj._rc = RectMake(2265 + j * obj._width, 896 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//3블록 -3
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 70;
+			obj._height = 72;
+			obj._rc = RectMake(1721 + j * obj._width, 1104 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -4
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 70;
+			obj._height = 70;
+			obj._rc = RectMake(1721 + j * obj._width, 1176 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -4 오른쪽
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 73;
+			obj._height = 73;
+			obj._rc = RectMake(2126 + j * obj._width, 1104 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//3블록 -5
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 73;
+			obj._rc = RectMake(1530 + j * obj._width, 1370 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//3블록 -5 오른쪽
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 11; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 70;
+			obj._rc = RectMake(1795 + j * obj._width, 1370 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	
+	//3블록 -6
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 73;
+			obj._rc = RectMake(1598 + j * obj._width, 1443 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -7
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(1931 + j * obj._width, 1509 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -8
+	for (int i = 0; i < 12; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(1931 + j * obj._width, 1849 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//3블록 -5 맨 오른쪽
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 70;
+			obj._rc = RectMake(2543 + j * obj._width, 1370 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -7
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(2543 + j * obj._width, 1577 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -8
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(2543 + j * obj._width, 1645 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -9
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(2543 + j * obj._width, 1781 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -10 사다리 왼쪽
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(2475 + j * obj._width, 1985 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -10 사다리 오른쪽
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 6; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(2815 + j * obj._width, 1985 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -11
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(2475 + j * obj._width, 2053 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록 -12
+	for (int i = 0; i < 7; i++)
+	{
+		for (int j = 0; j < 12; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(2475 + j * obj._width, 2189 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 72;
+			obj._rc = RectMake(2746 + j * obj._width, 1370 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(2882 + j * obj._width, 1577 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 72;
+			obj._rc = RectMake(3358 + j * obj._width, 1370 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(3358 + j * obj._width, 1441 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(3154 + j * obj._width, 1645 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(3426 + j * obj._width, 1848 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+
+	//3블록
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(3290 + j * obj._width, 1984 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(3290 + j * obj._width, 2324 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(3290 + j * obj._width, 2392 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+	//3블록
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			mapObject obj;
+			ZeroMemory(&obj, sizeof(mapObject));
+			obj._width = 68;
+			obj._height = 68;
+			obj._rc = RectMake(3290 + j * obj._width, 2596 + i * obj._height, obj._width, obj._height);
+			obj._isActived = true;
+			_vObject.push_back(obj);
+		}
+	}
+}
+
+HRESULT mapData::init(int stage)
+{
+	//=============================================================
+	//	## 1스테이지
+	//=============================================================
+	switch (stage)
+	{
+	case 1:
+		stage1_setting();
+		break;
+	case 2:
+		stage2_setting();
+		break;
+	default:
+		//에러
+		break;
+	}
 
 	return S_OK;
 }

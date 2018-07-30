@@ -20,7 +20,7 @@ HRESULT stageScene::init(void)
 	_enemyManager->init();
 
 	_mapData = new mapData;
-	_mapData->init();
+	_mapData->init(1);
 
 	_test = new testScene_kmy;
 	_test->init();
