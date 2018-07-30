@@ -16,10 +16,10 @@ HRESULT enemyManager::init(void)
 	IMAGEMANAGER->addFrameImage("의문", "enemyImage/QuestionMark.bmp", 960, 60, 16, 1);
 
 	//에너미 클래스 객체 생성 및 초기화
-	this->setSoldier(3700, 1244, 1);
-	this->setSoldier(3700, 1450, 2);
-	this->setSoldier(3600, 1655, 3);
-	this->setSoldier(3600, 2190, 4);
+	this->setSoldier(3700, 1234, 1);
+	this->setSoldier(3700, 1440, 2);
+	this->setSoldier(3600, 1645, 3);
+	this->setSoldier(3600, 2180, 4);
 	//this->setBrovil(3700, 1000, 5);
 		
 	_eBullet = new eBullet;
@@ -49,6 +49,7 @@ void enemyManager::update(void)
 	_eBullet->update();			
 
 	this->collision();
+	this->collideWithPBullet();
 }
 
 void enemyManager::render(void)
@@ -90,6 +91,7 @@ void enemyManager::collision()
 			getEBullet()->getVEnemybullet()[i].bulletImage->release();
 			SAFE_DELETE(getEBullet()->getVEnemybullet()[i].bulletImage);
 			getEBullet()->removeBullet(i);
+			//EFFECTMANAGER->addEffect()
 		}
 		else
 		{
@@ -98,38 +100,84 @@ void enemyManager::collision()
 	}		
 
 	// 충돌처리 ( 맵 타일 ) vs 일반 적
-	for (int j = 0; j < getVEnemy().size(); ++j)
+	//for (int j = 0; j < getVEnemy().size(); ++j)
+	//{
+	//	//if (!CAMERAMANAGER->CameraIn(getVEnemy()[j]->getEnemyRC())) continue;
+	//	for (int i = 386; i < _mapData->getObject().size(); i++)
+	//	{
+	//		if (!_mapData->getObject()[i]._isActived) continue;
+	//
+	//		if (IntersectRect(&rc, &_vSoldier[j]->getRcEnemy(), &_mapData->getObject()[i]._rc))
+	//		{				
+	//			//타일에 착지
+	//			if (_mapData->getObject()[i]._rc.bottom > _vSoldier[j]->getRcEnemy().top && _mapData->getObject()[i]._rc.bottom < _vSoldier[j]->getRcEnemy().bottom)
+	//			_vSoldier[j]->setY(_vSoldier[j]->getY() + 1);
+	//			
+	//			_vSoldier[j]->setIsOn(true);
+	//			_vSoldier[j]->setY(_vSoldier[j]->getY() - 0.4f);
+	//			//_vSoldier[j]->setY(_mapData->getObject()[i]._rc.top - _vSoldier[j]->getBodyImage()->getFrameHeight()/2);
+	//			break;				
+	//		}			
+	//		else
+	//		{				
+	//			_vSoldier[j]->setIsOn(false);
+	//		}	
+	//	}		
+	//}	
+	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
-		//if (!CAMERAMANAGER->CameraIn(getVEnemy()[j]->getEnemyRC())) continue;
-		for (int i = 386; i < _mapData->getObject().size(); i++)
-		{
-			if (!_mapData->getObject()[i]._isActived) continue;
+		float x, y;
+		x = _vSoldier[i]->getX();
+		y = _vSoldier[i]->getY();
 
-			if (IntersectRect(&rc, &_vSoldier[j]->getRcEnemy(), &_mapData->getObject()[i]._rc))
-			{				
-				//타일에 착지
-				if (_mapData->getObject()[i]._rc.bottom > _vSoldier[j]->getRcEnemy().top && _mapData->getObject()[i]._rc.bottom < _vSoldier[j]->getRcEnemy().bottom)
-				_vSoldier[j]->setY(_vSoldier[j]->getY() + 1);
-				
-				_vSoldier[j]->setIsOn(true);
-				_vSoldier[j]->setY(_vSoldier[j]->getY() - 0.4f);
-				//_vSoldier[j]->setY(_mapData->getObject()[i]._rc.top - _vSoldier[j]->getBodyImage()->getFrameHeight()/2);
-				break;				
-			}			
-			else
-			{				
-				_vSoldier[j]->setIsOn(false);
-			}	
-		}		
-	}			
+		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getEnemyBodyImage(), x, y, ENEMY_BOTTOM))
+		{
+			_vSoldier[i]->setIsOn(true);
+			_vSoldier[i]->setGravity(0.f);
+			
+			//_vSoldier[j]->setY(_mapData->getObject()[i]._rc.top - _vSoldier[j]->getBodyImage()->getFrameHeight()/2);	
+			//_vSoldier[i]->setY(y);
+			//_vSoldier[i]->getEnemyBodyImage()->setX(x);
+			//_vSoldier[i]->getEnemyBodyImage()->setY(y);
+		}
+		else
+		{
+			_vSoldier[i]->setIsOn(false);
+		}
+	}
+}
+
+// 플레이어 총알과 적이 충돌
+void enemyManager::collideWithPBullet()
+{
+	RECT rc;
+	for (int i = 0; i < _vSoldier.size(); ++i)
+	{
+		for (int j = 0; j < _playerManager->getPBullet()->getVPlayerBullet().size(); ++j)
+		{
+			if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vSoldier[i]->getRcEnemy()))
+			{
+				_vSoldier[i]->setIsAlive(false);
+				_vSoldier[i]->setBodyStatus(ENEMY_KNOCK_BACK);
+				_vSoldier[i]->setEnemyAngle(_playerManager->getPBullet()->getVPlayerBullet()[j].angle);
+				_vSoldier[i]->knockBackMove(_vSoldier[i]->getEnemyAngle());
+				break;
+			}
+		}
+	}
 }
 
 void enemyManager::enemyDie()
 {
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
-		//if (_vSoldier[i].)
+		if (!_vSoldier[i]->getIsAlive())
+		{
+			_vSoldier[i]->setBodyStatus(ENEMY_DEAD);
+			//_vSoldier[i].
+		}
 	}
+	
 }
 
 //=====================================================================================================================================================================================
