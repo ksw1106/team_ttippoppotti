@@ -443,10 +443,12 @@ void pBullet::move()
 		if (_vBullet[i].isLeft)
 		{
 			_vBullet[i].x -= _vBullet[i].speed;
+			_vBullet[i].angle = PI;
 		}
 		if (!_vBullet[i].isLeft)
 		{
 			_vBullet[i].x += _vBullet[i].speed;
+			_vBullet[i].angle = 0.f;
 		}
 
 		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y, 

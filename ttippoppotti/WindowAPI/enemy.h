@@ -77,6 +77,7 @@ private:
 	int _x, _y;
 	int _hp;
 	
+	bool _isAlive;
 	bool _isLeft;
 	bool _isOn;
 	bool _isUncovered;		// 플레이어 발견! 
@@ -90,6 +91,7 @@ private:
 public:
 	HRESULT initSoldier(int x, int y, int hp, int randomNum);
 	HRESULT initBrovil(int x, int y, int hp, int randomNum);
+
 	void release(void);
 	void update(void);
 	void render(void);
@@ -105,6 +107,7 @@ public:
 	int getX() { return _x; }
 	int getY() { return _y; }
 	int getHP() { return _hp; }
+	bool getIsAlive() { return _isAlive; }
 	bool getDirection() { return _isLeft; }
 	bool getIsUncovered() { return _isUncovered; }
 	bool getIsStrange() { return _isStrange; }
@@ -124,6 +127,7 @@ public:
 	void setX(int x) { _x = x; }
 	void setY(int y) { _y = y; }
 	void setHP(int hp) { _hp = hp; }
+	void setIsAlive(bool isAlive) { _isAlive = isAlive; }
 	void setDirection(bool isLeft) { _isLeft = isLeft; }
 	void setIsUncovered(bool isUncovered) { _isUncovered = isUncovered; }
 	void setIsStrange(bool isStrange) { _isStrange = isStrange; }
@@ -141,7 +145,7 @@ public:
 	void controlAI(int randomNum);
 	
 	void frameAnimate();	
-	void knockBackMove();	// 총알맞았을때 뒤로 날아감
+	void knockBackMove(float angle);	// 총알맞았을때 뒤로 날아감
 			
 	enemy() {}
 	virtual ~enemy() {}

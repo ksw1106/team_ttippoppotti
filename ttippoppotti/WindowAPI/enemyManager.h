@@ -33,6 +33,7 @@ public:
 	void render(void);
 		
 	void collision();	// 충돌함수
+	void collideWithPBullet();	// 플레이어 총알과 충돌함수
 	void enemyDie();
 	void setSoldier(int x, int y, int randomNum);
 	void setBrovil(int x, int y, int randomNum);

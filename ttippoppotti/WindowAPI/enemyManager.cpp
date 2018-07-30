@@ -49,6 +49,7 @@ void enemyManager::update(void)
 	_eBullet->update();			
 
 	this->collision();
+	this->collideWithPBullet();
 }
 
 void enemyManager::render(void)
@@ -90,6 +91,7 @@ void enemyManager::collision()
 			getEBullet()->getVEnemybullet()[i].bulletImage->release();
 			SAFE_DELETE(getEBullet()->getVEnemybullet()[i].bulletImage);
 			getEBullet()->removeBullet(i);
+			EFFECTMANAGER->addEffect()
 		}
 		else
 		{
@@ -121,15 +123,40 @@ void enemyManager::collision()
 				_vSoldier[j]->setIsOn(false);
 			}	
 		}		
-	}			
+	}		
+}
+
+// 플레이어 총알과 적이 충돌
+void enemyManager::collideWithPBullet()
+{
+	RECT rc;
+	for (int i = 0; i < _vSoldier.size(); ++i)
+	{
+		for (int j = 0; j < _playerManager->getPBullet()->getVPlayerBullet().size(); ++j)
+		{
+			if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vSoldier[i]->getRcEnemy()))
+			{
+				_vSoldier[i]->setIsAlive(false);
+				_vSoldier[i]->setBodyStatus(ENEMY_KNOCK_BACK);
+				_vSoldier[i]->setEnemyAngle(_playerManager->getPBullet()->getVPlayerBullet()[j].angle);
+				_vSoldier[i]->knockBackMove(_vSoldier[i]->getEnemyAngle());
+				break;
+			}
+		}
+	}
 }
 
 void enemyManager::enemyDie()
 {
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
-		//if (_vSoldier[i].)
+		if (!_vSoldier[i]->getIsAlive())
+		{
+			_vSoldier[i]->setBodyStatus(ENEMY_DEAD);
+			_vSoldier[i].
+		}
 	}
+	
 }
 
 //=====================================================================================================================================================================================
