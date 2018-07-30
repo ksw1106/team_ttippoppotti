@@ -13,9 +13,8 @@ private:
 	playerManager* _playerManager;
 	mapData* _mapData;
 	
-	vector<enemy*> _vSoldier;	// 일반적
-	brovil* _brovil;			// 브로빌 ( 보스 )
-	
+	vector<enemy*> _vSoldier;	// 일반 적
+		
 	eBullet* _eBullet;			// 총알 클래스
 		
 
@@ -34,7 +33,9 @@ public:
 	void render(void);
 		
 	void collision();	// 충돌함수
-	void setEnemy(int x, int y, int randomNum);
+	void enemyDie();
+	void setSoldier(int x, int y, int randomNum);
+	void setBrovil(int x, int y, int randomNum);
 		
 	enemyManager() {}
 	~enemyManager() {}

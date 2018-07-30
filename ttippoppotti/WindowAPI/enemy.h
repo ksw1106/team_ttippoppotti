@@ -5,21 +5,47 @@
 
 enum enemyStatus
 {
-	E_IDLE = 0,
-	E_WALK = 1,
-	E_DOUBT = 2,
-	E_KNOCK_BACK = 3,	
-	E_FLY_AWAY = 4,
-	E_DEAD = 5,
+	ENEMY_IDLE = 0,
+	ENEMY_WALK = 1,
+	ENEMY_DOUBT = 2,
+	ENEMY_KNOCK_BACK = 3,
+	ENEMY_FLY_AWAY = 4,
+	ENEMY_DEAD = 5,
 };
 
 enum gunStatus
 {
-	G_IDLE = 0,
-	G_TARGETING = 1,
-	G_READY = 2,
-	G_FIRE = 3,
-	G_RELOAD = 4,
+	GUN_IDLE = 0,
+	GUN_TARGETING = 1,
+	GUN_READY = 2,
+	GUN_FIRE = 3,
+	GUN_RELOAD = 4,
+};
+
+enum brovilStatus
+{
+	BROVIL_IDLE,
+	BROVIL_WALK,
+	BROVIL_KNOCK_BACK,
+	BROVIL_DEAD,
+	BROVIL_DISAPPEAR,
+};
+
+struct enemyImage
+{
+	image* bodyImage[6];
+	image* armImage[5];
+	int count;
+	int index;
+	int speed;	
+};
+
+struct brovilImage
+{
+	image* brovilImg[5];
+	int count;
+	int index;
+	int speed;
 };
 
 //부모클래스 => 이놈을 상속받아서 보스, 일반몬스터등을 만든다
@@ -28,84 +54,94 @@ class enemy : public gameNode
 private:
 	enemyStatus _enemyStatus;
 	gunStatus _gunStatus;
-	image * _bodyImage[6];
-	image * _armImage[5];
+	brovilStatus _brovilStatus;
+	
+	enemyImage _enemyImage;
+	brovilImage _brovilImage;
+
+	//image * _bodyImage[6];
+	//image * _armImage[5];
+	//image * _brovilImage[5];
 	image * _warnSign;
 	image * _doubtSign;
-	image* _deadImage;
-
-	RECT _enemyRC;
-	RECT _enemySightRC;
+	
+	RECT _rcEnemy;
+	RECT _rcEnemySight;
 
 	float _angle;
 	float _speed;
 	float _gravity;
 	float _accel;
 	float _kbSpeed;		// 맞았을 때 날아가는 속도
+	
 	int _x, _y;
 	int _hp;
+	
 	bool _isLeft;
 	bool _isOn;
-	bool _isAlarm;
-	bool _isAlarm2;
-
-	int _frameCount, _frameIndex, _frameIndex2, _frameIndex3, _frameIndex4;
-	int	_actionSpeed;		// 행동 바뀔 변수
-		
+	bool _isUncovered;		// 플레이어 발견! 
+	bool _isStrange;		// 아군(적) 의 시체 발견!
+			
 	int _randomNumber;
+	int _warnFrameIndex, _doubtFrameIndex;
+	int _warnFrameCount, _doubtFrameCount;
+	int _frameSpeed;
 
 public:
-	virtual HRESULT init(int x, int y, int hp, int randomNum);
-	virtual void release(void);
-	virtual void update(void);
-	virtual void render(void);
+	HRESULT initSoldier(int x, int y, int hp, int randomNum);
+	HRESULT initBrovil(int x, int y, int hp, int randomNum);
+	void release(void);
+	void update(void);
+	void render(void);
 
-	virtual image* getBodyImage() { return _bodyImage[_enemyStatus]; }
-	virtual image* getArmImage() { return _armImage[_gunStatus]; }
-	virtual RECT getEnemyRC() { return _enemyRC; }
-	virtual RECT getEnemySightRC() { return _enemySightRC; }
-	virtual float getSpeed() { return _speed; }
-	virtual float getGravity() { return _gravity; }
-	virtual int getX() { return _x; }
-	virtual int getY() { return _y; }
-	virtual int getHP() { return _hp; }
-	virtual bool getDirection() { return _isLeft; }
-	virtual bool getAlarm() { return _isAlarm; }
-	virtual bool getAlarm2() { return _isAlarm2; }
-	virtual enemyStatus getBodyStatus() { return _enemyStatus; }
-	virtual gunStatus getArmStatus() { return _gunStatus; }
-	virtual int getFrameIndex() { return _frameIndex; }
-	virtual int getFrameIndex2() { return _frameIndex2; }
-	virtual float getEnemyAngle() { return _angle; }
-	virtual int getRandomNum() { return _randomNumber; }
-	virtual float getAccel() { return _accel; }
-	virtual bool getIsOn() { return _isOn; }
-
-	virtual void setBodyImage(image* bodyImage) { _bodyImage[_enemyStatus] = bodyImage; }
-	virtual void setArmImage(image* armImage) { _armImage[_gunStatus] = armImage; }
-	virtual void setEnemyRC(RECT enemyRC) { _enemyRC = enemyRC; }
-	virtual void setEnemySightRC(RECT enemySightRC) { _enemySightRC = enemySightRC; }
-	virtual void setSpeed(float speed) { _speed = speed; }
-	virtual void setGravity(float gravity) { _gravity = gravity; }
-	virtual void setX(int x) { _x = x; }
-	virtual void setY(int y) { _y = y; }
-	virtual void setHP(int hp) { _hp = hp; }
-	virtual void setAlarm(bool isAlarm) { _isAlarm = isAlarm; }
-	virtual void setAlarm2(bool isAlarm2) { _isAlarm2 = isAlarm2; }
-	virtual void setBodyStatus(enemyStatus enemyStat) { _enemyStatus = enemyStat; }
-	virtual void setArmStatus(gunStatus gunStat) { _gunStatus = gunStat; }
-	virtual void setDirection(bool isLeft) { _isLeft = isLeft; }
-	virtual void setEnemyAngle(float angle) { _angle = angle; }
-	virtual void setRandomNum(int randomNum) { _randomNumber = randomNum; }
-	virtual void setAccel(float accel) { _accel = accel; }
-	virtual void setIsOn(bool isOn) { _isOn = isOn; }
-
-	virtual void move();
-	virtual void flyAway();
-	virtual void controlAI(int randomNum);
+	//image* getEnemyBodyImage() { return _enemyImage.bodyImage[_enemyStatus]; }
+	//image* getEnemyArmImage() { return _enemyImage.armImage[_gunStatus]; }
+	//image* getBrovilImage() { return _brovilImage.brovilImage[_brovilStatus]; }
+		
+	RECT getRcEnemy() { return _rcEnemy; }
+	RECT getRcEnemySight() { return _rcEnemySight; }
+	float getSpeed() { return _speed; }
+	float getGravity() { return _gravity; }
+	int getX() { return _x; }
+	int getY() { return _y; }
+	int getHP() { return _hp; }
+	bool getDirection() { return _isLeft; }
+	bool getIsUncovered() { return _isUncovered; }
+	bool getIsStrange() { return _isStrange; }
+	enemyStatus getBodyStatus() { return _enemyStatus; }
+	gunStatus getArmStatus() { return _gunStatus; }
+	brovilStatus getBrovilStatus() { return _brovilStatus; }
 	
-	virtual void frameAnimate();	
-	virtual void knockBackMove();	// 총알맞았을때 뒤로 날아감
+	float getEnemyAngle() { return _angle; }
+	int getRandomNum() { return _randomNumber; }
+	float getAccel() { return _accel; }
+	bool getIsOn() { return _isOn; }
+			
+	void setRcEnemy(RECT rcEnemy) { _rcEnemy = rcEnemy; }
+	void setEnemySightRC(RECT rcEnemySight) { _rcEnemySight = rcEnemySight; }
+	void setSpeed(float speed) { _speed = speed; }
+	void setGravity(float gravity) { _gravity = gravity; }
+	void setX(int x) { _x = x; }
+	void setY(int y) { _y = y; }
+	void setHP(int hp) { _hp = hp; }
+	void setDirection(bool isLeft) { _isLeft = isLeft; }
+	void setIsUncovered(bool isUncovered) { _isUncovered = isUncovered; }
+	void setIsStrange(bool isStrange) { _isStrange = isStrange; }
+	void setBodyStatus(enemyStatus enemyStat) { _enemyStatus = enemyStat; }
+	void setArmStatus(gunStatus gunStat) { _gunStatus = gunStat; }
+	void setBrovilStatus(brovilStatus brovilStatus) { _brovilStatus = brovilStatus; }
+	
+	void setEnemyAngle(float angle) { _angle = angle; }
+	void setRandomNum(int randomNum) { _randomNumber = randomNum; }
+	void setAccel(float accel) { _accel = accel; }
+	void setIsOn(bool isOn) { _isOn = isOn; }
+
+	void move();
+	void flyAway();
+	void controlAI(int randomNum);
+	
+	void frameAnimate();	
+	void knockBackMove();	// 총알맞았을때 뒤로 날아감
 			
 	enemy() {}
 	virtual ~enemy() {}
