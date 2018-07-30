@@ -48,10 +48,16 @@ public:
 	void render(void);
 
 
-	//이펙트 발사 설정
-	void activate(float x, float y, float angle);
-	//이펙트 발사!
-	void boom();
+	//포물선 발사 설정
+	void activateParabola(float x, float y, float angle);
+	//포물선 발사!
+	void boomParabola();
+	
+	//폭발 설정
+	void activateExplosion(float x, float y);
+	//폭발 발사!
+	void boomExplosion();
+
 
 	//이펙트 멈추기
 	void stopEffect();
