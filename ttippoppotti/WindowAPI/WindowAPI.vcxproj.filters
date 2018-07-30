@@ -45,6 +45,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="MainGame\브로포스\enemy">
+      <UniqueIdentifier>{1fb547e2-d20e-4827-801a-6ee0804500b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commonMacroFunction.h">
@@ -113,9 +116,6 @@
     <ClInclude Include="enemyManager.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
-    <ClInclude Include="enemy.h">
-      <Filter>MainGame\브로포스</Filter>
-    </ClInclude>
     <ClInclude Include="progressBar.h">
       <Filter>GameFramework2D\체력바</Filter>
     </ClInclude>
@@ -137,20 +137,20 @@
     <ClInclude Include="loadingScene.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
-    <ClInclude Include="soldier.h">
-      <Filter>MainGame\브로포스</Filter>
-    </ClInclude>
     <ClInclude Include="effects.h">
       <Filter>GameFramework2D\이펙트</Filter>
-    </ClInclude>
-    <ClInclude Include="brovil.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="stage2Scene.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionManager.h">
-      <Filter>GameFramework2D\매니져</Filter>
+    <ClInclude Include="brovil.h">
+      <Filter>MainGame\브로포스\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>MainGame\브로포스\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="soldier.h">
+      <Filter>MainGame\브로포스\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -211,9 +211,6 @@
     <ClCompile Include="player.cpp">
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
-    <ClCompile Include="enemy.cpp">
-      <Filter>MainGame\브로포스</Filter>
-    </ClCompile>
     <ClCompile Include="enemyManager.cpp">
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
@@ -250,20 +247,20 @@
     <ClCompile Include="Lee_Ji_Woong_addResource.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="soldier.cpp">
-      <Filter>MainGame\브로포스</Filter>
-    </ClCompile>
     <ClCompile Include="effects.cpp">
       <Filter>GameFramework2D\이펙트</Filter>
-    </ClCompile>
-    <ClCompile Include="brovil.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="stage2Scene.cpp">
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>GameFramework2D\매니져</Filter>
+    <ClCompile Include="brovil.cpp">
+      <Filter>MainGame\브로포스\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>MainGame\브로포스\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="soldier.cpp">
+      <Filter>MainGame\브로포스\enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
