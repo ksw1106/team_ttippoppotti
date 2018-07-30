@@ -63,7 +63,7 @@ void effectManager::addEffect(string effectName, const char * imageName, int cou
 	_mEffect.insert(make_pair(effectName, vEffectBuffer));
 }
 
-void effectManager::play(string effectName, int x, int y, float angle)
+void effectManager::playParabola(string effectName, int x, int y, float angle)
 {
 	miEffect mIter;
 
@@ -75,7 +75,7 @@ void effectManager::play(string effectName, int x, int y, float angle)
 		for (int i = 0; i < mIter->second.size(); i++)
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
-			mIter->second[i]->activate(x, y, angle);
+			mIter->second[i]->activateParabola(x, y, angle);
 			return;
 		}
 	}
