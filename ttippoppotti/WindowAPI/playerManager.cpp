@@ -111,7 +111,7 @@ void playerManager::update(void)
 	float tempX = _player->getX();
 	float tempY = _player->getY();
 
-	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, PLAYER_BOTTOM))
+	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_BOTTOM))
 	{
 		_player->setGravity(0.f);
 		_player->setSpeed(0.f);
@@ -124,7 +124,7 @@ void playerManager::update(void)
 		}
 	}
 
-	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, PLAYER_RIGHT))
+	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, _player->getSpeed(), 0, PLAYER_RIGHT))
 	{
 		hit_left = true;
 		_player->setIsJump(false);
@@ -137,7 +137,7 @@ void playerManager::update(void)
 
 	}
 
-	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, PLAYER_LEFT))
+	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, _player->getSpeed(), 0, PLAYER_LEFT))
 	{
 		hit_right = true;
 		_player->setIsJump(false);
@@ -146,7 +146,6 @@ void playerManager::update(void)
 		_player->setSpeed(0.f);
 		_player->setState(HANG_FORNT_HOLD);
 	}
-
 
 	_player->setX(tempX);
 	_player->setY(tempY);

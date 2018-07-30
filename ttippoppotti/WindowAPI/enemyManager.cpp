@@ -130,7 +130,7 @@ void enemyManager::collision()
 		x = _vSoldier[i]->getX();
 		y = _vSoldier[i]->getY();
 
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getEnemyBodyImage(), x, y, ENEMY_BOTTOM))
+		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getEnemyBodyImage(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_BOTTOM))
 		{
 			_vSoldier[i]->setIsOn(true);
 			_vSoldier[i]->setGravity(0.f);

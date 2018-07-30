@@ -31,7 +31,7 @@ enum brovilStatus
 	BROVIL_DISAPPEAR,
 };
 
-enum {ENEMY_LEFT, ENEMY_RIGHT, ENEMY_TOP, ENEMY_BOTTOM};
+enum {ENEMY_LEFT, ENEMY_TOP, ENEMY_RIGHT, ENEMY_BOTTOM};
 
 struct enemyImage
 {
