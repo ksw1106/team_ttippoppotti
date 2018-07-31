@@ -50,6 +50,34 @@ void enemyManager::update(void)
 
 	this->collision();
 	this->collideWithPBullet();
+
+	for (int i = 0; i < getVEnemy().size(); ++i)
+	{
+		if (!_vSoldier[i]->getIsOn())
+		{
+			if (_vSoldier[i]->getGravity() < 3.0f) _vSoldier[i]->setGravity(3.0f);
+			_vSoldier[i]->setY(_vSoldier[i]->getY() - sinf(_vSoldier[i]->getEnemyAngle()) * _vSoldier[i]->getSpeed() + _vSoldier[i]->getGravity());
+			_vSoldier[i]->setGravity(_vSoldier[i]->getGravity() + 0.5f);
+			
+		}
+		else
+		{
+			_vSoldier[i]->setGravity(0.f);
+		}
+
+		//ÁÂ¿ì ÀÌµ¿
+		if (_vSoldier[i]->getBodyStatus() == ENEMY_WALK)
+		{
+			if (_vSoldier[i]->getDirection())
+			{
+				_vSoldier[i]->setX(_vSoldier[i]->getX() - _vSoldier[i]->getSpeed());
+			}
+			else
+			{
+				_vSoldier[i]->setX(_vSoldier[i]->getX() + _vSoldier[i]->getSpeed());
+			}
+		}
+	}
 }
 
 void enemyManager::render(void)
@@ -61,9 +89,13 @@ void enemyManager::render(void)
 
 	_eBullet->render();
 	
-	char str[64];
-	sprintf_s(str, "%f", _vSoldier[0]->getGravity());
-	TextOut(getMemDC(), 300, 10, str, strlen(str));
+
+	for (int i = 0; i < _vSoldier.size(); ++i)
+	{
+		char str[64];
+		sprintf_s(str, "%f", _vSoldier[i]->getIsOn());
+		TextOut(getMemDC(), 300, 10+i*50, str, strlen(str));
+	}
 }
 
 void enemyManager::collision()
@@ -124,6 +156,8 @@ void enemyManager::collision()
 	//		}	
 	//	}		
 	//}	
+
+	// Àû ÂøÁö ( ÇÈ¼¿Ãæµ¹ )
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
 		float x, y;
@@ -132,17 +166,11 @@ void enemyManager::collision()
 
 		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getEnemyBodyImage(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_BOTTOM))
 		{
-			_vSoldier[i]->setIsOn(true);
-			_vSoldier[i]->setGravity(0.f);
-			
-			//_vSoldier[j]->setY(_mapData->getObject()[i]._rc.top - _vSoldier[j]->getBodyImage()->getFrameHeight()/2);	
-			//_vSoldier[i]->setY(y);
-			//_vSoldier[i]->getEnemyBodyImage()->setX(x);
-			//_vSoldier[i]->getEnemyBodyImage()->setY(y);
+			_vSoldier[i]->setIsOn(true);				
 		}
 		else
 		{
-			_vSoldier[i]->setIsOn(false);
+			_vSoldier[i]->setIsOn(false);				
 		}
 	}
 }
