@@ -21,11 +21,19 @@ public:
 	void release(void);
 	void update(void);
 	void render(void);
-
+	//피
+	void bloodSplash();
+	//탄피
+	void cartridge(float x, float y, bool isLeft);
+	//낙석
+	void rockFall();
+	
 	//이펙트 추가(이펙트키값, 이미지키값, 1회당 출력갯수, 버퍼갯수)
 	void addEffect(string effectName, const char* imageName, int count, int buffer, bool isFrameImg = false);
 	//이펙트 플레이
 	void playParabola(string effectName, int x, int y, float angle);
+
+	void playCartridge(string effectName, int x, int y, bool isLeft);
 
 	effectManager() {}
 	~effectManager() {}

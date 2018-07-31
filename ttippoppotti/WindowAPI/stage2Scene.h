@@ -11,6 +11,7 @@ class stage2Scene : public gameNode
 	mapData* _mapData;
 
 	RECT _rcCamera;
+	bool _camDebug;
 public:
 	HRESULT init(void);
 	void release(void);

@@ -39,6 +39,8 @@ private:
 	float _randGravity;
 	float _effectFPS;		//이펙트 속도
 	bool _isRunning;		//이펙트 재생중이냐?
+	bool _isParabola;
+	bool _isExplosion;
 	bool _isFrameImg;		//프레임이미지냐?
 
 public:
@@ -47,8 +49,10 @@ public:
 	void update(void);
 	void render(void);
 
+	//탄피 설정
+	void activateCartridge(float x, float y, bool isLeft);
 
-	//포물선 발사 설정
+	//포물선 발사 설정 (피, 낙석)
 	void activateParabola(float x, float y, float angle);
 	//포물선 발사!
 	void boomParabola();
@@ -57,10 +61,6 @@ public:
 	void activateExplosion(float x, float y);
 	//폭발 발사!
 	void boomExplosion();
-
-
-	//이펙트 멈추기
-	void stopEffect();
 
 	//충돌처리
 	void collisionProcess();
