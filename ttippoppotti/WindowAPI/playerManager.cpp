@@ -73,6 +73,7 @@ void playerManager::update(void)
 			}
 		}
 	}
+
 	_pBullet->update();
 	if (KEYMANAGER->isOnceKeyDown(VK_UP)&& !_player->getIsJump())
 	{
