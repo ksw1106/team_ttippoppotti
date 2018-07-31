@@ -18,13 +18,10 @@ void testScene_kmy::update(void)
 	if (KEYMANAGER->isOnceKeyDown('O'))
 	{
 		//³«¼®ÁÖÀÇ
-		EFFECTMANAGER->rockFall();
+		EFFECTMANAGER->rockFall(1000, 1800, 0.0f);
 		
 		//È£·¯ÁÖÀÇ
-		EFFECTMANAGER->bloodSplash();
-		
-		//ÅºÇÇ
-//		EFFECTMANAGER->cartridge(true);
+		EFFECTMANAGER->bloodSplash(1100, 1800, 0.0f);
 	}
 	
 }

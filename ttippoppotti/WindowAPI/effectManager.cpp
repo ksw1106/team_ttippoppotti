@@ -66,16 +66,16 @@ void effectManager::render(void)
 	}
 }
 
-void effectManager::bloodSplash()
+void effectManager::bloodSplash(float x, float y, float angle)
 {
-	playParabola("bloodSplash1", WINSIZEX / 3 - 10, WINSIZEY / 2 - 10, 0.0f);
-	playParabola("bloodSplash2", WINSIZEX / 3 - 20, WINSIZEY / 2 - 20, 0.0f);
-	playParabola("bloodSplash3", WINSIZEX / 3 - 30, WINSIZEY / 2 - 30, 0.0f);
-	playParabola("bloodSplash4", WINSIZEX / 3 - 40, WINSIZEY / 2 - 40, 0.0f);
-	playParabola("bloodSplash5", WINSIZEX / 3 - 50, WINSIZEY / 2 - 50, 0.0f);
-	playParabola("bloodSplash6", WINSIZEX / 3 - 60, WINSIZEY / 2 - 60, 0.0f);
-	playParabola("bloodSplash7", WINSIZEX / 3 - 70, WINSIZEY / 2 - 70, 0.0f);
-	playParabola("bloodSplash8", WINSIZEX / 3 - 80, WINSIZEY / 2 - 80, 0.0f);
+	playParabola("bloodSplash1", x, y, angle);
+	playParabola("bloodSplash2", x, y, angle);
+	playParabola("bloodSplash3", x, y, angle);
+	playParabola("bloodSplash4", x, y, angle);
+	playParabola("bloodSplash5", x, y, angle);
+	playParabola("bloodSplash6", x, y, angle);
+	playParabola("bloodSplash7", x, y, angle);
+	playParabola("bloodSplash8", x, y, angle);
 }
 
 void effectManager::cartridge(float x, float y, bool isLeft)
@@ -84,13 +84,13 @@ void effectManager::cartridge(float x, float y, bool isLeft)
 	EFFECTMANAGER->playCartridge("rambro_cartridge", x, y, isLeft);
 }
 
-void effectManager::rockFall()
+void effectManager::rockFall(float x, float y, float angle)
 {
-	EFFECTMANAGER->playParabola("rock1", WINSIZEX / 2, WINSIZEY / 2, 0.0f);
-	EFFECTMANAGER->playParabola("rock2", WINSIZEX / 2 - 10, WINSIZEY / 2, 0.0f);
-	EFFECTMANAGER->playParabola("rock3", WINSIZEX / 2 - 20, WINSIZEY / 2, 0.0f);
-	EFFECTMANAGER->playParabola("rock4", WINSIZEX / 2 - 30, WINSIZEY / 2, 0.0f);
-	EFFECTMANAGER->playParabola("rock5", WINSIZEX / 2 - 40, WINSIZEY / 2, 0.0f);
+	EFFECTMANAGER->playParabola("rock1", x, y, angle);
+	EFFECTMANAGER->playParabola("rock2", x, y, angle);
+	EFFECTMANAGER->playParabola("rock3", x, y, angle);
+	EFFECTMANAGER->playParabola("rock4", x, y, angle);
+	EFFECTMANAGER->playParabola("rock5", x, y, angle);
 }
 
 void effectManager::addEffect(string effectName, const char * imageName, int count, int buffer, bool isFrameImg)

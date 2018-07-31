@@ -21,12 +21,12 @@ public:
 	void release(void);
 	void update(void);
 	void render(void);
-	//피
-	void bloodSplash();
 	//탄피
 	void cartridge(float x, float y, bool isLeft);
+	//피
+	void bloodSplash(float x, float y, float angle);
 	//낙석
-	void rockFall();
+	void rockFall(float x, float y, float angle);
 	
 	//이펙트 추가(이펙트키값, 이미지키값, 1회당 출력갯수, 버퍼갯수)
 	void addEffect(string effectName, const char* imageName, int count, int buffer, bool isFrameImg = false);

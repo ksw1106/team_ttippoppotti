@@ -58,10 +58,6 @@ void effects::render(void)
 	for (int i = 0; i < _vFragment.size(); ++i)
 	{
 		if(!_vFragment[i].fire) continue;
-		/*if(_isFrameImg)
-			_vFragment[i].particleImg->frameRender(getMemDC(), _vFragment[i].rc.left, _vFragment[i].rc.top);
-		else
-			_vFragment[i].particleImg->render(getMemDC(), _vFragment[i].rc.left, _vFragment[i].rc.top);*/
 		if (_isFrameImg)
 			_vFragment[i].particleImg->frameRender(getMemDC(), _vFragment[i].rc.left - CAMERAMANAGER->getCamera().left, _vFragment[i].rc.top - CAMERAMANAGER->getCamera().top);
 		else
@@ -189,14 +185,11 @@ void effects::boomParabola()
 		_vFragment[i].gravity += 0.55f;
 		_vFragment[i].x += cosf(_vFragment[i].angle) * _vFragment[i].speed;
 		_vFragment[i].y += -sinf(_vFragment[i].angle) * _vFragment[i].speed + _vFragment[i].gravity;
-		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
+		_vFragment[i].rc = RectMake(_vFragment[i].x, _vFragment[i].y,
 			_vFragment[i].particleImg->getWidth(),
 			_vFragment[i].particleImg->getHeight());
 
-		_vFragment[i].particleImg->setX(_vFragment[i].x);
-		_vFragment[i].particleImg->setY(_vFragment[i].y);
-
-		if (COLLISIONMANAGER->pixelCollision(_vFragment[i].particleImg, _vFragment[i].x, _vFragment[i].y, _vFragment[i].speed, _vFragment[i].gravity, 3))
+		if (COLLISIONMANAGER->pixelCollision(_vFragment[i].rc, _vFragment[i].x, _vFragment[i].y, _vFragment[i].speed, _vFragment[i].gravity, 3))
 		{
 			_vFragment[i].gravity = 0;
 			_vFragment[i].speed *= 0.8;
