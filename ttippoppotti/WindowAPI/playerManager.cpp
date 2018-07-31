@@ -115,7 +115,8 @@ void playerManager::update(void)
 	float tempX = _player->getX();
 	float tempY = _player->getY();
 
-	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, 5, _player->getGravity(), PLAYER_BOTTOM))		//¹Ù´Ú
+
+	if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, _player->getGravity(), PLAYER_BOTTOM))		//¹Ù´Ú
 	{
 		_player->setGravity(0.f);
 		_player->setSpeed(0.f);
@@ -127,7 +128,7 @@ void playerManager::update(void)
 		}
 	}
 
-	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, 5, 0, PLAYER_RIGHT))				// ¿ÞÂÊº®
+	if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, 0, PLAYER_RIGHT))				// ¿ÞÂÊº®
 	{
 		hit_right = true;
 		_player->setIsJump(false);
@@ -144,7 +145,7 @@ void playerManager::update(void)
 	//{
 
 	//}
-	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, 5, 0, PLAYER_LEFT))				// ¿À¸¥ÂÊº®
+	if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, 0, PLAYER_LEFT))				// ¿À¸¥ÂÊº®
 	{
 		hit_left = true;
 		_player->setIsJump(false);
@@ -161,6 +162,51 @@ void playerManager::update(void)
 	_player->setY(tempY);
 	
 	/*
+=======
+	//if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_BOTTOM))		//¹Ù´Ú
+	//{
+	//	_player->setGravity(0.f);
+	//	_player->setSpeed(0.f);
+	//	_player->setIsJump(false);
+	//	hit_left = false;
+	//	hit_right = false;
+	//	if (_player->getState() != RUN)
+	//	{
+	//		_player->setState(IDLE);
+	//	}
+	//}
+
+	//if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), 0, PLAYER_RIGHT))				// ¿ÞÂÊº®
+	//{
+	//	hit_left = true;
+	//	_player->setIsJump(false);
+	//	_player->setGravity(0.f);
+	//	_player->setSpeed(0.f);
+	//	if (_player->getState() != RUN)
+	//	{
+	//		_player->setState(HANG_FORNT_HOLD);
+	//	}
+
+	//}
+
+	//if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), 0, PLAYER_LEFT))				// ¿À¸¥ÂÊº®
+	//{
+	//	hit_right = true;
+	//	_player->setIsJump(false);
+	//	_player->setIsLeft(true);
+	//	_player->setGravity(0.f);
+	//	_player->setSpeed(0.f);
+	//	if (_player->getState() != RUN)
+	//	{
+	//		_player->setState(HANG_FORNT_HOLD);
+	//	}
+	//}
+
+	_player->setX(tempX);
+	_player->setY(tempY);
+	
+	
+>>>>>>> 8e49a64b929487f1961c5ed9cb1bab871395c713
 	for (int i = 0; i < _mapData->getObject().size(); i++)
 	{
 		count++;
@@ -265,6 +311,7 @@ void playerManager::update(void)
 		}
 	}
 	*/
+	
 	for (int i = 0; i < MAX_STATE; i++)
 	{
 		_player->getImage(i)->setX(_player->getX());
@@ -288,18 +335,20 @@ void playerManager::collision()
 {
 	for (int i = 0; i < _enemyManager->getVEnemy().size(); i++)
 	{
-		RECT rcEnemy = _enemyManager->getVEnemy()[i]->getEnemyArmImage()->boudingBoxWithFrame();
-		RECT rcTemp;
-		if (IntersectRect(&rcTemp, &rcEnemy, &_pBullet->getVPlayerBullet()[i].rc))
-		{
-			getPBullet()->getVPlayerBullet()[i].bulletImage->release();
-			SAFE_DELETE(getPBullet()->getVPlayerBullet()[i].bulletImage);
-			getPBullet()->removeBullet(i);
-		}
-		else
-		{
-			i++;
-		}
+		//RECT rcEnemy = _enemyManager->getVEnemy()[i]->getEnemyArmImage()->boudingBoxWithFrame();
+		//RECT rcTemp;
+		//if (IntersectRect(&rcTemp, &rcEnemy, &_pBullet->getVPlayerBullet()[i].rc))
+		//{
+		//	getPBullet()->getVPlayerBullet()[i].bulletImage->release();
+		//	SAFE_DELETE(getPBullet()->getVPlayerBullet()[i].bulletImage);
+		//	getPBullet()->removeBullet(i);
+		//}
+		//else
+		//{
+		//	i++;
+		//}
+		//
+		//RECT rcEnemy = _enemyManager->getVEnemy()[i]->getEnemyBodyImage(_enemyManager->getVEnemy()[i]->getBodyStatus())->boudingBoxWithFrame();
 	}
 }
 
