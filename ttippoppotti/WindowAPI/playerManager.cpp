@@ -11,7 +11,7 @@ HRESULT playerManager::init(void)
 	_pBullet->init(500.f);
 
 	//_rcPlyaer = RectMake(_player->getX(),_player->getY(),,)
-	hit_left = hit_right = false;
+	hit_left = hit_right = hit_top = hit_bottom = false;
 	_isCollision = false;
 	_fireCount = 0;
 	_change = false;
@@ -89,7 +89,9 @@ void playerManager::update(void)
 	{
 		_player->setState(IDLE);
 	}
-	if (!hit_left && !hit_right)
+	
+
+	if (!hit_left &&  !hit_right)
 	{
 		_player->setY(_player->getY() + (-sin(_player->getAngle())*_player->getSpeed() + _player->getGravity()));
 	}
@@ -107,27 +109,27 @@ void playerManager::update(void)
 
 	RECT rcTemp;
 	RECT rcPlayer = _player->getImage(_player->getState())->boudingBoxWithFrame();
+	
 	image* _img = _player->getImage(_player->getState());
 
 	float tempX = _player->getX();
 	float tempY = _player->getY();
 
-	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_BOTTOM))		//¹Ù´Ú
+	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, 5, _player->getGravity(), PLAYER_BOTTOM))		//¹Ù´Ú
 	{
 		_player->setGravity(0.f);
 		_player->setSpeed(0.f);
 		_player->setIsJump(false);
-		hit_left = false;
-		hit_right = false;
+		_isCollision = true;
 		if (_player->getState() != RUN)
 		{
 			_player->setState(IDLE);
 		}
 	}
 
-	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, _player->getSpeed(), 0, PLAYER_RIGHT))				// ¿ÞÂÊº®
+	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, 5, 0, PLAYER_RIGHT))				// ¿ÞÂÊº®
 	{
-		hit_left = true;
+		hit_right = true;
 		_player->setIsJump(false);
 		_player->setGravity(0.f);
 		_player->setSpeed(0.f);
@@ -135,12 +137,16 @@ void playerManager::update(void)
 		{
 			_player->setState(HANG_FORNT_HOLD);
 		}
-
+		
 	}
 
-	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, _player->getSpeed(), 0, PLAYER_LEFT))				// ¿À¸¥ÂÊº®
+	//if (_isCollision)
+	//{
+
+	//}
+	if (COLLISIONMANAGER->pixelCollision(_img, tempX, tempY, 5, 0, PLAYER_LEFT))				// ¿À¸¥ÂÊº®
 	{
-		hit_right = true;
+		hit_left = true;
 		_player->setIsJump(false);
 		_player->setIsLeft(true);
 		_player->setGravity(0.f);
@@ -150,9 +156,10 @@ void playerManager::update(void)
 			_player->setState(HANG_FORNT_HOLD);
 		}
 	}
-
+	
 	_player->setX(tempX);
 	_player->setY(tempY);
+	
 	/*
 	for (int i = 0; i < _mapData->getObject().size(); i++)
 	{
@@ -282,6 +289,17 @@ void playerManager::collision()
 	for (int i = 0; i < _enemyManager->getVEnemy().size(); i++)
 	{
 		RECT rcEnemy = _enemyManager->getVEnemy()[i]->getEnemyArmImage()->boudingBoxWithFrame();
+		RECT rcTemp;
+		if (IntersectRect(&rcTemp, &rcEnemy, &_pBullet->getVPlayerBullet()[i].rc))
+		{
+			getPBullet()->getVPlayerBullet()[i].bulletImage->release();
+			SAFE_DELETE(getPBullet()->getVPlayerBullet()[i].bulletImage);
+			getPBullet()->removeBullet(i);
+		}
+		else
+		{
+			i++;
+		}
 	}
 }
 
