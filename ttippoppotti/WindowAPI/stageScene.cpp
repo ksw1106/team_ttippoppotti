@@ -65,7 +65,8 @@ HRESULT stageScene::init(void)
 	_hspeed = 5;
 	_x = 3400.f;
 	_y = 500.f;
-	_rcCamera = RectMake(0, 2878 - WINSIZEY, 5755, WINSIZEY);
+	_camDebug = false;
+	_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
 	CAMERAMANAGER->setCamera(_rcCamera);
 	return S_OK;
 }
@@ -122,33 +123,35 @@ void stageScene::update(void)
 	_test->update();
 	//이곳에서 계산식, 키보드, 마우스등등 업데이트를 한다
 	//간단하게 이곳에서 코딩한다고 생각하면 된다
-	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+
+	if (KEYMANAGER->isOnceKeyDown(VK_F9))
+		_camDebug = !_camDebug;
+	
+	if (!_camDebug)
+		_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
+	else
 	{
-		if (_rcCamera.left > 0)
+		if (KEYMANAGER->isStayKeyDown(VK_NUMPAD4))
 		{
+
 			_rcCamera.left -= 10;
+			_rcCamera.right -= 10;
 		}
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-	{
-		if (_rcCamera.right >= _rcCamera.left + 10 + WINSIZEX)
+		if (KEYMANAGER->isStayKeyDown(VK_NUMPAD6))
 		{
 			_rcCamera.left += 10;
+			_rcCamera.right += 10;
 		}
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_UP))
-	{
-		if (_rcCamera.top > 10)
+		if (KEYMANAGER->isStayKeyDown(VK_NUMPAD8))
 		{
 			_rcCamera.top -= 10;
+			_rcCamera.bottom -= 10;
 		}
-	}
 
-	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-	{
-		if (_rcCamera.bottom > _rcCamera.top + 10 + WINSIZEY)
+		if (KEYMANAGER->isStayKeyDown(VK_NUMPAD5))
 		{
 			_rcCamera.top += 10;
+			_rcCamera.bottom += 10;
 		}
 	}
 
@@ -187,52 +190,62 @@ void stageScene::update(void)
 			if (PtInRect(&_mapData->getObject()[i]._rc, ptTemp))
 			{
 				
-				mapObject obj = _mapData->getObject()[i];
-
-				SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_BRUSH));
-				SetDCBrushColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
-				SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_PEN));
-				SetDCPenColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
-				RectangleMake(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), obj._rc.left, obj._rc.top, obj._width, obj._height);
-				SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_BRUSH));
-				SetDCBrushColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
-				SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_PEN));
-				SetDCPenColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
-				RectangleMake(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), obj._rc.left, obj._rc.top, obj._width, obj._height);
-
-				obj._isActived = false;
-				_mapData->setObject(obj, i);
+				_mapData->deleteMap(i);
 				break; //임시
 			}
 		}
 	}
 
-	CAMERAMANAGER->setCamera(_rcCamera);
+	if (!_camDebug)
+	{
+		if (_rcCamera.left <= 0)
+		{
+			_rcCamera = RectMake(0, _playerManager->getPlayer()->getY() - WINSIZEY / 2, WINSIZEX, WINSIZEY);
+		}
+		else if (_rcCamera.right >= 5755)
+		{
+			_rcCamera = RectMake(5755 - WINSIZEX, _playerManager->getPlayer()->getY() - WINSIZEY / 2, WINSIZEX, WINSIZEY);
+		}
+		if (_rcCamera.top <= 0)
+		{
+			_rcCamera = RectMake(_playerManager->getPlayer()->getX() - WINSIZEX / 2, 0, WINSIZEX, WINSIZEY);
+		}
+		else if (_rcCamera.bottom >= 2878)
+		{
+			_rcCamera = RectMake(_playerManager->getPlayer()->getX() - WINSIZEX / 2, 2878 - WINSIZEY, WINSIZEX, WINSIZEY);
+		}
+	}
 	
+	CAMERAMANAGER->setCamera(_rcCamera);
+
+	if (KEYMANAGER->isOnceKeyDown('W'))
+	{
+		CAMERAMANAGER->CameraShake();
+	}
 }
 
 void stageScene::render(void)
 {
 	for (int i = 0; i < 3; i++)
 	{
-		_backGround[i]._image->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+		_backGround[i]._image->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 	}
 
 	//IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	
 	//헬기 등 오브젝트
 	if(CAMERAMANAGER->CameraIn(RectMake(_x, _y, _helicopter->getWidth(), _helicopter->getHeight())))
-		_helicopter->frameRender(getMemDC(), _x - _rcCamera.left, _y - _rcCamera.top);
+		_helicopter->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
 	if (CAMERAMANAGER->CameraIn(RectMake(_x+169, _y+181, IMAGEMANAGER->findImage("ladder")->getWidth(), IMAGEMANAGER->findImage("ladder")->getHeight())))
-		IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x + 169 - _rcCamera.left, _y + 181 - _rcCamera.top);
+		IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x + 169 - CAMERAMANAGER->getCamera().left, _y + 181 - CAMERAMANAGER->getCamera().top);
 	if (CAMERAMANAGER->CameraIn(RectMake(_flagX, _flagY, _saveFlag->getWidth(), _saveFlag->getHeight())))
-		_saveFlag->frameRender(getMemDC(), _flagX - _rcCamera.left, _flagY - _rcCamera.top);
+		_saveFlag->frameRender(getMemDC(), _flagX - CAMERAMANAGER->getCamera().left, _flagY - CAMERAMANAGER->getCamera().top);
 	if (CAMERAMANAGER->CameraIn(RectMake(IMAGEMANAGER->findImage("spike")->getX(), IMAGEMANAGER->findImage("spike")->getY(), IMAGEMANAGER->findImage("spike")->getWidth(), IMAGEMANAGER->findImage("spike")->getHeight())))
-		IMAGEMANAGER->findImage("spike")->render(getMemDC(), IMAGEMANAGER->findImage("spike")->getX() - _rcCamera.left, IMAGEMANAGER->findImage("spike")->getY() - _rcCamera.top);
+		IMAGEMANAGER->findImage("spike")->render(getMemDC(), IMAGEMANAGER->findImage("spike")->getX() - CAMERAMANAGER->getCamera().left, IMAGEMANAGER->findImage("spike")->getY() - CAMERAMANAGER->getCamera().top);
 	if (CAMERAMANAGER->CameraIn(RectMake(_humanDead->getX(), _humanDead->getY(), _humanDead->getWidth(), _humanDead->getHeight())))
-		_humanDead->frameRender(getMemDC(), _humanDead->getX() - _rcCamera.left, _humanDead->getY() - _rcCamera.top);
+		_humanDead->frameRender(getMemDC(), _humanDead->getX() - CAMERAMANAGER->getCamera().left, _humanDead->getY() - CAMERAMANAGER->getCamera().top);
 	if (CAMERAMANAGER->CameraIn(RectMake(_flag->getX(), _flag->getY(), _flag->getWidth(), _flag->getHeight())))
-		_flag->frameRender(getMemDC(), _flag->getX() - _rcCamera.left, _flag->getY() - _rcCamera.top);
+		_flag->frameRender(getMemDC(), _flag->getX() - CAMERAMANAGER->getCamera().left, _flag->getY() - CAMERAMANAGER->getCamera().top);
 	
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
@@ -262,7 +275,9 @@ void stageScene::render(void)
 				(_mapData->getObject()[i]._rc.top + (_mapData->getObject()[i]._rc.bottom - _mapData->getObject()[i]._rc.top) / 2) - _rcCamera.top, str, strlen(str));
 		}
 	}
-
+	char str[64];
+	sprintf(str, "%d", _camDebug);
+	TextOut(getMemDC(), 200, 200, str, strlen(str));
 	_playerManager->render();
 	_enemyManager->render();
 	_test->render();

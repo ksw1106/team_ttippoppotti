@@ -42,7 +42,11 @@ void mainGame::update(void)
 	//사운드매니져 업데이트
 	SOUNDMANAGER->update();
 
+	//이펙트매니져 업데이트
 	EFFECTMANAGER->update();
+
+	//카메라매니져 업데이트
+	CAMERAMANAGER->update();
 }
 
 //=============================================================

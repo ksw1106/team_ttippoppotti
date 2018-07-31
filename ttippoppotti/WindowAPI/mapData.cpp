@@ -1,6 +1,22 @@
 #include "stdafx.h"
 #include "mapData.h"
 
+void mapData::deleteMap(int index)
+{
+	SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_BRUSH));
+	SetDCBrushColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
+	SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_PEN));
+	SetDCPenColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
+	RectangleMake(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), _vObject[index]._rc.left, _vObject[index]._rc.top, _vObject[index]._width, _vObject[index]._height);
+	SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_BRUSH));
+	SetDCBrushColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
+	SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_PEN));
+	SetDCPenColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
+	RectangleMake(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), _vObject[index]._rc.left, _vObject[index]._rc.top, _vObject[index]._width, _vObject[index]._height);
+
+	_vObject[index]._isActived = false;
+}
+
 void mapData::stage1_setting()
 {
 	//1블록 + 다리
