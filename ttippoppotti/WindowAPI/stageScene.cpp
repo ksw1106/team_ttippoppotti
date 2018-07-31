@@ -180,8 +180,8 @@ void stageScene::update(void)
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 	{
 		POINT ptTemp;
-		ptTemp.x = _ptMouse.x + _rcCamera.left;
-		ptTemp.y = _ptMouse.y + _rcCamera.top;
+		ptTemp.x = _ptMouse.x + CAMERAMANAGER->getCamera().left;
+		ptTemp.y = _ptMouse.y + CAMERAMANAGER->getCamera().top;
 		//충돌체크
 		for (int i = 0; i < _mapData->getObject().size(); i++)
 		{
@@ -250,9 +250,9 @@ void stageScene::render(void)
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
 		char str[64];
-		sprintf_s(str, "%d", _ptMouse.x + _rcCamera.left);
+		sprintf_s(str, "%d", _ptMouse.x + CAMERAMANAGER->getCamera().left);
 		TextOut(getMemDC(), 10, 100, str, strlen(str));
-		sprintf_s(str, "%d", _ptMouse.y + _rcCamera.top);
+		sprintf_s(str, "%d", _ptMouse.y + CAMERAMANAGER->getCamera().top);
 		TextOut(getMemDC(), 80, 100, str, strlen(str));
 	}
 	
@@ -269,10 +269,10 @@ void stageScene::render(void)
 
 			if (!CAMERAMANAGER->CameraIn(_mapData->getObject()[i]._rc)) continue;
 			
-			RectangleMake(getMemDC(), _mapData->getObject()[i]._rc.left-_rcCamera.left, _mapData->getObject()[i]._rc.top-_rcCamera.top, _mapData->getObject()[i]._width, _mapData->getObject()[i]._height);
+			RectangleMake(getMemDC(), _mapData->getObject()[i]._rc.left - CAMERAMANAGER->getCamera().left, _mapData->getObject()[i]._rc.top - CAMERAMANAGER->getCamera().top, _mapData->getObject()[i]._width, _mapData->getObject()[i]._height);
 			sprintf(str, "%d", i);
-			TextOut(getMemDC(), (_mapData->getObject()[i]._rc.left + (_mapData->getObject()[i]._rc.right - _mapData->getObject()[i]._rc.left) / 2) - _rcCamera.left,
-				(_mapData->getObject()[i]._rc.top + (_mapData->getObject()[i]._rc.bottom - _mapData->getObject()[i]._rc.top) / 2) - _rcCamera.top, str, strlen(str));
+			TextOut(getMemDC(), (_mapData->getObject()[i]._rc.left + (_mapData->getObject()[i]._rc.right - _mapData->getObject()[i]._rc.left) / 2) - CAMERAMANAGER->getCamera().left,
+				(_mapData->getObject()[i]._rc.top + (_mapData->getObject()[i]._rc.bottom - _mapData->getObject()[i]._rc.top) / 2) - CAMERAMANAGER->getCamera().top, str, strlen(str));
 		}
 	}
 	char str[64];
