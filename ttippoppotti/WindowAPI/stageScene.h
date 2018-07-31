@@ -45,6 +45,7 @@ private:
 	int _speed;
 	bool _isLeft;
 	bool _isDown;
+	bool _camDebug;
 
 	const char* soundName[4];
 	int soundCount;
