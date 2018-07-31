@@ -24,6 +24,7 @@ private:
 	float _angle;
 	float _speed;
 	float _gravity;
+	float _jumpSpeed;
 
 	int _index;
 	int _count;
