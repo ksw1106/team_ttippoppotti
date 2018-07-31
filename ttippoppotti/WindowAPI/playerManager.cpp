@@ -59,7 +59,7 @@ void playerManager::update(void)
 		hit_right = false;
 	}
 	_fireCount++;
-	if (KEYMANAGER->isStayKeyDown(VK_UP))
+	if (KEYMANAGER->isStayKeyDown('Z'))
 	{	
 		if (_fireCount % 5 == 0)
 		{
@@ -74,7 +74,7 @@ void playerManager::update(void)
 		}
 	}
 	_pBullet->update();
-	if (KEYMANAGER->isOnceKeyDown(VK_SPACE)&& !_player->getIsJump())
+	if (KEYMANAGER->isOnceKeyDown(VK_UP)&& !_player->getIsJump())
 	{
 		_player->setState(JUMP);
 		_player->setGravity(0.0f);

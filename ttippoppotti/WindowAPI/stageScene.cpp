@@ -131,24 +131,24 @@ void stageScene::update(void)
 		_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
 	else
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_NUMPAD4))
+		if (KEYMANAGER->isStayKeyDown('A'))
 		{
 
 			_rcCamera.left -= 10;
 			_rcCamera.right -= 10;
 		}
-		if (KEYMANAGER->isStayKeyDown(VK_NUMPAD6))
+		if (KEYMANAGER->isStayKeyDown('D'))
 		{
 			_rcCamera.left += 10;
 			_rcCamera.right += 10;
 		}
-		if (KEYMANAGER->isStayKeyDown(VK_NUMPAD8))
+		if (KEYMANAGER->isStayKeyDown('W'))
 		{
 			_rcCamera.top -= 10;
 			_rcCamera.bottom -= 10;
 		}
 
-		if (KEYMANAGER->isStayKeyDown(VK_NUMPAD5))
+		if (KEYMANAGER->isStayKeyDown('S'))
 		{
 			_rcCamera.top += 10;
 			_rcCamera.bottom += 10;
@@ -218,7 +218,7 @@ void stageScene::update(void)
 	
 	CAMERAMANAGER->setCamera(_rcCamera);
 
-	if (KEYMANAGER->isOnceKeyDown('W'))
+	if (KEYMANAGER->isOnceKeyDown('P'))
 	{
 		CAMERAMANAGER->CameraShake();
 	}

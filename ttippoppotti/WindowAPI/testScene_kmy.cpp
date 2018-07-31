@@ -27,7 +27,7 @@ void testScene_kmy::release(void)
 
 void testScene_kmy::update(void)
 {
-	if (KEYMANAGER->isOnceKeyDown('Q'))
+	if (KEYMANAGER->isOnceKeyDown('O'))
 	{
 		//³«¼®ÁÖÀÇ
 		EFFECTMANAGER->playParabola("rock1", WINSIZEX / 2, WINSIZEY / 2, 0.0f);

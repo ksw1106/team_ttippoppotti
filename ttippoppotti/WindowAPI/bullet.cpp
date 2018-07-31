@@ -423,7 +423,7 @@ void pBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 	tagBullet pBullet;
 	ZeroMemory(&pBullet, sizeof(tagBullet));
 	pBullet.bulletImage = new image;
-	pBullet.bulletImage->init("broforce_ramBro/rambro_bullet.bmp", 50, 40, 1, 1, true, RGB(255, 0, 255));
+	pBullet.bulletImage->init("player_ramBro/rambro_bullet.bmp", 50, 40, 1, 1, true, RGB(255, 0, 255));
 	pBullet.speed = fireSpeed;
 	pBullet.isLeft = isLeft;
 	pBullet.x = pBullet.fireX = x;
