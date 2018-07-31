@@ -38,7 +38,7 @@ public:
 	void update(void);
 	void render(void);
 
-	//void collision();
+	void collision();
 
 	playerManager();
 	~playerManager();

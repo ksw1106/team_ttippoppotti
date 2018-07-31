@@ -27,13 +27,13 @@ void testScene_kmy::release(void)
 
 void testScene_kmy::update(void)
 {
-	if (KEYMANAGER->isOnceKeyDown('Q'))
+	if (KEYMANAGER->isOnceKeyDown('O'))
 	{
 		//³«¼®ÁÖÀÇ
 		EFFECTMANAGER->playParabola("rock1", WINSIZEX / 2, WINSIZEY / 2, 0.0f);
-		EFFECTMANAGER->playParabola("rock2", WINSIZEX / 2-10, WINSIZEY / 2, 0.0f);
-		EFFECTMANAGER->playParabola("rock3", WINSIZEX / 2-20, WINSIZEY / 2, 0.0f);
-		EFFECTMANAGER->playParabola("rock4", WINSIZEX / 2-30, WINSIZEY / 2, 0.0f);
+		EFFECTMANAGER->playParabola("rock2", WINSIZEX / 2 - 10, WINSIZEY / 2, 0.0f);
+		EFFECTMANAGER->playParabola("rock3", WINSIZEX / 2 - 20, WINSIZEY / 2, 0.0f);
+		EFFECTMANAGER->playParabola("rock4", WINSIZEX / 2 - 30, WINSIZEY / 2, 0.0f);
 		EFFECTMANAGER->playParabola("rock5", WINSIZEX / 2 - 40, WINSIZEY / 2, 0.0f);
 		
 		//È£·¯ÁÖÀÇ
@@ -47,7 +47,7 @@ void testScene_kmy::update(void)
 		EFFECTMANAGER->playParabola("bloodSplash8", WINSIZEX / 3 - 80, WINSIZEY / 2 - 80, 0.0f);
 		
 		//ÅºÇÇ
-		EFFECTMANAGER->playParabola("rambro_cartridge", WINSIZEX / 4, WINSIZEY / 2, PI/3);
+		EFFECTMANAGER->playParabola("rambro_cartridge", WINSIZEX / 4, WINSIZEY / 2, PI / 3);
 	}
 	
 }
