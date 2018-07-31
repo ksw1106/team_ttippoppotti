@@ -4,6 +4,7 @@
 bool CollisionManager::pixelCollision(image* img, float& x, float& y, float speed, float gravity, int dir)
 {
 	RECT _rc = img->boudingBoxWithFrame();
+	//RECT _rc = RectMakeCenter(x, y, 100, 100);
 	int _speed = (int)speed; //명시적
 	int _gravity = (int)gravity; //명시적
 	switch (dir)
@@ -54,7 +55,7 @@ bool CollisionManager::pixelCollision(image* img, float& x, float& y, float spee
 		}
 		break;
 	case DIRECT_BOTTOM: //bottom
-		for (int i = _rc.bottom - (_speed + _gravity); i <= _rc.bottom; i++)
+		for (int i = y + img->getFrameHeight() - (_speed + _gravity); i <= y + img->getFrameHeight(); i++)
 		{
 			COLORREF color = GetPixel(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), x, i);
 			int r = GetRValue(color);

@@ -200,20 +200,21 @@ void stageScene::update(void)
 	{
 		if (_rcCamera.left <= 0)
 		{
-			_rcCamera = RectMake(0, _playerManager->getPlayer()->getY() - WINSIZEY / 2, WINSIZEX, WINSIZEY);
+			_rcCamera.left = 0;
 		}
 		else if (_rcCamera.right >= 5755)
 		{
-			_rcCamera = RectMake(5755 - WINSIZEX, _playerManager->getPlayer()->getY() - WINSIZEY / 2, WINSIZEX, WINSIZEY);
+			_rcCamera.left = 5755 - WINSIZEX;
 		}
 		if (_rcCamera.top <= 0)
 		{
-			_rcCamera = RectMake(_playerManager->getPlayer()->getX() - WINSIZEX / 2, 0, WINSIZEX, WINSIZEY);
+			_rcCamera.top = 0;
 		}
 		else if (_rcCamera.bottom >= 2878)
 		{
-			_rcCamera = RectMake(_playerManager->getPlayer()->getX() - WINSIZEX / 2, 2878 - WINSIZEY, WINSIZEX, WINSIZEY);
+			_rcCamera.top = 2878 - WINSIZEY;
 		}
+		_rcCamera = RectMake( _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	}
 	
 	CAMERAMANAGER->setCamera(_rcCamera);
@@ -236,7 +237,7 @@ void stageScene::render(void)
 	//헬기 등 오브젝트
 	if(CAMERAMANAGER->CameraIn(RectMake(_x, _y, _helicopter->getWidth(), _helicopter->getHeight())))
 		_helicopter->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
-	if (CAMERAMANAGER->CameraIn(RectMake(_x+169, _y+181, IMAGEMANAGER->findImage("ladder")->getWidth(), IMAGEMANAGER->findImage("ladder")->getHeight())))
+	if (CAMERAMANAGER->CameraIn(RectMake(_x + 169, _y + 181, IMAGEMANAGER->findImage("ladder")->getWidth(), IMAGEMANAGER->findImage("ladder")->getHeight())))
 		IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x + 169 - CAMERAMANAGER->getCamera().left, _y + 181 - CAMERAMANAGER->getCamera().top);
 	if (CAMERAMANAGER->CameraIn(RectMake(_flagX, _flagY, _saveFlag->getWidth(), _saveFlag->getHeight())))
 		_saveFlag->frameRender(getMemDC(), _flagX - CAMERAMANAGER->getCamera().left, _flagY - CAMERAMANAGER->getCamera().top);

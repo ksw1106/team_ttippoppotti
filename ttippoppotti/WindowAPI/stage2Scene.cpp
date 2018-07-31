@@ -13,6 +13,10 @@ HRESULT stage2Scene::init(void)
 	_mapData = new mapData;
 	_mapData->init(2);
 
+	_camDebug = false;
+	_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
+	CAMERAMANAGER->setCamera(_rcCamera);
+
 	return S_OK;
 }
 
@@ -25,8 +29,8 @@ void stage2Scene::update(void)
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 	{
 		POINT ptTemp;
-		ptTemp.x = _ptMouse.x + _rcCamera.left;
-		ptTemp.y = _ptMouse.y + _rcCamera.top;
+		ptTemp.x = _ptMouse.x + CAMERAMANAGER->getCamera().left;
+		ptTemp.y = _ptMouse.y + CAMERAMANAGER->getCamera().top;
 		//충돌체크
 		for (int i = 0; i < _mapData->getObject().size(); i++)
 		{
@@ -50,36 +54,63 @@ void stage2Scene::update(void)
 		}
 	}
 
-	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+	if (KEYMANAGER->isOnceKeyDown(VK_F9))
+		_camDebug = !_camDebug;
+
+	if (!_camDebug)
+		_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
+	else
 	{
-		if (_rcCamera.left > 0)
+		if (KEYMANAGER->isStayKeyDown('A'))
 		{
+
 			_rcCamera.left -= 10;
+			_rcCamera.right -= 10;
 		}
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-	{
-		if (_rcCamera.right >= _rcCamera.left + 10 + WINSIZEX)
+		if (KEYMANAGER->isStayKeyDown('D'))
 		{
 			_rcCamera.left += 10;
+			_rcCamera.right += 10;
 		}
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_UP))
-	{
-		if (_rcCamera.top > 10)
+		if (KEYMANAGER->isStayKeyDown('W'))
 		{
 			_rcCamera.top -= 10;
+			_rcCamera.bottom -= 10;
 		}
-	}
 
-	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-	{
-		if (_rcCamera.bottom > _rcCamera.top + 10 + WINSIZEY)
+		if (KEYMANAGER->isStayKeyDown('S'))
 		{
 			_rcCamera.top += 10;
+			_rcCamera.bottom += 10;
 		}
 	}
+	if (!_camDebug)
+	{
+		if (_rcCamera.left <= 0)
+		{
+			_rcCamera.left = 0;
+		}
+		else if (_rcCamera.right >= 5755)
+		{
+			_rcCamera.left = 5755 - WINSIZEX;
+		}
+		if (_rcCamera.top <= 0)
+		{
+			_rcCamera.top = 0;
+		}
+		else if (_rcCamera.bottom >= 2878)
+		{
+			_rcCamera.top = 2878 - WINSIZEY;
+		}
+		_rcCamera = RectMake(_rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+	}
+
 	CAMERAMANAGER->setCamera(_rcCamera);
+
+	if (KEYMANAGER->isOnceKeyDown('P'))
+	{
+		CAMERAMANAGER->CameraShake();
+	}
 }
 
 void stage2Scene::render(void)
