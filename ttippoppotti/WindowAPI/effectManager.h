@@ -27,6 +27,10 @@ public:
 	void bloodSplash(float x, float y, float angle);
 	//낙석
 	void rockFall(float x, float y, float angle);
+	//폭발
+	void explosion(float x, float y);
+
+	void playExplosion();
 	
 	//이펙트 추가(이펙트키값, 이미지키값, 1회당 출력갯수, 버퍼갯수)
 	void addEffect(string effectName, const char* imageName, int count, int buffer, bool isFrameImg = false);

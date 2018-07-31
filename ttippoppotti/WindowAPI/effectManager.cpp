@@ -93,6 +93,15 @@ void effectManager::rockFall(float x, float y, float angle)
 	EFFECTMANAGER->playParabola("rock5", x, y, angle);
 }
 
+void effectManager::explosion(float x, float y)
+{
+	EFFECTMANAGER->playExplosion();
+}
+
+void effectManager::playExplosion()
+{
+}
+
 void effectManager::addEffect(string effectName, const char * imageName, int count, int buffer, bool isFrameImg)
 {
 	vEffect vEffectBuffer;

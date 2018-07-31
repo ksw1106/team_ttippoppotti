@@ -22,6 +22,9 @@ void testScene_kmy::update(void)
 		
 		//È£·¯ÁÖÀÇ
 		EFFECTMANAGER->bloodSplash(1100, 1800, 0.0f);
+
+		//Æã
+		EFFECTMANAGER->explosion(1000, 1800);
 	}
 	
 }
