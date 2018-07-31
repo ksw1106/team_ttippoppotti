@@ -1,16 +1,14 @@
 #include "stdafx.h"
 #include "CollisionManager.h"
 
-bool CollisionManager::pixelCollision(image* img, float& x, float& y, float speed, float gravity, int dir)
+bool CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, float gravity, int dir)
 {
-	RECT _rc = img->boudingBoxWithFrame();
-	//RECT _rc = RectMakeCenter(x, y, 100, 100);
 	int _speed = (int)speed; //명시적
 	int _gravity = (int)gravity; //명시적
 	switch (dir)
 	{
 	case DIRECT_LEFT: //left
-		for (int i = _rc.left + _speed; i >= _rc.left; i--)
+		for (int i = rc.left + _speed; i >= rc.left; i--)
 		{
 			COLORREF color = GetPixel(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), i, y);
 			int r = GetRValue(color);
@@ -25,7 +23,7 @@ bool CollisionManager::pixelCollision(image* img, float& x, float& y, float spee
 		}
 		break;
 	case DIRECT_TOP: //top
-		for (int i = _rc.top + _speed; i >= _rc.top; i--)
+		for (int i = rc.top + _speed; i >= rc.top; i--)
 		{
 			COLORREF color = GetPixel(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), x, i);
 			int r = GetRValue(color);
@@ -40,7 +38,7 @@ bool CollisionManager::pixelCollision(image* img, float& x, float& y, float spee
 		}
 		break;
 	case DIRECT_RIGHT: //right
-		for (int i = _rc.right - _speed; i <= _rc.right; i++)
+		for (int i = rc.right - _speed; i <= rc.right; i++)
 		{
 			COLORREF color = GetPixel(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), i, y);
 			int r = GetRValue(color);
@@ -49,13 +47,13 @@ bool CollisionManager::pixelCollision(image* img, float& x, float& y, float spee
 
 			if (!(r == 255 && g == 0 && b == 255))
 			{
-				x = i - 1 - img->getFrameWidth();//
+				x = i - 1 - rc.right-rc.left;//
 				return true;
 			}
 		}
 		break;
 	case DIRECT_BOTTOM: //bottom
-		for (int i = y + img->getFrameHeight() - (_speed + _gravity); i <= y + img->getFrameHeight(); i++)
+		for (int i = rc.bottom - (_speed + _gravity); i <= rc.bottom; i++)
 		{
 			COLORREF color = GetPixel(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), x, i);
 			int r = GetRValue(color);
@@ -64,7 +62,7 @@ bool CollisionManager::pixelCollision(image* img, float& x, float& y, float spee
 
 			if (!(r == 255 && g == 0 && b == 255))
 			{
-				y = i - 1 - img->getFrameHeight(); //
+				y = i - 1 - rc.bottom - rc.top; //
 				return true;
 			}
 		}

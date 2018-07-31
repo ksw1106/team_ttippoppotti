@@ -8,9 +8,10 @@ enum enemyStatus
 	ENEMY_IDLE = 0,
 	ENEMY_WALK = 1,
 	ENEMY_DOUBT = 2,
-	ENEMY_KNOCK_BACK = 3,
-	ENEMY_FLY_AWAY = 4,
-	ENEMY_DEAD = 5,
+	ENEMY_FIRE = 3,
+	ENEMY_KNOCK_BACK = 4,
+	ENEMY_FLY_AWAY = 5,
+	ENEMY_DEAD = 6,
 };
 
 enum gunStatus
@@ -35,7 +36,7 @@ enum {ENEMY_LEFT, ENEMY_TOP, ENEMY_RIGHT, ENEMY_BOTTOM};
 
 struct enemyImage
 {
-	image* bodyImage[6];
+	image* bodyImage[7];
 	image* armImage[5];
 	int count;
 	int index;
@@ -76,15 +77,17 @@ private:
 	float _accel;
 	float _kbSpeed;		// 맞았을 때 날아가는 속도
 	
-	int _x, _y;
+	float _x, _y;
 	int _hp;
 	
 	bool _isAlive;
 	bool _isLeft;
+	bool _isFire;
 	bool _isOn;
 	bool _isUncovered;		// 플레이어 발견! 
 	bool _isStrange;		// 아군(적) 의 시체 발견!
 			
+	int _count;				// 카운트
 	int _randomNumber;
 	int _warnFrameIndex, _doubtFrameIndex;
 	int _warnFrameCount, _doubtFrameCount;
@@ -98,21 +101,22 @@ public:
 	void update(void);
 	void render(void);
 
-	image* getEnemyBodyImage() { return _enemyImage.bodyImage[_enemyStatus]; }
-	image* getEnemyArmImage() { return _enemyImage.armImage[_gunStatus]; }
+	image* getEnemyBodyImage(enemyStatus enemyStat) { return _enemyImage.bodyImage[enemyStat]; }
+	image* getEnemyArmImage(gunStatus armStat) { return _enemyImage.armImage[armStat]; }
 	image* getBrovilImage() { return _brovilImage.brovilImg[_brovilStatus]; }
 		
 	RECT getRcEnemy() { return _rcEnemy; }
 	RECT getRcEnemySight() { return _rcEnemySight; }
 	float getSpeed() { return _speed; }
 	float getGravity() { return _gravity; }
-	int getX() { return _x; }
-	int getY() { return _y; }
+	float getX() { return _x; }
+	float getY() { return _y; }
 	int getHP() { return _hp; }
 	bool getIsAlive() { return _isAlive; }
 	bool getDirection() { return _isLeft; }
 	bool getIsUncovered() { return _isUncovered; }
 	bool getIsStrange() { return _isStrange; }
+	bool getIsFire() { return _isFire; }
 	enemyStatus getBodyStatus() { return _enemyStatus; }
 	gunStatus getArmStatus() { return _gunStatus; }
 	brovilStatus getBrovilStatus() { return _brovilStatus; }
@@ -126,13 +130,14 @@ public:
 	void setEnemySightRC(RECT rcEnemySight) { _rcEnemySight = rcEnemySight; }
 	void setSpeed(float speed) { _speed = speed; }
 	void setGravity(float gravity) { _gravity = gravity; }
-	void setX(int x) { _x = x; }
-	void setY(int y) { _y = y; }
+	void setX(float x) { _x = x; }
+	void setY(float y) { _y = y; }
 	void setHP(int hp) { _hp = hp; }
 	void setIsAlive(bool isAlive) { _isAlive = isAlive; }
 	void setDirection(bool isLeft) { _isLeft = isLeft; }
 	void setIsUncovered(bool isUncovered) { _isUncovered = isUncovered; }
 	void setIsStrange(bool isStrange) { _isStrange = isStrange; }
+	void setIsFire(bool isFire) { _isFire = isFire; }
 	void setBodyStatus(enemyStatus enemyStat) { _enemyStatus = enemyStat; }
 	void setArmStatus(gunStatus gunStat) { _gunStatus = gunStat; }
 	void setBrovilStatus(brovilStatus brovilStatus) { _brovilStatus = brovilStatus; }
@@ -142,9 +147,11 @@ public:
 	void setAccel(float accel) { _accel = accel; }
 	void setIsOn(bool isOn) { _isOn = isOn; }
 
-	void move();
-	void flyAway();
 	void controlAI(int randomNum);
+	void move();
+	void doubt();
+	void flyAway();
+	void fireMovement();
 	
 	void frameAnimate();	
 	void knockBackMove(float angle);	// 총알맞았을때 뒤로 날아감
