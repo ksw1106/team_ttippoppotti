@@ -71,7 +71,9 @@ void playerManager::update(void)
 			{
 				_pBullet->fire(_player->getX(), _player->getY() + 38, 20, _player->getIsLeft());
 			}
+			EFFECTMANAGER->cartridge(_player->getX(), _player->getY(), _player->getIsLeft());
 		}
+
 	}
 
 	_pBullet->update();
@@ -101,20 +103,16 @@ void playerManager::update(void)
 		_player->setY(_player->getY() + 2.f);
 	}
 
-	for (int i = 0; i < MAX_STATE; i++)
-	{
-		_player->getImage(i)->setX(_player->getX());
-		_player->getImage(i)->setY(_player->getY());
-	}
 
 	RECT rcTemp;
-	RECT rcPlayer = _player->getImage(_player->getState())->boudingBoxWithFrame();
+	RECT rcPlayer;
 	
-	image* _img = _player->getImage(_player->getState());
+	//image* _img = _player->getImage(_player->getState());
 
 	float tempX = _player->getX();
 	float tempY = _player->getY();
 
+	rcPlayer = RectMake(tempX, tempY, _player->getImage(_player->getState())->getFrameWidth(), _player->getImage(_player->getState())->getFrameHeight());
 
 	if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, _player->getGravity(), PLAYER_BOTTOM))		//¹Ù´Ú
 	{
@@ -127,6 +125,7 @@ void playerManager::update(void)
 			_player->setState(IDLE);
 		}
 	}
+	rcPlayer = RectMake(tempX, tempY, _player->getImage(_player->getState())->getFrameWidth(), _player->getImage(_player->getState())->getFrameHeight());
 
 	if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, 0, PLAYER_RIGHT))				// ¿ÞÂÊº®
 	{
@@ -145,6 +144,9 @@ void playerManager::update(void)
 	//{
 
 	//}
+
+	rcPlayer = RectMake(tempX, tempY, _player->getImage(_player->getState())->getFrameWidth(), _player->getImage(_player->getState())->getFrameHeight());
+
 	if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, 0, PLAYER_LEFT))				// ¿À¸¥ÂÊº®
 	{
 		hit_left = true;
@@ -311,24 +313,19 @@ void playerManager::update(void)
 		}
 	}
 	*/
-	
-	for (int i = 0; i < MAX_STATE; i++)
-	{
-		_player->getImage(i)->setX(_player->getX());
-		_player->getImage(i)->setY(_player->getY());
-	}
-	
 }
 
 void playerManager::render(void)
 {
+	RECT rc = RectMake(_player->getX(), _player->getY(), _player->getImage(_player->getState())->getFrameWidth(), _player->getImage(_player->getState())->getFrameHeight());
 	_player->render();
 	_pBullet->render();
 
 	char str[64];
 	sprintf_s(str, "%d", _player->getIsJump());
 	TextOut(getMemDC(), 100, 100, str, strlen(str));
-	count = 0;
+
+	RectangleMake(getMemDC(), rc.left, rc.top, rc.left + (rc.right-rc.left)/2, rc.top + (rc.bottom - rc.top) / 2);
 }
 
 void playerManager::collision()
