@@ -47,7 +47,7 @@ bool CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, 
 
 			if (!(r == 255 && g == 0 && b == 255))
 			{
-				x = i - 1 - rc.right-rc.left;//
+				x = i - 1 - (rc.right-rc.left);//
 				return true;
 			}
 		}
@@ -62,7 +62,7 @@ bool CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, 
 
 			if (!(r == 255 && g == 0 && b == 255))
 			{
-				y = i - 1 - rc.bottom - rc.top; //
+				y = i - 1 - (rc.bottom - rc.top); //
 				return true;
 			}
 		}
