@@ -158,7 +158,18 @@ void playerManager::update(void)
 			_player->setState(HANG_FRONT_HOLD);
 		}
 	}
-
+	else
+	{
+		hit_left = false;
+		hit_right = false;
+		if (_player->getState() != RUN)
+		{
+			_player->setIsJump(true);
+			//_player->setGravity(0.f);
+			//_player->setJumpSpeed(0.f);
+			_player->setState(IDLE);
+		}
+	}
 	//rcPlayer = RectMake(tempX, tempY, _player->getImage(_player->getState())->getFrameWidth(), _player->getImage(_player->getState())->getFrameHeight());
 
 	if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_LEFT))				// ¿ÞÂÊº®
