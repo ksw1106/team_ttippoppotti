@@ -7,7 +7,7 @@
 enum STATE
 {
 	IDLE, RUN, JUMP, 
-	HANG_FORNT_HOLD, HANG_BACK_HOLD,
+	HANG_FRONT_HOLD, HANG_BACK_HOLD,
 	FAST_RUN, ROLL
 };
 
@@ -30,6 +30,7 @@ private:
 	int _count;
 	int _animationSpeed;
 
+	bool _isCollision;
 	bool _isActived;
 	bool _isLeft;
 	bool _isJump;
@@ -55,6 +56,8 @@ public:
 	void setSpeed(float speed) { _speed = speed; }
 	float getGravity() { return _gravity; }
 	void setGravity(float gravity) { _gravity = gravity; }
+	float getJumpSpeed() { return _jumpSpeed; }
+	void setJumpSpeed(float jumpSpeed) { _jumpSpeed = jumpSpeed; }
 	
 	int getIndex() { return _index; }
 	void setIndex(int index) { _index = index; }
@@ -63,6 +66,8 @@ public:
 	int getAnimationSpeed() { return _animationSpeed; }
 	void setAnimationSpeed(int animationSpeed) { _animationSpeed = animationSpeed; }
 
+	bool getIsCollision() { return _isCollision; }
+	void setIsCollision(int isCollision) { _isCollision = isCollision; }
 	bool getIsActived() { return _isActived; }
 	void setIsActived(int isActived) { _isActived = isActived; }
 	bool getIsLeft() { return _isLeft; }

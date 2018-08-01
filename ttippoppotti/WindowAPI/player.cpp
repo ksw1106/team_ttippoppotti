@@ -8,7 +8,7 @@ HRESULT player::init(void)
 	_ramBro[RUN] = IMAGEMANAGER->findImage("broforce_run (1)");
 	//_ramBro[FAST_RUN] = IMAGEMANAGER->addFrameImage("broforce_run (2)", "broforce_run (2).bmp", 448, 128, 8, 2, true, RGB(255, 0, 255));
 	_ramBro[JUMP] = IMAGEMANAGER->findImage("broforce_jump");
-	_ramBro[HANG_FORNT_HOLD] = IMAGEMANAGER->findImage("broforce_hang_forntHold");
+	_ramBro[HANG_FRONT_HOLD] = IMAGEMANAGER->findImage("broforce_hang_forntHold");
 	_ramBro[HANG_BACK_HOLD] = IMAGEMANAGER->findImage("broforce_hang_backHold");
 	//_ramBro[ROLL] = IMAGEMANAGER->addFrameImage("broforce_roll", "broforce_roll.bmp", 936, 136, 13, 2, true, RGB(255, 0, 255));
 
@@ -18,11 +18,13 @@ HRESULT player::init(void)
 	_oldX = _x;
 	_oldY = _y;
 	_angle = 90.f *3.14 / 180;
-	_speed = 0.f;
+	_speed = 5.f;
+	_jumpSpeed = 0.f;
 	_gravity = 0.f;
 	_count = _index = 0;
 	_animationSpeed = 5;
 	_isActived = _isLeft = _isJump = _isFall = false;
+	_isCollision = false;
 
 	return S_OK;
 }
@@ -40,5 +42,8 @@ void player::update(void)
 
 void player::render(void)
 {
-	_ramBro[_state]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+	if (_state == HANG_FRONT_HOLD )
+		_ramBro[_state+_isCollision]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+	else
+		_ramBro[_state]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
 }

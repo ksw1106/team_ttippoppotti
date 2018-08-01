@@ -18,7 +18,7 @@ private:
 	
 	RECT temp;
 	bool hit_left, hit_right, hit_top, hit_bottom;
-	bool _isCollision;
+
 	float _ground;
 	int count = 0;
 	int _fireCount;
@@ -27,6 +27,7 @@ private:
 	RECT _rcPlyaer;
 
 public:
+
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }
 	void setMapData(mapData* mapData) { _mapData = mapData; }
 	player* getPlayer() { return _player; }
