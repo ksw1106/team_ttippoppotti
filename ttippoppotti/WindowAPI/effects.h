@@ -34,6 +34,7 @@ private:
 	int _x, _y;				//이펙트 터트릴 위치좌표
 	int _falseCount;
 	int _count;
+	int _explosionCount;
 	int _index;
 	int _animationSpeed;
 	float _randGravity;
@@ -51,6 +52,9 @@ public:
 
 	//탄피 설정
 	void activateCartridge(float x, float y, bool isLeft);
+
+	//
+	void activateBallExplosion(float x, float y);
 
 	//포물선 발사 설정 (피, 낙석)
 	void activateParabola(float x, float y, float angle);

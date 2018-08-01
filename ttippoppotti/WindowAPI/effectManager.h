@@ -15,12 +15,14 @@ private:
 
 private:
 	mEffect _mEffect;		//이펙트벡터가 담겨있는 맵
+	int _count;
 
 public:
 	HRESULT init(void);
 	void release(void);
 	void update(void);
 	void render(void);
+
 	//탄피
 	void cartridge(float x, float y, bool isLeft);
 	//피
@@ -29,15 +31,16 @@ public:
 	void rockFall(float x, float y, float angle);
 	//폭발
 	void explosion(float x, float y);
-
-	void playExplosion();
 	
 	//이펙트 추가(이펙트키값, 이미지키값, 1회당 출력갯수, 버퍼갯수)
 	void addEffect(string effectName, const char* imageName, int count, int buffer, bool isFrameImg = false);
 	//이펙트 플레이
-	void playParabola(string effectName, int x, int y, float angle);
+	void playParabola(string effectName, float x, float y, float angle);
 
-	void playCartridge(string effectName, int x, int y, bool isLeft);
+	void playExplosion(string effectName, float x, float y);
+	void playBallExplosion(string effectName, float x, float y);
+
+	void playCartridge(string effectName, float x, float y, bool isLeft);
 
 	effectManager() {}
 	~effectManager() {}

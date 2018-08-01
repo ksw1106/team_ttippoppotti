@@ -227,7 +227,7 @@ void stageScene::update(void)
 
 void stageScene::render(void)
 {
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		_backGround[i]._image->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 	}
@@ -281,5 +281,6 @@ void stageScene::render(void)
 	TextOut(getMemDC(), 200, 200, str, strlen(str));
 	_playerManager->render();
 	_enemyManager->render();
+	_backGround[2]._image->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 	_test->render();
 }
