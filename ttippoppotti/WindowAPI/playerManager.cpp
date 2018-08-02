@@ -128,7 +128,7 @@ void playerManager::update(void)
 	float tempX = _player->getX();
 	float tempY = _player->getY();
 
-	rcPlayer = RectMake(tempX, tempY, _player->getImage(_player->getState())->getFrameWidth(), _player->getImage(_player->getState())->getFrameHeight());
+	rcPlayer = RectMake(tempX, tempY, 60, 80);
 
 	if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_TOP))				// 위쪽 벽
 	{
@@ -141,30 +141,43 @@ void playerManager::update(void)
 		{
 			_player->setState(IDLE);
 		}
+
+		hit_top = true;
 	}
-	//
 	else if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_BOTTOM))		// 아래쪽 벽
 	{
 		_player->setGravity(0.f);
 		_player->setJumpSpeed(0.f);
 		_player->setIsJump(false);
+
 		if (_player->getState() != RUN && _player->getState() != KNIFE)
 		{
 			hit_left = false;
 			hit_right = false;
 			_player->setState(IDLE);
 		}
+
+		hit_bottom = true;
 	}
-	//rcPlayer = RectMake(tempX, tempY, _player->getImage(_player->getState())->getFrameWidth(), _player->getImage(_player->getState())->getFrameHeight());
+
+	if (_player->getIsJump())
+	{
+		hit_bottom = false;
+	}
 
 	if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_RIGHT))				// 오른쪽 벽
 	{
-		_player->setIsJump(false);
-		_player->setGravity(0.f);
-		_player->setJumpSpeed(0.f);
+		if ((_player->getOldY() - tempY) < 0)
+		{
+			_player->setIsJump(false);
+			_player->setGravity(0.f);
+			_player->setJumpSpeed(0.f);
+		}
+	
 		_player->setIsLeft(false);
-		hit_right = true;
 
+		hit_right = true;
+		hit_left = false;
 		//_player->setIsCollision(!_player->getIsCollision());
 
 		//if (_player->getState() == JUMP)
@@ -179,12 +192,16 @@ void playerManager::update(void)
 	}
 	else if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_LEFT))				// 왼쪽벽
 	{
-		_player->setIsJump(false);
-		_player->setGravity(0.f);
-		_player->setJumpSpeed(0.f);
+		if ((_player->getOldY() - tempY) < 0)
+		{
+			_player->setIsJump(false);
+			_player->setGravity(0.f);
+			_player->setJumpSpeed(0.f);
+		}
 		_player->setIsLeft(true);
-		hit_left = true;
 
+		hit_left = true;
+		hit_right = false;
 		//if (_player->getState() == JUMP)
 		//{
 		//	_player->setState(HANG_FRONT_HOLD);
@@ -199,18 +216,19 @@ void playerManager::update(void)
 	{
 		hit_left = false;
 		hit_right = false;
+
+		if (_player->getState() == HANG_FRONT_HOLD)
+			_player->setState(JUMP);
 	}
 
-	if (hit_left && !hit_right)
+	if (hit_left && !hit_right && !hit_bottom)
 	{
 		_player->setState(HANG_FRONT_HOLD);
 	}
-	else if (hit_right && !hit_left)
+	else if (hit_right && !hit_left && !hit_bottom)
 	{
 		_player->setState(HANG_FRONT_HOLD);
 	}
-
-
 	//else if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), 0, PLAYER_RIGHT))				// 오른쪽벽
 	//{
 	//	hit_right = true;
@@ -364,7 +382,7 @@ void playerManager::render(void)
 	_pBullet->render();
 
 	char str[64];
-	sprintf_s(str, "%d", _player->getIsLeft());
+	sprintf_s(str, "%d", hit_bottom);
 	TextOut(getMemDC(), 100, 100, str, strlen(str));
 	if (KEYMANAGER->isToggleKey(VK_F8))
 	{
