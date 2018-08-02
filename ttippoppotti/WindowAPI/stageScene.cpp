@@ -27,12 +27,14 @@ HRESULT stageScene::init(void)
 
 	_playerManager->setMapData(_mapData);
 	_enemyManager->setMapData(_mapData);
+	OBJECTMANAGER->setMapData(_mapData);
+	OBJECTMANAGER->init();				//오브젝트매니져 초기화
 	_playerManager->setEnemyManager(_enemyManager);
 	_enemyManager->setPlayerManager(_playerManager);
 
 	for (int i = 0; i < 7; i++)
 	{
-		ZeroMemory(&_backGround[i], sizeof(object));
+		ZeroMemory(&_backGround[i], sizeof(world));
 		_backGround[i]._rc = RectMake(0, 2878 - WINSIZEY, 5755, WINSIZEY);
 	}
 
@@ -47,10 +49,6 @@ HRESULT stageScene::init(void)
 	_helicopter = IMAGEMANAGER->findImage("helicopter");
 	
 	_saveFlag = IMAGEMANAGER->findImage("saveFlag");
-	_humanDead = IMAGEMANAGER->findImage("humanDead");
-	IMAGEMANAGER->findImage("spike");
-	_humanDead->setX(3754.f);
-	_humanDead->setY(995.f);
 
 	_flag = IMAGEMANAGER->findImage("flag");
 
@@ -223,6 +221,8 @@ void stageScene::update(void)
 	{
 		CAMERAMANAGER->CameraShake();
 	}
+
+	OBJECTMANAGER->update();
 }
 
 void stageScene::render(void)
@@ -279,9 +279,12 @@ void stageScene::render(void)
 	char str[64];
 	sprintf(str, "%d", _camDebug);
 	TextOut(getMemDC(), 200, 200, str, strlen(str));
+	
+	OBJECTMANAGER->render(getMemDC());
+
 	_playerManager->render();
 	_enemyManager->render();
 	_backGround[2]._image->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
-	IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+	//IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	_test->render();
 }

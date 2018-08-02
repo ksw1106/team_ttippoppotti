@@ -1,26 +1,21 @@
 #pragma once
 #include "singletonBase.h"
+#include "objectA.h"
 
-struct tagObject
-{
-	float _x, _y;
-	int _count;
-	int _index;
-	int _animationSpeed;
-	bool _isActived;
-	bool _targetIsActived;
-};
+class mapData;
 
 class objectManager : public singletonBase<objectManager>
 {
-	vector<tagObject> _vObjectList;
+	mapData* _mapData;
+	vector<objectA> _vObject;
 public:
+	void setMapData(mapData* mapData) { _mapData = mapData;	}
 	//오브젝트매니져 초기화
 	HRESULT init();
 	//오브젝트매니져 해제
 	void release();
 	void update();
-	void render();
+	void render(HDC hdc);
 	objectManager() {}
 	~objectManager() {}
 };

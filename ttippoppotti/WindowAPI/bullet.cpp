@@ -409,6 +409,7 @@ void pBullet::render(void)
 {
 	for (int i = 0; i < _vBullet.size(); ++i)
 	{
+		
 		_vBullet[i].bulletImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
 			_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
 			_vBullet[i].bulletImage->getFrameX(), _vBullet[i].bulletImage->getFrameY());

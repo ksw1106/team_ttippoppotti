@@ -20,24 +20,27 @@ HRESULT effectManager::init(void)
 	addEffect("rock4", "rock_sml2", 10, 10);
 	addEffect("rock5", "rock_sml3", 10, 10);
 
-	addEffect("flame1", "explosionFlame1", 5, 5);
-	addEffect("flame2", "explosionFlame2", 5, 5);
-	addEffect("flame3", "explosionFlame3", 5, 5);
-	addEffect("flame4", "explosionFlame4", 5, 5);
-	addEffect("flame5", "explosionFlame5", 5, 5);
-	addEffect("flame6", "explosionFlame6", 5, 5);
-	addEffect("flame7", "explosionFlame7", 5, 5);
-	addEffect("flame8", "explosionFlame8", 5, 5);
+	addEffect("flame1", "explosionFlame1", 20, 5);
+	addEffect("flame2", "explosionFlame2", 20, 5);
+	addEffect("flame3", "explosionFlame3", 20, 5);
+	addEffect("flame4", "explosionFlame4", 20, 5);
+	addEffect("flame5", "explosionFlame5", 20, 5);
+	addEffect("flame6", "explosionFlame6", 20, 5);
+	addEffect("flame7", "explosionFlame7", 20, 5);
+	addEffect("flame8", "explosionFlame8", 20, 5);
 
-	addEffect("ballFlame1", "explosionBallFlame", 1, 10, true);
-	addEffect("ballFlame2", "explosionBallFlame_large", 1, 10, true);
-	addEffect("ballFlame3", "explosionBallFlame_larger", 1, 10, true);
-	addEffect("ballFlame4", "explosionBallFlame_small", 1, 10, true);
+	addEffect("ballFlame1", "explosionBallFlame", 10, 1, true);
+	addEffect("ballFlame2", "explosionBallFlame_large", 10, 1, true);
+	addEffect("ballFlame3", "explosionBallFlame_larger", 10, 1, true);
+	addEffect("ballFlame4", "explosionBallFlame_small", 10, 1, true);
 
-	addEffect("rambro_cartridge", "rambro_cartridge", 1, 10, true);
+	addEffect("woodDebris1", "woodDebris1", 10, 5, true);
+	addEffect("woodDebris2", "woodDebris2", 10, 5, true);
+
+	addEffect("rambro_cartridge", "rambro_cartridge", 10, 1, true);
 
 	_count = 0;
-
+	_isExplosion = false;
 	return S_OK;
 }
 
@@ -58,6 +61,12 @@ void effectManager::release(void)
 
 void effectManager::update(void)
 {
+	if (_isExplosion)
+	{
+		explosion(_x, _y);
+		_count++;
+	}
+
 	miEffect mIter;
 	mIter = _mEffect.begin();
 	for (mIter; mIter != _mEffect.end(); ++mIter)
@@ -108,45 +117,52 @@ void effectManager::rockFall(float x, float y, float angle)
 	this->playParabola("rock5", x, y, angle);
 }
 
+void effectManager::woodDebris(float x, float y, float angle)
+{
+	this->playParabola("woodDebris1", x, y, angle);
+	this->playParabola("woodDebris2", x, y, angle);
+}
+
 void effectManager::explosion(float x, float y)
 { 
-	bool _isStart;
-
-	_count++;
+	if (_count > 35)
+		this->playExplosion("flame8", x, y);
+	else if (_count > 30)
+		this->playExplosion("flame7", x, y);
+	else if (_count > 25)
+		this->playExplosion("flame6", x, y);
+	else if (_count > 20)
+		this->playExplosion("flame5", x, y);
+	else if (_count > 15)
+		this->playExplosion("flame4", x, y);
+	else if (_count > 10)
+		this->playExplosion("flame3", x, y);
+	else if (_count > 5)
+		this->playExplosion("flame2", x, y);
+	else
+		this->playExplosion("flame1", x, y);
 
 	if (_count > 40)
-		_isStart = false;
-	else
-		_isStart = true;
-
-	if (_isStart)
 	{
-		if (_count > 35)
-			this->playExplosion("flame8", x, y);
-		else if (_count > 30)
-			this->playExplosion("flame7", x, y);
-		else if (_count > 25)
-			this->playExplosion("flame6", x, y);
-		else if (_count > 20)
-			this->playExplosion("flame5", x, y);
-		else if (_count > 15)
-			this->playExplosion("flame4", x, y);
-		else if (_count > 10)
-			this->playExplosion("flame3", x, y);
-		else if (_count > 5)
-			this->playExplosion("flame2", x, y);
-		else
-			this->playExplosion("flame1", x, y);
-		this->playBallExplosion("ballFlame1", x, y);
-		this->playBallExplosion("ballFlame2", x, y);
-		this->playBallExplosion("ballFlame3", x, y);
-	}
-	else
+		_isExplosion = false;
 		_count = 0;
+	}
+
+	this->playBallExplosion("ballFlame1", x, y);
+	this->playBallExplosion("ballFlame2", x, y);
+	this->playBallExplosion("ballFlame3", x, y);
+
 
 }
 
-void effectManager::addEffect(string effectName, const char * imageName, int count, int buffer, bool isFrameImg)
+void effectManager::explosionStart(float x, float y)
+{
+	_isExplosion = true;
+	_x = x;
+	_y = y;
+}
+
+void effectManager::addEffect(string effectName, const char * imageName, int buffer, int count, bool isFrameImg)
 {
 	vEffect vEffectBuffer;
 

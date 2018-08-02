@@ -16,7 +16,8 @@ private:
 private:
 	mEffect _mEffect;		//이펙트벡터가 담겨있는 맵
 	int _count;
-
+	float _x, _y;
+	bool _isExplosion;
 public:
 	HRESULT init(void);
 	void release(void);
@@ -29,14 +30,18 @@ public:
 	void bloodSplash(float x, float y, float angle);
 	//낙석
 	void rockFall(float x, float y, float angle);
+	//나무파편
+	void woodDebris(float x, float y, float angle);
+
 	//폭발
 	void explosion(float x, float y);
+	//폭발 초기화
+	void explosionStart(float x, float y);
 	
-	//이펙트 추가(이펙트키값, 이미지키값, 1회당 출력갯수, 버퍼갯수)
-	void addEffect(string effectName, const char* imageName, int count, int buffer, bool isFrameImg = false);
+	//이펙트 추가(이펙트키값, 이미지키값, 1회당 출력갯수, 버퍼갯수, 애니메이션이냐?)
+	void addEffect(string effectName, const char* imageName, int buffer, int count = 1, bool isFrameImg = false);
 	//이펙트 플레이
 	void playParabola(string effectName, float x, float y, float angle);
-
 	void playExplosion(string effectName, float x, float y);
 	void playBallExplosion(string effectName, float x, float y);
 

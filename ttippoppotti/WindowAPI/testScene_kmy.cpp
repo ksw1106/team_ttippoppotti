@@ -22,9 +22,16 @@ void testScene_kmy::update(void)
 		
 		//호러주의
 		EFFECTMANAGER->bloodSplash(1100, 1800, 0.0f);
+		
+		//나무파편주의
+		EFFECTMANAGER->woodDebris(900, 1800, 0.0f);
+
+			//펑
+		EFFECTMANAGER->explosionStart(500, 2000);
+
+
 	}
-		//펑
-		//EFFECTMANAGER->explosion(500, 2000);
+		
 }
 
 void testScene_kmy::render(void)

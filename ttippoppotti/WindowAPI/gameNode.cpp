@@ -26,7 +26,7 @@ HRESULT gameNode::init(bool managerInit)
 		//EFFECTMANAGER->init();				//이펙트매니져 초기화
 
 		FRAMEMANAGER->init();				//프레임매니져 초기화
-		OBJECTMANAGER->init();				//오브젝트매니져 초기화
+		
 		CAMERAMANAGER->init();				//카메라매니져 초기화
 		COLLISIONMANAGER->init();
 		SAVEDATA->init();					//세이브데이터 초기화
