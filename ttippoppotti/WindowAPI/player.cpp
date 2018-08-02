@@ -43,8 +43,8 @@ void player::update(void)
 
 void player::render(void)
 {
-	//if (_state == HANG_FRONT_HOLD )
-	//	_ramBro[_state+_isCollision]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
-	//else
+	if (_state == HANG_FRONT_HOLD )
+		_ramBro[_state+_isCollision]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+	else
 		_ramBro[_state]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
 }

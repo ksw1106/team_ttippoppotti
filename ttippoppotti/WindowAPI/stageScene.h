@@ -25,7 +25,7 @@ private:
 	world _backGround[7];
 	image* _helicopter;
 	image* _saveFlag;
-	image* _humanDead;
+	//image* _humanDead;
 	image* _flag;
 	float _flagX, _flagY;
 	float _x, _y;

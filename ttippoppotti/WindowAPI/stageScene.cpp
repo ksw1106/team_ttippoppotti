@@ -27,8 +27,8 @@ HRESULT stageScene::init(void)
 
 	_playerManager->setMapData(_mapData);
 	_enemyManager->setMapData(_mapData);
-	OBJECTMANAGER->setMapData(_mapData);
-	OBJECTMANAGER->init();				//오브젝트매니져 초기화
+	//OBJECTMANAGER->setMapData(_mapData);
+	//OBJECTMANAGER->init();				//오브젝트매니져 초기화
 	_playerManager->setEnemyManager(_enemyManager);
 	_enemyManager->setPlayerManager(_playerManager);
 
@@ -172,7 +172,7 @@ void stageScene::update(void)
 
 	FRAMEMANAGER->frameChange(_helicopter, _count, _index, _speed, _isLeft);
 	FRAMEMANAGER->frameChange(_saveFlag, _fcount, _findex, _fspeed, _isLeft);
-	FRAMEMANAGER->frameChange(_humanDead, _hcount, _hindex, _hspeed, _isLeft);
+	//FRAMEMANAGER->frameChange(_humanDead, _hcount, _hindex, _hspeed, _isLeft);
 	FRAMEMANAGER->frameChange(_flag, _flagCount, _flagIndex, _flagSpeed, _isLeft);
 
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
@@ -241,10 +241,10 @@ void stageScene::render(void)
 		IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x + 169 - CAMERAMANAGER->getCamera().left, _y + 181 - CAMERAMANAGER->getCamera().top);
 	if (CAMERAMANAGER->CameraIn(RectMake(_flagX, _flagY, _saveFlag->getWidth(), _saveFlag->getHeight())))
 		_saveFlag->frameRender(getMemDC(), _flagX - CAMERAMANAGER->getCamera().left, _flagY - CAMERAMANAGER->getCamera().top);
-	if (CAMERAMANAGER->CameraIn(RectMake(IMAGEMANAGER->findImage("spike")->getX(), IMAGEMANAGER->findImage("spike")->getY(), IMAGEMANAGER->findImage("spike")->getWidth(), IMAGEMANAGER->findImage("spike")->getHeight())))
+	/*if (CAMERAMANAGER->CameraIn(RectMake(IMAGEMANAGER->findImage("spike")->getX(), IMAGEMANAGER->findImage("spike")->getY(), IMAGEMANAGER->findImage("spike")->getWidth(), IMAGEMANAGER->findImage("spike")->getHeight())))
 		IMAGEMANAGER->findImage("spike")->render(getMemDC(), IMAGEMANAGER->findImage("spike")->getX() - CAMERAMANAGER->getCamera().left, IMAGEMANAGER->findImage("spike")->getY() - CAMERAMANAGER->getCamera().top);
 	if (CAMERAMANAGER->CameraIn(RectMake(_humanDead->getX(), _humanDead->getY(), _humanDead->getWidth(), _humanDead->getHeight())))
-		_humanDead->frameRender(getMemDC(), _humanDead->getX() - CAMERAMANAGER->getCamera().left, _humanDead->getY() - CAMERAMANAGER->getCamera().top);
+		_humanDead->frameRender(getMemDC(), _humanDead->getX() - CAMERAMANAGER->getCamera().left, _humanDead->getY() - CAMERAMANAGER->getCamera().top);*/
 	if (CAMERAMANAGER->CameraIn(RectMake(_flag->getX(), _flag->getY(), _flag->getWidth(), _flag->getHeight())))
 		_flag->frameRender(getMemDC(), _flag->getX() - CAMERAMANAGER->getCamera().left, _flag->getY() - CAMERAMANAGER->getCamera().top);
 	
