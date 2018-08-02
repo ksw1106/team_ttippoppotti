@@ -26,7 +26,7 @@ class effects : public gameNode
 {
 private:
 	//구조체를 담을 벡터, 반복자
-	vector<tagParticle> _vFragment;
+	vector<tagParticle> _vParticle;
 
 	mapdata* _mapdata;
 	const char* _imageName;		//파편 이미지 이름(키값)
@@ -37,11 +37,11 @@ private:
 	int _explosionCount;
 	int _index;
 	int _animationSpeed;
-	float _randGravity;
 	float _effectFPS;		//이펙트 속도
 	bool _isRunning;		//이펙트 재생중이냐?
 	bool _isParabola;
 	bool _isExplosion;
+	bool _isBallExplosion;
 	bool _isFrameImg;		//프레임이미지냐?
 
 public:
@@ -77,7 +77,7 @@ public:
 	bool getIsRunning() { return _isRunning; }
 
 	//이펙트벡터 가져오기
-	vector<tagParticle> getVFragment() { return _vFragment; }
+	vector<tagParticle> getVParticle() { return _vParticle; }
 
 	effects() : _isRunning(false), _x(0), _y(0) {}
 	~effects() {}

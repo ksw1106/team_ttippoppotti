@@ -41,6 +41,7 @@ HRESULT effectManager::init(void)
 
 	_count = 0;
 	_isExplosion = false;
+
 	return S_OK;
 }
 

@@ -9,26 +9,22 @@ HRESULT effects::init(const char * imageName, int particleMax, bool isFrameImg)
 	//갯수 초기화
 	_particleMax = particleMax;
 
-	_randGravity = -1;
-
 	_isFrameImg = isFrameImg;
 
 	_count = _index = 0;
 	_animationSpeed = 3;
 	_explosionCount = 0;
+	_isParabola = false;
+	_isBallExplosion = false;
+	_isExplosion = false;
 
-	//총알의 갯수만큼 구조체를 초기화 한 후 벡터에 담기
 	for (int i = 0; i < _particleMax; i++)
 	{
-		//총알 구조체 선언
 		tagParticle particle;
-		//제로메모리 또는 멤셋
-		//구조체의 변수들의 값을 한번에 0으로 초기화 시켜준다
 		ZeroMemory(&particle, sizeof(tagParticle));
 		particle.particleImg = IMAGEMANAGER->findImage(_imageName);
 
-		//벡터에 담기
-		_vFragment.push_back(particle);
+		_vParticle.push_back(particle);
 	}
 	return S_OK;
 }
@@ -44,11 +40,16 @@ void effects::update(void)
 		if (_isExplosion)
 		{
 			this->boomExplosion();
-			//this->boomBallExplosion();
+		}
+		else if (_isBallExplosion)
+		{
+			this->boomBallExplosion();
 		}
 		else if (_isParabola)
+		{
 			this->boomParabola();
-
+			this->collisionProcess();
+		}
 		this->frameChange();
 	}
 	else
@@ -60,13 +61,13 @@ void effects::update(void)
 void effects::render(void)
 {
 	if (!_isRunning) return;
-	for (int i = 0; i < _vFragment.size(); ++i)
+	for (int i = 0; i < _vParticle.size(); ++i)
 	{
-		if(!_vFragment[i].fire) continue;
+		if(!_vParticle[i].fire) continue;
 		if (_isFrameImg)
-			_vFragment[i].particleImg->frameRender(getMemDC(), _vFragment[i].rc.left - CAMERAMANAGER->getCamera().left, _vFragment[i].rc.top - CAMERAMANAGER->getCamera().top);
+			_vParticle[i].particleImg->frameRender(getMemDC(), _vParticle[i].rc.left - CAMERAMANAGER->getCamera().left, _vParticle[i].rc.top - CAMERAMANAGER->getCamera().top);
 		else
-			_vFragment[i].particleImg->render(getMemDC(), _vFragment[i].rc.left - CAMERAMANAGER->getCamera().left, _vFragment[i].rc.top - CAMERAMANAGER->getCamera().top);
+			_vParticle[i].particleImg->render(getMemDC(), _vParticle[i].rc.left - CAMERAMANAGER->getCamera().left, _vParticle[i].rc.top - CAMERAMANAGER->getCamera().top);
 	}
 }
 
@@ -76,57 +77,39 @@ void effects::activateCartridge(float x, float y, bool isLeft)
 	_isParabola = true;
 	for (int i = 0; i < _particleMax; i++)
 	{
-		//총알 구조체 선언
-		tagParticle fragment;
-		//제로메모리 또는 멤셋
-		//구조체의 변수들의 값을 한번에 0으로 초기화 시켜준다
-		ZeroMemory(&fragment, sizeof(tagParticle));
-		fragment.particleImg = IMAGEMANAGER->findImage(_imageName);
-
-		//벡터에 담기
-		_vFragment.push_back(fragment);
-
-		_vFragment[i].fire = true;
-		_vFragment[i].y = y;
+		_vParticle[i].fire = true;
+		_vParticle[i].y = y;
 		if (isLeft)
 		{
-			_vFragment[i].angle = PI / 4;
-			_vFragment[i].x = x + 64;
+			_vParticle[i].angle = PI / 4;
+			_vParticle[i].x = x + 64;
 		}
 		else //플레이어가 오른쪽을 바라보고 있을 때
 		{
-			_vFragment[i].angle = PI - PI / 4;
-			_vFragment[i].x = x;
+			_vParticle[i].angle = PI - PI / 4;
+			_vParticle[i].x = x;
 		}
-		_vFragment[i].gravity = 0.0f;
-		_vFragment[i].speed = RND->getFromFloatTo(5.0f, 10.0f);
-		_vFragment[i].count = 0;
-		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
-			_vFragment[i].particleImg->getWidth(),
-			_vFragment[i].particleImg->getHeight());
+		_vParticle[i].gravity = 0.0f;
+		_vParticle[i].speed = RND->getFromFloatTo(5.0f, 10.0f);
+		_vParticle[i].count = 0;
+		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
+			_vParticle[i].particleImg->getWidth(),
+			_vParticle[i].particleImg->getHeight());
 	}
 }
 
 void effects::activateBallExplosion(float x, float y)
 {
 	_isRunning = true;
-	_isExplosion = true;
+	_isBallExplosion = true;
 
 	for (int i = 0; i < _particleMax; i++)
 	{
-		//총알 구조체 선언
-		tagParticle fragment;
-		//제로메모리 또는 멤셋
-		//구조체의 변수들의 값을 한번에 0으로 초기화 시켜준다
-		ZeroMemory(&fragment, sizeof(tagParticle));
-		fragment.particleImg = IMAGEMANAGER->findImage(_imageName);
-		_vFragment[i].x = x;
-		_vFragment[i].y = y;
-		//벡터에 담기
-		_vFragment.push_back(fragment);
-		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
-			_vFragment[i].particleImg->getWidth(),
-			_vFragment[i].particleImg->getHeight());
+		_vParticle[i].x = x;
+		_vParticle[i].y = y;
+		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
+			_vParticle[i].particleImg->getWidth(),
+			_vParticle[i].particleImg->getHeight());
 	}
 }
 
@@ -134,9 +117,9 @@ void effects::boomBallExplosion()
 {
 	for (int i = 0; i < _particleMax; i++)
 	{
-		_vFragment[i].count++;
-		if (_vFragment[i].count >= _vFragment[i].particleImg->getMaxFrameX())
-			_vFragment[i].fire = false;
+		_vParticle[i].count++;
+		if (_vParticle[i].count >= _vParticle[i].particleImg->getMaxFrameX())
+			_vParticle[i].fire = false;
 	}
 }
 
@@ -147,26 +130,16 @@ void effects::activateExplosion(float x, float y)
 	
 	for (int i = 0; i < _particleMax; i++)
 	{
-		//총알 구조체 선언s
-		tagParticle fragment;
-		//제로메모리 또는 멤셋
-		//구조체의 변수들의 값을 한번에 0으로 초기화 시켜준다
-		ZeroMemory(&fragment, sizeof(tagParticle));
-		fragment.particleImg = IMAGEMANAGER->findImage(_imageName);
-
-		//벡터에 담기
-		_vFragment.push_back(fragment);
-
-		_vFragment[i].fire = true;
-		_vFragment[i].angle = PI / _particleMax * (i + 1);
-		_vFragment[i].gravity = 0.0f;
-		_vFragment[i].x = x;
-		_vFragment[i].y = y;
-		_vFragment[i].speed = 9.0f;
-		_vFragment[i].count = 0;
-		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
-			_vFragment[i].particleImg->getWidth(),
-			_vFragment[i].particleImg->getHeight());
+		_vParticle[i].fire = true;
+		_vParticle[i].angle = PI / _particleMax * (i + 1);
+		_vParticle[i].gravity = 0.0f;
+		_vParticle[i].x = x;
+		_vParticle[i].y = y;
+		_vParticle[i].speed = 9.0f;
+		_vParticle[i].count = 0;
+		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
+			_vParticle[i].particleImg->getWidth(),
+			_vParticle[i].particleImg->getHeight());
 	}
 }
 void effects::boomExplosion()
@@ -174,21 +147,21 @@ void effects::boomExplosion()
 	_explosionCount++;
 	if (_explosionCount % 5)
 	{
-		for (int i = 0; i < _vFragment.size(); ++i)
+		for (int i = 0; i < _vParticle.size(); ++i)
 		{
-			if (!_vFragment[i].fire) continue;
-			_vFragment[i].gravity += 0.07f;
-			_vFragment[i].x += cosf(_vFragment[i].angle) * _vFragment[i].speed;
-			_vFragment[i].y += -sinf(_vFragment[i].angle) * _vFragment[i].speed + _vFragment[i].gravity;
-			_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
-				_vFragment[i].particleImg->getWidth(),
-				_vFragment[i].particleImg->getHeight());
+			if (!_vParticle[i].fire) continue;
+			_vParticle[i].gravity += 0.07f;
+			_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
+			_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
+				_vParticle[i].particleImg->getWidth(),
+				_vParticle[i].particleImg->getHeight());
 
-			_vFragment[i].count++;
+			_vParticle[i].count++;
 
-			if (_vFragment[i].count == 300 || _vFragment[i].y - CAMERAMANAGER->getCamera().top >= WINSIZEY || _vFragment[i].speed < 0.5f)
+			if (_vParticle[i].count == 300 || _vParticle[i].y - CAMERAMANAGER->getCamera().top >= WINSIZEY || _vParticle[i].speed < 0.5f)
 			{
-				_vFragment[i].fire = false;
+				_vParticle[i].fire = false;
 				_isRunning = false;
 				_isParabola = false;
 			}
@@ -202,82 +175,72 @@ void effects::activateParabola(float x, float y, float angle)
 	_isParabola = true;
 	for (int i = 0; i < _particleMax; i++)
 	{
-		//총알 구조체 선언
-		tagParticle fragment;
-		//제로메모리 또는 멤셋
-		//구조체의 변수들의 값을 한번에 0으로 초기화 시켜준다
-		ZeroMemory(&fragment, sizeof(tagParticle));
-		fragment.particleImg = IMAGEMANAGER->findImage(_imageName);
-		
-		//벡터에 담기
-		_vFragment.push_back(fragment);
-
-		_vFragment[i].fire = true;
+		_vParticle[i].fire = true;
 		if (angle == PI) //플레이어가 총알을 왼편으로 쐈을 때
-			_vFragment[i].angle = PI + RND->getFromFloatTo(0.1f, 1.5f) - 0.75f;
+			_vParticle[i].angle = PI + RND->getFromFloatTo(0.1f, 1.5f) - 0.75f;
 		else if (angle == 0.0f) //플레이어 총알 오른
-			_vFragment[i].angle = RND->getFromFloatTo(0.1f, 1.5f) - 0.75;
+			_vParticle[i].angle = RND->getFromFloatTo(0.1f, 1.5f) - 0.75;
 		else
-			_vFragment[i].angle = angle;
-		_vFragment[i].gravity = 0.0f;
-		_vFragment[i].x = x;
-		_vFragment[i].y = y;
-		_vFragment[i].speed = RND->getFromFloatTo(1.0f, 20.0f);
-		_vFragment[i].count = 0;
-		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
-			_vFragment[i].particleImg->getWidth(),
-			_vFragment[i].particleImg->getHeight());
+			_vParticle[i].angle = angle;
+		_vParticle[i].gravity = 0.0f;
+		_vParticle[i].x = x;
+		_vParticle[i].y = y;
+		_vParticle[i].speed = RND->getFromFloatTo(1.0f, 20.0f);
+		_vParticle[i].count = 0;
+		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
+			_vParticle[i].particleImg->getFrameWidth(),
+			_vParticle[i].particleImg->getFrameHeight());
 	}
 }
 
 void effects::boomParabola()
 {
-	for (int i = 0; i < _vFragment.size(); ++i)
+	//돌무더기, 피, 탄피, 나무파편
+	for (int i = 0; i < _vParticle.size(); ++i)
 	{
-		if (!_vFragment[i].fire) continue;
+		if (!_vParticle[i].fire) continue;
 
-		_vFragment[i].gravity += 0.55f;
-		_vFragment[i].x += cosf(_vFragment[i].angle) * _vFragment[i].speed;
-		_vFragment[i].y += -sinf(_vFragment[i].angle) * _vFragment[i].speed + _vFragment[i].gravity;
-		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
-			_vFragment[i].particleImg->getWidth(),
-			_vFragment[i].particleImg->getHeight());
+		_vParticle[i].gravity += 0.55f;
+		_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
+		_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
+		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
+			_vParticle[i].particleImg->getFrameWidth(),
+			_vParticle[i].particleImg->getFrameHeight());
 
-		_vFragment[i].count++;
+		_vParticle[i].count++;
 
-		if (_vFragment[i].count == 500 || _vFragment[i].y - CAMERAMANAGER->getCamera().top >= WINSIZEY || _vFragment[i].speed < 0.5f)
+		if (_vParticle[i].count == 500 || _vParticle[i].y - CAMERAMANAGER->getCamera().top >= WINSIZEY || _vParticle[i].speed < 0.5f)
 		{
-			_vFragment[i].fire = false;
+			_vParticle[i].fire = false;
 			_isRunning = false;
 			_isParabola = false;
 		}
 	}
-	//this->collisionProcess();
 }
 
 void effects::collisionProcess()
 {
-	for (int i = 0; i < _vFragment.size(); ++i)
+	for (int i = 0; i < _vParticle.size(); ++i)
 	{
-		if (COLLISIONMANAGER->pixelCollision(_vFragment[i].rc, _vFragment[i].x, _vFragment[i].y, _vFragment[i].speed, _vFragment[i].gravity, 1))
+		if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 3)) //아래
 		{
-			_vFragment[i].angle = PI - _vFragment[i].angle;
-			_vFragment[i].speed *= 0.8;
+			_vParticle[i].gravity = PI2 - _vParticle[i].angle;
+			_vParticle[i].speed *= 0.9;
 		}
-		if (COLLISIONMANAGER->pixelCollision(_vFragment[i].rc, _vFragment[i].x, _vFragment[i].y, _vFragment[i].speed, _vFragment[i].gravity, 2))
+		if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 2)) //오
 		{
-			_vFragment[i].angle = PI2 - _vFragment[i].angle;
-			_vFragment[i].speed *= 0.8;
+			_vParticle[i].angle = PI - _vParticle[i].angle;
+			_vParticle[i].speed *= 0.9;
 		}
-		if (COLLISIONMANAGER->pixelCollision(_vFragment[i].rc, _vFragment[i].x, _vFragment[i].y, _vFragment[i].speed, _vFragment[i].gravity, 3))
+		if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 0)) //왼
 		{
-			_vFragment[i].gravity = PI2 - _vFragment[i].angle;
-			_vFragment[i].speed *= 0.8;
+			_vParticle[i].angle = PI - _vParticle[i].angle;
+			_vParticle[i].speed *= 0.9;
 		}
-		if (COLLISIONMANAGER->pixelCollision(_vFragment[i].rc, _vFragment[i].x, _vFragment[i].y, _vFragment[i].speed, _vFragment[i].gravity, 4))
+		if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 1)) //위
 		{
-			_vFragment[i].angle = PI - _vFragment[i].angle;
-			_vFragment[i].speed *= 0.8;
+			_vParticle[i].angle = PI2 - _vParticle[i].angle;
+			_vParticle[i].speed *= 0.9;
 		}
 	}
 }
