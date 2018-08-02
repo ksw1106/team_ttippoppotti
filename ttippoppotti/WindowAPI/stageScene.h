@@ -5,7 +5,7 @@
 #include "mapData.h"
 #include "testScene_kmy.h"
 
-struct object
+struct world
 {
 	image* _image;
 	float _x, _y;
@@ -22,7 +22,7 @@ private:
 	testScene_kmy* _test;
 	
 	RECT _rcCamera;
-	object _backGround[7];
+	world _backGround[7];
 	image* _helicopter;
 	image* _saveFlag;
 	image* _humanDead;
@@ -58,4 +58,3 @@ public:
 	stageScene() {}
 	~stageScene() {}
 };
-
