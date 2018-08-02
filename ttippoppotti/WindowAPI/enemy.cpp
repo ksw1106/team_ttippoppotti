@@ -26,9 +26,7 @@ HRESULT enemy::initSoldier(int x, int y, int hp, int randomNum)
 				
 	_warnSign = IMAGEMANAGER->findImage("알람");
 	_doubtSign = IMAGEMANAGER->findImage("의문");
-
-	_warnFrameCount = _doubtFrameCount = 0;
-	_warnFrameIndex = _doubtFrameCount = 0;
+		
 	_frameSpeed = 0;
 	_count = 0;
 
@@ -36,8 +34,8 @@ HRESULT enemy::initSoldier(int x, int y, int hp, int randomNum)
 	_doubtSign->setFrameY(0);
 		
 	_angle = 270.f * 3.14f / 180;
-	_speed = 3.f;
-	_enemyStatus = ENEMY_WALK;
+	_speed = 2.f;
+	_enemyStatus = ENEMY_IDLE;
 	_gunStatus = GUN_IDLE;
 	
 	_gravity = 0.f;
@@ -103,72 +101,51 @@ void enemy::release(void)
 
 void enemy::update(void)
 {	
+	// 밑에 없으면 떨어짐
+	fall();
+	
+	// 살아있을때
 	if (_isAlive)
 	{
-		//_gravity += _accel;
-		if (_warnSign->getFrameX() >= _warnSign->getMaxFrameX())
+		// 적 시야 렉트 변화
+		if (_isLeft)
 		{
-			//_warnSign.re
+			_rcEnemySight = RectMake(_x - 800, _y, 800, _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());
 		}
-		if (_doubtSign->getFrameX() >= _doubtSign->getMaxFrameX())
+		else
 		{
-			_isStrange = false;
+			_rcEnemySight = RectMake(_x + _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _y, 800, _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());
+		}
+
+		if (_isUncovered)
+		{
+			// 플레이어 발견!
+			this->discover();
+		}
+
+		if (_isStrange)
+		{
+			// 아군 시체 발견!
+			this->doubt();
 		}		
 	}
+	// 죽었을때
 	else
 	{
-		if (_enemyStatus == ENEMY_KNOCK_BACK)
-		{
-			if (_isLeft)
-			{
-				if (_enemyImage.bodyImage[ENEMY_KNOCK_BACK]->getFrameX() == 0 )
-				{
-
-				}
-			}
-			else
-			{
-				if (_enemyImage.bodyImage[ENEMY_KNOCK_BACK]->getFrameX() == _enemyImage.bodyImage[ENEMY_KNOCK_BACK]->getMaxFrameX())
-				{
-
-				}
-			}
-		}
+		
 
 	}
 
-	if (_enemyStatus == ENEMY_FIRE) _gunStatus = GUN_TARGETING;
-	
-	if (_enemyStatus != ENEMY_FIRE)
+	// 사격자세를 취한다	
+	if (_enemyStatus == ENEMY_FIRE)
 	{
-		this->controlAI(RND->getInt(200));
-	}	
-	else
-	{
+		_gunStatus = GUN_TARGETING;
 		this->fireMovement();
-	}
+	}		
 
 	this->move();
 	this->frameAnimate();
-	
-	
-	//if (_enemyStatus == ENEMY_KNOCK_BACK || _brovilStatus == BROVIL_KNOCK_BACK)
-	//{
-	//	this->knockBackMove();
-	//}
-	
-	//for (int i = 0; i < 7; ++i)
-	//{
-	//	_enemyImage.bodyImage[i]->setX(_x);
-	//	_enemyImage.bodyImage[i]->setY(_y);
-	//}
-	//
-	//for (int i = 0; i < 5; ++i)
-	//{
-	//	_enemyImage.armImage[i]->setX(_x);
-	//	_enemyImage.armImage[i]->setY(_y);
-	//}
-
+		
 	_rcEnemy = RectMake(_x, _y, _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());	
 }
 
@@ -201,11 +178,13 @@ void enemy::render(void)
 		// 플레이어 발견했을때, 느낌표 말풍선!
 		if (_isUncovered)
 		{
+			if (_warnSign->getFrameX() >= _warnSign->getMaxFrameX()) return;
 			IMAGEMANAGER->frameRender("알람", getMemDC(), _x + 10 - CAMERAMANAGER->getCamera().left, _y - 50 - CAMERAMANAGER->getCamera().top, _warnSign->getFrameX(), _warnSign->getFrameY());
 		}
 
 		if (_isStrange)
 		{
+			if (_doubtSign->getFrameX() >= _doubtSign->getMaxFrameX()) return;
 			IMAGEMANAGER->frameRender("의문", getMemDC(), _x + 10 - CAMERAMANAGER->getCamera().left, _y - 50 - CAMERAMANAGER->getCamera().top, _doubtSign->getFrameX(), _doubtSign->getFrameY());
 		}		
 	}
@@ -230,44 +209,46 @@ void enemy::render(void)
 //======================================================================================================================================
 //======================================================================================================================================
 
+void enemy::fall()
+{
+	// 떨어질때, 아닐떄
+	if (!_isOn)
+	{
+		if (_gravity < 3.0f) _gravity = 3.0f;
+		_y += -sinf(_angle)*_speed + _gravity;
+		_gravity += 0.5f;
+	}
+	else
+	{
+		_gravity = 0;
+	}
+}
+
+void enemy::idle()
+{
+	if (_enemyStatus == ENEMY_IDLE)
+	{
+		
+	}
+
+}
+
 void enemy::move()
 {
 	if (_isAlive)
 	{		
-		//아군(적) 시체 발견하고 의심할때,
-		if (_enemyStatus == ENEMY_DOUBT)
+		//좌우 이동
+		if (_enemyStatus == ENEMY_WALK)
 		{
-			_gunStatus = GUN_TARGETING;
 			if (_isLeft)
 			{
-				if (_enemyImage.armImage[_gunStatus]->getFrameX() == 0)
-				{
-					_gunStatus = GUN_FIRE;
-					_enemyStatus = ENEMY_FIRE;
-					_enemyImage.bodyImage[_enemyStatus]->setFrameX(4);
-				}
+				_x -= _speed;
 			}
 			else
 			{
-				if (_enemyImage.armImage[_gunStatus]->getFrameX() == _enemyImage.armImage[_gunStatus]->getMaxFrameX())
-				{
-					_gunStatus = GUN_FIRE;
-					_enemyStatus = ENEMY_FIRE;
-					_enemyImage.bodyImage[_enemyStatus]->setFrameX(4);
-				}
+				_x += _speed;
 			}
-		}
-
-		// 적 시야 렉트 변화
-		if (_isLeft)
-		{
-			_rcEnemySight = RectMake(getX() - 800, getY(), 800 + _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());
-		}
-		else
-		{
-			_rcEnemySight = RectMake(getX(), getY(), 800 + _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());
-		}
-
+		}	
 	}	
 	
 	//날라갈때
@@ -275,6 +256,57 @@ void enemy::move()
 	{
 		flyAway();
 	}	
+}
+
+// 적 의심 (아군 시체 발견)
+void enemy::doubt()
+{
+	_enemyStatus = ENEMY_DOUBT;
+	//아군(적) 시체 발견하고 의심할때,
+	if (_enemyStatus == ENEMY_DOUBT)
+	{
+		_gunStatus = GUN_TARGETING;
+		if (_isLeft)
+		{
+			if (_enemyImage.armImage[_gunStatus]->getFrameX() == 0)
+			{
+				_gunStatus = GUN_FIRE;
+				_enemyStatus = ENEMY_FIRE;
+				_enemyImage.bodyImage[_enemyStatus]->setFrameX(4);
+			}
+		}
+		else
+		{
+			if (_enemyImage.armImage[_gunStatus]->getFrameX() == _enemyImage.armImage[_gunStatus]->getMaxFrameX())
+			{
+				_gunStatus = GUN_FIRE;
+				_enemyStatus = ENEMY_FIRE;
+				_enemyImage.bodyImage[_enemyStatus]->setFrameX(4);
+			}
+		}
+	}
+}
+
+// 플레이어 발견
+void enemy::discover()
+{
+	_enemyStatus = ENEMY_DOUBT;
+	if (!_isLeft)
+	{
+		if (_enemyImage.bodyImage[ENEMY_DOUBT]->getFrameX() >= _enemyImage.bodyImage[ENEMY_DOUBT]->getMaxFrameX())
+		{
+			// 사격 모션
+			_enemyStatus = ENEMY_FIRE;
+		}
+	}
+	else
+	{
+		if (_enemyImage.bodyImage[ENEMY_DOUBT]->getFrameX() <= 0)
+		{
+			// 사격 모션
+			_enemyStatus = ENEMY_FIRE;
+		}
+	}
 }
 
 //날아갈때
@@ -296,28 +328,6 @@ void enemy::flyAway()
 	}
 
 	//_gravity += 0.05f;
-}
-
-void enemy::controlAI(int randomNum)
-{	
-	if (getBodyStatus() != ENEMY_DEAD)
-	{
-		if (randomNum % 7 == 1)
-		{
-			setBodyStatus(ENEMY_WALK);
-			setArmStatus(GUN_IDLE);
-		}
-		//else if (randomNum % 7 == 0)
-		//{
-		//	setBodyStatus(ENEMY_IDLE);
-		//	setArmStatus(GUN_IDLE);
-		//}
-		if (randomNum % 7 == 2)
-		{
-			if (getDirection()) setDirection(false);
-			else setDirection(true);
-		}
-	}		
 }
 
 void enemy::fireMovement()
@@ -390,10 +400,14 @@ void enemy::fireMovement()
 void enemy::frameAnimate()
 {		
 	FRAMEMANAGER->frameChange(_enemyImage.bodyImage[_enemyStatus], _enemyImage.count, _enemyImage.index, _enemyImage.speed, _isLeft);
-		
+
 	//FRAMEMANAGER->frameChange(_brovilImage.brovilImg[_brovilStatus], _brovilImage.count, _brovilImage.index, _brovilImage.speed, _isLeft);
 	FRAMEMANAGER->frameChange(_enemyImage.armImage[_gunStatus], _enemyImage.count, _enemyImage.index, _enemyImage.speed, _isLeft);
+	
+	if (_isUncovered)
 	FRAMEMANAGER->frameChange(_warnSign, _warnFrameCount, _warnFrameIndex, _frameSpeed, 0);
+	
+	if (_isStrange)
 	FRAMEMANAGER->frameChange(_doubtSign, _doubtFrameCount, _doubtFrameIndex, _frameSpeed, 0);
 }
 

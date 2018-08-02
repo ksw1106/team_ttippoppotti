@@ -147,14 +147,17 @@ public:
 	void setAccel(float accel) { _accel = accel; }
 	void setIsOn(bool isOn) { _isOn = isOn; }
 
-	void controlAI(int randomNum);
+	//void controlAI(int randomNum);
+	void fall();
+	void idle();
 	void move();
 	void doubt();
-	void flyAway();
+	void discover();
 	void fireMovement();
+	void flyAway();
+	void knockBackMove(float angle);	// 총알맞았을때 뒤로 날아감
 	
 	void frameAnimate();	
-	void knockBackMove(float angle);	// 총알맞았을때 뒤로 날아감
 			
 	enemy() {}
 	virtual ~enemy() {}
