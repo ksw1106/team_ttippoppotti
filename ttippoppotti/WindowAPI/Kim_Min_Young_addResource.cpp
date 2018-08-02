@@ -8,9 +8,6 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadImage("rock_sml1", "effectImage/rock_fragment_sml_01.bmp", 8, 8);
 	_loading->loadImage("rock_sml2", "effectImage/rock_fragment_sml_02.bmp", 9, 9);
 	_loading->loadImage("rock_sml3", "effectImage/rock_fragment_sml_03.bmp", 9, 9);
-	_loading->loadFrameImage("rambro_cartridge", "effectImage/rambro_cartridge_01.bmp", 40, 10, 4, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("woodPiece1", "effectImage/wood_piece_01.bmp", 136, 34, 4, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("woodPiece2", "effectImage/wood_piece_02.bmp", 104, 26, 4, 1, true, RGB(255, 0, 255));
 	//_loading->loadImage("UI_rambroWalk", "effectImage/UI_rambro_walk_01.bmp", 262, 156, true, RGB(255, 0, 255));
 	//_loading->loadImage("UI_rambroGrenade", "effectImage/UI_rambro_grenade_01.bmp", 29, 38, true, RGB(255, 0, 255));
 	//_loading->loadImage("UI_statBox", "effectImage/UI_statBox_temp_01.bmp", 445, 114);
@@ -33,10 +30,17 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadFrameImage("bloodTrailPuff1", "effectImage/bloodTrailPuff_01.bmp", 126, 14, 9, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("bloodTrailPuff2", "effectImage/bloodTrailPuff_02.bmp", 94, 6, 16, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("bloodTrailPuff3", "effectImage/bloodTrailPuff_03.bmp", 154, 13, 11, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("explosionBallFlame", "effectImage/explosionBallFlame_01.bmp", 1040, 64, 26, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("explosionBallFlame_large", "effectImage/explosionBallFlame_large_01.bmp", 2112, 64, 33, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("explosionBallFlame_larger", "effectImage/explosionBallFlame_larger_01.bmp", 2976, 128, 31, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("explosionBallFlame_small", "effectImage/explosionBallFlame_small_01.bmp", 672, 32, 21, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("explosionBallFlame", "effectImage/explosionBallFlame_01.bmp", 4160, 256, 26, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("explosionBallFlame_large", "effectImage/explosionBallFlame_large_01.bmp", 8448, 256, 33, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("explosionBallFlame_larger", "effectImage/explosionBallFlame_larger_01.bmp", 11904, 512, 31, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("explosionBallFlame_small", "effectImage/explosionBallFlame_small_01.bmp", 2688, 128, 21, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("rambro_cartridge", "effectImage/rambro_cartridge_01.bmp", 40, 10, 4, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("woodDebris1", "effectImage/wood_debris_01.bmp", 136, 34, 4, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("woodDebris2", "effectImage/wood_debris_02.bmp", 104, 26, 4, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("smoke1", "effectImage/smoke_01.bmp", 448, 32, 14, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("smoke2", "effectImage/smoke_02.bmp", 480, 32, 15, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("whitePuff", "effectImage/whitePuff_01.bmp", 384, 64, 6, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("bulletPuff", "effectImage/bulletPuff_01.bmp", 528, 66, 8, 1, true, RGB(255, 0, 255));
 }
 
 void loadingScene::Kim_Min_Young_addSound()

@@ -16,8 +16,6 @@ void loadingScene::Kim_Sang_Won_addImage()
 	_loading->loadFrameImage("helicopter", "helicopter.bmp", 1625, 182, 5, 1);
 	_loading->loadImage("ladder", "ladder.bmp", 25, 237, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("saveFlag", "saveFlag.bmp", 3234, 88, 33, 1);
-	_loading->loadFrameImage("humanDead", "human_dead.bmp", 1404, 125, 13, 1);
-	_loading->loadImage("spike", "spike.bmp", 3795.f, 976.f, 15, 108, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("flag", "flag.bmp", 3650.f, 972.f, 2048, 112, 32, 1);
 }
 

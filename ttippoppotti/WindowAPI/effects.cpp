@@ -14,7 +14,7 @@ HRESULT effects::init(const char * imageName, int particleMax, bool isFrameImg)
 	_isFrameImg = isFrameImg;
 
 	_count = _index = 0;
-	_animationSpeed = 5;
+	_animationSpeed = 3;
 	_explosionCount = 0;
 
 	//총알의 갯수만큼 구조체를 초기화 한 후 벡터에 담기
@@ -42,12 +42,12 @@ void effects::update(void)
 	if (_isRunning)
 	{
 		if (_isExplosion)
-			this->boomExplosion();
-		else if (_isParabola)
 		{
-			this->boomParabola();
-			this->collisionProcess();
+			this->boomExplosion();
+			//this->boomBallExplosion();
 		}
+		else if (_isParabola)
+			this->boomParabola();
 
 		this->frameChange();
 	}
@@ -83,7 +83,6 @@ void effects::activateCartridge(float x, float y, bool isLeft)
 		ZeroMemory(&fragment, sizeof(tagParticle));
 		fragment.particleImg = IMAGEMANAGER->findImage(_imageName);
 
-		_falseCount = 0;
 		//벡터에 담기
 		_vFragment.push_back(fragment);
 
@@ -123,13 +122,21 @@ void effects::activateBallExplosion(float x, float y)
 		fragment.particleImg = IMAGEMANAGER->findImage(_imageName);
 		_vFragment[i].x = x;
 		_vFragment[i].y = y;
-
-		_falseCount = 0;
 		//벡터에 담기
 		_vFragment.push_back(fragment);
 		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
 			_vFragment[i].particleImg->getWidth(),
 			_vFragment[i].particleImg->getHeight());
+	}
+}
+
+void effects::boomBallExplosion()
+{
+	for (int i = 0; i < _particleMax; i++)
+	{
+		_vFragment[i].count++;
+		if (_vFragment[i].count >= _vFragment[i].particleImg->getMaxFrameX())
+			_vFragment[i].fire = false;
 	}
 }
 
@@ -140,14 +147,13 @@ void effects::activateExplosion(float x, float y)
 	
 	for (int i = 0; i < _particleMax; i++)
 	{
-		//총알 구조체 선언
+		//총알 구조체 선언s
 		tagParticle fragment;
 		//제로메모리 또는 멤셋
 		//구조체의 변수들의 값을 한번에 0으로 초기화 시켜준다
 		ZeroMemory(&fragment, sizeof(tagParticle));
 		fragment.particleImg = IMAGEMANAGER->findImage(_imageName);
 
-		_falseCount = 0;
 		//벡터에 담기
 		_vFragment.push_back(fragment);
 
@@ -156,7 +162,7 @@ void effects::activateExplosion(float x, float y)
 		_vFragment[i].gravity = 0.0f;
 		_vFragment[i].x = x;
 		_vFragment[i].y = y;
-		_vFragment[i].speed = 7.0f;
+		_vFragment[i].speed = 9.0f;
 		_vFragment[i].count = 0;
 		_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
 			_vFragment[i].particleImg->getWidth(),
@@ -171,7 +177,7 @@ void effects::boomExplosion()
 		for (int i = 0; i < _vFragment.size(); ++i)
 		{
 			if (!_vFragment[i].fire) continue;
-			_vFragment[i].gravity += 0.08f;
+			_vFragment[i].gravity += 0.07f;
 			_vFragment[i].x += cosf(_vFragment[i].angle) * _vFragment[i].speed;
 			_vFragment[i].y += -sinf(_vFragment[i].angle) * _vFragment[i].speed + _vFragment[i].gravity;
 			_vFragment[i].rc = RectMakeCenter(_vFragment[i].x, _vFragment[i].y,
@@ -203,7 +209,6 @@ void effects::activateParabola(float x, float y, float angle)
 		ZeroMemory(&fragment, sizeof(tagParticle));
 		fragment.particleImg = IMAGEMANAGER->findImage(_imageName);
 		
-		_falseCount = 0;
 		//벡터에 담기
 		_vFragment.push_back(fragment);
 
@@ -247,6 +252,7 @@ void effects::boomParabola()
 			_isParabola = false;
 		}
 	}
+	//this->collisionProcess();
 }
 
 void effects::collisionProcess()
