@@ -155,6 +155,9 @@
     <ClInclude Include="CollisionManager.h">
       <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
+    <ClInclude Include="objectA.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -267,6 +270,9 @@
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>GameFramework2D\매니져</Filter>
+    </ClCompile>
+    <ClCompile Include="objectA.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

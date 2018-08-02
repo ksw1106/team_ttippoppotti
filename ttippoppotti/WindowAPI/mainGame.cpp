@@ -18,7 +18,6 @@ HRESULT mainGame::init(void)
 	/*ÇöÀç¾À ¼³Á¤*/
 	SCENEMANAGER->loadScene("·Îµù¾À");
 	
-
 	return S_OK;
 }
 
