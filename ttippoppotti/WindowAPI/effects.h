@@ -53,14 +53,16 @@ public:
 	//탄피 설정
 	void activateCartridge(float x, float y, bool isLeft);
 
-	//
+	//중앙폭발
 	void activateBallExplosion(float x, float y);
+	//중앙폭발
+	void boomBallExplosion();
 
-	//포물선 발사 설정 (피, 낙석)
+	//포물선 발사 설정 (피, 낙석, 나무파편)
 	void activateParabola(float x, float y, float angle);
 	//포물선 발사!
 	void boomParabola();
-	
+
 	//폭발 설정
 	void activateExplosion(float x, float y);
 	//폭발 발사!
@@ -68,8 +70,7 @@ public:
 
 	//충돌처리
 	void collisionProcess();
-
-	//
+	//애니메이션
 	void frameChange();
 
 	//이펙트가 재생중인지 상태값 가져오기
