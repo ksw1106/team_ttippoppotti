@@ -282,6 +282,6 @@ void stageScene::render(void)
 	_playerManager->render();
 	_enemyManager->render();
 	_backGround[2]._image->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
-	IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+	//IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	_test->render();
 }

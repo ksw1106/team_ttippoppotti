@@ -24,6 +24,7 @@ private:
 	int _fireCount;
 	bool _change;
 
+	RECT _rcRambro;
 	RECT _rcPlyaer;
 
 public:
