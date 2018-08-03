@@ -3,7 +3,7 @@
 
 void loadingScene::Lee_Ji_Woong_addImage()
 {
-	_loading->loadFrameImage("군인시체", "enemyImage/soldier_dead.bmp", 80, 160, 1, 2);
+	_loading->loadFrameImage("군인시체", "enemyImage/soldier_dead.bmp", 90, 100, 1, 2);
 	_loading->loadFrameImage("군인걸음", "enemyImage/soldier_walk.bmp", 520, 150, 8, 2);
 	_loading->loadFrameImage("군인의심", "enemyImage/soldier_doubt.bmp", 325, 152, 5, 2);
 	_loading->loadFrameImage("군인평상시", "enemyImage/soldier_idle.bmp", 975, 152, 15, 2);

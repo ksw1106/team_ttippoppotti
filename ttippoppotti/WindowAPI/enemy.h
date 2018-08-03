@@ -94,8 +94,8 @@ private:
 	int _frameSpeed;
 
 public:
-	HRESULT initSoldier(int x, int y, int hp, int randomNum);
-	HRESULT initBrovil(int x, int y, int hp, int randomNum);
+	HRESULT initSoldier(int x, int y);
+	HRESULT initBrovil(int x, int y);
 
 	void release(void);
 	void update(void);
@@ -156,6 +156,7 @@ public:
 	void fireMovement();
 	void flyAway();
 	void knockBackMove(float angle);	// 총알맞았을때 뒤로 날아감
+	void dead();
 	
 	void frameAnimate();	
 			
