@@ -56,7 +56,7 @@ void loadingScene::Kim_Min_Young_addImage()
 	_humanDeadImage->init("human_dead.bmp", 1404, 125, 13, 1);
 	_spikeImage = new image;
 	_spikeImage->init("spike.bmp", 3795.f, 976.f, 15, 108, true, RGB(255, 0, 255));*/
-	_loading->loadFrameImage("");
+	//_loading->loadFrameImage("");
 	_loading->loadFrameImage("truck", "objectImage/truck_01.bmp", 528, 66, 11, 1, true, RGB(255, 0, 255));
 }
 
