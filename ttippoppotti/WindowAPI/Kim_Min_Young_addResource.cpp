@@ -45,18 +45,15 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadImage("skull", "objectImage/skull_01.bmp", 30, 30, true, RGB(255, 0, 255));
 	_loading->loadImage("skullPole", "objectImage/skull_pole_01.bmp", 32, 114, true, RGB(255, 0, 255));
 	_loading->loadImage("doubleSkullPole", "objectImage/doubleSkull_pole_01.bmp", 70, 114, true, RGB(255, 0, 255));
-	_loading->loadImage("skullContainer", "objectImage/skull_container_01.bmp", 101, 108, true, RGB(255, 0, 255));
+	_loading->loadImage("skullDrum", "objectImage/skull_drum_red_01.bmp", 101, 108, true, RGB(255, 0, 255));
 	_loading->loadImage("prisoner_InJail", "objectImage/prisoner_inJail_01.bmp", 203, 203, true, RGB(255, 0, 255));
-	_loading->loadImage("prisoner", "objectImage/prisoner_01.bmp", 89, 114, true, RGB(255, 0, 255));
-	_loading->loadImage("woodBox", "objectImage/woodBox_01.bmp", 101, 101);
+	_loading->loadImage("prisoner_freed", "objectImage/prisoner_01.bmp", 89, 114, true, RGB(255, 0, 255));
+	_loading->loadImage("woodenBox", "objectImage/woodenBox_01.bmp", 101, 101);
 	_loading->loadImage("bottle_green", "objectImage/bottle_green_01.bmp", 25, 57, true, RGB(255, 0, 255));
 	_loading->loadImage("bottle_gray", "objectImage/bottle_gray_01.bmp", 25, 57, true, RGB(255, 0, 255));
 	_loading->loadImage("bottle_brown", "objectImage/bottle_brown_01.bmp", 45, 63, true, RGB(255, 0, 255));
-	/*_humanDeadImage = new image;
-	_humanDeadImage->init("human_dead.bmp", 1404, 125, 13, 1);
-	_spikeImage = new image;
-	_spikeImage->init("spike.bmp", 3795.f, 976.f, 15, 108, true, RGB(255, 0, 255));*/
-	//_loading->loadFrameImage("");
+	_loading->loadImage("spike", "objectImage/spike.bmp", 15, 108, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("human_dead", "human_dead.bmp", 1404, 125, 13, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("truck", "objectImage/truck_01.bmp", 528, 66, 11, 1, true, RGB(255, 0, 255));
 }
 
