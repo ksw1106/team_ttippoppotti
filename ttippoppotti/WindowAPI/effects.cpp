@@ -78,23 +78,20 @@ void effects::activateCartridge(float x, float y, bool isLeft)
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
-		_vParticle[i].y = y;
+		_vParticle[i].y = y + 32;
+		_vParticle[i].x = x + 32;
 		if (isLeft)
-		{
 			_vParticle[i].angle = PI / 4;
-			_vParticle[i].x = x + 64;
-		}
 		else //플레이어가 오른쪽을 바라보고 있을 때
-		{
 			_vParticle[i].angle = PI - PI / 4;
-			_vParticle[i].x = x;
-		}
 		_vParticle[i].gravity = 0.0f;
-		_vParticle[i].speed = RND->getFromFloatTo(5.0f, 10.0f);
+		_vParticle[i].speed = RND->getFromFloatTo(10.0f, 15.0f);
 		_vParticle[i].count = 0;
-		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
-			_vParticle[i].particleImg->getWidth(),
-			_vParticle[i].particleImg->getHeight());
+		if (_isFrameImg)
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+		else
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+
 	}
 }
 
@@ -137,9 +134,11 @@ void effects::activateExplosion(float x, float y)
 		_vParticle[i].y = y;
 		_vParticle[i].speed = 9.0f;
 		_vParticle[i].count = 0;
-		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
-			_vParticle[i].particleImg->getWidth(),
-			_vParticle[i].particleImg->getHeight());
+		if (_isFrameImg)
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+		else
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+
 	}
 }
 void effects::boomExplosion()
@@ -153,9 +152,11 @@ void effects::boomExplosion()
 			_vParticle[i].gravity += 0.07f;
 			_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
 			_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
-			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
-				_vParticle[i].particleImg->getWidth(),
-				_vParticle[i].particleImg->getHeight());
+			if (_isFrameImg)
+				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+			else
+				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+
 
 			_vParticle[i].count++;
 
@@ -187,9 +188,10 @@ void effects::activateParabola(float x, float y, float angle)
 		_vParticle[i].y = y;
 		_vParticle[i].speed = RND->getFromFloatTo(1.0f, 20.0f);
 		_vParticle[i].count = 0;
-		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
-			_vParticle[i].particleImg->getFrameWidth(),
-			_vParticle[i].particleImg->getFrameHeight());
+		if (_isFrameImg)
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(),	_vParticle[i].particleImg->getFrameHeight());
+		else
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
 	}
 }
 
@@ -203,9 +205,11 @@ void effects::boomParabola()
 		_vParticle[i].gravity += 0.55f;
 		_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
 		_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
-		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
-			_vParticle[i].particleImg->getFrameWidth(),
-			_vParticle[i].particleImg->getFrameHeight());
+		if (_isFrameImg)
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+		else
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+
 
 		_vParticle[i].count++;
 

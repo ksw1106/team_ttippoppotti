@@ -3,12 +3,19 @@
 enum OBJECT_TYPE
 {
 	SKULL,
-	SPIKE,
+	SKULL_POLE,
+	SKULL_CONTAINER,
+	PRISONER,
+	WOODBOX,
+	BOTTLEGREEN,
+	BOTTLEGRAY,
+	BOTTLEBROWN,
+	TRUCK,
+	HUMAN_DEAD,
 	HELICOPTER,
 	BOX,
-	CAGE,
-	DRUM,
-	FLAG,
+	SPIKE,
+	FLAG
 };
 
 enum OBJECT_STATE
@@ -23,6 +30,8 @@ class objectA
 {
 protected:
 	OBJECT_TYPE _type;
+	OBJECT_STATE _state;
+	image* _objectImg[3];
 	float _x, _y;
 	float _speed;
 	float _angle;

@@ -48,6 +48,9 @@
     <Filter Include="MainGame\브로포스\enemy">
       <UniqueIdentifier>{1fb547e2-d20e-4827-801a-6ee0804500b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameFramework2D\오브젝트">
+      <UniqueIdentifier>{3e5abcbd-083a-41b9-8265-b68d87045c36}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commonMacroFunction.h">
@@ -156,7 +159,7 @@
       <Filter>GameFramework2D\매니져</Filter>
     </ClInclude>
     <ClInclude Include="objectA.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>GameFramework2D\오브젝트</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -235,9 +238,6 @@
     <ClCompile Include="testScene_kmy.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Kim_Sang_Won_addResource.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="mapData.cpp">
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
@@ -272,6 +272,9 @@
       <Filter>GameFramework2D\매니져</Filter>
     </ClCompile>
     <ClCompile Include="objectA.cpp">
+      <Filter>GameFramework2D\오브젝트</Filter>
+    </ClCompile>
+    <ClCompile Include="Kim_Sang_Won_addResource.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

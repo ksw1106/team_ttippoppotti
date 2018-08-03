@@ -316,10 +316,10 @@ void eBullet::render(void)
 
 void eBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 {
+	++_bulletCount;
 	//총알 벡터에 담는것을 제한하자
 	if (_bulletMax < _vEBullet.size() + 1) return;
 
-	++_bulletCount;
 	if (_bulletCount % fireSpeed != 0) return;
 
 	tagBullet ebullet;
@@ -481,6 +481,7 @@ void pBullet::move()
 	
 	}
 }
+
 // 총알제거
 void pBullet::removeBullet(int index)
 {

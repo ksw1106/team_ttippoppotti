@@ -8,6 +8,7 @@ class objectManager : public singletonBase<objectManager>
 {
 	mapData* _mapData;
 	vector<objectA> _vObject;
+
 public:
 	void setMapData(mapData* mapData) { _mapData = mapData;	}
 	//오브젝트매니져 초기화

@@ -98,6 +98,7 @@ image * imageManager::addFrameImage(string strKey, const char * fileName, int wi
 	img = new image;
 	if (FAILED(img->init(fileName, width, height, frameX, frameY, isTrans, transColor)))
 	{
+		cout << fileName;
 		SAFE_DELETE(img);
 		return NULL;
 	}
