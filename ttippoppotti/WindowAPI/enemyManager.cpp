@@ -8,18 +8,13 @@ HRESULT enemyManager::init(void)
 	// 플레이어매니저 클래스 가져오기
 	this->setPlayerManager(_playerManager);
 	// 맵데이터 가져오기
-	this->setMapData(_mapData);
-	
-	//알람 이미지 초기화
-	IMAGEMANAGER->addFrameImage("알람", "enemyImage/ExclamationMark.bmp", 1020, 60, 17, 1);
-	//의문 이미지 초기화
-	IMAGEMANAGER->addFrameImage("의문", "enemyImage/QuestionMark.bmp", 960, 60, 16, 1);
+	this->setMapData(_mapData);	
 
 	//에너미 클래스 객체 생성 및 초기화
-	this->setSoldier(3600, 1210, 1);
-	this->setSoldier(3700, 1410, 2);
-	this->setSoldier(3500, 1620, 3);
-	this->setSoldier(3400, 2160, 4);
+	this->setSoldier(3600, 1210);
+	this->setSoldier(3700, 1410);
+	this->setSoldier(3500, 1620);
+	this->setSoldier(3400, 2160);
 	//this->setBrovil(3700, 1000, 5);
 		
 	_eBullet = new eBullet;
@@ -42,14 +37,20 @@ void enemyManager::update(void)
 		// 총알발사
 		if (_vSoldier[i]->getIsFire())
 		{
-			_eBullet->fire(_vSoldier[i]->getX() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameWidth()/2,
-				getVEnemy()[i]->getY() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameHeight() / 2,
-				10, getVEnemy()[i]->getDirection());
-		}			
+			// 왼쪽이면
+			if (_vSoldier[i]->getDirection())
+				_eBullet->fire(_vSoldier[i]->getX() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameWidth() - _vSoldier[i]->getEnemyArmImage(_vSoldier[i]->getArmStatus())->getFrameWidth(),
+					getVEnemy()[i]->getY() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameHeight() / 2,
+					200, getVEnemy()[i]->getDirection());
+			// 오른쪽이면
+			else
+				_eBullet->fire(_vSoldier[i]->getX() + _vSoldier[i]->getEnemyArmImage(_vSoldier[i]->getArmStatus())->getFrameWidth(),
+					getVEnemy()[i]->getY() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameHeight() / 2,
+					200, getVEnemy()[i]->getDirection());
+		}	
+	}			
+	_eBullet->update();			
 	
-		_eBullet->update();			
-	}		
-
 	this->collision();
 	this->collideWithPBullet();		// 플레이어 총알과 충돌
 	//this->enemyDie();				// 적 죽음
@@ -77,16 +78,15 @@ void enemyManager::collision()
 {	
 	// 충돌처리(플레이어) vs 적 시야
 	RECT rc;
-	RECT rcPlayer = _playerManager->getPlayer()->getImage(_playerManager->getPlayer()->getState())->boudingBoxWithFrame();
+	RECT rcPlayer = RectMake(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(),
+		_playerManager->getPlayer()->getImage(_playerManager->getPlayer()->getState())->getFrameWidth(), _playerManager->getPlayer()->getImage(_playerManager->getPlayer()->getState())->getFrameHeight());
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
 		if (IntersectRect(&rc, &_vSoldier[i]->getRcEnemySight(), &rcPlayer))
 		{
 			// 말풍선 띄우기
 			_vSoldier[i]->setIsUncovered(true);
-			
-			// 적 상태 변경 ( 경고 )
-			//_vSoldier[i]->setBodyStatus(ENEMY_DOUBT);				
+						
 		}
 	}
 
@@ -148,20 +148,16 @@ void enemyManager::enemyDie()
 {
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
-		if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
-		{
-			_vSoldier[i]->setBodyStatus(ENEMY_DEAD);
-			//_vSoldier[i].
-		}
+		
 	}	
 }
 
 //=====================================================================================================================================================================================
 
-void enemyManager::setSoldier(int x, int y, int randomNum)
+void enemyManager::setSoldier(int x, int y)
 {
 	enemy* _soldier = new soldier;
-	_soldier->initSoldier(x, y, 100, randomNum);
+	_soldier->initSoldier(x, y);
 	_vSoldier.push_back(_soldier);
 }
 
