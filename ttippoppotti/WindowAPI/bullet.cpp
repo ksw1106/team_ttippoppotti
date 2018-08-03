@@ -394,6 +394,17 @@ void eBullet::removeBullet(int index)
 HRESULT pBullet::init(float range)
 {
 	_range = range;
+	for (int i = 0; i < 100; i++)
+	{
+		tagBullet pBullet;
+		ZeroMemory(&pBullet, sizeof(tagBullet));
+		pBullet.bulletImage = new image;
+		pBullet.bulletImage->init("player_ramBro/rambro_bullet.bmp", 50, 40, 1, 1, true, RGB(255, 0, 255));
+		
+		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
+		_vBullet.push_back(pBullet);
+	}
+	
 
 	return S_OK;
 };
@@ -409,10 +420,12 @@ void pBullet::render(void)
 {
 	for (int i = 0; i < _vBullet.size(); ++i)
 	{
-		
-		_vBullet[i].bulletImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
-			_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
-			_vBullet[i].bulletImage->getFrameX(), _vBullet[i].bulletImage->getFrameY());
+		if (_vBullet[i].isActived == true)
+		{
+			_vBullet[i].bulletImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
+				_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
+				_vBullet[i].bulletImage->getFrameX(), _vBullet[i].bulletImage->getFrameY());
+		}
 	}
 };
 
@@ -421,52 +434,51 @@ void pBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 {
 	//if (_bulletMax < _vBullet.size() + 1)return;
 
-	tagBullet pBullet;
-	ZeroMemory(&pBullet, sizeof(tagBullet));
-	pBullet.bulletImage = new image;
-	pBullet.bulletImage->init("player_ramBro/rambro_bullet.bmp", 50, 40, 1, 1, true, RGB(255, 0, 255));
-	pBullet.speed = fireSpeed;
-	pBullet.isLeft = isLeft;
-	pBullet.x = pBullet.fireX = x;
-	pBullet.y = pBullet.fireY = y;
-	pBullet.rc = RectMakeCenter(pBullet.x, pBullet.y, 
-		pBullet.bulletImage->getFrameWidth(), 
-		pBullet.bulletImage->getFrameHeight());
+	
+	for (int i = 0; i < _vBullet.size(); i++)
+	{
+		if (_vBullet[i].isActived)continue;
+		_vBullet[i].isActived = true;
+		_vBullet[i].speed = fireSpeed;
+		_vBullet[i].isLeft = isLeft;
+		_vBullet[i].x = _vBullet[i].fireX = x;
+		_vBullet[i].y = _vBullet[i].fireY = y;
+		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
+			_vBullet[i].bulletImage->getFrameWidth(),
+			_vBullet[i].bulletImage->getFrameHeight());
 
-	// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
-	_vBullet.push_back(pBullet);
+		break;
+	}
 }
 // ÃÑ¾Ë ¹«ºê
 void pBullet::move()
 {
-	for (int i = 0; i < _vBullet.size();)
+	for (int i = 0; i < _vBullet.size(); ++i)
 	{
-		if (_vBullet[i].isLeft)
+		if (_vBullet[i].isActived)
 		{
-			_vBullet[i].x -= _vBullet[i].speed;
-			_vBullet[i].angle = PI;
-		}
-		if (!_vBullet[i].isLeft)
-		{
-			_vBullet[i].x += _vBullet[i].speed;
-			_vBullet[i].angle = 0.f;
-		}
+			if (_vBullet[i].isLeft)
+			{
+				_vBullet[i].x -= _vBullet[i].speed;
+				_vBullet[i].angle = PI;
+			}
+			if (!_vBullet[i].isLeft)
+			{
+				_vBullet[i].x += _vBullet[i].speed;
+				_vBullet[i].angle = 0.f;
+			}
 
-		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y, 
-			_vBullet[i].bulletImage->getFrameWidth(), 
-			_vBullet[i].bulletImage->getFrameHeight());
-
-		float distance = getDistance(_vBullet[i].x, _vBullet[i].y, _vBullet[i].fireX, _vBullet[i].fireY);
-		if (distance > _range)
-		{
-			_vBullet[i].bulletImage->release();
-			SAFE_DELETE(_vBullet[i].bulletImage);
-			_vBullet.erase(_vBullet.begin() + i);
+			_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
+				_vBullet[i].bulletImage->getFrameWidth(),
+				_vBullet[i].bulletImage->getFrameHeight());	
+			float distance = getDistance(_vBullet[i].x, _vBullet[i].y, _vBullet[i].fireX, _vBullet[i].fireY);
+			
+			if (distance > _range)
+			{
+				_vBullet[i].isActived = false;
+			}
 		}
-		else
-		{
-			++i;
-		}
+	
 	}
 }
 // ÃÑ¾ËÁ¦°Å

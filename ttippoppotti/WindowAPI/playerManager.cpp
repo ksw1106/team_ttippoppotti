@@ -74,7 +74,6 @@ void playerManager::update(void)
 			}
 			EFFECTMANAGER->cartridge(_player->getX(), _player->getY(), _player->getIsLeft());
 		}
-
 	}
 	_pBullet->update();
 
@@ -89,10 +88,6 @@ void playerManager::update(void)
 		{
 			_player->setState(KNIFE);
 		}
-		//_player->setIsLeft(false);
-
-		//_player->setIsLeft(false);
-		//_player->setState(KNIFE);
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_UP) && !_player->getIsJump())
@@ -103,6 +98,10 @@ void playerManager::update(void)
 		_player->setIsJump(true);
 		hit_left = false;
 		hit_right = false;
+		if (_player->getState() == HANG_FRONT_HOLD || _player->getState() == HANG_BACK_HOLD)
+		{
+			_player->setJumpSpeed(10.f);
+		}
 	}
 
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || (KEYMANAGER->isOnceKeyUp('C')))
@@ -229,6 +228,39 @@ void playerManager::update(void)
 	{
 		_player->setState(HANG_FRONT_HOLD);
 	}
+
+	/*
+	if («»ºø√Êµπ) √—æÀ - «»ºø∏ 
+	for (√—æÀ∫§≈Õ)
+	false ¿Œ æ÷µÈ continue
+	for (∏ ∫§≈Õ)
+	if (∑∫∆Æ√Êµπ) √—æÀ - ∏ 
+	√—æÀ isActived false∑Œ πŸ≤Ÿ∞Ì
+	∏  deleteMap(i) ¿Œ∞° Ω·¡÷∞Ì
+	*/
+
+	for (int i = 0; i < _pBullet->getVPlayerBullet().size(); i++)  // √—æÀ¿Ã∂˚ ∫Æ¿Ã∂˚ √Êµπ«œ∏È ∫Æ ¡ˆøˆ¡÷±‚
+	{
+		if (COLLISIONMANAGER->pixelCollision(_pBullet->getVPlayerBullet()[i].rc, _pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y, _pBullet->getVPlayerBullet()[i].speed, 0, PLAYER_LEFT))
+		{
+			for (int j = 0; j < _mapData->getObject().size(); j++)
+			{
+				if (!_pBullet->getVPlayerBullet()[i].isActived)continue;
+				if (!_mapData->getObject()[j]._isActived)continue;
+				if (IntersectRect(&temp, &_mapData->getObject()[j]._rc, &_pBullet->getVPlayerBullet()[i].rc))
+				{
+					_pBullet->getVPlayerBullet()[i].isActived = false;
+					_mapData->deleteMap(j);
+				}
+			}
+		}
+	}
+
+	
+	_player->setX(tempX);
+	_player->setY(tempY);
+
+	this->collision();
 	//else if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), 0, PLAYER_RIGHT))				// ø¿∏•¬ ∫Æ
 	//{
 	//	hit_right = true;
@@ -258,17 +290,8 @@ void playerManager::update(void)
 	//		_player->setState(IDLE);
 	//	}
 	//}
-	
-	_player->setX(tempX);
-	_player->setY(tempY);
-	
-	this->collision();
+
 	/*
-=======
-	
-	
-	
->>>>>>> 8e49a64b929487f1961c5ed9cb1bab871395c713
 	for (int i = 0; i < _mapData->getObject().size(); i++)
 	{
 		count++;
@@ -393,20 +416,22 @@ void playerManager::render(void)
 
 void playerManager::collision()
 {
-	//for (int i = 0; i < _enemyManager->getVEnemy().size();++i)
-	//{
-	//	for (int j = 0; j < getPBullet()->getVPlayerBullet().size(); ++j)
-	//	{
-	//		RECT rcEnemy = _enemyManager->getVEnemy()[i]->getEnemyBodyImage(_enemyManager->getVEnemy()[i]->getBodyStatus())->boudingBoxWithFrame();
-	//		RECT rcTemp;
-	//		if (IntersectRect(&rcTemp, &rcEnemy, &_pBullet->getVPlayerBullet()[j].rc))
-	//		{
-	//			getPBullet()->getVPlayerBullet()[j].bulletImage->release();
-	//			SAFE_DELETE(getPBullet()->getVPlayerBullet()[j].bulletImage);
-	//			getPBullet()->removeBullet(j);
-	//		}
-	//	}	
-	//}
+	for (int i = 0; i < _enemyManager->getVEnemy().size();++i)
+	{
+		for (int j = 0; j < getPBullet()->getVPlayerBullet().size(); ++j)
+		{
+			RECT rcTemp;
+			RECT rcEnemy = _enemyManager->getVEnemy()[i]->getRcEnemy();
+			if (IntersectRect(&rcTemp, &rcEnemy, &_pBullet->getVPlayerBullet()[j].rc))
+			{
+				if (_pBullet->getVPlayerBullet()[j].isActived == true)
+				{
+					_pBullet->getVPlayerBullet()[j].isActived = false;
+					break;
+				}
+			}
+		}	
+	}
 }
 
 playerManager::playerManager()

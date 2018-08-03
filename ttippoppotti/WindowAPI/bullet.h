@@ -12,6 +12,7 @@ struct tagBullet
 	float angle;
 	float gravity;
 	float radius;
+	bool isActived;
 	bool fire;
 	bool isLeft;
 	int count;
@@ -183,7 +184,7 @@ public:
 	// ÃÑ¾ËÁ¦°Å
 	void removeBullet(int index);
 	// ÃÑ¾Ëº¤ÅÍ °¡Á®¿À±â
-	vector<tagBullet> getVPlayerBullet() { return _vBullet; }
+	vector<tagBullet>& getVPlayerBullet() { return _vBullet; }
 
 	pBullet() {}
 	~pBullet() {}
