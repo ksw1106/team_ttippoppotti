@@ -1,5 +1,7 @@
 #pragma once
 
+class skull;
+
 enum OBJECT_TYPE
 {
 	SKULL,
@@ -11,7 +13,7 @@ enum OBJECT_TYPE
 	BOTTLEGRAY,
 	BOTTLEBROWN,
 	TRUCK,
-	HUMAN_DEAD,
+	HUMAN_DEAD, //이거랑 스파이크는 세트로 다시 따는게?ㅎㅎㅎ
 	HELICOPTER,
 	BOX,
 	SPIKE,
@@ -41,10 +43,15 @@ protected:
 	int _animationSpeed;
 	bool _isLeft;
 	bool _isFrameImage;
-
 public:
+	OBJECT_TYPE getType() { return _type; }
+	OBJECT_STATE getState() { return _state; }
+
+	void setState(OBJECT_STATE state) { _state = state; }
+
 	virtual void init() = 0;
 	virtual void update();
+	virtual void render();
 	virtual void idle() = 0;
 	virtual void move() = 0;
 };
@@ -55,17 +62,9 @@ public:
 //타겟은 자신의 소환지점 아래 좌표를 PtInRect로 계속 보면될듯?
 
 //프레임 이미지가 아니라 이미지 한장
-class spike : public objectA
-{
-private:
-	image* _humanDeadImage;
-	image* _spikeImage;
-private:
-	void init();
-	void idle();
-	void move();
 
+class objectFactory
+{
 public:
-	image * getHumanDeadImage() { return _humanDeadImage; }
-	image* getSpikeImage() { return _spikeImage; }
+	objectA* createObject(OBJECT_TYPE type);
 };
