@@ -188,10 +188,33 @@ public:
 
 	pBullet() {}
 	~pBullet() {}
-
-
-
 };
+//=============================================================
+//	## pGrenade  ## (플레이어 수류탄)
+//=============================================================
+class pGrenade : public gameNode
+{
+private:
+	vector<tagBullet> _vBullet;
 
+private:
+	float _range;
+	int _grenadeMax;
 
+public:
+
+	HRESULT init(float range);
+	void release(void);
+	void update(void);
+	void render(void);
+
+	void fire(int x, int y, int fireSpeed, bool isLeft);
+
+	void move();
+
+	vector<tagBullet>& getVPlayerGrenade() { return _vBullet; }
+
+	pGrenade() {}
+	~pGrenade() {}
+};
 

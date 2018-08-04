@@ -90,6 +90,18 @@ void playerManager::update(void)
 		}
 	}
 
+	if (KEYMANAGER->isOnceKeyDown('X'))
+	{
+		if (_player->getIsLeft() == false)
+		{
+			_pGrenade->fire(_player->getX() + 60, _player->getY() + 38, 20, _player->getIsLeft());
+		}
+		if (_player->getIsLeft() == true)
+		{
+			_pGrenade->fire(_player->getX(), _player->getY() + 38, 20, _player->getIsLeft());
+		}
+	}
+	//_pGrenade->update();
 	if (KEYMANAGER->isOnceKeyDown(VK_UP) && !_player->getIsJump())
 	{
 		_player->setState(JUMP);
@@ -241,7 +253,7 @@ void playerManager::update(void)
 
 	for (int i = 0; i < _pBullet->getVPlayerBullet().size(); i++)  // 총알이랑 벽이랑 충돌하면 벽 지워주기
 	{
-		if (COLLISIONMANAGER->pixelCollision(_pBullet->getVPlayerBullet()[i].rc, _pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y, _pBullet->getVPlayerBullet()[i].speed, 0, PLAYER_LEFT))
+		if (COLLISIONMANAGER->pixelCollision(_pBullet->getVPlayerBullet()[i].rc, _pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y, _pBullet->getVPlayerBullet()[i].speed, _pBullet->getVPlayerBullet()[i].gravity, PLAYER_LEFT))
 		{
 			for (int j = 0; j < _mapData->getObject().size(); j++)
 			{
@@ -256,19 +268,36 @@ void playerManager::update(void)
 		}
 	}
 
-	for (int i = 0; i < _enemyManager->getEBullet()->getVEnemybullet().size(); i++)
-	{
-		if (IntersectRect(&temp, &rcPlayer, &_enemyManager->getEBullet()->getVEnemybullet()[i].rc))
-		{
-			_player->setState(DIE);
-		}
-	}
+	//for (int i = 0; i < _pGrenade->getVPlayerGrenade().size(); i++)
+	//{
+	//	if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc, _pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y, _pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_LEFT))
+	//	{
+	//		for (int j = 0; j < _mapData->getObject().size(); j++)
+	//		{
+	//			if (!_pGrenade->getVPlayerGrenade()[i].isActived)continue;
+	//			if (!_mapData->getObject()[j]._isActived)continue;
+	//			if (IntersectRect(&temp, &_mapData->getObject()[j]._rc, &_pGrenade->getVPlayerGrenade()[i].rc))
+	//			{
+	//				_pGrenade->getVPlayerGrenade()[i].isActived = false;
+	//				_mapData->deleteMap(j);
+	//			}
+	//		}
+	//	}
+	//}
+	//for (int i = 0; i < _enemyManager->getEBullet()->getVEnemybullet().size(); i++) // 죽는거 나중에 상원이 한테 물어보고
+	//{
+	//	if (IntersectRect(&temp, &rcPlayer, &_enemyManager->getEBullet()->getVEnemybullet()[i].rc))
+	//	{
+	//		_player->setState(DIE);
+	//	}
+	//}
 	
 	_player->setX(tempX);
 	_player->setY(tempY);
 
 	this->collision();
 	this->rambroDie();
+	
 	//else if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), 0, PLAYER_RIGHT))				// 오른쪽벽
 	//{
 	//	hit_right = true;
