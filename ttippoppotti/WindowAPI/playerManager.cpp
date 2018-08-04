@@ -256,11 +256,19 @@ void playerManager::update(void)
 		}
 	}
 
+	for (int i = 0; i < _enemyManager->getEBullet()->getVEnemybullet().size(); i++)
+	{
+		if (IntersectRect(&temp, &rcPlayer, &_enemyManager->getEBullet()->getVEnemybullet()[i].rc))
+		{
+			_player->setState(DIE);
+		}
+	}
 	
 	_player->setX(tempX);
 	_player->setY(tempY);
 
 	this->collision();
+	this->rambroDie();
 	//else if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), 0, PLAYER_RIGHT))				// 오른쪽벽
 	//{
 	//	hit_right = true;
@@ -412,6 +420,16 @@ void playerManager::render(void)
 	}
 
 	RectangleMake(getMemDC(), rc.left, rc.top, rc.left + (rc.right-rc.left)/2, rc.top + (rc.bottom - rc.top) / 2);
+}
+
+void playerManager::rambroDie()
+{
+	//float tempX = _player->getX();
+	//float tempY = _player->getY();
+	//RECT rcPlayer;
+	//rcPlayer = RectMake(tempX, tempY, 60, 80);
+	//RECT rcPlayer;
+	//rcPlayer = RectMake(_player->getX(), _player->getY(), _player->getImage()->getFrameWidth(), _player->getImage()->getFrameHeight());
 }
 
 void playerManager::collision()

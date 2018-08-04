@@ -40,6 +40,7 @@ public:
 	void update(void);
 	void render(void);
 
+	void rambroDie();
 	void collision();
 
 	playerManager();

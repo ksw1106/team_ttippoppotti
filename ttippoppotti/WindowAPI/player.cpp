@@ -11,6 +11,7 @@ HRESULT player::init(void)
 	_ramBro[HANG_FRONT_HOLD] = IMAGEMANAGER->findImage("broforce_hang_forntHold");
 	_ramBro[HANG_BACK_HOLD] = IMAGEMANAGER->findImage("broforce_hang_backHold");
 	_ramBro[KNIFE] = IMAGEMANAGER->findImage("broforce_knife");
+	_ramBro[DIE] = IMAGEMANAGER->findImage("broforce_die");
 	//_ramBro[ROLL] = IMAGEMANAGER->addFrameImage("broforce_roll", "broforce_roll.bmp", 936, 136, 13, 2, true, RGB(255, 0, 255));
 
 	_state = IDLE;

@@ -2,13 +2,13 @@
 #include "gameNode.h"
 #include "bullet.h"  //미사일클래스 사용하기 위해
 
-#define MAX_STATE 6
+#define MAX_STATE 7
 
 enum STATE
 {
 	IDLE, RUN, JUMP, 
 	HANG_FRONT_HOLD, HANG_BACK_HOLD,
-	KNIFE,
+	KNIFE, DIE,
 	FAST_RUN, ROLL
 };
 
