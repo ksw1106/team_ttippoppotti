@@ -18,27 +18,31 @@ HRESULT objectManager::init()
 
 	OBJECT_TYPE type;
 
-	for (int i = 0; i < 6; i++)
-	{
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_fPos[i].x, _fPos[i].y);
-		//좌표 넣어야함 오브젝트에
-
-		type = (OBJECT_TYPE)RND->getFromIntTo(0, 6);
-		
-		_vObject.push_back(object);
-	}
+	//_fPos[0].x = RND->getFromIntTo(), _fPos[0].y = ;
+	//_fPos[1].x = , _fPos[1].y = ;
+	//_fPos[2].x = , _fPos[2].y = ;
+	//_fPos[3].x = , _fPos[3].y = ;
+	//_fPos[4].x = , _fPos[4].y = ;
+	//_fPos[5].x = , _fPos[5].y = ;
+	//for (int i = 0; i < 6; i++)
+	//{
+	//	type = (OBJECT_TYPE)RND->getFromIntTo(0, 6);
+	//
+	//	objectA* object = _factory->createObject(type);
+	//	object->setPosition(_fPos[i].x, _fPos[i].y);
+	//	
+	//	_vObject.push_back(object);
+	//}
 
 	_prisonerPos[0].x = 3280, _prisonerPos[0].y = 1558;
 	_prisonerPos[1].x = 3686, _prisonerPos[1].y = 2099;
 	for (int i = 0; i < 2; i++)
 	{
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_prisonerPos[i].x, _prisonerPos[i].y);
-		//좌표 넣어야함 오브젝트에
-
 		type = PRISONER;
 
+		objectA* object = _factory->createObject(type);
+		object->setPosition(_prisonerPos[i].x, _prisonerPos[i].y);
+		
 		_vObject.push_back(object);
 	}
 
@@ -58,36 +62,33 @@ HRESULT objectManager::init()
 	_boxPos[13].x = 3888, _boxPos[13].y = 1626;
 	for (int i = 0; i < 14; i++)
 	{
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_boxPos[i].x, _boxPos[i].y);
-		//좌표 넣어야함 오브젝트에
-
 		type = WOODENBOX;
 
+		objectA* object = _factory->createObject(type);
+		object->setPosition(_boxPos[i].x, _boxPos[i].y);
+		
 		_vObject.push_back(object);
 	}
 
 	_drumRedPos[0].x = 3009, _drumRedPos[0].y = 1422;
 	for (int i = 0; i < 1; i++)
 	{
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_drumRedPos[i].x, _drumRedPos[i].y);
-		//좌표 넣어야함 오브젝트에
-
 		type = SKULL_DRUMRED;
 
+		objectA* object = _factory->createObject(type);
+		object->setPosition(_drumRedPos[i].x, _drumRedPos[i].y);
+		
 		_vObject.push_back(object);
 	}
 
 	_drumGrayPos[0].x = 2941, _drumGrayPos[0].y = 1220;
 	for (int i = 0; i < 1; i++)
 	{
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_drumGrayPos[i].x, _drumGrayPos[i].y);
-		//좌표 넣어야함 오브젝트에
-
 		type = SKULL_DRUMGRAY;
 
+		objectA* object = _factory->createObject(type);
+		object->setPosition(_drumGrayPos[i].x, _drumGrayPos[i].y);
+		
 		_vObject.push_back(object);
 	}
 
@@ -118,8 +119,7 @@ void objectManager::render(HDC hdc)
 	for (int i = 0; i < _vObject.size(); i++)
 	{
 		if (OBJECT_DESTROY == _vObject[i]->getState()) continue;
-
-		_vObject[i]->render();
+		_vObject[i]->render(hdc);
 	}
 
 }

@@ -14,8 +14,8 @@ HRESULT effectManager::init(void)
 	addEffect("bloodSplash7", "blood_still7", 10, 10);
 	addEffect("bloodSplash8", "blood_still8", 10, 10);
 
-	addEffect("rock2", "rock_big2", 10, 10);
 	addEffect("rock1", "rock_big1", 10, 10);
+	addEffect("rock2", "rock_big2", 10, 10);
 	addEffect("rock3", "rock_sml1", 10, 10);
 	addEffect("rock4", "rock_sml2", 10, 10);
 	addEffect("rock5", "rock_sml3", 10, 10);

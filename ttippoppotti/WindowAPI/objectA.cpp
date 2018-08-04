@@ -6,21 +6,26 @@ void objectA::update()
 	switch (_state)
 	{
 	case OBJECT_IDLE:
+		idle();
 		break;
 	case OBJECT_MOVE:
+		move();
 		break;
 	case OBJECT_DESTROY:
 		break;
 	}
+	if(_isFrameImage)
+		FRAMEMANAGER->frameChange(_image[_state], _count, _index, _animationSpeed, _isLeft);
 }
-
-void objectA::render()
+void objectA::render(HDC hdc)
 {
 	switch (_state)
 	{
 	case OBJECT_IDLE:
+		_image[OBJECT_IDLE]->frameRender(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
 		break;
 	case OBJECT_MOVE:
+		_image[OBJECT_MOVE]->frameRender(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
 		break;
 	case OBJECT_DESTROY:
 		break;
@@ -29,21 +34,17 @@ void objectA::render()
 
 void deadBody::init()
 {
-	_deadBodyImage = IMAGEMANAGER->findImage("human_dead");
-	/*_humanDeadImage = new image;
-	_humanDeadImage->init("human_dead.bmp", 1404, 125, 13, 1);
-	_spikeImage = new image;
-	_spikeImage->init("spike.bmp", 3795.f, 976.f, 15, 108, true, RGB(255, 0, 255));*/
-	//임시 - 나중에 소환지점 싹 다 저장한후 랜덤으로 뭐 소환할지 선택해서 만들면 된다
-	_x = 3754.f;
-	_y = 995.f;
-
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("human_dead");
+	_count = _index = 0;
+	_animationSpeed = 3;
+	_isFrameImage = true;
+	_isLeft = false;
+	_state = OBJECT_IDLE;
 }
 
 void deadBody::idle()
 {
-
-
 }
 
 void deadBody::move()
@@ -52,9 +53,10 @@ void deadBody::move()
 
 void skull::init()
 {
-	_skullImage = IMAGEMANAGER->findImage("skull");
-	//_skullImage->setX();
-	//_skullImage->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("skull");
+	_isFrameImage = false;
+	_state = OBJECT_IDLE;
 }
 
 void skull::idle()
@@ -67,9 +69,10 @@ void skull::move()
 
 void skullPole::init()
 {
-	_skullPoleImage = IMAGEMANAGER->findImage("skullPole");
-	//_skullPoleImage->setX();
-	//_skullPoleImage->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("skullPole");
+	_isFrameImage = false;
+	_state = OBJECT_IDLE;
 }
 
 void skullPole::idle()
@@ -82,9 +85,10 @@ void skullPole::move()
 
 void doubleSkullPole::init()
 {
-	_doubleSkullPoleImage = IMAGEMANAGER->findImage("doubleSkullPole");
-	//_doubleSkullPoleImage->setX();
-	//_doubleSkullPoleImage->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("doubleSkullPole");
+	_isFrameImage = false;
+	_state = OBJECT_IDLE;
 }
 
 void doubleSkullPole::idle()
@@ -97,9 +101,10 @@ void doubleSkullPole::move()
 
 void skullDrumRed::init()
 {
-	_skullDrumRedImage = IMAGEMANAGER->findImage("skullDrumRed");
-	//_skullDrumImage->setX();
-	//_skullDrumImage->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("skullDrumRed");
+	_isFrameImage = false;
+	_state = OBJECT_IDLE;
 }
 
 void skullDrumRed::idle()
@@ -112,9 +117,10 @@ void skullDrumRed::move()
 
 void skullDrumGray::init()
 {
-	_skullDrumGrayImage = IMAGEMANAGER->findImage("skullDrumGray");
-	//_skullDrumImage->setX();
-	//_skullDrumImage->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("skullDrumGray");
+	_isFrameImage = false;
+	_state = OBJECT_IDLE;
 }
 
 void skullDrumGray::idle()
@@ -127,12 +133,11 @@ void skullDrumGray::move()
 
 void prisoner::init()
 {
-	_prisonerImage[OBJECT_IDLE] = IMAGEMANAGER->findImage("prisoner_inJail");
-	_prisonerImage[OBJECT_MOVE] = IMAGEMANAGER->findImage("prisoner_freed");
-	//_prisonerImage[OBJECT_IDLE]->setX();
-	//_prisonerImage[OBJECT_IDLE]->setY();
-	//_prisonerImage[OBJECT_MOVE]->setX();
-	//_prisonerImage[OBJECT_MOVE]->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("prisoner_inJail");
+	_prisonerFreedImage = IMAGEMANAGER->findImage("prisoner_freed");
+	_isFrameImage = false;
+	_state = OBJECT_IDLE;
 }
 
 void prisoner::idle()
@@ -145,9 +150,10 @@ void prisoner::move()
 
 void woodenBox::init()
 {
-	_woodenBoxImage = IMAGEMANAGER->findImage("woodenBox");
-	//_woodenBoxImage->setX();
-	//_woodenBoxImage->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("woodenBox");
+	_isFrameImage = false;
+	_state = OBJECT_IDLE;
 }
 
 void woodenBox::idle()
@@ -160,9 +166,10 @@ void woodenBox::move()
 
 void bottleGreen::init()
 {
-	_bottleGreenImage = IMAGEMANAGER->findImage("bottle_green");
-	//_bottleGreenImage->setX();
-	//_bottleGreenImage->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("bottle_green");
+	_isFrameImage = false;
+	_state = OBJECT_IDLE;
 }
 
 void bottleGreen::idle()
@@ -175,9 +182,10 @@ void bottleGreen::move()
 
 void bottleGray::init()
 {
-	_bottleGrayImage = IMAGEMANAGER->findImage("bottle_gray");
-	//_bottleGrayImage->setX();
-	//_bottleGrayImage->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("bottle_gray");
+	_isFrameImage = false;
+	_state = OBJECT_IDLE;
 }
 
 void bottleGray::idle()
@@ -190,9 +198,10 @@ void bottleGray::move()
 
 void bottleBrown::init()
 {
-	_bottleBrownImage = IMAGEMANAGER->findImage("bottle_brown");
-	//_bottleBrownImage->setX();
-	//_bottleBrownImage->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("bottle_brown");
+	_isFrameImage = false;
+	_state = OBJECT_IDLE;
 }
 
 void bottleBrown::idle()
@@ -205,24 +214,41 @@ void bottleBrown::move()
 
 void truck::init()
 {
-	_truckImage = IMAGEMANAGER->findImage("truck");
-	//_truckImage->setX();
-	//_truckImage->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("truck");
+	_count = _index = 0;
+	_animationSpeed = 3;
+	_isFrameImage = true;
+	_isLeft = false;
+	_state = OBJECT_IDLE;
+	_oldX = _x;
+	_oldY = _y;
+	_x = -_image[_state]->getFrameWidth();
 }
 
 void truck::idle()
 {
+	_isFrameImage = true;
+	_x += 3.0f;
+	if (_oldX <= _x)
+		_x = _oldX;
 }
 
 void truck::move()
 {
+	//_isFrameImage = false;
+	//_image[_state]->setFrameX(_image[_state]->getMaxFrameX());
 }
 
 void helicopter::init()
 {
-	_helicopterImage = IMAGEMANAGER->findImage("helicopter");
-	//_helicopterImage->setX();
-	//_helicopterImage->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("helicopter");
+	_count = _index = 0;
+	_animationSpeed = 3;
+	_isFrameImage = true;
+	_isLeft = false;
+	_state = OBJECT_IDLE;
 }
 
 void helicopter::idle()
@@ -235,9 +261,16 @@ void helicopter::move()
 
 void americanFlag::init()
 {
-	_americanFlagImage = IMAGEMANAGER->findImage("saveFlag");
-	//_americanFlagImage->setX();
-	//_americanFlagImage->setY();
+	for (int i = 0; i < 3; i++)
+		_image[i] = IMAGEMANAGER->findImage("saveFlag");
+	_count = _index = 0;
+	_animationSpeed = 3;
+	_isFrameImage = true;
+	_isLeft = false;
+	_state = OBJECT_IDLE;
+	_oldX = _x;
+	_oldY = _y;
+	//_y += _image[_state]->getFrameHeight();
 }
 
 void americanFlag::idle()
@@ -250,56 +283,56 @@ void americanFlag::move()
 
 objectA * objectFactory::createObject(OBJECT_TYPE type)
 {
-	objectA* _objectA;
+	objectA* _object;
 	switch (type)
 	{
 	case DEADBODY:
-		_objectA = new deadBody;
+		_object = new deadBody;
 		break;
 	case SKULL:
-		_objectA = new skull;
+		_object = new skull;
 		break;
 	case SKULL_POLE:
-		_objectA = new skullPole;
+		_object = new skullPole;
 		break;
 	case DOUBLESKULL_POLE:
-		_objectA = new doubleSkullPole;
-		break;
-	case SKULL_DRUMRED:
-		_objectA = new skullDrumRed;
-		break;
-	case SKULL_DRUMGRAY:
-		_objectA = new skullDrumGray;
-		break;
-	case PRISONER:
-		_objectA = new prisoner;
-		break;
-	case WOODENBOX:
-		_objectA = new woodenBox;
+		_object = new doubleSkullPole;
 		break;
 	case BOTTLEGREEN:
-		_objectA = new bottleGreen;
+		_object = new bottleGreen;
 		break;
 	case BOTTLEGRAY:
-		_objectA = new bottleGray;
+		_object = new bottleGray;
 		break;
 	case BOTTLEBROWN:
-		_objectA = new bottleBrown;
+		_object = new bottleBrown;
+		break;
+	case PRISONER:
+		_object = new prisoner;
+		break;
+	case WOODENBOX:
+		_object = new woodenBox;
+		break;
+	case SKULL_DRUMRED:
+		_object = new skullDrumRed;
+		break;
+	case SKULL_DRUMGRAY:
+		_object = new skullDrumGray;
 		break;
 	case TRUCK:
-		_objectA = new truck;
+		_object = new truck;
 		break;
 	case HELICOPTER:
-		_objectA = new helicopter;
+		_object = new helicopter;
 		break;
 	case AMERICAN_FLAG:
-		_objectA = new americanFlag;
+		_object = new americanFlag;
 		break;
 	default:
 		//누구냐 넌??
 		break;
 	}
-	_objectA->init();
+	_object->init();
 
-	return _objectA;
+	return _object;
 }
