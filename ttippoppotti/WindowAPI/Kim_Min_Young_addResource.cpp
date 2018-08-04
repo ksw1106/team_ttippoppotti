@@ -41,20 +41,21 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadFrameImage("smoke2", "effectImage/smoke_02.bmp", 480, 32, 15, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("whitePuff", "effectImage/whitePuffPop_01.bmp", 384, 64, 6, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("bulletPuff", "effectImage/bulletPuff_01.bmp", 528, 66, 8, 1, true, RGB(255, 0, 255));
-	
-	_loading->loadImage("skull", "objectImage/skull_01.bmp", 30, 30, true, RGB(255, 0, 255));
-	_loading->loadImage("skullPole", "objectImage/skull_pole_01.bmp", 32, 114, true, RGB(255, 0, 255));
-	_loading->loadImage("doubleSkullPole", "objectImage/doubleSkull_pole_01.bmp", 70, 114, true, RGB(255, 0, 255));
-	_loading->loadImage("skullDrum", "objectImage/skull_drum_red_01.bmp", 101, 108, true, RGB(255, 0, 255));
-	_loading->loadImage("prisoner_InJail", "objectImage/prisoner_inJail_01.bmp", 203, 203, true, RGB(255, 0, 255));
-	_loading->loadImage("prisoner_freed", "objectImage/prisoner_01.bmp", 89, 114, true, RGB(255, 0, 255));
-	_loading->loadImage("woodenBox", "objectImage/woodenBox_01.bmp", 101, 101);
-	_loading->loadImage("bottle_green", "objectImage/bottle_green_01.bmp", 25, 57, true, RGB(255, 0, 255));
-	_loading->loadImage("bottle_gray", "objectImage/bottle_gray_01.bmp", 25, 57, true, RGB(255, 0, 255));
-	_loading->loadImage("bottle_brown", "objectImage/bottle_brown_01.bmp", 45, 63, true, RGB(255, 0, 255));
-	_loading->loadImage("spike", "objectImage/spike.bmp", 15, 108, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("human_dead", "human_dead.bmp", 1404, 125, 13, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("truck", "objectImage/truck_01.bmp", 528, 66, 11, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("p1Bubble", "effectImage/p1_bubble_01.bmp", 1056, 92, 12, 1, true, RGB(255, 0, 255));
+
+	_loading->loadImage("skull", "objectImage/skull_01.bmp", 20, 20, true, RGB(255, 0, 255));
+	_loading->loadImage("skullPole", "objectImage/skull_pole_01.bmp", 23, 77, true, RGB(255, 0, 255));
+	_loading->loadImage("doubleSkullPole", "objectImage/doubleSkull_pole_01.bmp", 47, 77, true, RGB(255, 0, 255));
+	_loading->loadImage("skullDrum_red", "objectImage/skull_drum_red_01.bmp", 68, 68);
+	_loading->loadImage("skullDrum_gray", "objectImage/skull_drum_gray_01.bmp", 68, 68);
+	_loading->loadImage("prisoner_InJail", "objectImage/prisoner_inJail_01.bmp", 136, 136, true, RGB(255, 0, 255));
+	_loading->loadImage("prisoner_freed", "objectImage/prisoner_01.bmp", 136, 136, true, RGB(255, 0, 255));
+	_loading->loadImage("woodenBox", "objectImage/woodenBox_01.bmp", 68, 68);
+	_loading->loadImage("bottle_green", "objectImage/bottle_green_01.bmp", 17, 39, true, RGB(255, 0, 255));
+	_loading->loadImage("bottle_gray", "objectImage/bottle_gray_01.bmp", 17, 39, true, RGB(255, 0, 255));
+	_loading->loadImage("bottle_brown", "objectImage/bottle_brown_01.bmp", 31, 44, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("human_dead", "objectImage/human_dead.bmp", 1404, 165, 13, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("truck", "objectImage/truck_01.bmp", 4262, 231, 11, 1, true, RGB(255, 0, 255));
 }
 
 void loadingScene::Kim_Min_Young_addSound()

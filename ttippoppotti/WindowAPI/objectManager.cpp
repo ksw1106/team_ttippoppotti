@@ -18,14 +18,76 @@ HRESULT objectManager::init()
 
 	OBJECT_TYPE type;
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		objectA* object = _factory->createObject(type);
-
+		object->setPosition(_fPos[i].x, _fPos[i].y);
 		//좌표 넣어야함 오브젝트에
 
-		type = (OBJECT_TYPE)RND->getFromIntTo(0, 1);
+		type = (OBJECT_TYPE)RND->getFromIntTo(0, 6);
 		
+		_vObject.push_back(object);
+	}
+
+	_prisonerPos[0].x = 3280, _prisonerPos[0].y = 1558;
+	_prisonerPos[1].x = 3686, _prisonerPos[1].y = 2099;
+	for (int i = 0; i < 2; i++)
+	{
+		objectA* object = _factory->createObject(type);
+		object->setPosition(_prisonerPos[i].x, _prisonerPos[i].y);
+		//좌표 넣어야함 오브젝트에
+
+		type = PRISONER;
+
+		_vObject.push_back(object);
+	}
+
+	_boxPos[0].x = 2873, _boxPos[0].y = 1220;
+	_boxPos[1].x = 2941, _boxPos[1].y = 1132;
+	_boxPos[2].x = 3009, _boxPos[2].y = 1354;
+	_boxPos[3].x = 3009, _boxPos[3].y = 1557;
+	_boxPos[4].x = 3009, _boxPos[4].y = 1625;
+	_boxPos[5].x = 4024, _boxPos[5].y = 1354;
+	_boxPos[6].x = 3956, _boxPos[6].y = 1422;
+	_boxPos[7].x = 4024, _boxPos[7].y = 1422;
+	_boxPos[8].x = 4024, _boxPos[8].y = 1558;
+	_boxPos[9].x = 4024, _boxPos[9].y = 1626;
+	_boxPos[10].x = 3956, _boxPos[10].y = 1558;
+	_boxPos[11].x = 3956, _boxPos[11].y = 1626;
+	_boxPos[12].x = 3888, _boxPos[12].y = 1558;
+	_boxPos[13].x = 3888, _boxPos[13].y = 1626;
+	for (int i = 0; i < 14; i++)
+	{
+		objectA* object = _factory->createObject(type);
+		object->setPosition(_boxPos[i].x, _boxPos[i].y);
+		//좌표 넣어야함 오브젝트에
+
+		type = WOODENBOX;
+
+		_vObject.push_back(object);
+	}
+
+	_drumRedPos[0].x = 3009, _drumRedPos[0].y = 1422;
+	for (int i = 0; i < 1; i++)
+	{
+		objectA* object = _factory->createObject(type);
+		object->setPosition(_drumRedPos[i].x, _drumRedPos[i].y);
+		//좌표 넣어야함 오브젝트에
+
+		type = SKULL_DRUMRED;
+
+		_vObject.push_back(object);
+	}
+
+	_drumGrayPos[0].x = 2941, _drumGrayPos[0].y = 1220;
+	for (int i = 0; i < 1; i++)
+	{
+		objectA* object = _factory->createObject(type);
+		object->setPosition(_drumGrayPos[i].x, _drumGrayPos[i].y);
+		//좌표 넣어야함 오브젝트에
+
+		type = SKULL_DRUMGRAY;
+
 		_vObject.push_back(object);
 	}
 
