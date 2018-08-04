@@ -14,7 +14,8 @@ private:
 	player* _player;
 	mapData* _mapData;
 
-	pBullet* _pBullet;
+	pBullet * _pBullet;
+	pGrenade * _pGrenade;
 	
 	RECT temp;
 	bool hit_left, hit_right, hit_top, hit_bottom;
@@ -34,6 +35,7 @@ public:
 	player* getPlayer() { return _player; }
 
 	pBullet* getPBullet() { return _pBullet; }
+	pGrenade* getPGrenade() { return _pGrenade; }
 
 	HRESULT init(void);
 	void release(void);
