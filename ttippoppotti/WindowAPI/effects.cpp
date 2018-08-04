@@ -85,7 +85,7 @@ void effects::activateCartridge(float x, float y, bool isLeft)
 		else //플레이어가 오른쪽을 바라보고 있을 때
 			_vParticle[i].angle = PI - PI / 4;
 		_vParticle[i].gravity = 0.0f;
-		_vParticle[i].speed = RND->getFromFloatTo(10.0f, 15.0f);
+		_vParticle[i].speed = RND->getFromFloatTo(5.0f, 10.0f);
 		_vParticle[i].count = 0;
 		if (_isFrameImg)
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());

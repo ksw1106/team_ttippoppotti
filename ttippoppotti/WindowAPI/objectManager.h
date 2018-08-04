@@ -7,8 +7,8 @@ class mapData;
 class objectManager : public singletonBase<objectManager>
 {
 	mapData* _mapData;
-	vector<objectA> _vObject;
-
+	vector<objectA*> _vObject;
+	objectFactory* _factory;
 public:
 	void setMapData(mapData* mapData) { _mapData = mapData;	}
 	//오브젝트매니져 초기화

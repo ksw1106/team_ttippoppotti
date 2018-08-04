@@ -161,6 +161,12 @@
     <ClInclude Include="objectA.h">
       <Filter>GameFramework2D\오브젝트</Filter>
     </ClInclude>
+    <ClInclude Include="spike.h">
+      <Filter>GameFramework2D\오브젝트</Filter>
+    </ClInclude>
+    <ClInclude Include="skull.h">
+      <Filter>GameFramework2D\오브젝트</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -276,6 +282,12 @@
     </ClCompile>
     <ClCompile Include="Kim_Sang_Won_addResource.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="spike.cpp">
+      <Filter>GameFramework2D\오브젝트</Filter>
+    </ClCompile>
+    <ClCompile Include="skull.cpp">
+      <Filter>GameFramework2D\오브젝트</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
