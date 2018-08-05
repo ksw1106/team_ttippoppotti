@@ -98,7 +98,7 @@ HRESULT objectManager::init()
 void objectManager::release()
 {
 	//init에서 공장 만들면 해제 해야한다
-	SAFE_DELETE(_factory);
+	//SAFE_DELETE(_factory);
 }
 
 void objectManager::update()

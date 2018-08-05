@@ -35,9 +35,10 @@ class objectA
 protected:
 	OBJECT_TYPE _type;
 	OBJECT_STATE _state;
-	image* _image[3];
+	RECT _rc;
+	image* _image;
 	float _x, _y;
-	float _oldX, _oldY;
+	float _destX, _destY;
 	float _speed;
 	float _angle;
 	bool _isActived;
@@ -50,7 +51,8 @@ public:
 	OBJECT_TYPE getType() { return _type; }
 	OBJECT_STATE getState() { return _state; }
 	bool getIsFrameImage() { return _isFrameImage; }
-	image* getImage(OBJECT_STATE state) { return _image[state]; }
+	image* getImage() { return _image; }
+	RECT getRect() { return _rc; }
 
 	void setState(OBJECT_STATE state) { _state = state; }
 	void setPosition(float x, float y) { _x = x, _y = y; }
