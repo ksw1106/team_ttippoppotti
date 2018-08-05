@@ -1,7 +1,5 @@
 #pragma once
 
-class playerManager;
-
 enum OBJECT_TYPE
 {
 	//random
@@ -35,7 +33,6 @@ enum OBJECT_STATE
 class objectA
 {
 protected:
-	playerManager* _playerManager;
 	OBJECT_TYPE _type;
 	OBJECT_STATE _state;
 	RECT _rc;
@@ -56,9 +53,10 @@ public:
 	bool getIsFrameImage() { return _isFrameImage; }
 	image* getImage() { return _image; }
 	RECT getRect() { return _rc; }
-
+	bool* getTargetIsActived() { return _targetIsActived; }
 	void setState(OBJECT_STATE state) { _state = state; }
 	void setPosition(float x, float y) { _x = x, _y = y; }
+	void setTargetIsActived(bool targetIsActived) { _targetIsActived = &targetIsActived; }
 
 	virtual void init() = 0;
 	virtual void update();

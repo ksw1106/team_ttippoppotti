@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "objectA.h"
-#include "playerManager.h"
 
 void objectA::update()
 {
+	if (!_targetIsActived)
+		_state = OBJECT_DESTROY;
 	switch (_state)
 	{
 	case OBJECT_IDLE:
@@ -43,7 +44,7 @@ void deadBody::init()
 {
 	_image = IMAGEMANAGER->findImage("human_dead");
 	_count = _index = 0;
-	_animationSpeed = 3;
+	_animationSpeed = 5;
 	_isFrameImage = true;
 	_isLeft = false;
 	_state = OBJECT_IDLE;
@@ -142,11 +143,6 @@ void prisoner::init()
 
 void prisoner::idle()
 {
-	//RECT tempRc;
-	//if (IntersectRect(&tempRc, &_playerManager->getPBullet()., &_rc))
-	//{
-	//	_image = _prisonerFreedImage;
-	//}
 }
 
 void prisoner::move()
@@ -217,8 +213,8 @@ void truck::init()
 {
 	_image = IMAGEMANAGER->findImage("truck");
 	_count = _index = 0;
-	_animationSpeed = 3;
-	_isFrameImage = true;
+	_animationSpeed = 5;
+	_isFrameImage = false;
 	_isLeft = false;
 	_state = OBJECT_IDLE;
 	_destX = _x;
@@ -228,10 +224,10 @@ void truck::init()
 
 void truck::idle()
 {
-	_isFrameImage = true;
-	_x += 3.0f;
 	if (_destX <= _x)
 		_x = _destX;
+	else
+		_x += 3.0f;
 }
 
 void truck::move()
@@ -244,7 +240,7 @@ void helicopter::init()
 {
 	_image = IMAGEMANAGER->findImage("helicopter");
 	_count = _index = 0;
-	_animationSpeed = 3;
+	_animationSpeed = 5;
 	_isFrameImage = true;
 	_isLeft = false;
 	_state = OBJECT_IDLE;
@@ -262,7 +258,7 @@ void americanFlag::init()
 {
 	_image = IMAGEMANAGER->findImage("saveFlag");
 	_count = _index = 0;
-	_animationSpeed = 3;
+	_animationSpeed = 5;
 	_isFrameImage = true;
 	_isActived = false;
 	_isLeft = false;
@@ -275,11 +271,6 @@ void americanFlag::init()
 
 void americanFlag::idle()
 {
-	RECT tempRc;
-
-	if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getImage(_playerManager->getPlayer()->getState())->boudingBoxWithFrame(), &_rc))
-		_isActived = true;
-
 	if (_isActived)
 	{
 		if (_y != _destY)
@@ -317,7 +308,7 @@ void enemyFlag::init()
 {
 	_image = IMAGEMANAGER->findImage("flag");
 	_count = _index = 0;
-	_animationSpeed = 3;
+	_animationSpeed = 5;
 	_isFrameImage = true;
 	_isActived = true;
 	_isLeft = false;

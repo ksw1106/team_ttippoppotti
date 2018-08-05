@@ -27,8 +27,8 @@ HRESULT stageScene::init(void)
 
 	_playerManager->setMapData(_mapData);
 	_enemyManager->setMapData(_mapData);
-	//OBJECTMANAGER->setMapData(_mapData);
-	//OBJECTMANAGER->init();				//오브젝트매니져 초기화
+	OBJECTMANAGER->setMapData(_mapData);
+	OBJECTMANAGER->init();				//오브젝트매니져 초기화
 	_playerManager->setEnemyManager(_enemyManager);
 	_enemyManager->setPlayerManager(_playerManager);
 
@@ -66,7 +66,6 @@ HRESULT stageScene::init(void)
 	_camDebug = false;
 	_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
 	CAMERAMANAGER->setCamera(_rcCamera);
-	OBJECTMANAGER->init();
 	return S_OK;
 }
 
@@ -233,24 +232,24 @@ void stageScene::render(void)
 	{
 		_backGround[i]._image->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 	}
-	OBJECTMANAGER->render(getMemDC());
-	_backGround[2]._image->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
-
 	
+	OBJECTMANAGER->render(getMemDC());
+	
+	_backGround[2]._image->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 	
 	//헬기 등 오브젝트
-	if(CAMERAMANAGER->CameraIn(RectMake(_x, _y, _helicopter->getWidth(), _helicopter->getHeight())))
+	/*if(CAMERAMANAGER->CameraIn(RectMake(_x, _y, _helicopter->getWidth(), _helicopter->getHeight())))
 		_helicopter->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
 	if (CAMERAMANAGER->CameraIn(RectMake(_x + 169, _y + 181, IMAGEMANAGER->findImage("ladder")->getWidth(), IMAGEMANAGER->findImage("ladder")->getHeight())))
 		IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x + 169 - CAMERAMANAGER->getCamera().left, _y + 181 - CAMERAMANAGER->getCamera().top);
 	if (CAMERAMANAGER->CameraIn(RectMake(_flagX, _flagY, _saveFlag->getWidth(), _saveFlag->getHeight())))
 		_saveFlag->frameRender(getMemDC(), _flagX - CAMERAMANAGER->getCamera().left, _flagY - CAMERAMANAGER->getCamera().top);
-	/*if (CAMERAMANAGER->CameraIn(RectMake(IMAGEMANAGER->findImage("spike")->getX(), IMAGEMANAGER->findImage("spike")->getY(), IMAGEMANAGER->findImage("spike")->getWidth(), IMAGEMANAGER->findImage("spike")->getHeight())))
+	if (CAMERAMANAGER->CameraIn(RectMake(IMAGEMANAGER->findImage("spike")->getX(), IMAGEMANAGER->findImage("spike")->getY(), IMAGEMANAGER->findImage("spike")->getWidth(), IMAGEMANAGER->findImage("spike")->getHeight())))
 		IMAGEMANAGER->findImage("spike")->render(getMemDC(), IMAGEMANAGER->findImage("spike")->getX() - CAMERAMANAGER->getCamera().left, IMAGEMANAGER->findImage("spike")->getY() - CAMERAMANAGER->getCamera().top);
 	if (CAMERAMANAGER->CameraIn(RectMake(_humanDead->getX(), _humanDead->getY(), _humanDead->getWidth(), _humanDead->getHeight())))
-		_humanDead->frameRender(getMemDC(), _humanDead->getX() - CAMERAMANAGER->getCamera().left, _humanDead->getY() - CAMERAMANAGER->getCamera().top);*/
+		_humanDead->frameRender(getMemDC(), _humanDead->getX() - CAMERAMANAGER->getCamera().left, _humanDead->getY() - CAMERAMANAGER->getCamera().top);
 	if (CAMERAMANAGER->CameraIn(RectMake(_flag->getX(), _flag->getY(), _flag->getWidth(), _flag->getHeight())))
-		_flag->frameRender(getMemDC(), _flag->getX() - CAMERAMANAGER->getCamera().left, _flag->getY() - CAMERAMANAGER->getCamera().top);
+		_flag->frameRender(getMemDC(), _flag->getX() - CAMERAMANAGER->getCamera().left, _flag->getY() - CAMERAMANAGER->getCamera().top);*/
 	
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
@@ -283,8 +282,6 @@ void stageScene::render(void)
 	char str[64];
 	sprintf(str, "%d", _camDebug);
 	TextOut(getMemDC(), 200, 200, str, strlen(str));
-	
-	OBJECTMANAGER->render(getMemDC());
 
 	_playerManager->render();
 	_enemyManager->render();
