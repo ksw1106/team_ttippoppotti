@@ -1,7 +1,5 @@
 #pragma once
 
-//class skull;
-
 enum OBJECT_TYPE
 {
 	//random
@@ -19,7 +17,9 @@ enum OBJECT_TYPE
 	SKULL_DRUMGRAY,
 	TRUCK,
 	HELICOPTER,
-	AMERICAN_FLAG
+	AMFLAG_POLE,
+	AMERICAN_FLAG,
+	ENEMY_FLAG
 };
 
 enum OBJECT_STATE
@@ -53,9 +53,10 @@ public:
 	bool getIsFrameImage() { return _isFrameImage; }
 	image* getImage() { return _image; }
 	RECT getRect() { return _rc; }
-
+	bool* getTargetIsActived() { return _targetIsActived; }
 	void setState(OBJECT_STATE state) { _state = state; }
 	void setPosition(float x, float y) { _x = x, _y = y; }
+	void setTargetIsActived(bool targetIsActived) { _targetIsActived = &targetIsActived; }
 
 	virtual void init() = 0;
 	virtual void update();
@@ -203,7 +204,28 @@ private:
 
 public:
 };
+
 class americanFlag : public objectA
+{
+private:
+	void init();
+	void idle();
+	void move();
+
+public:
+};
+
+class amFlagPole : public objectA
+{
+private:
+	void init();
+	void idle();
+	void move();
+
+public:
+};
+
+class enemyFlag : public objectA
 {
 private:
 	void init();

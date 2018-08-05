@@ -38,8 +38,9 @@ struct enemyImage
 {
 	image* bodyImage[7];
 	image* armImage[5];
+	int bodyImageIndex;
+	int armImageIndex;
 	int count;
-	int index;
 	int speed;	
 };
 
@@ -50,6 +51,7 @@ struct brovilImage
 	int index;
 	int speed;
 };
+
 
 //부모클래스 => 이놈을 상속받아서 보스, 일반몬스터등을 만든다
 class enemy : public gameNode
@@ -89,6 +91,7 @@ private:
 			
 	int _count;				// 카운트
 	int _randomNumber;
+	int _kbIndex;
 	int _warnFrameIndex, _doubtFrameIndex;
 	int _warnFrameCount, _doubtFrameCount;
 	int _frameSpeed;
@@ -141,6 +144,8 @@ public:
 	void setBodyStatus(enemyStatus enemyStat) { _enemyStatus = enemyStat; }
 	void setArmStatus(gunStatus gunStat) { _gunStatus = gunStat; }
 	void setBrovilStatus(brovilStatus brovilStatus) { _brovilStatus = brovilStatus; }
+	void setBodyImageIndex(int bodyImageIndex) { _enemyImage.bodyImageIndex = bodyImageIndex; }
+	void setArmImageIndex(int armImageIndex) { _enemyImage.armImageIndex = armImageIndex; }
 	
 	void setEnemyAngle(float angle) { _angle = angle; }
 	void setRandomNum(int randomNum) { _randomNumber = randomNum; }
@@ -155,7 +160,7 @@ public:
 	void discover();
 	void fireMovement();
 	void flyAway();
-	void knockBackMove(float angle);	// 총알맞았을때 뒤로 날아감
+	void knockBackMove(bool isLeft);	// 총알맞았을때 뒤로 날아감
 	void dead();
 	
 	void frameAnimate();	
@@ -163,4 +168,6 @@ public:
 	enemy() {}
 	virtual ~enemy() {}
 };
+
+//========================================================================================================
 
