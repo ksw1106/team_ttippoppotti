@@ -2,7 +2,6 @@
 #include "gameNode.h"
 #include "bullet.h"
 #include "soldier.h"
-#include "brovil.h"
 
 class playerManager;
 class mapData;
@@ -14,6 +13,7 @@ private:
 	mapData* _mapData;
 	
 	vector<enemy*> _vSoldier;	// 일반 적
+	vector<enemy*> _vBrovil;
 		
 	eBullet* _eBullet;			// 총알 클래스
 		
@@ -32,12 +32,13 @@ public:
 	void update(void);
 	void render(void);
 		
+	void enemyFire(int num);
 	void collision();	// 충돌함수
 	void collideWithPBullet();	// 플레이어 총알과 충돌함수
-	void enemyDie(int num);
+	void enemyDie();
 
 	void setSoldier(int x, int y);
-	void setBrovil(int x, int y, int randomNum);
+	void setBrovil(int x, int y);
 		
 	enemyManager() {}
 	~enemyManager() {}

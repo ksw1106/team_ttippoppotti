@@ -34,27 +34,16 @@ void enemyManager::update(void)
 	{
 		_vSoldier[i]->update();		
 		
-		// 총알발사
-		if (_vSoldier[i]->getIsFire())
-		{
-			// 왼쪽이면
-			if (_vSoldier[i]->getDirection())
-				_eBullet->fire(_vSoldier[i]->getX() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameWidth() - _vSoldier[i]->getEnemyArmImage(_vSoldier[i]->getArmStatus())->getFrameWidth(),
-					getVEnemy()[i]->getY() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameHeight() / 2,
-					200, getVEnemy()[i]->getDirection());
-			// 오른쪽이면
-			else
-				_eBullet->fire(_vSoldier[i]->getX() + _vSoldier[i]->getEnemyArmImage(_vSoldier[i]->getArmStatus())->getFrameWidth(),
-					getVEnemy()[i]->getY() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameHeight() / 2,
-					200, getVEnemy()[i]->getDirection());
-		}	
-	}			
+		if (!_vSoldier[i]->getIsAlive()) continue;
+		this->enemyFire(i);
+	}
+
 	_eBullet->update();
 	
 	this->collision();
 	this->collideWithPBullet();		// 플레이어 총알과 충돌
-	//this->enemyDie();				// 적 죽음
-		
+	this->enemyDie();
+			
 }
 
 void enemyManager::render(void)
@@ -69,9 +58,10 @@ void enemyManager::render(void)
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
 		char str[64];
-		sprintf_s(str, "%f", _vSoldier[i]->getIsOn());
+		sprintf_s(str, "%d", _vSoldier[i]->getBodyStatus());
 		TextOut(getMemDC(), 300, 10+i*50, str, strlen(str));
 	}
+
 }
 
 //=====================================================================================================================================================================================
@@ -85,12 +75,28 @@ void enemyManager::setSoldier(int x, int y)
 	_vSoldier.push_back(_soldier);
 }
 
-//void enemyManager::setBrovil(int x, int y, int randomNum)
-//{
-//	enemy* _brovil = new brovil;
-//	_brovil->initBrovil(x, y, 100, randomNum);
-//	_vSoldier.push_back(_brovil);
-//}
+void enemyManager::setBrovil(int x, int y)
+{
+	
+}
+
+void enemyManager::enemyFire(int num)
+{	
+	// 총알발사
+	if (_vSoldier[num]->getIsFire())
+	{
+		// 왼쪽이면
+		if (_vSoldier[num]->getDirection())
+			_eBullet->fire(_vSoldier[num]->getX() + _vSoldier[num]->getEnemyBodyImage(_vSoldier[num]->getBodyStatus())->getFrameWidth() - _vSoldier[num]->getEnemyArmImage(_vSoldier[num]->getArmStatus())->getFrameWidth(),
+				getVEnemy()[num]->getY() + _vSoldier[num]->getEnemyBodyImage(_vSoldier[num]->getBodyStatus())->getFrameHeight() / 2,
+				200, getVEnemy()[num]->getDirection());
+		// 오른쪽이면
+		else
+			_eBullet->fire(_vSoldier[num]->getX() + _vSoldier[num]->getEnemyArmImage(_vSoldier[num]->getArmStatus())->getFrameWidth(),
+				getVEnemy()[num]->getY() + _vSoldier[num]->getEnemyBodyImage(_vSoldier[num]->getBodyStatus())->getFrameHeight() / 2,
+				200, getVEnemy()[num]->getDirection());
+	}	
+}
 
 void enemyManager::collision()
 {
@@ -102,6 +108,7 @@ void enemyManager::collision()
 	{
 		if (IntersectRect(&rc, &_vSoldier[i]->getRcEnemySight(), &rcPlayer))
 		{
+			if (_vSoldier[i]->getIsAlive())
 			// 말풍선 띄우기
 			_vSoldier[i]->setIsUncovered(true);
 		}
@@ -139,6 +146,67 @@ void enemyManager::collision()
 			_vSoldier[i]->setIsOn(false);
 		}
 	}
+
+	// 적 왼쪽 벽 충돌
+	for (int i = 0; i < _vSoldier.size(); ++i)
+	{
+		float x, y;
+		x = _vSoldier[i]->getX();
+		y = _vSoldier[i]->getY();
+
+		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_LEFT))
+		{
+			if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
+			{
+				if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
+				else _vSoldier[i]->setDirection(true);
+			}
+			else
+			{
+				_vSoldier[i]->setX(x);
+			}
+		}			
+	}
+
+	// 적 오른쪽 벽 충돌
+	for (int i = 0; i < _vSoldier.size(); ++i)
+	{
+		float x, y;
+		x = _vSoldier[i]->getX() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameWidth();
+		y = _vSoldier[i]->getY();
+
+		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_RIGHT))
+		{
+			if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
+			{
+				if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
+				else _vSoldier[i]->setDirection(true);
+			}
+			else
+			{
+				_vSoldier[i]->setX(x);
+			}
+		}		
+	}
+
+	//// 적 윗 벽 충돌
+	//for (int i = 0; i < _vSoldier.size(); ++i)
+	//{
+	//	float x, y;
+	//	x = _vSoldier[i]->getX();
+	//	y = _vSoldier[i]->getY();
+	//
+	//	if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_TOP))
+	//	{
+	//		_vSoldier[i]->setIsOn(true);
+	//	}
+	//	else
+	//	{
+	//		_vSoldier[i]->setIsOn(false);
+	//	}
+	//}
+
+
 }
 
 // 플레이어 총알과 적이 충돌
@@ -150,17 +218,33 @@ void enemyManager::collideWithPBullet()
 		for (int j = 0; j < _playerManager->getPBullet()->getVPlayerBullet().size(); ++j)
 		{
 			if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vSoldier[i]->getRcEnemy()))
-			{
-				_vSoldier[i]->setIsAlive(false);
-				_vSoldier[i]->setEnemyAngle(_playerManager->getPBullet()->getVPlayerBullet()[j].angle);
-				this->enemyDie(i);
-				break;
+			{				
+				//_vSoldier[i]->setIsAlive(false);
+				_vSoldier[i]->setDirection(_playerManager->getPBullet()->getVPlayerBullet()[j].isLeft);
+				
+				if (_vSoldier[i]->getBodyStatus() != ENEMY_KNOCK_BACK && _vSoldier[i]->getBodyStatus() != ENEMY_DEAD)
+				{
+					if (_vSoldier[i]->getDirection())
+						_vSoldier[i]->setBodyImageIndex(_vSoldier[i]->getEnemyBodyImage(ENEMY_KNOCK_BACK)->getMaxFrameX()-1);
+					else
+						_vSoldier[i]->setBodyImageIndex(0);
+					
+					_vSoldier[i]->setBodyStatus(ENEMY_KNOCK_BACK);			
+				
+					break;
+				}
+
+				if (_vSoldier[i]->getBodyStatus() == ENEMY_DEAD)
+				{
+					_vSoldier[i]->move();
+				}
 			}
 		}
 	}
 }
 
-void enemyManager::enemyDie(int num)
+// 에너미 플레이어 총알맞아 죽음
+void enemyManager::enemyDie()
 {
-	_vSoldier[num]->dead();
+	
 }

@@ -146,9 +146,6 @@
     <ClInclude Include="stage2Scene.h">
       <Filter>MainGame\브로포스</Filter>
     </ClInclude>
-    <ClInclude Include="brovil.h">
-      <Filter>MainGame\브로포스\enemy</Filter>
-    </ClInclude>
     <ClInclude Include="enemy.h">
       <Filter>MainGame\브로포스\enemy</Filter>
     </ClInclude>
@@ -160,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="objectA.h">
       <Filter>GameFramework2D\오브젝트</Filter>
+    </ClInclude>
+    <ClInclude Include="dog.h">
+      <Filter>MainGame\브로포스\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -259,9 +259,6 @@
     <ClCompile Include="stage2Scene.cpp">
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
-    <ClCompile Include="brovil.cpp">
-      <Filter>MainGame\브로포스\enemy</Filter>
-    </ClCompile>
     <ClCompile Include="enemy.cpp">
       <Filter>MainGame\브로포스\enemy</Filter>
     </ClCompile>
@@ -276,6 +273,9 @@
     </ClCompile>
     <ClCompile Include="Kim_Sang_Won_addResource.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="dog.cpp">
+      <Filter>MainGame\브로포스\enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
