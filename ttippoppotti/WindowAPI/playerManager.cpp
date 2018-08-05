@@ -8,7 +8,9 @@ HRESULT playerManager::init(void)
 	_player = new player;
 	_player->init();
 	_pBullet = new pBullet;
-	_pBullet->init(500.f);
+	_pBullet->init(700.f);
+	_pGrenade = new pGrenade;
+	_pGrenade->init(500.f);
 
 	hit_left = hit_right = hit_top = hit_bottom = false;
 	
@@ -22,6 +24,7 @@ void playerManager::release(void)
 {
 	SAFE_DELETE(_player);
 	_pBullet->release();
+	_pGrenade->release();
 }
 
 void playerManager::update(void)
@@ -60,7 +63,7 @@ void playerManager::update(void)
 		hit_right = false;
 	}
 	_fireCount++;
-	if (KEYMANAGER->isStayKeyDown('Z'))
+	if (KEYMANAGER->isStayKeyDown('Z'))						// ±âº» ÃÑ¾Ë ¹ß»ç
 	{
 		if (_fireCount % 5 == 0)
 		{
@@ -77,7 +80,7 @@ void playerManager::update(void)
 	}
 	_pBullet->update();
 
-	if (KEYMANAGER->isStayKeyDown('C'))
+	if (KEYMANAGER->isStayKeyDown('C'))						// Ä®»§
 	{
 		if (_player->getIsLeft())
 		{
@@ -90,18 +93,18 @@ void playerManager::update(void)
 		}
 	}
 
-	if (KEYMANAGER->isOnceKeyDown('X'))
+	if (KEYMANAGER->isOnceKeyDown('X'))						// ¼ö·ùÅº
 	{
 		if (_player->getIsLeft() == false)
 		{
-			_pGrenade->fire(_player->getX() + 60, _player->getY() + 38, 20, _player->getIsLeft());
+			_pGrenade->fire(_player->getX() + 60, _player->getY() + 38, 5, _player->getIsLeft());
 		}
 		if (_player->getIsLeft() == true)
 		{
-			_pGrenade->fire(_player->getX(), _player->getY() + 38, 20, _player->getIsLeft());
+			_pGrenade->fire(_player->getX(), _player->getY() + 38, 5, _player->getIsLeft());
 		}
 	}
-	//_pGrenade->update();
+	_pGrenade->update();
 	if (KEYMANAGER->isOnceKeyDown(VK_UP) && !_player->getIsJump())
 	{
 		_player->setState(JUMP);
@@ -440,6 +443,7 @@ void playerManager::render(void)
 	RECT rc = RectMake(_player->getX(), _player->getY(), _player->getImage(_player->getState())->getFrameWidth(), _player->getImage(_player->getState())->getFrameHeight());
 	_player->render();
 	_pBullet->render();
+	_pGrenade->render();
 
 	char str[64];
 	sprintf_s(str, "%d", hit_bottom);
