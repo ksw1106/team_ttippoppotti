@@ -15,17 +15,23 @@ void objectA::update()
 		break;
 	}
 	if(_isFrameImage)
-		FRAMEMANAGER->frameChange(_image[_state], _count, _index, _animationSpeed, _isLeft);
+		FRAMEMANAGER->frameChange(_image, _count, _index, _animationSpeed, _isLeft);
 }
 void objectA::render(HDC hdc)
 {
 	switch (_state)
 	{
 	case OBJECT_IDLE:
-		_image[OBJECT_IDLE]->frameRender(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+		if (_isFrameImage)
+			_image->frameRender(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+		else
+			_image->render(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
 		break;
 	case OBJECT_MOVE:
-		_image[OBJECT_MOVE]->frameRender(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+		if (_isFrameImage)
+			_image->frameRender(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+		else
+			_image->render(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
 		break;
 	case OBJECT_DESTROY:
 		break;
@@ -34,8 +40,7 @@ void objectA::render(HDC hdc)
 
 void deadBody::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("human_dead");
+	_image = IMAGEMANAGER->findImage("human_dead");
 	_count = _index = 0;
 	_animationSpeed = 3;
 	_isFrameImage = true;
@@ -53,8 +58,7 @@ void deadBody::move()
 
 void skull::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("skull");
+	_image = IMAGEMANAGER->findImage("skull");
 	_isFrameImage = false;
 	_state = OBJECT_IDLE;
 }
@@ -69,8 +73,7 @@ void skull::move()
 
 void skullPole::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("skullPole");
+	_image = IMAGEMANAGER->findImage("skullPole");
 	_isFrameImage = false;
 	_state = OBJECT_IDLE;
 }
@@ -85,8 +88,7 @@ void skullPole::move()
 
 void doubleSkullPole::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("doubleSkullPole");
+	_image = IMAGEMANAGER->findImage("doubleSkullPole");
 	_isFrameImage = false;
 	_state = OBJECT_IDLE;
 }
@@ -101,8 +103,7 @@ void doubleSkullPole::move()
 
 void skullDrumRed::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("skullDrumRed");
+	_image = IMAGEMANAGER->findImage("skullDrumRed");
 	_isFrameImage = false;
 	_state = OBJECT_IDLE;
 }
@@ -117,8 +118,7 @@ void skullDrumRed::move()
 
 void skullDrumGray::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("skullDrumGray");
+	_image = IMAGEMANAGER->findImage("skullDrumGray");
 	_isFrameImage = false;
 	_state = OBJECT_IDLE;
 }
@@ -133,8 +133,7 @@ void skullDrumGray::move()
 
 void prisoner::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("prisoner_inJail");
+	_image = IMAGEMANAGER->findImage("prisoner_inJail");
 	_prisonerFreedImage = IMAGEMANAGER->findImage("prisoner_freed");
 	_isFrameImage = false;
 	_state = OBJECT_IDLE;
@@ -150,8 +149,7 @@ void prisoner::move()
 
 void woodenBox::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("woodenBox");
+	_image = IMAGEMANAGER->findImage("woodenBox");
 	_isFrameImage = false;
 	_state = OBJECT_IDLE;
 }
@@ -166,8 +164,7 @@ void woodenBox::move()
 
 void bottleGreen::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("bottle_green");
+	_image = IMAGEMANAGER->findImage("bottle_green");
 	_isFrameImage = false;
 	_state = OBJECT_IDLE;
 }
@@ -182,8 +179,7 @@ void bottleGreen::move()
 
 void bottleGray::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("bottle_gray");
+	_image = IMAGEMANAGER->findImage("bottle_gray");
 	_isFrameImage = false;
 	_state = OBJECT_IDLE;
 }
@@ -198,8 +194,7 @@ void bottleGray::move()
 
 void bottleBrown::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("bottle_brown");
+	_image = IMAGEMANAGER->findImage("bottle_brown");
 	_isFrameImage = false;
 	_state = OBJECT_IDLE;
 }
@@ -214,24 +209,23 @@ void bottleBrown::move()
 
 void truck::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("truck");
+	_image = IMAGEMANAGER->findImage("truck");
 	_count = _index = 0;
 	_animationSpeed = 3;
 	_isFrameImage = true;
 	_isLeft = false;
 	_state = OBJECT_IDLE;
-	_oldX = _x;
-	_oldY = _y;
-	_x = -_image[_state]->getFrameWidth();
+	_destX = _x;
+	_destY = _y;
+	_x = -_image->getFrameWidth();
 }
 
 void truck::idle()
 {
 	_isFrameImage = true;
 	_x += 3.0f;
-	if (_oldX <= _x)
-		_x = _oldX;
+	if (_destX <= _x)
+		_x = _destX;
 }
 
 void truck::move()
@@ -242,8 +236,7 @@ void truck::move()
 
 void helicopter::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("helicopter");
+	_image = IMAGEMANAGER->findImage("helicopter");
 	_count = _index = 0;
 	_animationSpeed = 3;
 	_isFrameImage = true;
@@ -261,24 +254,35 @@ void helicopter::move()
 
 void americanFlag::init()
 {
-	for (int i = 0; i < 3; i++)
-		_image[i] = IMAGEMANAGER->findImage("saveFlag");
+	_image = IMAGEMANAGER->findImage("saveFlag");
 	_count = _index = 0;
 	_animationSpeed = 3;
 	_isFrameImage = true;
+	_isActived = false;
 	_isLeft = false;
 	_state = OBJECT_IDLE;
-	_oldX = _x;
-	_oldY = _y;
-	//_y += _image[_state]->getFrameHeight();
+	_destX = _x;
+	_destY = _y;
+	_rc = RectMake(_x - _image->getFrameWidth(), _y, _image->getFrameWidth() * 2, _image->getFrameHeight() * 2);
+	_y += _image->getFrameHeight() * 2.5;
 }
 
 void americanFlag::idle()
 {
+	if (_isActived)
+	{
+		if (_y != _destY)
+		{
+			_y -= 3.0f;
+			if (_y <= _destY)
+				_y = _destY;
+		}
+	}
 }
 
 void americanFlag::move()
 {
+
 }
 
 objectA * objectFactory::createObject(OBJECT_TYPE type)
