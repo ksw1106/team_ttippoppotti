@@ -1,6 +1,6 @@
 #pragma once
 
-//class skull;
+class playerManager;
 
 enum OBJECT_TYPE
 {
@@ -19,7 +19,9 @@ enum OBJECT_TYPE
 	SKULL_DRUMGRAY,
 	TRUCK,
 	HELICOPTER,
-	AMERICAN_FLAG
+	AMFLAG_POLE,
+	AMERICAN_FLAG,
+	ENEMY_FLAG
 };
 
 enum OBJECT_STATE
@@ -33,6 +35,7 @@ enum OBJECT_STATE
 class objectA
 {
 protected:
+	playerManager* _playerManager;
 	OBJECT_TYPE _type;
 	OBJECT_STATE _state;
 	RECT _rc;
@@ -203,7 +206,28 @@ private:
 
 public:
 };
+
 class americanFlag : public objectA
+{
+private:
+	void init();
+	void idle();
+	void move();
+
+public:
+};
+
+class amFlagPole : public objectA
+{
+private:
+	void init();
+	void idle();
+	void move();
+
+public:
+};
+
+class enemyFlag : public objectA
 {
 private:
 	void init();

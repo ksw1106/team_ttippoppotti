@@ -66,6 +66,7 @@ HRESULT stageScene::init(void)
 	_camDebug = false;
 	_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
 	CAMERAMANAGER->setCamera(_rcCamera);
+	OBJECTMANAGER->init();
 	return S_OK;
 }
 
@@ -118,6 +119,7 @@ void stageScene::update(void)
 	
 	_playerManager->update();
 	_enemyManager->update();
+	OBJECTMANAGER->update();
 	_test->update();
 	//이곳에서 계산식, 키보드, 마우스등등 업데이트를 한다
 	//간단하게 이곳에서 코딩한다고 생각하면 된다
@@ -227,10 +229,12 @@ void stageScene::update(void)
 
 void stageScene::render(void)
 {
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		_backGround[i]._image->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 	}
+	OBJECTMANAGER->render(getMemDC());
+	_backGround[2]._image->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 
 	
 	

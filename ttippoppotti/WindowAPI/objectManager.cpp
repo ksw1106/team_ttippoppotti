@@ -18,33 +18,40 @@ HRESULT objectManager::init()
 
 	OBJECT_TYPE type;
 
-	//_fPos[0].x = RND->getFromIntTo(), _fPos[0].y = ;
-	//_fPos[1].x = , _fPos[1].y = ;
-	//_fPos[2].x = , _fPos[2].y = ;
-	//_fPos[3].x = , _fPos[3].y = ;
-	//_fPos[4].x = , _fPos[4].y = ;
-	//_fPos[5].x = , _fPos[5].y = ;
-	//for (int i = 0; i < 6; i++)
+	_fPos[0].x = 677, _fPos[0].y = 2164;
+	_fPos[1].x = 863, _fPos[1].y = 2164;
+	_fPos[2].x = 1340, _fPos[2].y = 2164;
+	_fPos[3].x = 1950, _fPos[3].y = 1420;
+	_fPos[4].x = 3169, _fPos[4].y = 1692;
+	_fPos[5].x = 3509, _fPos[5].y = 1692;
+	_fPos[6].x = 3771, _fPos[6].y = 1692;
+	_fPos[7].x = 3158, _fPos[7].y = 1490;
+	_fPos[8].x = 3915, _fPos[8].y = 1490;
+	_fPos[9].x = 3230, _fPos[9].y = 1286;
+	_fPos[10].x = 3915, _fPos[10].y = 1286;
+	_fPos[11].x = 3169, _fPos[11].y = 1084;
+	//_mapData->getObject()[렉트번호].isActived
+	//for (int i = 0; i < 12; i++)
 	//{
-	//	type = (OBJECT_TYPE)RND->getFromIntTo(0, 6);
+	//	type = (OBJECT_TYPE)RND->getFromIntTo(0, 7);
 	//
 	//	objectA* object = _factory->createObject(type);
-	//	object->setPosition(_fPos[i].x, _fPos[i].y);
+	//	object->setPosition(_fPos[i].x, _fPos[i].y - object->getImage()->getHeight());
 	//	
 	//	_vObject.push_back(object);
 	//}
 
 	_prisonerPos[0].x = 3280, _prisonerPos[0].y = 1558;
 	_prisonerPos[1].x = 3686, _prisonerPos[1].y = 2099;
-	for (int i = 0; i < 2; i++)
-	{
-		type = PRISONER;
-
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_prisonerPos[i].x, _prisonerPos[i].y);
-		
-		_vObject.push_back(object);
-	}
+	//for (int i = 0; i < 2; i++)
+	//{
+	//	type = PRISONER;
+	//
+	//	objectA* object = _factory->createObject(type);
+	//	object->setPosition(_prisonerPos[i].x, _prisonerPos[i].y);
+	//	
+	//	_vObject.push_back(object);
+	//}
 
 	_boxPos[0].x = 2873, _boxPos[0].y = 1220;
 	_boxPos[1].x = 2941, _boxPos[1].y = 1132;
@@ -60,37 +67,88 @@ HRESULT objectManager::init()
 	_boxPos[11].x = 3956, _boxPos[11].y = 1626;
 	_boxPos[12].x = 3888, _boxPos[12].y = 1558;
 	_boxPos[13].x = 3888, _boxPos[13].y = 1626;
-	for (int i = 0; i < 14; i++)
-	{
-		type = WOODENBOX;
-
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_boxPos[i].x, _boxPos[i].y);
-		
-		_vObject.push_back(object);
-	}
+	//for (int i = 0; i < 14; i++)
+	//{
+	//	type = WOODENBOX;
+	//
+	//	objectA* object = _factory->createObject(type);
+	//	object->setPosition(_boxPos[i].x, _boxPos[i].y);
+	//	
+	//	_vObject.push_back(object);
+	//}
 
 	_drumRedPos[0].x = 3009, _drumRedPos[0].y = 1422;
-	for (int i = 0; i < 1; i++)
-	{
-		type = SKULL_DRUMRED;
-
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_drumRedPos[i].x, _drumRedPos[i].y);
-		
-		_vObject.push_back(object);
-	}
+	//for (int i = 0; i < 1; i++)
+	//{
+	//	type = SKULL_DRUMRED;
+	//
+	//	objectA* object = _factory->createObject(type);
+	//	object->setPosition(_drumRedPos[i].x, _drumRedPos[i].y);
+	//	
+	//	_vObject.push_back(object);
+	//}
 
 	_drumGrayPos[0].x = 2941, _drumGrayPos[0].y = 1220;
-	for (int i = 0; i < 1; i++)
-	{
-		type = SKULL_DRUMGRAY;
+	//for (int i = 0; i < 1; i++)
+	//{
+	//	type = SKULL_DRUMGRAY;
+	//
+	//	objectA* object = _factory->createObject(type);
+	//	object->setPosition(_drumGrayPos[i].x, _drumGrayPos[i].y);
+	//	
+	//	_vObject.push_back(object);
+	//}
+	
+	_truckPos[0].x = 160, _truckPos[0].y = 2164;
+	//for (int i = 0; i < 1; i++)
+	//{
+	//	type = TRUCK;
+	//
+	//	objectA* object = _factory->createObject(type);
+	//	object->setPosition(_truckPos[i].x, _truckPos[i].y - object->getImage()->getHeight());
+	//
+	//	_vObject.push_back(object);
+	//}
 
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_drumGrayPos[i].x, _drumGrayPos[i].y);
-		
-		_vObject.push_back(object);
-	}
+	_amFlagPos[0].x = 1835, _amFlagPos[0].y = 1225;
+	_amFlagPos[1].x = 2927, _amFlagPos[1].y = 2036;
+	_amFlagPos[2].x = 3321, _amFlagPos[2].y = 880;
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	type = AMERICAN_FLAG;
+	//
+	//	objectA* object = _factory->createObject(type);
+	//	object->setPosition(_amFlagPos[i].x, _amFlagPos[i].y);
+	//
+	//	_vObject.push_back(object);
+	//}
+
+	_amFlagPolePos[0].x = 1840, _amFlagPolePos[0].y = 1425;
+	_amFlagPolePos[1].x = 2909, _amFlagPolePos[1].y = 2236;
+	//for (int i = 0; i < 2; i++)
+	//{
+	//	type = AMFLAG_POLE;
+	//
+	//	objectA* object = _factory->createObject(type);
+	//	object->setPosition(_amFlagPolePos[i].x, _amFlagPolePos[i].y);
+	//
+	//	_vObject.push_back(object);
+	//}
+
+	_enemyFlagPos[0].x = 2949, _enemyFlagPos[0].y = 1083;
+	_enemyFlagPos[1].x = 4099, _enemyFlagPos[1].y = 1083;
+	//for (int i = 0; i < 2; i++)
+	//{
+	//	type = AMERICAN_FLAG;
+	//
+	//	objectA* object = _factory->createObject(type);
+	//	object->setPosition(_enemyFlagPos[i].x, _enemyFlagPos[i].y - object->getImage()->getHeight());
+	//
+	//	_vObject.push_back(object);
+	//}
+
+	for (int i = 0; i < _vObject.size(); i++)
+		_vObject[i]->setState(OBJECT_IDLE);
 
 	return S_OK;
 }

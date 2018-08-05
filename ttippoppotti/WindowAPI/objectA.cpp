@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "objectA.h"
+#include "playerManager.h"
 
 void objectA::update()
 {
@@ -103,7 +104,7 @@ void doubleSkullPole::move()
 
 void skullDrumRed::init()
 {
-	_image = IMAGEMANAGER->findImage("skullDrumRed");
+	_image = IMAGEMANAGER->findImage("skullDrum_red");
 	_isFrameImage = false;
 	_state = OBJECT_IDLE;
 }
@@ -118,7 +119,7 @@ void skullDrumRed::move()
 
 void skullDrumGray::init()
 {
-	_image = IMAGEMANAGER->findImage("skullDrumGray");
+	_image = IMAGEMANAGER->findImage("skullDrum_gray");
 	_isFrameImage = false;
 	_state = OBJECT_IDLE;
 }
@@ -141,6 +142,11 @@ void prisoner::init()
 
 void prisoner::idle()
 {
+	//RECT tempRc;
+	//if (IntersectRect(&tempRc, &_playerManager->getPBullet()., &_rc))
+	//{
+	//	_image = _prisonerFreedImage;
+	//}
 }
 
 void prisoner::move()
@@ -269,6 +275,11 @@ void americanFlag::init()
 
 void americanFlag::idle()
 {
+	RECT tempRc;
+
+	if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getImage(_playerManager->getPlayer()->getState())->boudingBoxWithFrame(), &_rc))
+		_isActived = true;
+
 	if (_isActived)
 	{
 		if (_y != _destY)
@@ -282,7 +293,45 @@ void americanFlag::idle()
 
 void americanFlag::move()
 {
+	_isActived = true;
+}
 
+void amFlagPole::init()
+{
+	_image = IMAGEMANAGER->findImage("saveFlag_pole");
+	_isActived = true;
+	_isFrameImage = false;
+}
+
+void amFlagPole::idle()
+{
+	_isActived = true;
+}
+
+void amFlagPole::move()
+{
+	_isActived = true;
+}
+
+void enemyFlag::init()
+{
+	_image = IMAGEMANAGER->findImage("flag");
+	_count = _index = 0;
+	_animationSpeed = 3;
+	_isFrameImage = true;
+	_isActived = true;
+	_isLeft = false;
+	_state = OBJECT_IDLE;
+}
+
+void enemyFlag::idle()
+{
+	_isActived = true;
+}
+
+void enemyFlag::move()
+{
+	_isActived = true;
 }
 
 objectA * objectFactory::createObject(OBJECT_TYPE type)
@@ -332,6 +381,12 @@ objectA * objectFactory::createObject(OBJECT_TYPE type)
 	case AMERICAN_FLAG:
 		_object = new americanFlag;
 		break;
+	case AMFLAG_POLE:
+		_object = new amFlagPole;
+		break;
+	case ENEMY_FLAG:
+		_object = new enemyFlag;
+		break;
 	default:
 		//´©±¸³Ä ³Í??
 		break;
@@ -340,3 +395,4 @@ objectA * objectFactory::createObject(OBJECT_TYPE type)
 
 	return _object;
 }
+
