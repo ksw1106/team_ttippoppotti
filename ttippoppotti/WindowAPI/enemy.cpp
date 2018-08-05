@@ -428,11 +428,13 @@ void enemy::frameAnimate()
 	//FRAMEMANAGER->frameChange(_brovilImage.brovilImg[_brovilStatus], _brovilImage.count, _brovilImage.index, _brovilImage.speed, _isLeft);
 	FRAMEMANAGER->frameChange(_enemyImage.armImage[_gunStatus], _enemyImage.count, _enemyImage.index, _enemyImage.speed, _isLeft);
 	
+	// 플레이어 만났을 때 '!' 프레임 한번만 돌게
 	if (_isUncovered && _warnFrameIndex < _warnSign->getMaxFrameX())
 	{
 		FRAMEMANAGER->frameChange(_warnSign, _warnFrameCount, _warnFrameIndex, _frameSpeed, 0);
 	}
 	
+	// 에너미 아군 시체 만났을때, '?' 프레임 한번만 돌게
 	if (_isStrange && _doubtFrameIndex < _doubtSign->getMaxFrameX())
 	{
 		FRAMEMANAGER->frameChange(_doubtSign, _doubtFrameCount, _doubtFrameIndex, _frameSpeed, 0);

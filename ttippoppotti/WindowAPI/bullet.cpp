@@ -506,6 +506,7 @@ HRESULT pGrenade::init(float range)
 
 void pGrenade::release(void)
 {
+
 }
 
 void pGrenade::update(void)
@@ -552,13 +553,13 @@ void pGrenade::move()
 		{
 			if (_vBullet[i].isLeft)
 			{
-				_vBullet[i].gravity += 0.60f;
-				_vBullet[i].x -= cosf(_vBullet[i].angle) * _vBullet[i].speed;
-				_vBullet[i].y -= -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
+				_vBullet[i].gravity += 0.10f;
+				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
+				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
 			if (!_vBullet[i].isLeft)
 			{
-				_vBullet[i].gravity += 0.60f;
+				_vBullet[i].gravity += 0.10f;
 				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
