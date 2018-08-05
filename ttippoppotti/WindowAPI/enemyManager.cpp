@@ -49,7 +49,7 @@ void enemyManager::update(void)
 					200, getVEnemy()[i]->getDirection());
 		}	
 	}			
-	_eBullet->update();			
+	_eBullet->update();
 	
 	this->collision();
 	this->collideWithPBullet();		// 플레이어 총알과 충돌
@@ -74,8 +74,26 @@ void enemyManager::render(void)
 	}
 }
 
+//=====================================================================================================================================================================================
+//=====================================================================================================================================================================================
+//=====================================================================================================================================================================================
+
+void enemyManager::setSoldier(int x, int y)
+{
+	enemy* _soldier = new soldier;
+	_soldier->initSoldier(x, y);
+	_vSoldier.push_back(_soldier);
+}
+
+//void enemyManager::setBrovil(int x, int y, int randomNum)
+//{
+//	enemy* _brovil = new brovil;
+//	_brovil->initBrovil(x, y, 100, randomNum);
+//	_vSoldier.push_back(_brovil);
+//}
+
 void enemyManager::collision()
-{	
+{
 	// 충돌처리(플레이어) vs 적 시야
 	RECT rc;
 	RECT rcPlayer = RectMake(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(),
@@ -86,7 +104,6 @@ void enemyManager::collision()
 		{
 			// 말풍선 띄우기
 			_vSoldier[i]->setIsUncovered(true);
-						
 		}
 	}
 
@@ -104,8 +121,8 @@ void enemyManager::collision()
 		{
 			++i;
 		}
-	}		
-		
+	}
+
 	// 적 착지 ( 픽셀충돌 )
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
@@ -115,11 +132,11 @@ void enemyManager::collision()
 
 		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_BOTTOM))
 		{
-			_vSoldier[i]->setIsOn(true);					
+			_vSoldier[i]->setIsOn(true);
 		}
 		else
 		{
-			_vSoldier[i]->setIsOn(false);				
+			_vSoldier[i]->setIsOn(false);
 		}
 	}
 }
@@ -135,35 +152,15 @@ void enemyManager::collideWithPBullet()
 			if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vSoldier[i]->getRcEnemy()))
 			{
 				_vSoldier[i]->setIsAlive(false);
-				_vSoldier[i]->setBodyStatus(ENEMY_KNOCK_BACK);
 				_vSoldier[i]->setEnemyAngle(_playerManager->getPBullet()->getVPlayerBullet()[j].angle);
-				_vSoldier[i]->knockBackMove(_vSoldier[i]->getEnemyAngle());
+				this->enemyDie(i);
 				break;
 			}
 		}
 	}
 }
 
-void enemyManager::enemyDie()
+void enemyManager::enemyDie(int num)
 {
-	for (int i = 0; i < _vSoldier.size(); ++i)
-	{
-		
-	}	
+	_vSoldier[num]->dead();
 }
-
-//=====================================================================================================================================================================================
-
-void enemyManager::setSoldier(int x, int y)
-{
-	enemy* _soldier = new soldier;
-	_soldier->initSoldier(x, y);
-	_vSoldier.push_back(_soldier);
-}
-
-//void enemyManager::setBrovil(int x, int y, int randomNum)
-//{
-//	enemy* _brovil = new brovil;
-//	_brovil->initBrovil(x, y, 100, randomNum);
-//	_vSoldier.push_back(_brovil);
-//}
