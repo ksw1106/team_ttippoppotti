@@ -81,11 +81,11 @@ void effects::activateCartridge(float x, float y, bool isLeft)
 		_vParticle[i].y = y + 32;
 		_vParticle[i].x = x + 32;
 		if (isLeft)
-			_vParticle[i].angle = PI / 4;
+			_vParticle[i].angle = PI / 3;
 		else //플레이어가 오른쪽을 바라보고 있을 때
-			_vParticle[i].angle = PI - PI / 4;
+			_vParticle[i].angle = PI - PI / 3;
 		_vParticle[i].gravity = 0.0f;
-		_vParticle[i].speed = RND->getFromFloatTo(5.0f, 10.0f);
+		_vParticle[i].speed = RND->getFromFloatTo(8.0f, 13.0f);
 		_vParticle[i].count = 0;
 		if (_isFrameImg)
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
@@ -228,23 +228,24 @@ void effects::collisionProcess()
 	{
 		if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 3)) //아래
 		{
-			_vParticle[i].gravity = PI2 - _vParticle[i].angle;
-			_vParticle[i].speed *= 0.9;
+			_vParticle[i].gravity = 0;
+			_vParticle[i].angle = PI2 - _vParticle[i].angle;
+			_vParticle[i].speed *= 0.8;
 		}
 		if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 2)) //오
 		{
 			_vParticle[i].angle = PI - _vParticle[i].angle;
-			_vParticle[i].speed *= 0.9;
+			_vParticle[i].speed *= 0.8;
 		}
 		if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 0)) //왼
 		{
 			_vParticle[i].angle = PI - _vParticle[i].angle;
-			_vParticle[i].speed *= 0.9;
+			_vParticle[i].speed *= 0.8;
 		}
 		if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 1)) //위
 		{
 			_vParticle[i].angle = PI2 - _vParticle[i].angle;
-			_vParticle[i].speed *= 0.9;
+			_vParticle[i].speed *= 0.8;
 		}
 	}
 }
