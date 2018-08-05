@@ -394,6 +394,7 @@ void eBullet::removeBullet(int index)
 HRESULT pBullet::init(float range)
 {
 	_range = range;
+	
 	for (int i = 0; i < 100; i++)
 	{
 		tagBullet pBullet;
@@ -491,7 +492,8 @@ void pBullet::removeBullet(int index)
 HRESULT pGrenade::init(float range)
 {
 	_range = range;
-	for (int i = 0; i < 10; i++)
+	_count = 0;
+	for (int i = 0; i < 50; i++)
 	{
 		tagBullet pGrenade;
 		ZeroMemory(&pGrenade, sizeof(tagBullet));
@@ -535,6 +537,8 @@ void pGrenade::fire(int x, int y, int fireSpeed, bool isLeft)
 		_vBullet[i].isActived = true;
 		_vBullet[i].speed = fireSpeed;
 		_vBullet[i].isLeft = isLeft;
+		_vBullet[i].gravity = 0.0f;
+		_vBullet[i].count = 0;
 		_vBullet[i].x = _vBullet[i].fireX = x;
 		_vBullet[i].y = _vBullet[i].fireY = y;
 		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
@@ -551,15 +555,17 @@ void pGrenade::move()
 	{
 		if (_vBullet[i].isActived)
 		{
-			if (_vBullet[i].isLeft)
+			if (_vBullet[i].isLeft)					// ¿ÞÂÊ
 			{
-				_vBullet[i].gravity += 0.10f;
+				_vBullet[i].gravity += 0.90f;
+				_vBullet[i].angle = 145.f * PI / 180;
 				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
-			if (!_vBullet[i].isLeft)
+			if (!_vBullet[i].isLeft)				// ¿À¸¥ÂÊ
 			{
-				_vBullet[i].gravity += 0.10f;
+				_vBullet[i].gravity += 0.90f;
+				_vBullet[i].angle = 35.f * PI / 180;
 				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
@@ -567,12 +573,8 @@ void pGrenade::move()
 			_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
 				_vBullet[i].bulletImage->getFrameWidth(),
 				_vBullet[i].bulletImage->getFrameHeight());
-			float distance = getDistance(_vBullet[i].x, _vBullet[i].y, _vBullet[i].fireX, _vBullet[i].fireY);
-	
-			if (distance > _range)
-			{
-				_vBullet[i].isActived = false;
-			}
+
+			_vBullet[i].count++;
 		}
 	}
 }

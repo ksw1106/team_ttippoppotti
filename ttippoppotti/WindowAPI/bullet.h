@@ -200,6 +200,7 @@ private:
 private:
 	float _range;
 	int _grenadeMax;
+	int _count;
 
 public:
 

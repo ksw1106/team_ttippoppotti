@@ -26,8 +26,6 @@ private:
 	bool _change;
 
 	RECT _rcRambro;
-	RECT _rcPlyaer;
-
 public:
 
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }
