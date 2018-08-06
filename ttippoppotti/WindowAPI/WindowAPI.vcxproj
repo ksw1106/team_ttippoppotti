@@ -181,6 +181,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="testScene_kmy.h" />
     <ClInclude Include="timeManager.h" />
+    <ClInclude Include="titleScene.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
@@ -225,6 +226,7 @@
     </ClCompile>
     <ClCompile Include="testScene_kmy.cpp" />
     <ClCompile Include="timeManager.cpp" />
+    <ClCompile Include="titleScene.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="winMain.cpp" />

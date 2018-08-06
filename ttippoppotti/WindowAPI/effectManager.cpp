@@ -39,7 +39,7 @@ HRESULT effectManager::init(void)
 
 	addEffect("rambro_cartridge", "rambro_cartridge", 10, 1, true);
 
-	addEffect("bulletPuff", "bulletPuff", 1, 1, true);
+	addEffect("bulletPuff", "bulletPuff", 10, 1, true);
 	addEffect("knifePuff", "whitePuff", 1, 1, true);
 
 	_count = 0;

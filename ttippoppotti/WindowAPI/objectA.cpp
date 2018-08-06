@@ -16,7 +16,7 @@ void objectA::update()
 	case OBJECT_DESTROY:
 		break;
 	}
-	if(_isFrameImage)
+	if (_isFrameImage)
 		FRAMEMANAGER->frameChange(_image, _count, _index, _animationSpeed, _isLeft);
 }
 void objectA::render(HDC hdc)
@@ -45,6 +45,7 @@ void deadBody::init()
 	_image = IMAGEMANAGER->findImage("human_dead");
 	_count = _index = 0;
 	_animationSpeed = 5;
+	_rc = _image->boudingBoxWithFrame();
 	_isFrameImage = true;
 	_isLeft = false;
 }
@@ -60,6 +61,7 @@ void deadBody::move()
 void skull::init()
 {
 	_image = IMAGEMANAGER->findImage("skull");
+	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -74,6 +76,7 @@ void skull::move()
 void skullPole::init()
 {
 	_image = IMAGEMANAGER->findImage("skullPole");
+	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -88,6 +91,7 @@ void skullPole::move()
 void doubleSkullPole::init()
 {
 	_image = IMAGEMANAGER->findImage("doubleSkullPole");
+	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -102,6 +106,7 @@ void doubleSkullPole::move()
 void skullDrumRed::init()
 {
 	_image = IMAGEMANAGER->findImage("skullDrum_red");
+	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -116,6 +121,7 @@ void skullDrumRed::move()
 void skullDrumGray::init()
 {
 	_image = IMAGEMANAGER->findImage("skullDrum_gray");
+	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -131,6 +137,7 @@ void prisoner::init()
 {
 	_image = IMAGEMANAGER->findImage("prisoner_inJail");
 	_prisonerFreedImage = IMAGEMANAGER->findImage("prisoner_freed");
+	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -145,6 +152,7 @@ void prisoner::move()
 void woodenBox::init()
 {
 	_image = IMAGEMANAGER->findImage("woodenBox");
+	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -159,6 +167,7 @@ void woodenBox::move()
 void bottleGreen::init()
 {
 	_image = IMAGEMANAGER->findImage("bottle_green");
+	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -173,6 +182,7 @@ void bottleGreen::move()
 void bottleGray::init()
 {
 	_image = IMAGEMANAGER->findImage("bottle_gray");
+	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -187,6 +197,7 @@ void bottleGray::move()
 void bottleBrown::init()
 {
 	_image = IMAGEMANAGER->findImage("bottle_brown");
+	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -204,10 +215,11 @@ void truck::init()
 	_count = _index = 0;
 	_animationSpeed = 5;
 	_isFrameImage = false;
+	_rc = _image->boudingBox();
 	_isLeft = false;
 	_destX = _x;
 	_destY = _y;
-	_x = -_image->getFrameWidth();
+	//_x = -_image->getFrameWidth();
 }
 
 void truck::idle()
@@ -220,8 +232,6 @@ void truck::idle()
 
 void truck::move()
 {
-	//_isFrameImage = false;
-	//_image[_state]->setFrameX(_image[_state]->getMaxFrameX());
 }
 
 void helicopter::init()
@@ -229,6 +239,7 @@ void helicopter::init()
 	_image = IMAGEMANAGER->findImage("helicopter");
 	_count = _index = 0;
 	_animationSpeed = 5;
+	_rc = _image->boudingBoxWithFrame();
 	_isFrameImage = true;
 	_isLeft = false;
 }
@@ -246,6 +257,7 @@ void americanFlag::init()
 	_image = IMAGEMANAGER->findImage("saveFlag");
 	_count = _index = 0;
 	_animationSpeed = 5;
+	_rc = _image->boudingBoxWithFrame();
 	_isFrameImage = true;
 	_isActived = false;
 	_isLeft = false;
@@ -276,6 +288,7 @@ void americanFlag::move()
 void amFlagPole::init()
 {
 	_image = IMAGEMANAGER->findImage("saveFlag_pole");
+	_rc = _image->boudingBox();
 	_isActived = true;
 	_isFrameImage = false;
 }
@@ -295,6 +308,7 @@ void enemyFlag::init()
 	_image = IMAGEMANAGER->findImage("flag");
 	_count = _index = 0;
 	_animationSpeed = 5;
+	_rc = _image->boudingBoxWithFrame();
 	_isFrameImage = true;
 	_isActived = true;
 	_isLeft = false;
