@@ -34,7 +34,8 @@ public:
 		
 	void enemyFire(int num);
 	void collision();	// 충돌함수
-	void collideWithPBullet();	// 플레이어 총알과 충돌함수
+	void collideWithPBullet();		// 플레이어 총알과 충돌함수
+	void collideWithPGrenade();		// 플레이어 수류탄과 충돌함수
 	void enemyDie();
 
 	void setSoldier(int x, int y);

@@ -4,6 +4,7 @@
 HRESULT enemy::initSoldier(int x, int y)
 {
 	_x = x, _y = y;
+	_hp = 5;
 			
 	_enemyImage.bodyImage[ENEMY_IDLE] = IMAGEMANAGER->findImage("군인평상시");
 	_enemyImage.bodyImage[ENEMY_WALK] = IMAGEMANAGER->findImage("군인걸음");
@@ -50,6 +51,7 @@ HRESULT enemy::initSoldier(int x, int y)
 	
 	_gravity = 0.f;
 	
+	_accel = 0.8f;
 	_kbSpeed = 20.f;
 	_kbIndex = 0;
 	_isAlive = true;
@@ -302,20 +304,42 @@ void enemy::flyAway()
 {
 	if (_isLeft)
 	{
-		_angle = PI / 4 * 3;
-		_x += cosf(_angle)*15.0f;
-		_y += -sinf(_angle)*15.0f + _gravity;
-		_gravity += _accel;
+		_angle = PI / 4 * 3;				
 	}
 	else
 	{
-		_angle = PI / 4;
-		_x += cosf(_angle)*15.0f;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-		_y += -sinf(_angle)*15.0f + _gravity;
-		_gravity += _accel;
+		_angle = PI / 4;		
 	}
 
-	//_gravity += 0.05f;
+	_x += cosf(_angle) * 20.0f;
+	_y += -sinf(_angle) * 20.0f + _gravity;
+	_gravity += _accel;
+	
+	if (_gravity > 20.f)
+	{
+		_gravity = 0;		
+	}
+	if (_gravity <= 0)
+	{
+		_enemyStatus = ENEMY_DEAD;
+	}
+	
+	//if (_isLeft)
+	//{
+	//	if (_enemyImage.bodyImageIndex <= 0)
+	//	{
+	//		_enemyStatus = ENEMY_DEAD;
+	//	}
+	//}
+	//else
+	//{
+	//	if (_enemyImage.bodyImageIndex >= _enemyImage.bodyImage[ENEMY_FLY_AWAY]->getMaxFrameX())
+	//	{
+	//		_enemyStatus = ENEMY_DEAD;
+	//	}
+	//}
+
+	
 }
 
 // 발사시 에너미 프레임 움직임
@@ -402,6 +426,11 @@ void enemy::frameAnimate()
 	{		
 		FRAMEMANAGER->frameChange(_enemyImage.bodyImage[ENEMY_DEAD], _enemyImage.count, _enemyImage.bodyImageIndex, _enemyImage.speed, _isLeft);
 	}	
+	else if (_enemyStatus == ENEMY_FLY_AWAY)
+	{
+		_enemyImage.speed = 2;
+		FRAMEMANAGER->frameChange(_enemyImage.bodyImage[ENEMY_DEAD], _enemyImage.count, _enemyImage.bodyImageIndex, _enemyImage.speed, _isLeft);
+	}
 	else
 	{
 		_enemyImage.speed = 10;
@@ -430,18 +459,29 @@ void enemy::knockBackMove(bool isLeft)
 	{
 		if (isLeft)
 		{		
-			_x -= _kbSpeed;			
+			_x -= _kbSpeed;
+			_y -= _kbSpeed - 8.f;
 		}
 		else
 		{		
 			_x += _kbSpeed;
+			_y -= _kbSpeed - 8.f;
 		}	
-		_kbSpeed -= 1.0f;
+		_kbSpeed -= 0.8f;
 	}
 }
 
 void enemy::dead()
 {	
 	
+}
+
+// 피가 다 닳았을때 시체 분해됨 ㅋ
+void enemy::enemyExplode()
+{
+	if (_hp <= 0)
+	{
+		
+	}
 }
 
