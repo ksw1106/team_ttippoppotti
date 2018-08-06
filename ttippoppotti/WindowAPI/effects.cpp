@@ -116,22 +116,29 @@ void effects::boomExplosion()
 		for (int i = 0; i < _vParticle.size(); ++i)
 		{
 			if (!_vParticle[i].fire) continue;
-			_vParticle[i].gravity += 0.07f;
-			_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
-			_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
 			if (_isFrameImg)
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 			else
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
-
-
 			_vParticle[i].count++;
-
-			if (_vParticle[i].count == 300 || _vParticle[i].y - CAMERAMANAGER->getCamera().top >= WINSIZEY || _vParticle[i].speed < 0.5f)
+			
+			if (_vParticle[i].count >= 300)
 			{
 				_vParticle[i].fire = false;
 				_isRunning = false;
 				_isParabola = false;
+			}
+			//else if (_vParticle[i].count >= 50)
+			//{
+			//	_vParticle[i].speed = 0;
+			//	_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
+			//	_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed;
+			//}
+			else
+			{
+				_vParticle[i].gravity += 0.07f;
+				_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
+				_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
 			}
 		}
 	}
