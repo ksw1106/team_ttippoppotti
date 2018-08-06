@@ -1,11 +1,9 @@
 #include "stdafx.h"
 #include "testScene_kmy.h"
+//#include "playerManager.h"
 
 HRESULT testScene_kmy::init(void)
 {
-	
-
-	EFFECTMANAGER->init();
 	return S_OK;
 }
 
@@ -36,8 +34,6 @@ void testScene_kmy::update(void)
 
 		//Į
 		EFFECTMANAGER->knifePuff(900, 2000, false);
-		
-		EFFECTMANAGER->p1Bubble(1000, 2000);
 	}
 }
 
