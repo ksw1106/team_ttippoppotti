@@ -161,6 +161,9 @@
     <ClInclude Include="dog.h">
       <Filter>MainGame\브로포스\enemy</Filter>
     </ClInclude>
+    <ClInclude Include="titleScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -276,6 +279,9 @@
     </ClCompile>
     <ClCompile Include="dog.cpp">
       <Filter>MainGame\브로포스\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="titleScene.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
