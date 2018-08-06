@@ -34,8 +34,8 @@ void enemyManager::update(void)
 	{
 		_vSoldier[i]->update();		
 		
-		if (!_vSoldier[i]->getIsAlive()) continue;
-		this->enemyFire(i);
+		//if (!_vSoldier[i]->getIsAlive()) continue;
+		//this->enemyFire(i);
 	}
 
 	_eBullet->update();
@@ -108,9 +108,20 @@ void enemyManager::collision()
 	{
 		if (IntersectRect(&rc, &_vSoldier[i]->getRcEnemySight(), &rcPlayer))
 		{
-			if (_vSoldier[i]->getIsAlive())
+			if (!_vSoldier[i]->getIsAlive()) continue;
+			
 			// 富浅急 剁快扁
 			_vSoldier[i]->setIsUncovered(true);
+			if (_vSoldier[i]->getBodyStatus() != ENEMY_DOUBT)
+			{
+				_vSoldier[i]->setBodyStatus(ENEMY_DOUBT);
+				if (_vSoldier[i]->getDirection())
+					_vSoldier[i]->setBodyImageIndex(_vSoldier[i]->getEnemyBodyImage(ENEMY_DOUBT)->getMaxFrameX()-1);
+				else
+					_vSoldier[i]->setBodyImageIndex(0);
+
+				//break;
+			}			
 		}
 	}
 
@@ -148,46 +159,46 @@ void enemyManager::collision()
 	}
 
 	// 利 哭率 寒 面倒
-	for (int i = 0; i < _vSoldier.size(); ++i)
-	{
-		float x, y;
-		x = _vSoldier[i]->getX();
-		y = _vSoldier[i]->getY();
-
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_LEFT))
-		{
-			if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
-			{
-				if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
-				else _vSoldier[i]->setDirection(true);
-			}
-			else
-			{
-				_vSoldier[i]->setX(x);
-			}
-		}			
-	}
+	//for (int i = 0; i < _vSoldier.size(); ++i)
+	//{
+	//	float x, y;
+	//	x = _vSoldier[i]->getX();
+	//	y = _vSoldier[i]->getY();
+	//
+	//	if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_LEFT))
+	//	{
+	//		if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
+	//		{
+	//			if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
+	//			else _vSoldier[i]->setDirection(true);
+	//		}
+	//		else
+	//		{
+	//			_vSoldier[i]->setX(x);
+	//		}
+	//	}			
+	//}
 
 	// 利 坷弗率 寒 面倒
-	for (int i = 0; i < _vSoldier.size(); ++i)
-	{
-		float x, y;
-		x = _vSoldier[i]->getX() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameWidth();
-		y = _vSoldier[i]->getY();
-
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_RIGHT))
-		{
-			if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
-			{
-				if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
-				else _vSoldier[i]->setDirection(true);
-			}
-			else
-			{
-				_vSoldier[i]->setX(x);
-			}
-		}		
-	}
+	//for (int i = 0; i < _vSoldier.size(); ++i)
+	//{
+	//	float x, y;
+	//	x = _vSoldier[i]->getX() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameWidth();
+	//	y = _vSoldier[i]->getY();
+	//
+	//	if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_RIGHT))
+	//	{
+	//		if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
+	//		{
+	//			if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
+	//			else _vSoldier[i]->setDirection(true);
+	//		}
+	//		else
+	//		{
+	//			_vSoldier[i]->setX(x);
+	//		}
+	//	}		
+	//}
 
 	//// 利 拉 寒 面倒
 	//for (int i = 0; i < _vSoldier.size(); ++i)

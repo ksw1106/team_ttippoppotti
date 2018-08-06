@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "bullet.h"
 
 #define COOLTIME 7	// _frameIndex ¹Ù²î´Â ¼Óµµ
 
@@ -57,6 +58,8 @@ struct brovilImage
 class enemy : public gameNode
 {
 private:
+	eBullet * _eBullet;
+
 	enemyStatus _enemyStatus;
 	gunStatus _gunStatus;
 	brovilStatus _brovilStatus;

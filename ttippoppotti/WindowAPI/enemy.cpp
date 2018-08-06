@@ -4,6 +4,9 @@
 HRESULT enemy::initSoldier(int x, int y)
 {
 	_x = x, _y = y;
+
+	_eBullet = new eBullet;
+	_eBullet->init(5, 800);
 		
 	_enemyImage.bodyImage[ENEMY_IDLE] = IMAGEMANAGER->findImage("군인평상시");
 	_enemyImage.bodyImage[ENEMY_WALK] = IMAGEMANAGER->findImage("군인걸음");
@@ -44,7 +47,7 @@ HRESULT enemy::initSoldier(int x, int y)
 	_doubtSign->setFrameY(0);
 		
 	_angle = 270.f * 3.14f / 180;
-	_speed = 2.f;
+	_speed = 3.f;
 	_enemyStatus = ENEMY_IDLE;
 	_gunStatus = GUN_IDLE;
 	
@@ -69,13 +72,25 @@ void enemy::release(void)
 	SAFE_DELETE(_warnSign);
 	_doubtSign->release();
 	SAFE_DELETE(_doubtSign);
+	_eBullet->release();
+	SAFE_DELETE(_eBullet);
 }
 
 void enemy::update(void)
 {	
+		
+	// 총알발사
+	if (_isFire)
+	{
+		if (_isLeft)
+			_eBullet->fire(_x + _enemyImage.bodyImage[_enemyStatus]->getFrameWidth() - _enemyImage.armImage[_gunStatus]->getFrameWidth(), _y + _enemyImage.bodyImage[_enemyStatus]->getFrameHeight() / 2, 1, 1);
+		else
+			_eBullet->fire(_x + _enemyImage.armImage[_gunStatus]->getFrameWidth(), _y + _enemyImage.bodyImage[_enemyStatus]->getFrameHeight() / 2, 1, 0);
+						
+	}
+
 	// 밑에 없으면 떨어짐
-	fall();
-	
+	fall();	
 
 	switch (_enemyStatus)
 	{
@@ -95,17 +110,18 @@ void enemy::update(void)
 			{
 				// 플레이어 발견!
 				this->discover();
-				break;
+				
 			}
 			else if (_isStrange)
 			{
 				// 아군 시체 발견
 				this->doubt();
-				break;
 			}
+			break;
 		}
 		case ENEMY_FIRE:
 		{
+			//if (_isFire) break;
 			this->fireMovement();
 			break;
 		}
@@ -144,6 +160,8 @@ void enemy::update(void)
 	this->frameAnimate();
 		
 	_rcEnemy = RectMake(_x, _y, _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());	
+
+	_eBullet->update();
 }
 
 void enemy::render(void)
@@ -199,7 +217,7 @@ void enemy::render(void)
 			800 + _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());
 	}
 	
-	
+	_eBullet->render();
 }
 
 //======================================================================================================================================
@@ -273,19 +291,17 @@ void enemy::discover()
 {
 	//_enemyStatus = ENEMY_DOUBT;
 
-	if (!_isLeft)
-	{
-		if (_enemyStatus != ENEMY_FIRE) _enemyImage.bodyImageIndex = 0;
-		if (_enemyImage.bodyImageIndex >= _enemyImage.bodyImage[ENEMY_FIRE]->getMaxFrameX())
+	if (_isLeft)
+	{		
+		if (_enemyStatus == ENEMY_DOUBT && _enemyImage.bodyImageIndex <= 0)
 		{
 			// 사격 모션
 			_enemyStatus = ENEMY_FIRE;
 		}
 	}
 	else
-	{
-		if (_enemyStatus != ENEMY_FIRE) _enemyImage.bodyImageIndex = _enemyImage.bodyImage[ENEMY_FIRE]->getMaxFrameX() - 1;
-		if (_enemyImage.bodyImage[ENEMY_DOUBT]->getFrameX() <= 0)
+	{		
+		if (_enemyStatus == ENEMY_DOUBT && _enemyImage.bodyImageIndex >= _enemyImage.bodyImage[ENEMY_DOUBT]->getMaxFrameX())
 		{
 			// 사격 모션
 			_enemyStatus = ENEMY_FIRE;
@@ -316,72 +332,122 @@ void enemy::flyAway()
 
 // 발사시 에너미 프레임 움직임
 void enemy::fireMovement()
-{
-	//if (_gunStatus == GUN_TARGETING && _enemyImage.armImageIndex == _enemyImage.armImage[GUN_TARGETING]->getMaxFrameX())
-	//	_gunStatus = GUN_TARGETING;
-
-	switch (_gunStatus)
+{		
+	if (_gunStatus != GUN_TARGETING && _gunStatus != GUN_READY && _gunStatus != GUN_FIRE)
 	{
-		case GUN_TARGETING:
-		{
-			if (!_isLeft)
-			{
-				if (_enemyImage.armImage[GUN_TARGETING]->getFrameX() >= _enemyImage.armImage[GUN_TARGETING]->getMaxFrameX())
-				{
-					_gunStatus = GUN_READY;					
-				}
-			}
-			else
-			{
-				if (_enemyImage.armImage[GUN_TARGETING]->getFrameX() == 0)
-				{
-					_gunStatus = GUN_READY;					
-				}
-			}
-		}
-		case GUN_READY:
-		{
-			if (!_isLeft)
-			{
-				if (_enemyImage.armImage[GUN_READY]->getFrameX() >= _enemyImage.armImage[GUN_READY]->getMaxFrameX())
-				{
-					_gunStatus = GUN_FIRE;					
-				}
-			}
-			else
-			{
-				if (_enemyImage.armImage[GUN_READY]->getFrameX() == 0)
-				{
-					_gunStatus = GUN_FIRE;					
-				}
-			}
-		}
-		case GUN_FIRE:
-		{
-			if (!_isLeft)
-			{
-				if (_enemyImage.armImage[GUN_FIRE]->getFrameX() >= _enemyImage.armImage[GUN_FIRE]->getMaxFrameX())
-				{
-					_isFire = true;					
-				}
-			}
-			else
-			{
-				if (_enemyImage.armImage[GUN_FIRE]->getFrameX() == 0)
-				{
-					_isFire = true;					
-				}
-			}
-		}
+		_gunStatus = GUN_TARGETING;
 
-	default:
-		break;
+		if (_isLeft)
+			_enemyImage.armImageIndex = _enemyImage.armImage[GUN_TARGETING]->getMaxFrameX();
+		else
+			_enemyImage.armImageIndex = 0;
+	}	
+	
+	if (_isLeft)
+	{	
+
+		if (_gunStatus == GUN_TARGETING && _enemyImage.armImageIndex <= 0)
+		{
+			_gunStatus = GUN_READY;
+			_enemyImage.armImageIndex = _enemyImage.armImage[GUN_READY]->getMaxFrameX();			
+		}
+		else if (_gunStatus == GUN_READY && _enemyImage.armImageIndex <= 0) 
+		{
+			_gunStatus = GUN_FIRE;
+			_enemyImage.armImageIndex = _enemyImage.armImage[GUN_FIRE]->getMaxFrameX();			
+		}
+		else if (_gunStatus == GUN_FIRE && _enemyImage.armImageIndex <= 0)
+		{
+			
+			_isFire = true;
+		}
+		else _isFire = false;
 	}
+
+	else
+	{		
+
+		if (_gunStatus == GUN_TARGETING && _enemyImage.armImageIndex >= _enemyImage.armImage[GUN_TARGETING]->getMaxFrameX())
+		{
+			_gunStatus = GUN_READY;
+			_enemyImage.armImageIndex = 0;			
+		}
+		else if (_gunStatus == GUN_READY && _enemyImage.armImageIndex >= _enemyImage.armImage[GUN_READY]->getMaxFrameX())
+		{
+			_gunStatus = GUN_FIRE;
+			_enemyImage.armImageIndex = 0;			
+		}
+		else if (_gunStatus == GUN_FIRE && _enemyImage.armImageIndex >= _enemyImage.armImage[GUN_FIRE]->getMaxFrameX())
+		{
+			
+			_isFire = true;
+		}
+		else _isFire = false;
+	}
+
+	//switch (_gunStatus)
+	//{
+	//	case GUN_TARGETING:
+	//	{
+	//		if (!_isLeft)
+	//		{
+	//			if (_enemyImage.armImage[GUN_TARGETING]->getFrameX() >= _enemyImage.armImage[GUN_TARGETING]->getMaxFrameX())
+	//			{
+	//				_gunStatus = GUN_READY;					
+	//			}
+	//		}
+	//		else
+	//		{
+	//			if (_enemyImage.armImage[GUN_TARGETING]->getFrameX() == 0)
+	//			{
+	//				_gunStatus = GUN_READY;					
+	//			}
+	//		}
+	//	}
+	//	case GUN_READY:
+	//	{
+	//		if (!_isLeft)
+	//		{
+	//			if (_enemyImage.armImage[GUN_READY]->getFrameX() >= _enemyImage.armImage[GUN_READY]->getMaxFrameX())
+	//			{
+	//				_gunStatus = GUN_FIRE;					
+	//			}
+	//		}
+	//		else
+	//		{
+	//			if (_enemyImage.armImage[GUN_READY]->getFrameX() == 0)
+	//			{
+	//				_gunStatus = GUN_FIRE;					
+	//			}
+	//		}
+	//	}
+	//	case GUN_FIRE:
+	//	{
+	//		if (!_isLeft)
+	//		{
+	//			if (_enemyImage.armImage[GUN_FIRE]->getFrameX() >= _enemyImage.armImage[GUN_FIRE]->getMaxFrameX())
+	//			{
+	//				_isFire = true;					
+	//			}
+	//		}
+	//		else
+	//		{
+	//			if (_enemyImage.armImage[GUN_FIRE]->getFrameX() == 0)
+	//			{
+	//				_isFire = true;					
+	//			}
+	//		}
+	//	}
+	//
+	//default:
+	//	break;
+	//}
 }
 
+// 프레임 애니메이션
 void enemy::frameAnimate()
 {		
-	if (_enemyStatus == ENEMY_KNOCK_BACK || _enemyStatus == ENEMY_DEAD)
+	if (_enemyStatus == ENEMY_KNOCK_BACK || _enemyStatus == ENEMY_DEAD )
 	{		
 		if (_isLeft)
 		{				
