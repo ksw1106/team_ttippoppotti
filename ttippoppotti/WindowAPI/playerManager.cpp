@@ -102,7 +102,7 @@ void playerManager::update(void)
 		{
 			_knifeCollision = false;
 		}
-
+		
 		if (_player->getIsLeft())
 		{
 			_player->setState(KNIFE);
@@ -111,9 +111,11 @@ void playerManager::update(void)
 		{
 			_player->setState(KNIFE);
 		}
-		EFFECTMANAGER->knifePuff(_player->getX(), _player->getY(), _player->getIsLeft());
+		
+		
+		
 	}
-	//EFFECTMANAGER->bulletPuff();
+	
 	if (KEYMANAGER->isOnceKeyDown('X'))							// 수류탄
 	{
 		if (_player->getIsLeft() == false)						// 오른쪽
@@ -293,6 +295,8 @@ void playerManager::update(void)
 				{
 					_pBullet->getVPlayerBullet()[i].isActived = false;
 					_mapData->deleteMap(j);
+					if (_pBullet->getVPlayerBullet()[i].isActived == false)
+						EFFECTMANAGER->bulletPuff(_pBullet->getVPlayerBullet()[i].x,_pBullet->getVPlayerBullet()[i].y);
 					break;
 				}
 			}
@@ -308,6 +312,8 @@ void playerManager::update(void)
 				{
 					_pBullet->getVPlayerBullet()[i].isActived = false;
 					_mapData->deleteMap(j);
+					if (_pBullet->getVPlayerBullet()[i].isActived == false)
+						EFFECTMANAGER->bulletPuff(_pBullet->getVPlayerBullet()[i].x,_pBullet->getVPlayerBullet()[i].y);
 					break;
 				}
 			}
@@ -371,6 +377,7 @@ void playerManager::update(void)
 				if (IntersectRect(&temp, &_rcKnife, &_mapData->getObject()[i]._rc))
 				{
 					_mapData->deleteMap(i);
+					EFFECTMANAGER->knifePuff(_player->getX(), _player->getY(), _player->getIsLeft());
 					break;
 				}
 			}
@@ -571,6 +578,8 @@ void playerManager::collision()
 				if (_pBullet->getVPlayerBullet()[j].isActived == true)
 				{
 					_pBullet->getVPlayerBullet()[j].isActived = false;
+					if (_pBullet->getVPlayerBullet()[j].isActived == false)
+						EFFECTMANAGER->bulletPuff(_pBullet->getVPlayerBullet()[j].x, _pBullet->getVPlayerBullet()[j].y);
 					break;
 				}
 			}
