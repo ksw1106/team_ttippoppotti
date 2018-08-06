@@ -473,11 +473,14 @@ void pBullet::move()
 			_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
 				_vBullet[i].bulletImage->getFrameWidth(),
 				_vBullet[i].bulletImage->getFrameHeight());	
+
 			float distance = getDistance(_vBullet[i].x, _vBullet[i].y, _vBullet[i].fireX, _vBullet[i].fireY);
 			
 			if (distance > _range)
 			{
 				_vBullet[i].isActived = false;
+				if (_vBullet[i].isActived == false)
+				EFFECTMANAGER->bulletPuff(_vBullet[i].x, _vBullet[i].y);
 			}
 		}
 	}

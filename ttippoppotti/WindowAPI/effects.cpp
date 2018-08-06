@@ -12,7 +12,7 @@ HRESULT effects::init(const char * imageName, int particleMax, bool isFrameImg)
 	_isFrameImg = isFrameImg;
 
 	_count = _index = 0;
-	_animationSpeed = 3;
+	_animationSpeed = 2;
 	_explosionCount = 0;
 	_isParabola = false;
 	_isExplosion = false;
