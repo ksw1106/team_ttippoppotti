@@ -41,9 +41,7 @@ private:
 	bool _isRunning;		//이펙트 재생중이냐?
 	bool _isParabola;
 	bool _isExplosion;
-	bool _isBallExplosion;
-	bool _isEllipsePuff;
-	bool _isBubble;
+	bool _isStaticAnim;
 	bool _isFrameImg;		//프레임이미지냐?
 
 public:
@@ -56,8 +54,6 @@ public:
 	void activateCartridge(float x, float y, bool isLeft);
 	//중앙폭발
 	void activateBallExplosion(float x, float y);
-	//중앙폭발
-	void boomBallExplosion();
 
 	//포물선 발사 설정 (피, 낙석, 나무파편)
 	void activateParabola(float x, float y, float angle);
@@ -72,10 +68,8 @@ public:
 	//총 발사시 이펙트
 	void activateBulletPuff(float x, float y);
 	void activateKnifePuff(float x, float y, bool isLeft);
-	void boomEllipsePuff();
+	void boomStaticAnim();
 
-	void activateP1Bubble(float x, float y);
-	void boomP1Bubble();
 	//충돌처리
 	void collisionProcess();
 	//애니메이션

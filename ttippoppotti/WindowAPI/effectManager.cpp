@@ -39,10 +39,8 @@ HRESULT effectManager::init(void)
 
 	addEffect("rambro_cartridge", "rambro_cartridge", 10, 1, true);
 
-	addEffect("bulletPuff", "bulletPuff", 10, 1, true);
-	addEffect("knifePuff", "whitePuff", 10, 1, true);
-
-	addEffect("p1Bubble", "p1Bubble", 2, 1, true);
+	addEffect("bulletPuff", "bulletPuff", 1, 1, true);
+	addEffect("knifePuff", "whitePuff", 1, 1, true);
 
 	_count = 0;
 	_isExplosion = false;
@@ -153,11 +151,6 @@ void effectManager::bulletPuff(float x, float y)
 void effectManager::knifePuff(float x, float y, bool isLeft)
 {
 	this->playKnifePuff("knifePuff", x, y, isLeft);
-}
-
-void effectManager::p1Bubble(float x, float y)
-{
-	this->playP1Bubble("p1Bubble", x, y);
 }
 
 void effectManager::explosion(float x, float y)
@@ -316,24 +309,6 @@ void effectManager::playKnifePuff(string effectName, float x, float y, bool isLe
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
 			mIter->second[i]->activateKnifePuff(x, y, isLeft);
-			return;
-		}
-	}
-}
-
-void effectManager::playP1Bubble(string effectName, float x, float y)
-{
-	miEffect mIter;
-
-	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
-	{
-		if (!(mIter->first == effectName)) continue;
-
-		//이펙트키와 일치하면 이펙트 실행
-		for (int i = 0; i < mIter->second.size(); i++)
-		{
-			if (mIter->second[i]->getIsRunning()) continue;
-			mIter->second[i]->activateP1Bubble(x, y);
 			return;
 		}
 	}

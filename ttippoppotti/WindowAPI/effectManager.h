@@ -38,9 +38,6 @@ public:
 	//Ä® ÀÌÆåÆ®
 	void knifePuff(float x, float y, bool isLeft);
 
-	//p1¸»Ç³¼±
-	void p1Bubble(float x, float y);
-
 	//Æø¹ß
 	void explosion(float x, float y);
 	//Æø¹ß ÃÊ±âÈ­
@@ -55,7 +52,6 @@ public:
 	void playCartridge(string effectName, float x, float y, bool isLeft);
 	void playBulletPuff(string effectName, float x, float y);
 	void playKnifePuff(string effectName, float x, float y, bool isLeft);
-	void playP1Bubble(string effectName, float x, float y);
 
 	effectManager() {}
 	~effectManager() {}

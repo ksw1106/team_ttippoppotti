@@ -12,13 +12,11 @@ HRESULT effects::init(const char * imageName, int particleMax, bool isFrameImg)
 	_isFrameImg = isFrameImg;
 
 	_count = _index = 0;
-	_animationSpeed = 5;
+	_animationSpeed = 3;
 	_explosionCount = 0;
 	_isParabola = false;
-	_isBallExplosion = false;
 	_isExplosion = false;
-	_isEllipsePuff = false;
-	_isBubble = false;
+	_isStaticAnim = false;
 
 	for (int i = 0; i < _particleMax; i++)
 	{
@@ -40,10 +38,8 @@ void effects::update(void)
 	if (_isRunning)
 	{
 		this->boomExplosion();
-		this->boomBallExplosion();
+		this->boomStaticAnim();
 		this->boomParabola();
-		this->boomEllipsePuff();
-		this->boomP1Bubble();
 		this->collisionProcess();
 		this->frameChange();
 	}
@@ -144,10 +140,11 @@ void effects::boomExplosion()
 void effects::activateBulletPuff(float x, float y)
 {
 	_isRunning = true;
-	_isEllipsePuff = true;
+	_isStaticAnim = true;
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
+		_index = _count = 0;
 		_vParticle[i].x = x;
 		_vParticle[i].y = y;
 		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
@@ -157,65 +154,34 @@ void effects::activateBulletPuff(float x, float y)
 void effects::activateKnifePuff(float x, float y, bool isLeft)
 {
 	_isRunning = true;
-	_isEllipsePuff = true;
+	_isStaticAnim = true;
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
+		_index = _count = 0;
 		if (isLeft)
 			_vParticle[i].x = x;
 		else //플레이어 오른
 			_vParticle[i].x = x + 89;
-		_vParticle[i].y = y;
+		_vParticle[i].y = y + 38;
 		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 	}
 }
 
-void effects::boomEllipsePuff()
+void effects::boomStaticAnim()
 {
-	if (_isEllipsePuff)
+	if (_isStaticAnim)
 	{
 		for (int i = 0; i < _particleMax; i++)
 		{
-			_vParticle[i].count++;
-			if (_vParticle[i].count >= _vParticle[i].particleImg->getMaxFrameX())
+			if (_index >= _vParticle[i].particleImg->getMaxFrameX())
 			{
 				_vParticle[i].fire = false;
 				_isRunning = false;
-				_isEllipsePuff = false;
+				_isStaticAnim = false;
+				_vParticle[i].count = 0;
 			}
-		}
-	}
-}
-
-void effects::activateP1Bubble(float x, float y)
-{
-	_isRunning = true;
-	_isBubble = true;
-	for (int i = 0; i < _particleMax; i++)
-	{
-		_vParticle[i].fire = true;
-		_vParticle[i].x = x + 32;
-		_vParticle[i].y = y - 30;
-		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
-	}
-}
-
-void effects::boomP1Bubble()
-{
-	if (_isBubble)
-	{
-		for (int i = 0; i < _particleMax; i++)
-		{
-			if (_vParticle[i].count >= _vParticle[i].particleImg->getMaxFrameX())
-			{
-				//_vParticle[i].particleImg->setFrameX(_vParticle[i].particleImg->getMaxFrameX());
-				_vParticle[i].particleImg = IMAGEMANAGER->findImage("p1Bubble_still");
-				_isFrameImg = false;
-			}
-			else
-			{
-				_vParticle[i].count++;
-			}
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 		}
 	}
 }
@@ -223,7 +189,7 @@ void effects::boomP1Bubble()
 void effects::activateBallExplosion(float x, float y)
 {
 	_isRunning = true;
-	_isBallExplosion = true;
+	_isStaticAnim = true;
 
 	for (int i = 0; i < _particleMax; i++)
 	{
@@ -233,23 +199,6 @@ void effects::activateBallExplosion(float x, float y)
 		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
 			_vParticle[i].particleImg->getFrameWidth(),
 			_vParticle[i].particleImg->getFrameHeight());
-	}
-}
-
-void effects::boomBallExplosion()
-{
-	if (_isBallExplosion)
-	{
-		for (int i = 0; i < _particleMax; i++)
-		{
-			_vParticle[i].count++;
-			if (_vParticle[i].count >= _vParticle[i].particleImg->getMaxFrameX())
-			{
-				_vParticle[i].fire = false;
-				_isRunning = false;
-				_isBallExplosion = false;
-			}
-		}
 	}
 }
 

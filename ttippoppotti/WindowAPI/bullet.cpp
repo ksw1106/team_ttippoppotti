@@ -501,7 +501,7 @@ HRESULT pGrenade::init(float range)
 		tagBullet pGrenade;
 		ZeroMemory(&pGrenade, sizeof(tagBullet));
 		pGrenade.bulletImage = new image;
-		pGrenade.bulletImage->init("player_ramBro/rambro_grenade.bmp", 40, 40, 1, 1, true, RGB(255, 0, 255));
+		pGrenade.bulletImage->init("player_ramBro/rambro_grenade.bmp", 28, 35, 1, 1, true, RGB(255, 0, 255));
 
 		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
 		_vBullet.push_back(pGrenade);
@@ -586,26 +586,4 @@ void pGrenade::move()
 			_vBullet[i].count++;
 		}
 	}
-}
-
-float pGrenade::getDistance(float startX, float startY, float endX, float endY)
-{
-	float x = endX - startX;
-	float y = endY - startY;
-
-	return sqrtf(x * x + y * y);
-}
-
-float pGrenade::getAngle(float startX, float startY, float endX, float endY)
-{
-	float x = endX - startX;
-	float y = endY - startY;
-	float distance = sqrtf(x * x + y * y);
-	float angle = acosf(x / distance);
-	if (endY > startY)
-	{
-		angle = PI2 - angle;
-	}
-
-	return angle;
 }
