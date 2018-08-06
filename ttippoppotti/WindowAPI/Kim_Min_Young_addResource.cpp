@@ -27,6 +27,8 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadImage("explosionFlame6", "effectImage/explosion_flame_06.bmp", 33, 33, true, RGB(255, 0, 255));
 	_loading->loadImage("explosionFlame7", "effectImage/explosion_flame_07.bmp", 33, 33, true, RGB(255, 0, 255));
 	_loading->loadImage("explosionFlame8", "effectImage/explosion_flame_08.bmp", 43, 43, true, RGB(255, 0, 255));
+	_loading->loadImage("p1Bubble_still", "effectImage/p1_bubble_still_01.bmp", 88, 92, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("p1Bubble", "effectImage/p1_bubble_01.bmp", 1056, 92, 12, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("bloodTrailPuff1", "effectImage/bloodTrailPuff_01.bmp", 126, 14, 9, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("bloodTrailPuff2", "effectImage/bloodTrailPuff_02.bmp", 94, 6, 16, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("bloodTrailPuff3", "effectImage/bloodTrailPuff_03.bmp", 154, 13, 11, 1, true, RGB(255, 0, 255));
@@ -41,7 +43,6 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadFrameImage("smoke2", "effectImage/smoke_02.bmp", 480, 32, 15, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("whitePuff", "effectImage/whitePuffPop_01.bmp", 384, 64, 6, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("bulletPuff", "effectImage/bulletPuff_01.bmp", 528, 66, 8, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("p1Bubble", "effectImage/p1_bubble_01.bmp", 1056, 92, 12, 1, true, RGB(255, 0, 255));
 
 	_loading->loadImage("skull", "objectImage/skull_01.bmp", 20, 20, true, RGB(255, 0, 255));
 	_loading->loadImage("skullPole", "objectImage/skull_pole_01.bmp", 23, 77, true, RGB(255, 0, 255));

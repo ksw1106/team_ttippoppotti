@@ -18,27 +18,41 @@ HRESULT objectManager::init()
 
 	OBJECT_TYPE type;
 
-	_fPos[0].x = 677, _fPos[0].y = 2164;
-	_fPos[1].x = 863, _fPos[1].y = 2164;
-	_fPos[2].x = 1340, _fPos[2].y = 2164;
-	_fPos[3].x = 1950, _fPos[3].y = 1420;
-	_fPos[4].x = 3169, _fPos[4].y = 1692;
-	_fPos[5].x = 3509, _fPos[5].y = 1692;
-	_fPos[6].x = 3771, _fPos[6].y = 1692;
-	_fPos[7].x = 3158, _fPos[7].y = 1490;
-	_fPos[8].x = 3915, _fPos[8].y = 1490;
-	_fPos[9].x = 3230, _fPos[9].y = 1287;
-	_fPos[10].x = 3910, _fPos[10].y = 1287;
-	_fPos[11].x = 3169, _fPos[11].y = 1085;
+	_fPos[0].x = _mapData->getObject()[9]._rc.left, _fPos[0].y = _mapData->getObject()[9]._rc.top;
+	_fPos[1].x = _mapData->getObject()[11]._rc.left, _fPos[1].y = _mapData->getObject()[11]._rc.top;
+	_fPos[2].x = _mapData->getObject()[234]._rc.left, _fPos[2].y = _mapData->getObject()[234]._rc.top;
+	_fPos[3].x = _mapData->getObject()[137]._rc.left, _fPos[3].y = _mapData->getObject()[137]._rc.top;
+	_fPos[4].x = _mapData->getObject()[457]._rc.left, _fPos[4].y = _mapData->getObject()[457]._rc.top;
+	_fPos[5].x = _mapData->getObject()[462]._rc.left, _fPos[5].y = _mapData->getObject()[462]._rc.top;
+	_fPos[6].x = _mapData->getObject()[365]._rc.left, _fPos[6].y = _mapData->getObject()[365]._rc.top;
+	_fPos[7].x = _mapData->getObject()[434]._rc.left, _fPos[7].y = _mapData->getObject()[434]._rc.top;
+	_fPos[8].x = _mapData->getObject()[444]._rc.left, _fPos[8].y = _mapData->getObject()[444]._rc.top;
+	_fPos[9].x = _mapData->getObject()[410]._rc.left, _fPos[9].y = _mapData->getObject()[410]._rc.top;
+	_fPos[10].x = _mapData->getObject()[420]._rc.left, _fPos[10].y = _mapData->getObject()[420]._rc.top;
+	_fPos[11].x = _mapData->getObject()[390]._rc.left, _fPos[11].y = _mapData->getObject()[390]._rc.top;
+
 	for (int i = 0; i < 12; i++)
 	{
 		type = (OBJECT_TYPE)RND->getFromIntTo(0, 6);
 	
 		objectA* object = _factory->createObject(type);
-		object->setPosition(_fPos[i].x, _fPos[i].y - object->getImage()->getHeight());
+		object->setPosition(_fPos[i].x, _fPos[i].y - object->getImage()->getHeight() + 6);
 		
 		_vObject.push_back(object);
 	}
+
+	_vObject[0]->setTargetIsActived(&_mapData->getObject()[9]._isActived);
+	_vObject[1]->setTargetIsActived(&_mapData->getObject()[11]._isActived);
+	_vObject[2]->setTargetIsActived(&_mapData->getObject()[234]._isActived);
+	_vObject[3]->setTargetIsActived(&_mapData->getObject()[137]._isActived);
+	_vObject[4]->setTargetIsActived(&_mapData->getObject()[457]._isActived);
+	_vObject[5]->setTargetIsActived(&_mapData->getObject()[462]._isActived);
+	_vObject[6]->setTargetIsActived(&_mapData->getObject()[465]._isActived);
+	_vObject[7]->setTargetIsActived(&_mapData->getObject()[434]._isActived);
+	_vObject[8]->setTargetIsActived(&_mapData->getObject()[444]._isActived);
+	_vObject[9]->setTargetIsActived(&_mapData->getObject()[410]._isActived);
+	_vObject[10]->setTargetIsActived(&_mapData->getObject()[420]._isActived);
+	_vObject[11]->setTargetIsActived(&_mapData->getObject()[390]._isActived);
 
 	_prisonerPos[0].x = 3280, _prisonerPos[0].y = 1558;
 	_prisonerPos[1].x = 3685, _prisonerPos[1].y = 2099;
@@ -54,9 +68,9 @@ HRESULT objectManager::init()
 
 	_boxPos[0].x = 2873, _boxPos[0].y = 1220;
 	_boxPos[1].x = 2941, _boxPos[1].y = 1152;
-	_boxPos[2].x = 3010, _boxPos[2].y = 1354;
-	_boxPos[3].x = 3010, _boxPos[3].y = 1557;
-	_boxPos[4].x = 3010, _boxPos[4].y = 1625;
+	_boxPos[2].x = 3009, _boxPos[2].y = 1354;
+	_boxPos[3].x = 3009, _boxPos[3].y = 1557;
+	_boxPos[4].x = 3009, _boxPos[4].y = 1625;
 	_boxPos[5].x = 4024, _boxPos[5].y = 1354;
 	_boxPos[6].x = 3956, _boxPos[6].y = 1422;
 	_boxPos[7].x = 4024, _boxPos[7].y = 1422;
@@ -76,7 +90,7 @@ HRESULT objectManager::init()
 		_vObject.push_back(object);
 	}
 
-	_drumRedPos[0].x = 3010, _drumRedPos[0].y = 1422;
+	_drumRedPos[0].x = 3009, _drumRedPos[0].y = 1422;
 	for (int i = 0; i < 1; i++)
 	{
 		type = SKULL_DRUMRED;
@@ -160,19 +174,6 @@ HRESULT objectManager::init()
 	for (int i = 0; i < _vObject.size(); i++)
 		_vObject[i]->setState(OBJECT_IDLE);
 
-
-	_vObject[0]->setTargetIsActived(&_mapData->getObject()[9]._isActived);
-	_vObject[1]->setTargetIsActived(&_mapData->getObject()[11]._isActived);
-	_vObject[2]->setTargetIsActived(&_mapData->getObject()[234]._isActived); 
-	_vObject[3]->setTargetIsActived(&_mapData->getObject()[137]._isActived); 
-	_vObject[4]->setTargetIsActived(&_mapData->getObject()[457]._isActived); 
-	_vObject[5]->setTargetIsActived(&_mapData->getObject()[462]._isActived); 
-	_vObject[6]->setTargetIsActived(&_mapData->getObject()[465]._isActived); 
-	_vObject[7]->setTargetIsActived(&_mapData->getObject()[434]._isActived); 
-	_vObject[8]->setTargetIsActived(&_mapData->getObject()[444]._isActived); 
-	_vObject[9]->setTargetIsActived(&_mapData->getObject()[410]._isActived); 
-	_vObject[10]->setTargetIsActived(&_mapData->getObject()[420]._isActived);
-	_vObject[11]->setTargetIsActived(&_mapData->getObject()[390]._isActived);
 	return S_OK;
 }
 
