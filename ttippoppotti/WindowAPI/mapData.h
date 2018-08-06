@@ -15,6 +15,7 @@ class mapData : public gameNode
 	char str[128];
 public:
 	void deleteMap(int index);
+	void deleteMapIndexByIndex(int num, int index, int index2);
 
 	vector<mapObject>& getObject() { return _vObject; }
 	void setObject(mapObject obj, int index) { _vObject[index] = obj; }

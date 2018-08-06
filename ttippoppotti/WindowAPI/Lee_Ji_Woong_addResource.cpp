@@ -13,7 +13,7 @@ void loadingScene::Lee_Ji_Woong_addImage()
 
 	_loading->loadFrameImage("ÃÑ¹ß»ç", "enemyImage/gun_fire.bmp", 340, 152, 4, 2);
 	_loading->loadFrameImage("ÃÑÆò»ó½Ã", "enemyImage/gun_idle.bmp", 520, 152, 8, 2);
-	_loading->loadFrameImage("ÃÑÁ¶ÁØ", "enemyImage/gun_targeting.bmp", 560, 160, 7, 2);
+	_loading->loadFrameImage("ÃÑÁ¶ÁØ", "enemyImage/gun_targeting.bmp", 595, 152, 7, 2);
 	_loading->loadFrameImage("ÃÑÀåÀü", "enemyImage/gun_reload.bmp", 1280, 160, 16, 2);
 	_loading->loadFrameImage("ÃÑ¹ß»ç´ë±â", "enemyImage/gun_ready.bmp", 1360, 152, 16, 2);
 

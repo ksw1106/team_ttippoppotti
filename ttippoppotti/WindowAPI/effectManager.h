@@ -33,6 +33,14 @@ public:
 	//³ª¹«ÆÄÆí
 	void woodDebris(float x, float y, float angle);
 
+	//ÃÑ¾ËÀÌÆåÆ®
+	void bulletPuff(float x, float y);
+	//Ä® ÀÌÆåÆ®
+	void knifePuff(float x, float y, bool isLeft);
+
+	//p1¸»Ç³¼±
+	void p1Bubble(float x, float y);
+
 	//Æø¹ß
 	void explosion(float x, float y);
 	//Æø¹ß ÃÊ±âÈ­
@@ -44,8 +52,10 @@ public:
 	void playParabola(string effectName, float x, float y, float angle);
 	void playExplosion(string effectName, float x, float y);
 	void playBallExplosion(string effectName, float x, float y);
-
 	void playCartridge(string effectName, float x, float y, bool isLeft);
+	void playBulletPuff(string effectName, float x, float y);
+	void playKnifePuff(string effectName, float x, float y, bool isLeft);
+	void playP1Bubble(string effectName, float x, float y);
 
 	effectManager() {}
 	~effectManager() {}

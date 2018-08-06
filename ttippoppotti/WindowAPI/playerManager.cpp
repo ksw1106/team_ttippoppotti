@@ -106,6 +106,7 @@ void playerManager::update(void)
 		{
 			_player->setState(KNIFE);
 		}
+		EFFECTMANAGER->knifePuff(_player->getX(), _player->getY(), _player->getIsLeft());
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('X'))							// ¼ö·ùÅº

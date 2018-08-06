@@ -18,7 +18,7 @@ HRESULT enemyManager::init(void)
 	//this->setBrovil(3700, 1000, 5);
 		
 	_eBullet = new eBullet;
-	_eBullet->init(10, 800.f);
+	_eBullet->init(1, 800.f);
 	
 	return S_OK;
 }
@@ -34,8 +34,24 @@ void enemyManager::update(void)
 	{
 		_vSoldier[i]->update();		
 		
-		//if (!_vSoldier[i]->getIsAlive()) continue;
-		//this->enemyFire(i);
+		if (!_vSoldier[i]->getIsAlive()) continue;
+		
+		if (_vSoldier[i]->getIsFire())
+		{
+			this->enemyFire(i);
+		}
+
+		// 플레이어 방향에 맞춰 적방향 바꿈 (발견상태일때)
+		if (_vSoldier[i]->getIsUncovered() && (180 / 3.14f * getAngle(_vSoldier[i]->getX(), _vSoldier[i]->getY(), _playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY())) >= 91.f
+			&& (180 / 3.14f * getAngle(_vSoldier[i]->getX(), _vSoldier[i]->getY(), _playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY()) <= 270.f))
+		{
+			_vSoldier[i]->setDirection(true);
+		}
+		else
+		{
+			_vSoldier[i]->setDirection(false);
+		}		
+		
 	}
 
 	_eBullet->update();
@@ -89,12 +105,12 @@ void enemyManager::enemyFire(int num)
 		if (_vSoldier[num]->getDirection())
 			_eBullet->fire(_vSoldier[num]->getX() + _vSoldier[num]->getEnemyBodyImage(_vSoldier[num]->getBodyStatus())->getFrameWidth() - _vSoldier[num]->getEnemyArmImage(_vSoldier[num]->getArmStatus())->getFrameWidth(),
 				getVEnemy()[num]->getY() + _vSoldier[num]->getEnemyBodyImage(_vSoldier[num]->getBodyStatus())->getFrameHeight() / 2,
-				200, getVEnemy()[num]->getDirection());
+				1, getVEnemy()[num]->getDirection());
 		// 오른쪽이면
 		else
 			_eBullet->fire(_vSoldier[num]->getX() + _vSoldier[num]->getEnemyArmImage(_vSoldier[num]->getArmStatus())->getFrameWidth(),
 				getVEnemy()[num]->getY() + _vSoldier[num]->getEnemyBodyImage(_vSoldier[num]->getBodyStatus())->getFrameHeight() / 2,
-				200, getVEnemy()[num]->getDirection());
+				1, getVEnemy()[num]->getDirection());
 	}	
 }
 
@@ -104,24 +120,14 @@ void enemyManager::collision()
 	RECT rc;
 	RECT rcPlayer = RectMake(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(),
 		_playerManager->getPlayer()->getImage(_playerManager->getPlayer()->getState())->getFrameWidth(), _playerManager->getPlayer()->getImage(_playerManager->getPlayer()->getState())->getFrameHeight());
+	
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
 		if (IntersectRect(&rc, &_vSoldier[i]->getRcEnemySight(), &rcPlayer))
 		{
-			if (!_vSoldier[i]->getIsAlive()) continue;
-			
+			if (!_vSoldier[i]->getIsAlive()) continue;			
 			// 말풍선 띄우기
-			_vSoldier[i]->setIsUncovered(true);
-			if (_vSoldier[i]->getBodyStatus() != ENEMY_DOUBT)
-			{
-				_vSoldier[i]->setBodyStatus(ENEMY_DOUBT);
-				if (_vSoldier[i]->getDirection())
-					_vSoldier[i]->setBodyImageIndex(_vSoldier[i]->getEnemyBodyImage(ENEMY_DOUBT)->getMaxFrameX()-1);
-				else
-					_vSoldier[i]->setBodyImageIndex(0);
-
-				//break;
-			}			
+			_vSoldier[i]->setIsUncovered(true);	
 		}
 	}
 
@@ -159,46 +165,46 @@ void enemyManager::collision()
 	}
 
 	// 적 왼쪽 벽 충돌
-	//for (int i = 0; i < _vSoldier.size(); ++i)
-	//{
-	//	float x, y;
-	//	x = _vSoldier[i]->getX();
-	//	y = _vSoldier[i]->getY();
-	//
-	//	if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_LEFT))
-	//	{
-	//		if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
-	//		{
-	//			if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
-	//			else _vSoldier[i]->setDirection(true);
-	//		}
-	//		else
-	//		{
-	//			_vSoldier[i]->setX(x);
-	//		}
-	//	}			
-	//}
+	for (int i = 0; i < _vSoldier.size(); ++i)
+	{
+		float x, y;
+		x = _vSoldier[i]->getX();
+		y = _vSoldier[i]->getY();
+	
+		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_LEFT))
+		{
+			if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
+			{
+				if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
+				else _vSoldier[i]->setDirection(true);
+			}
+			else
+			{
+				_vSoldier[i]->setX(x);
+			}
+		}			
+	}
 
 	// 적 오른쪽 벽 충돌
-	//for (int i = 0; i < _vSoldier.size(); ++i)
-	//{
-	//	float x, y;
-	//	x = _vSoldier[i]->getX() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameWidth();
-	//	y = _vSoldier[i]->getY();
-	//
-	//	if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_RIGHT))
-	//	{
-	//		if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
-	//		{
-	//			if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
-	//			else _vSoldier[i]->setDirection(true);
-	//		}
-	//		else
-	//		{
-	//			_vSoldier[i]->setX(x);
-	//		}
-	//	}		
-	//}
+	for (int i = 0; i < _vSoldier.size(); ++i)
+	{
+		float x, y;
+		x = _vSoldier[i]->getX() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameWidth();
+		y = _vSoldier[i]->getY();
+	
+		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_RIGHT))
+		{
+			if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
+			{
+				if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
+				else _vSoldier[i]->setDirection(true);
+			}
+			else
+			{
+				_vSoldier[i]->setX(x);
+			}
+		}		
+	}
 
 	//// 적 윗 벽 충돌
 	//for (int i = 0; i < _vSoldier.size(); ++i)
@@ -230,19 +236,22 @@ void enemyManager::collideWithPBullet()
 		{
 			if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vSoldier[i]->getRcEnemy()))
 			{				
-				//_vSoldier[i]->setIsAlive(false);
-				_vSoldier[i]->setDirection(_playerManager->getPBullet()->getVPlayerBullet()[j].isLeft);
+				if (_vSoldier[i]->getDirection() != _playerManager->getPBullet()->getVPlayerBullet()[j].isLeft)
+				{
+					_vSoldier[i]->setDirection(_playerManager->getPBullet()->getVPlayerBullet()[j].isLeft);
+				}
+				_vSoldier[i]->setIsUncovered(false);
+				_vSoldier[i]->setIsStrange(false);
 				
 				if (_vSoldier[i]->getBodyStatus() != ENEMY_KNOCK_BACK && _vSoldier[i]->getBodyStatus() != ENEMY_DEAD)
-				{
+				{					
 					if (_vSoldier[i]->getDirection())
 						_vSoldier[i]->setBodyImageIndex(_vSoldier[i]->getEnemyBodyImage(ENEMY_KNOCK_BACK)->getMaxFrameX()-1);
 					else
 						_vSoldier[i]->setBodyImageIndex(0);
 					
 					_vSoldier[i]->setBodyStatus(ENEMY_KNOCK_BACK);			
-				
-					break;
+								
 				}
 
 				if (_vSoldier[i]->getBodyStatus() == ENEMY_DEAD)
