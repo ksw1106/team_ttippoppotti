@@ -214,6 +214,10 @@ public:
 	void move();
 
 	vector<tagBullet>& getVPlayerGrenade() { return _vBullet; }
+	//두점 사이의 거리
+	float getDistance(float startX, float startY, float endX, float endY);
+	//두점 사이의 각도
+	float getAngle(float startX, float startY, float endX, float endY);
 
 	pGrenade() {}
 	~pGrenade() {}

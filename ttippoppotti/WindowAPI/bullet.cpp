@@ -440,6 +440,7 @@ void pBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 		_vBullet[i].isActived = true;
 		_vBullet[i].speed = fireSpeed;
 		_vBullet[i].isLeft = isLeft;
+		y = RND->getFromIntTo(y - 20, y + 20);			// y °ªÀ» ·£´ýÀ¸·Î ¹Ù²ãÁà¼­ ÃÑ¾Ë ³ª°¡´Â°Ô ·£´ýÇÏ°Ô ³ª°¨
 		_vBullet[i].x = _vBullet[i].fireX = x;
 		_vBullet[i].y = _vBullet[i].fireY = y;
 		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
@@ -456,15 +457,17 @@ void pBullet::move()
 	{
 		if (_vBullet[i].isActived)
 		{
-			if (_vBullet[i].isLeft)
+			if (_vBullet[i].isLeft)					// ¿ÞÂÊ
 			{
-				_vBullet[i].x -= _vBullet[i].speed;
-				_vBullet[i].angle = PI;
+				_vBullet[i].angle = 180.f * PI / 180;
+				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
+				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
-			if (!_vBullet[i].isLeft)
+			if (!_vBullet[i].isLeft)				// ¿À¸¥ÂÊ
 			{
-				_vBullet[i].x += _vBullet[i].speed;
-				_vBullet[i].angle = 0.f;
+				_vBullet[i].angle = 0.f * PI / 180;
+				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
+				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
 
 			_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
@@ -544,6 +547,14 @@ void pGrenade::fire(int x, int y, int fireSpeed, bool isLeft)
 		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
 			_vBullet[i].bulletImage->getFrameWidth(),
 			_vBullet[i].bulletImage->getFrameHeight());
+		if (_vBullet[i].isLeft)
+		{
+			_vBullet[i].angle = 145.f * PI / 180;
+		}
+		if (!_vBullet[i].isLeft)
+		{
+			_vBullet[i].angle = 35.f * PI / 180;
+		}
 
 		break;
 	}
@@ -557,15 +568,13 @@ void pGrenade::move()
 		{
 			if (_vBullet[i].isLeft)					// ¿ÞÂÊ
 			{
-				_vBullet[i].gravity += 0.90f;
-				_vBullet[i].angle = 145.f * PI / 180;
+				_vBullet[i].gravity += 0.90f;	
 				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
 			if (!_vBullet[i].isLeft)				// ¿À¸¥ÂÊ
 			{
-				_vBullet[i].gravity += 0.90f;
-				_vBullet[i].angle = 35.f * PI / 180;
+				_vBullet[i].gravity += 0.90f;	
 				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
@@ -577,4 +586,26 @@ void pGrenade::move()
 			_vBullet[i].count++;
 		}
 	}
+}
+
+float pGrenade::getDistance(float startX, float startY, float endX, float endY)
+{
+	float x = endX - startX;
+	float y = endY - startY;
+
+	return sqrtf(x * x + y * y);
+}
+
+float pGrenade::getAngle(float startX, float startY, float endX, float endY)
+{
+	float x = endX - startX;
+	float y = endY - startY;
+	float distance = sqrtf(x * x + y * y);
+	float angle = acosf(x / distance);
+	if (endY > startY)
+	{
+		angle = PI2 - angle;
+	}
+
+	return angle;
 }

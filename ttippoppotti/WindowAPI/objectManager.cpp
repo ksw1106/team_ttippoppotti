@@ -30,7 +30,6 @@ HRESULT objectManager::init()
 	_fPos[9].x = 3230, _fPos[9].y = 1287;
 	_fPos[10].x = 3910, _fPos[10].y = 1287;
 	_fPos[11].x = 3169, _fPos[11].y = 1085;
-	//_mapData->getObject()[렉트번호].isActived;
 	for (int i = 0; i < 12; i++)
 	{
 		type = (OBJECT_TYPE)RND->getFromIntTo(0, 6);
@@ -163,6 +162,17 @@ HRESULT objectManager::init()
 
 
 	_vObject[0]->setTargetIsActived(&_mapData->getObject()[9]._isActived);
+	_vObject[1]->setTargetIsActived(&_mapData->getObject()[11]._isActived);
+	_vObject[2]->setTargetIsActived(&_mapData->getObject()[234]._isActived); 
+	_vObject[3]->setTargetIsActived(&_mapData->getObject()[137]._isActived); 
+	_vObject[4]->setTargetIsActived(&_mapData->getObject()[457]._isActived); 
+	_vObject[5]->setTargetIsActived(&_mapData->getObject()[462]._isActived); 
+	_vObject[6]->setTargetIsActived(&_mapData->getObject()[465]._isActived); 
+	_vObject[7]->setTargetIsActived(&_mapData->getObject()[434]._isActived); 
+	_vObject[8]->setTargetIsActived(&_mapData->getObject()[444]._isActived); 
+	_vObject[9]->setTargetIsActived(&_mapData->getObject()[410]._isActived); 
+	_vObject[10]->setTargetIsActived(&_mapData->getObject()[420]._isActived);
+	_vObject[11]->setTargetIsActived(&_mapData->getObject()[390]._isActived);
 	return S_OK;
 }
 

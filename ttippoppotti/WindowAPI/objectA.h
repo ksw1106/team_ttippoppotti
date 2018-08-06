@@ -56,8 +56,8 @@ public:
 	bool* getTargetIsActived() { return _targetIsActived; }
 	void setState(OBJECT_STATE state) { _state = state; }
 	void setPosition(float x, float y) { _x = x, _y = y; }
-	void setTargetIsActived(bool targetIsActived) { _targetIsActived = &targetIsActived; }
-
+	void setTargetIsActived(bool* targetIsActived) { _targetIsActived = targetIsActived; }
+	void setType(OBJECT_TYPE type) { _type = type; }
 	virtual void init() = 0;
 	virtual void update();
 	virtual void render(HDC hdc);
