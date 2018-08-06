@@ -44,7 +44,7 @@ HRESULT enemy::initSoldier(int x, int y)
 	_doubtSign->setFrameY(0);
 		
 	_angle = 270.f * 3.14f / 180;
-	_speed = 3.f;
+	_speed = 5.f;
 	_enemyStatus = ENEMY_IDLE;
 	_gunStatus = GUN_IDLE;
 	
@@ -73,8 +73,7 @@ void enemy::release(void)
 }
 
 void enemy::update(void)
-{	
-		
+{			
 	// 밑에 없으면 떨어짐
 	fall();	
 
@@ -322,7 +321,6 @@ void enemy::flyAway()
 // 발사시 에너미 프레임 움직임
 void enemy::fireMovement()
 {			
-
 	if (_gunStatus != GUN_TARGETING && _gunStatus != GUN_READY && _gunStatus != GUN_FIRE)
 	{
 		_gunStatus = GUN_TARGETING;
