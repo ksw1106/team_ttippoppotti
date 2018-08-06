@@ -16,7 +16,7 @@ HRESULT playerManager::init(void)
 	
 	_fireCount = 0;
 	_change = false;
-	
+
 	return S_OK;
 }
 

@@ -18,9 +18,9 @@ HRESULT objectManager::init()
 
 	OBJECT_TYPE type;
 
-	_fPos[0].x = _mapData->getObject()[9]._rc.left, _fPos[0].y = _mapData->getObject()[9]._rc.top;
-	_fPos[1].x = _mapData->getObject()[11]._rc.left, _fPos[1].y = _mapData->getObject()[11]._rc.top;
-	_fPos[2].x = _mapData->getObject()[234]._rc.left, _fPos[2].y = _mapData->getObject()[234]._rc.top;
+	_fPos[0].x = _mapData->getObject()[8]._rc.left, _fPos[0].y = _mapData->getObject()[8]._rc.top;
+	_fPos[1].x = _mapData->getObject()[10]._rc.left, _fPos[1].y = _mapData->getObject()[10]._rc.top;
+	_fPos[2].x = _mapData->getObject()[235]._rc.left, _fPos[2].y = _mapData->getObject()[235]._rc.top;
 	_fPos[3].x = _mapData->getObject()[137]._rc.left, _fPos[3].y = _mapData->getObject()[137]._rc.top;
 	_fPos[4].x = _mapData->getObject()[457]._rc.left, _fPos[4].y = _mapData->getObject()[457]._rc.top;
 	_fPos[5].x = _mapData->getObject()[462]._rc.left, _fPos[5].y = _mapData->getObject()[462]._rc.top;

@@ -25,6 +25,7 @@ class objectManager : public singletonBase<objectManager>
 	fPos _amFlagPolePos[2];
 	fPos _enemyFlagPos[2];
 public:
+	vector<objectA*> getVObject() { return _vObject; }
 	void setMapData(mapData* mapData) { _mapData = mapData;	}
 	//오브젝트매니져 초기화
 	HRESULT init();
