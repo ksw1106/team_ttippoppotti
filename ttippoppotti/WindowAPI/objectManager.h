@@ -3,6 +3,7 @@
 #include "objectA.h"
 
 class mapData;
+class playerManager;
 
 struct fPos
 {
@@ -14,6 +15,7 @@ class objectManager : public singletonBase<objectManager>
 	mapData* _mapData;
 	vector<objectA*> _vObject;
 	objectFactory* _factory;
+	playerManager* _playerManager;
 	fPos _fPos[12];
 	fPos _prisonerPos[2];
 	fPos _boxPos[14];

@@ -134,7 +134,6 @@ void stageScene::update(void)
 	{
 		if (KEYMANAGER->isStayKeyDown('A'))
 		{
-
 			_rcCamera.left -= 10;
 			_rcCamera.right -= 10;
 		}
@@ -238,20 +237,6 @@ void stageScene::render(void)
 	OBJECTMANAGER->render(getMemDC());
 	
 	_backGround[2]._image->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
-	
-	//헬기 등 오브젝트
-	/*if(CAMERAMANAGER->CameraIn(RectMake(_x, _y, _helicopter->getWidth(), _helicopter->getHeight())))
-		_helicopter->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
-	if (CAMERAMANAGER->CameraIn(RectMake(_x + 169, _y + 181, IMAGEMANAGER->findImage("ladder")->getWidth(), IMAGEMANAGER->findImage("ladder")->getHeight())))
-		IMAGEMANAGER->findImage("ladder")->render(getMemDC(), _x + 169 - CAMERAMANAGER->getCamera().left, _y + 181 - CAMERAMANAGER->getCamera().top);
-	if (CAMERAMANAGER->CameraIn(RectMake(_flagX, _flagY, _saveFlag->getWidth(), _saveFlag->getHeight())))
-		_saveFlag->frameRender(getMemDC(), _flagX - CAMERAMANAGER->getCamera().left, _flagY - CAMERAMANAGER->getCamera().top);
-	if (CAMERAMANAGER->CameraIn(RectMake(IMAGEMANAGER->findImage("spike")->getX(), IMAGEMANAGER->findImage("spike")->getY(), IMAGEMANAGER->findImage("spike")->getWidth(), IMAGEMANAGER->findImage("spike")->getHeight())))
-		IMAGEMANAGER->findImage("spike")->render(getMemDC(), IMAGEMANAGER->findImage("spike")->getX() - CAMERAMANAGER->getCamera().left, IMAGEMANAGER->findImage("spike")->getY() - CAMERAMANAGER->getCamera().top);
-	if (CAMERAMANAGER->CameraIn(RectMake(_humanDead->getX(), _humanDead->getY(), _humanDead->getWidth(), _humanDead->getHeight())))
-		_humanDead->frameRender(getMemDC(), _humanDead->getX() - CAMERAMANAGER->getCamera().left, _humanDead->getY() - CAMERAMANAGER->getCamera().top);
-	if (CAMERAMANAGER->CameraIn(RectMake(_flag->getX(), _flag->getY(), _flag->getWidth(), _flag->getHeight())))
-		_flag->frameRender(getMemDC(), _flag->getX() - CAMERAMANAGER->getCamera().left, _flag->getY() - CAMERAMANAGER->getCamera().top);*/
 	
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{

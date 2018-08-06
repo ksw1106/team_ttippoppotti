@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "objectManager.h"
 #include "mapData.h"
+#include "playerManager.h"
 
 HRESULT objectManager::init()
 {
@@ -25,7 +26,7 @@ HRESULT objectManager::init()
 	_fPos[4].x = _mapData->getObject()[457]._rc.left, _fPos[4].y = _mapData->getObject()[457]._rc.top;
 	_fPos[5].x = _mapData->getObject()[462]._rc.left, _fPos[5].y = _mapData->getObject()[462]._rc.top;
 	_fPos[6].x = _mapData->getObject()[365]._rc.left, _fPos[6].y = _mapData->getObject()[365]._rc.top;
-	_fPos[7].x = _mapData->getObject()[434]._rc.left, _fPos[7].y = _mapData->getObject()[434]._rc.top;
+	_fPos[7].x = _mapData->getObject()[435]._rc.left, _fPos[7].y = _mapData->getObject()[435]._rc.top;
 	_fPos[8].x = _mapData->getObject()[444]._rc.left, _fPos[8].y = _mapData->getObject()[444]._rc.top;
 	_fPos[9].x = _mapData->getObject()[410]._rc.left, _fPos[9].y = _mapData->getObject()[410]._rc.top;
 	_fPos[10].x = _mapData->getObject()[420]._rc.left, _fPos[10].y = _mapData->getObject()[420]._rc.top;
@@ -41,14 +42,14 @@ HRESULT objectManager::init()
 		_vObject.push_back(object);
 	}
 
-	_vObject[0]->setTargetIsActived(&_mapData->getObject()[9]._isActived);
-	_vObject[1]->setTargetIsActived(&_mapData->getObject()[11]._isActived);
-	_vObject[2]->setTargetIsActived(&_mapData->getObject()[234]._isActived);
+	_vObject[0]->setTargetIsActived(&_mapData->getObject()[8]._isActived);
+	_vObject[1]->setTargetIsActived(&_mapData->getObject()[10]._isActived);
+	_vObject[2]->setTargetIsActived(&_mapData->getObject()[235]._isActived);
 	_vObject[3]->setTargetIsActived(&_mapData->getObject()[137]._isActived);
 	_vObject[4]->setTargetIsActived(&_mapData->getObject()[457]._isActived);
 	_vObject[5]->setTargetIsActived(&_mapData->getObject()[462]._isActived);
 	_vObject[6]->setTargetIsActived(&_mapData->getObject()[465]._isActived);
-	_vObject[7]->setTargetIsActived(&_mapData->getObject()[434]._isActived);
+	_vObject[7]->setTargetIsActived(&_mapData->getObject()[435]._isActived);
 	_vObject[8]->setTargetIsActived(&_mapData->getObject()[444]._isActived);
 	_vObject[9]->setTargetIsActived(&_mapData->getObject()[410]._isActived);
 	_vObject[10]->setTargetIsActived(&_mapData->getObject()[420]._isActived);
@@ -185,13 +186,57 @@ void objectManager::release()
 
 void objectManager::update()
 {
+	RECT tempRc;
 	//오브젝트 벡터 돌리면서 업데이트 시켜주면 된다
 	for (int i = 0; i < _vObject.size(); i++)
 	{
 		if (OBJECT_DESTROY == _vObject[i]->getState()) continue;
 
 		_vObject[i]->update();
+		/*for (int j = 0; j < _playerManager->getPBullet()->getVPlayerBullet().size(); j++)
+		{
+			if (_vObject[i]->getType() == WOODENBOX)
+			{
+				//총알과 박스가 부딪혔을 때
+				if (IntersectRect(&tempRc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vObject[i]->getRect()))
+				{
+					//EFFECTMANAGER->explosion(_vObject[i]->getImage()->getX(), _vObject[i]->getImage()->getY());
+					//EFFECTMANAGER->woodDebris(_vObject[i]->getImage()->getX(), _vObject[i]->getImage()->getY());
+					_vObject[i]->setState(OBJECT_DESTROY);
+
+				}
+			}
+			else if (_vObject[i]->getType() == SKULL_DRUMRED)
+			{
+				if (IntersectRect(&tempRc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vObject[i]->getRect()))
+				{
+					_vObject[i]->setState(OBJECT_DESTROY);
+				}
+			}
+			else if (_vObject[i]->getType() == SKULL_DRUMGRAY)
+			{
+				if (IntersectRect(&tempRc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vObject[i]->getRect()))
+				{
+					_vObject[i]->setState(OBJECT_DESTROY);
+				}
+			}
+			else if (_vObject[i]->getType() == PRISONER)
+			{
+				if (IntersectRect(&tempRc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vObject[i]->getRect()))
+				{
+					_vObject[i]->setState(OBJECT_MOVE);
+				}
+				if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getImage(_playerManager->getPlayer()->getState())->boudingBoxWithFrame(), &_vObject[i]->getRect()))
+				{
+					if (_vObject[i]->getState() == OBJECT_MOVE)
+					{
+						_vObject[i]->setState(OBJECT_MOVE);
+					}
+				}
+			}
+		}*/
 	}
+
 }
 
 void objectManager::render(HDC hdc)
