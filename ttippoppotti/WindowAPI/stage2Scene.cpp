@@ -13,6 +13,8 @@ HRESULT stage2Scene::init(void)
 	_mapData = new mapData;
 	_mapData->init(2);
 
+	EFFECTMANAGER->init();
+
 	_camDebug = false;
 	_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
 	CAMERAMANAGER->setCamera(_rcCamera);
