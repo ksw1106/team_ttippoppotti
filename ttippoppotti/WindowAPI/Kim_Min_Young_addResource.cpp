@@ -30,10 +30,10 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadFrameImage("bloodTrailPuff1", "effectImage/bloodTrailPuff_01.bmp", 126, 14, 9, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("bloodTrailPuff2", "effectImage/bloodTrailPuff_02.bmp", 94, 6, 16, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("bloodTrailPuff3", "effectImage/bloodTrailPuff_03.bmp", 154, 13, 11, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("explosionBallFlame", "effectImage/explosionBallFlame_01.bmp", 4160, 256, 26, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("explosionBallFlame_large", "effectImage/explosionBallFlame_large_01.bmp", 8448, 256, 33, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("explosionBallFlame_larger", "effectImage/explosionBallFlame_larger_01.bmp", 11904, 512, 31, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("explosionBallFlame_small", "effectImage/explosionBallFlame_small_01.bmp", 2688, 128, 21, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("explosionBallFlame", "effectImage/explosionBallFlame_01.bmp", 4160, 256, 24, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("explosionBallFlame_large", "effectImage/explosionBallFlame_large_01.bmp", 8448, 256, 31, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("explosionBallFlame_larger", "effectImage/explosionBallFlame_larger_01.bmp", 11904, 512, 29, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("explosionBallFlame_small", "effectImage/explosionBallFlame_small_01.bmp", 2688, 128, 19, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("rambro_cartridge", "effectImage/rambro_cartridge_01.bmp", 40, 10, 4, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("woodDebris1", "effectImage/wood_debris_01.bmp", 136, 34, 4, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("woodDebris2", "effectImage/wood_debris_02.bmp", 104, 26, 4, 1, true, RGB(255, 0, 255));
@@ -56,7 +56,7 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadImage("bottle_brown", "objectImage/bottle_brown_01.bmp", 31, 44, true, RGB(255, 0, 255));
 	_loading->loadImage("saveFlag_pole", "objectImage/saveFlag_pole_01.bmp", 22, 203, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("human_dead", "objectImage/human_dead.bmp", 972, 115, 12, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("truck", "objectImage/truck_01.bmp", 389, 231, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("truck", "objectImage/truck_01.bmp", 388, 231, true, RGB(255, 0, 255));
 }
 
 void loadingScene::Kim_Min_Young_addSound()

@@ -52,7 +52,6 @@ public:
 
 	//ÅºÇÇ ¼³Á¤
 	void activateCartridge(float x, float y, bool isLeft);
-
 	//Áß¾ÓÆø¹ß
 	void activateBallExplosion(float x, float y);
 	//Áß¾ÓÆø¹ß
@@ -67,6 +66,12 @@ public:
 	void activateExplosion(float x, float y);
 	//Æø¹ß ¹ß»ç!
 	void boomExplosion();
+
+	//ÃÑ ¹ß»ç½Ã ÀÌÆåÆ®
+	void activateBulletPuff();
+
+	//Ä® ÀÌÆåÆ®
+	void activateKnifePuff();
 
 	//Ãæµ¹Ã³¸®
 	void collisionProcess();

@@ -16,7 +16,7 @@ class mapData : public gameNode
 public:
 	void deleteMap(int index);
 
-	vector<mapObject> getObject() { return _vObject; }
+	vector<mapObject>& getObject() { return _vObject; }
 	void setObject(mapObject obj, int index) { _vObject[index] = obj; }
 
 	void stage1_setting();

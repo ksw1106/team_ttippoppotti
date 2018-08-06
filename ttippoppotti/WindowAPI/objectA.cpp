@@ -3,8 +3,8 @@
 
 void objectA::update()
 {
-	if (!_targetIsActived)
-		_state = OBJECT_DESTROY;
+	//if (_type >= 0 && _type <= 6 && !*_targetIsActived)
+	//	_state = OBJECT_DESTROY;
 	switch (_state)
 	{
 	case OBJECT_IDLE:
@@ -47,7 +47,6 @@ void deadBody::init()
 	_animationSpeed = 5;
 	_isFrameImage = true;
 	_isLeft = false;
-	_state = OBJECT_IDLE;
 }
 
 void deadBody::idle()
@@ -62,7 +61,6 @@ void skull::init()
 {
 	_image = IMAGEMANAGER->findImage("skull");
 	_isFrameImage = false;
-	_state = OBJECT_IDLE;
 }
 
 void skull::idle()
@@ -77,7 +75,6 @@ void skullPole::init()
 {
 	_image = IMAGEMANAGER->findImage("skullPole");
 	_isFrameImage = false;
-	_state = OBJECT_IDLE;
 }
 
 void skullPole::idle()
@@ -92,7 +89,6 @@ void doubleSkullPole::init()
 {
 	_image = IMAGEMANAGER->findImage("doubleSkullPole");
 	_isFrameImage = false;
-	_state = OBJECT_IDLE;
 }
 
 void doubleSkullPole::idle()
@@ -107,7 +103,6 @@ void skullDrumRed::init()
 {
 	_image = IMAGEMANAGER->findImage("skullDrum_red");
 	_isFrameImage = false;
-	_state = OBJECT_IDLE;
 }
 
 void skullDrumRed::idle()
@@ -122,7 +117,6 @@ void skullDrumGray::init()
 {
 	_image = IMAGEMANAGER->findImage("skullDrum_gray");
 	_isFrameImage = false;
-	_state = OBJECT_IDLE;
 }
 
 void skullDrumGray::idle()
@@ -138,7 +132,6 @@ void prisoner::init()
 	_image = IMAGEMANAGER->findImage("prisoner_inJail");
 	_prisonerFreedImage = IMAGEMANAGER->findImage("prisoner_freed");
 	_isFrameImage = false;
-	_state = OBJECT_IDLE;
 }
 
 void prisoner::idle()
@@ -153,7 +146,6 @@ void woodenBox::init()
 {
 	_image = IMAGEMANAGER->findImage("woodenBox");
 	_isFrameImage = false;
-	_state = OBJECT_IDLE;
 }
 
 void woodenBox::idle()
@@ -168,7 +160,6 @@ void bottleGreen::init()
 {
 	_image = IMAGEMANAGER->findImage("bottle_green");
 	_isFrameImage = false;
-	_state = OBJECT_IDLE;
 }
 
 void bottleGreen::idle()
@@ -183,7 +174,6 @@ void bottleGray::init()
 {
 	_image = IMAGEMANAGER->findImage("bottle_gray");
 	_isFrameImage = false;
-	_state = OBJECT_IDLE;
 }
 
 void bottleGray::idle()
@@ -198,7 +188,6 @@ void bottleBrown::init()
 {
 	_image = IMAGEMANAGER->findImage("bottle_brown");
 	_isFrameImage = false;
-	_state = OBJECT_IDLE;
 }
 
 void bottleBrown::idle()
@@ -216,7 +205,6 @@ void truck::init()
 	_animationSpeed = 5;
 	_isFrameImage = false;
 	_isLeft = false;
-	_state = OBJECT_IDLE;
 	_destX = _x;
 	_destY = _y;
 	_x = -_image->getFrameWidth();
@@ -243,7 +231,6 @@ void helicopter::init()
 	_animationSpeed = 5;
 	_isFrameImage = true;
 	_isLeft = false;
-	_state = OBJECT_IDLE;
 }
 
 void helicopter::idle()
@@ -262,7 +249,6 @@ void americanFlag::init()
 	_isFrameImage = true;
 	_isActived = false;
 	_isLeft = false;
-	_state = OBJECT_IDLE;
 	_destX = _x;
 	_destY = _y;
 	_rc = RectMake(_x - _image->getFrameWidth(), _y, _image->getFrameWidth() * 2, _image->getFrameHeight() * 2);
@@ -312,7 +298,6 @@ void enemyFlag::init()
 	_isFrameImage = true;
 	_isActived = true;
 	_isLeft = false;
-	_state = OBJECT_IDLE;
 }
 
 void enemyFlag::idle()
@@ -383,6 +368,7 @@ objectA * objectFactory::createObject(OBJECT_TYPE type)
 		break;
 	}
 	_object->init();
+	_object->setType(type);
 
 	return _object;
 }

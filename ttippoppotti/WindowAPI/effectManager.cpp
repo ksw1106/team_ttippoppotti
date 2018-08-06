@@ -83,11 +83,27 @@ void effectManager::render(void)
 {
 	miEffect mIter;
 	mIter = _mEffect.begin();
+	/*
 	for (mIter; mIter != _mEffect.end(); ++mIter)
 	{
+		//for (int i = mIter->second.size() - 1; i >= 0 ; i--)
 		for (int i = 0; i < mIter->second.size(); i++)
 		{
 			mIter->second[i]->render();
+		}
+	}
+	*/
+	
+	vector<vector<effects*>> temp;
+	for (mIter; mIter != _mEffect.end(); ++mIter)
+	{
+		temp.push_back(mIter->second);
+	}
+	for (int i = temp.size() - 1; i >= 0; i--)
+	{
+		for (int j = temp[i].size() - 1; j >= 0; --j)
+		{
+			temp[i][j]->render();
 		}
 	}
 }
@@ -149,9 +165,9 @@ void effectManager::explosion(float x, float y)
 		_count = 0;
 	}
 
-	this->playBallExplosion("ballFlame1", x, y);
+	//this->playBallExplosion("ballFlame1", x, y);
 	this->playBallExplosion("ballFlame2", x, y);
-	this->playBallExplosion("ballFlame3", x, y);
+	//this->playBallExplosion("ballFlame3", x, y);
 
 
 }
@@ -236,7 +252,7 @@ void effectManager::playCartridge(string effectName, float x, float y, bool isLe
 	miEffect mIter;
 
 	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
-	{
+ 	{
 		if (!(mIter->first == effectName)) continue;
 
 		//이펙트키와 일치하면 이펙트 실행
