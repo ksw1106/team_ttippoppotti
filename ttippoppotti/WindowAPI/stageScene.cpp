@@ -25,6 +25,8 @@ HRESULT stageScene::init(void)
 	_test = new testScene_kmy;
 	_test->init();
 
+	EFFECTMANAGER->init();
+
 	_playerManager->setMapData(_mapData);
 	_enemyManager->setMapData(_mapData);
 	OBJECTMANAGER->setMapData(_mapData);

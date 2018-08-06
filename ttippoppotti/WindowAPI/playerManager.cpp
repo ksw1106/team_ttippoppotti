@@ -113,7 +113,7 @@ void playerManager::update(void)
 		}
 		EFFECTMANAGER->knifePuff(_player->getX(), _player->getY(), _player->getIsLeft());
 	}
-
+	//EFFECTMANAGER->bulletPuff();
 	if (KEYMANAGER->isOnceKeyDown('X'))							// 수류탄
 	{
 		if (_player->getIsLeft() == false)						// 오른쪽
