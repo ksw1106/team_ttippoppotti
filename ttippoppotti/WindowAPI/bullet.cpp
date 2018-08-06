@@ -541,7 +541,7 @@ void pGrenade::fire(int x, int y, int fireSpeed, bool isLeft)
 		_vBullet[i].speed = fireSpeed;
 		_vBullet[i].isLeft = isLeft;
 		_vBullet[i].gravity = 0.0f;
-		_vBullet[i].count = 0;
+		_vBullet[i].count = 0;		
 		_vBullet[i].x = _vBullet[i].fireX = x;
 		_vBullet[i].y = _vBullet[i].fireY = y;
 		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
