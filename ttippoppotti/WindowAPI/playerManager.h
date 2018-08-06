@@ -16,11 +16,13 @@ private:
 
 	pBullet * _pBullet;
 	pGrenade * _pGrenade;
+	image * _p1Bubble;
 	
 	RECT temp;
 	bool hit_left, hit_right, hit_top, hit_bottom;
 
 	float _ground;
+	int _count, _index, _animationSpeed;
 	int count = 0;
 	int _fireCount;
 	bool _change;
@@ -44,6 +46,7 @@ public:
 
 	void rambroDie();
 	void collision();
+	void p1Bubble();
 
 	playerManager();
 	~playerManager();

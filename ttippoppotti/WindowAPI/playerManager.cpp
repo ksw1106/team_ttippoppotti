@@ -14,13 +14,18 @@ HRESULT playerManager::init(void)
 
 	hit_left = hit_right = hit_top = hit_bottom = false;
 	
+	_index = _count = 0;
+	_animationSpeed = 5;
 	_fireCount = 0;
 	_change = false;
 	_knifeCount = 0;
 	_knifeCollision = false;
 
 	_rcKnife = RectMake(_player->getX(), _player->getY(), 60, 20);
-	
+	_p1Bubble = IMAGEMANAGER->findImage("p1Bubble");
+	_p1Bubble->setX(_player->getX() + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
+	_p1Bubble->setY(_player->getY() - 100);
+
 	return S_OK;
 }
 
@@ -36,7 +41,7 @@ void playerManager::update(void)
 	_player->update();
 	_player->setOldX(_player->getX());
 	_player->setOldY(_player->getY());
-
+	
 	float knifeX = _player->getX() + 80;
 	float knifeY = _player->getY() + 30;
 
@@ -102,7 +107,7 @@ void playerManager::update(void)
 		{
 			_player->setState(KNIFE);
 		}
-		else
+		else if (!_player->getIsLeft())
 		{
 			_player->setState(KNIFE);
 		}
@@ -350,7 +355,7 @@ void playerManager::update(void)
 			if (!_mapData->getObject()[j]._isActived)continue;
 			if (IntersectRect(&temp, &_mapData->getObject()[j]._rc, &_pGrenade->getVPlayerGrenade()[i].rc))
 			{
-				_mapData->deleteMap(j);
+				_mapData->deleteMapIndexByIndex(j, 3, 3);
 				_pGrenade->getVPlayerGrenade()[i].isActived = false;
 				break;
 			}		
@@ -372,9 +377,6 @@ void playerManager::update(void)
 		}
 	}
 	
-	
-	
-
 	_player->setX(tempX);
 	_player->setY(tempY);
 
@@ -516,6 +518,7 @@ void playerManager::update(void)
 		}
 	}
 	*/
+	p1Bubble();
 }
 
 void playerManager::render(void)
@@ -524,6 +527,7 @@ void playerManager::render(void)
 	_player->render();
 	_pBullet->render();
 	_pGrenade->render();
+	_p1Bubble->frameRender(getMemDC(), _p1Bubble->getX() - CAMERAMANAGER->getCamera().left, _p1Bubble->getY() - CAMERAMANAGER->getCamera().top);
 
 	char str[64];
 	sprintf_s(str, "%d", hit_bottom);
@@ -571,6 +575,20 @@ void playerManager::collision()
 				}
 			}
 		}	
+	}
+}
+
+void playerManager::p1Bubble()
+{
+	_p1Bubble->setX(_player->getX() + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
+	_p1Bubble->setY(_player->getY() - _p1Bubble->getFrameHeight() - 5);
+	if (_index >= _p1Bubble->getMaxFrameX())
+	{
+		_p1Bubble->setFrameX(_p1Bubble->getMaxFrameX());
+	}
+	else
+	{
+		FRAMEMANAGER->frameChange(_p1Bubble, _count, _index, _animationSpeed, false);
 	}
 }
 

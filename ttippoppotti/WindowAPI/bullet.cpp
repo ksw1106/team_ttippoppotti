@@ -501,7 +501,7 @@ HRESULT pGrenade::init(float range)
 		tagBullet pGrenade;
 		ZeroMemory(&pGrenade, sizeof(tagBullet));
 		pGrenade.bulletImage = new image;
-		pGrenade.bulletImage->init("player_ramBro/rambro_grenade.bmp", 40, 40, 1, 1, true, RGB(255, 0, 255));
+		pGrenade.bulletImage->init("player_ramBro/rambro_grenade.bmp", 28, 35, 1, 1, true, RGB(255, 0, 255));
 
 		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
 		_vBullet.push_back(pGrenade);

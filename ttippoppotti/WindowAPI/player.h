@@ -36,6 +36,7 @@ private:
 	bool _isLeft;
 	bool _isJump;
 	bool _isFall;
+	bool _isKnife;
 		
 public:
 	image * getImage(int num) { return _ramBro[num]; }
@@ -68,15 +69,17 @@ public:
 	void setAnimationSpeed(int animationSpeed) { _animationSpeed = animationSpeed; }
 
 	bool getIsCollision() { return _isCollision; }
-	void setIsCollision(int isCollision) { _isCollision = isCollision; }
+	void setIsCollision(bool isCollision) { _isCollision = isCollision; }
 	bool getIsActived() { return _isActived; }
-	void setIsActived(int isActived) { _isActived = isActived; }
+	void setIsActived(bool isActived) { _isActived = isActived; }
 	bool getIsLeft() { return _isLeft; }
-	void setIsLeft(int isLeft) { _isLeft = isLeft; }
+	void setIsLeft(bool isLeft) { _isLeft = isLeft; }
 	bool getIsJump() { return _isJump; }
-	void setIsJump(int isJump) { _isJump = isJump; }
+	void setIsJump(bool isJump) { _isJump = isJump; }
 	bool getIsFall() { return _isFall; }
-	void setIsFall(int isFall) { _isFall = isFall; }
+	void setIsFall(bool isFall) { _isFall = isFall; }
+	bool getIsKnife() { return _isKnife; }
+	void setIsKnife(bool isKnife) { _isKnife = isKnife; }
 
 	HRESULT init(void);
 	void release(void);
