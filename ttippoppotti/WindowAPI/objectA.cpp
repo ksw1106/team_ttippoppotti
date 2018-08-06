@@ -3,8 +3,8 @@
 
 void objectA::update()
 {
-	//if (_type >= 0 && _type <= 6 && !*_targetIsActived)
-	//	_state = OBJECT_DESTROY;
+	if (_type >= 0 && _type <= 6 && !*_targetIsActived)
+		_state = OBJECT_DESTROY;
 	switch (_state)
 	{
 	case OBJECT_IDLE:
