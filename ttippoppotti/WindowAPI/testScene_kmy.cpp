@@ -26,12 +26,19 @@ void testScene_kmy::update(void)
 		//³ª¹«ÆÄÆíÁÖÀÇ
 		EFFECTMANAGER->woodDebris(900, 1800, 0.0f);
 
-			//Æã
+		//Æã
 		EFFECTMANAGER->explosionStart(500, 2000);
-
-
 	}
+	if (KEYMANAGER->isOnceKeyDown('I'))
+	{
+		//¶ÑµÎ¶ÑµÎ
+		EFFECTMANAGER->bulletPuff(800, 2000);
+
+		//Ä®
+		EFFECTMANAGER->knifePuff(900, 2000, false);
 		
+		EFFECTMANAGER->p1Bubble(1000, 2000);
+	}
 }
 
 void testScene_kmy::render(void)
