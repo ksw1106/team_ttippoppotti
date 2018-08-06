@@ -25,7 +25,9 @@ private:
 	int _fireCount;
 	bool _change;
 
-	RECT _rcRambro;
+	RECT _rcKnife;
+	int _knifeCount;
+	bool _knifeCollision;
 public:
 
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }

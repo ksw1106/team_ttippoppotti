@@ -16,6 +16,10 @@ HRESULT playerManager::init(void)
 	
 	_fireCount = 0;
 	_change = false;
+	_knifeCount = 0;
+	_knifeCollision = false;
+
+	_rcKnife = RectMake(_player->getX(), _player->getY(), 60, 20);
 	
 	return S_OK;
 }
@@ -33,6 +37,8 @@ void playerManager::update(void)
 	_player->setOldX(_player->getX());
 	_player->setOldY(_player->getY());
 
+	float knifeX = _player->getX() + 80;
+	float knifeY = _player->getY() + 30;
 
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 	{
@@ -63,7 +69,7 @@ void playerManager::update(void)
 		hit_right = false;
 	}
 	_fireCount++;
-	if (KEYMANAGER->isStayKeyDown('Z'))						// 기본 총알 발사
+	if (KEYMANAGER->isStayKeyDown('Z'))							// 기본 총알 발사
 	{
 		if (_fireCount % 5 == 0)
 		{
@@ -78,14 +84,23 @@ void playerManager::update(void)
 			EFFECTMANAGER->cartridge(_player->getX(), _player->getY(), _player->getIsLeft());
 		}
 	}
-	_pBullet->update();
+
+	_pBullet->update();											// 총알 업데이트 ( 무브 )
+
+	_rcKnife = RectMake(knifeX , knifeY , 30, 30);
 
 	if (KEYMANAGER->isStayKeyDown('C'))							// 칼빵
 	{
+		_knifeCount++;
+		_knifeCollision = true;
+		if (_knifeCount % 2 == 0)
+		{
+			_knifeCollision = false;
+		}
+
 		if (_player->getIsLeft())
 		{
 			_player->setState(KNIFE);
-
 		}
 		else
 		{
@@ -104,7 +119,9 @@ void playerManager::update(void)
 			_pGrenade->fire(_player->getX(), _player->getY() + 38, 20, _player->getIsLeft());
 		}
 	}
-	_pGrenade->update();
+
+	_pGrenade->update();										// 수류탄 업데이트 ( 무브 )
+
 	if (KEYMANAGER->isOnceKeyDown(VK_UP) && !_player->getIsJump())
 	{
 		_player->setState(JUMP);
@@ -119,7 +136,7 @@ void playerManager::update(void)
 		}
 	}
 
-	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || (KEYMANAGER->isOnceKeyUp('C')))
+	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || (KEYMANAGER->isOnceKeyUp('C') && _player->getImage(KNIFE)->getMaxFrameX()))
 	{
 		_player->setState(IDLE);
 	}
@@ -300,7 +317,7 @@ void playerManager::update(void)
 		{
 			_pGrenade->getVPlayerGrenade()[i].gravity = 0;
 			_pGrenade->getVPlayerGrenade()[i].angle = PI2 - _pGrenade->getVPlayerGrenade()[i].angle;
-			_pGrenade->getVPlayerGrenade()[i].speed *= 0.5f;
+			_pGrenade->getVPlayerGrenade()[i].speed *= 0.6f;
 		}
 		else if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc,		// 위쪽 벽
 			_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y,
@@ -327,7 +344,7 @@ void playerManager::update(void)
 
 		if (_pGrenade->getVPlayerGrenade()[i].count < 70) continue;
 
-		for (int j = 0; j < _mapData->getObject().size(); j++)
+		for (int j = 0; j < _mapData->getObject().size(); j++)								// 수류탄 카운트 70보다 클때 맵 지워주기
 		{
 			if (!_mapData->getObject()[j]._isActived)continue;
 			if (IntersectRect(&temp, &_mapData->getObject()[j]._rc, &_pGrenade->getVPlayerGrenade()[i].rc))
@@ -335,9 +352,27 @@ void playerManager::update(void)
 				_mapData->deleteMap(j);
 				_pGrenade->getVPlayerGrenade()[i].isActived = false;
 				break;
-			}			
+			}		
 		}
 	}
+
+	if (_knifeCollision)
+	{
+		if (COLLISIONMANAGER->pixelCollision(_rcKnife, knifeX, knifeY, 0, 0, PLAYER_RIGHT))
+		{
+			for (int i = 0; i < _mapData->getObject().size(); i++)
+			{
+				if (IntersectRect(&temp, &_rcKnife, &_mapData->getObject()[i]._rc))
+				{
+					_mapData->deleteMap(i);
+					break;
+				}
+			}
+		}
+	}
+	
+	
+	
 
 	_player->setX(tempX);
 	_player->setY(tempY);
@@ -494,8 +529,13 @@ void playerManager::render(void)
 	TextOut(getMemDC(), 100, 100, str, strlen(str));
 	if (KEYMANAGER->isToggleKey(VK_F8))
 	{
+		
 	}
-
+	if (_knifeCollision)
+	{
+		RectangleMake(getMemDC(), _player->getX() + 60 - CAMERAMANAGER->getCamera().left, _player->getY() + 30 - CAMERAMANAGER->getCamera().top, 30, 30);
+	}
+	
 	RectangleMake(getMemDC(), rc.left, rc.top, rc.left + (rc.right-rc.left)/2, rc.top + (rc.bottom - rc.top) / 2);
 }
 
