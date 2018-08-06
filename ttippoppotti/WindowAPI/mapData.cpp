@@ -17,6 +17,52 @@ void mapData::deleteMap(int index)
 	_vObject[index]._isActived = false;
 }
 
+void mapData::deleteMapIndexByIndex(int num, int index, int index2)
+{
+	RECT rc = _vObject[num]._rc;
+	POINT pt, tempPt;
+
+	int iIndex = -(index / 2);
+	int iIndex2 = (index / 2) + 1;
+	int jIndex = -(index2 / 2);
+	int jIndex2 = (index2 / 2) + 1;
+
+	pt.x = rc.left + (rc.right - rc.left) / 2;
+	pt.y = rc.top + (rc.bottom - rc.top) / 2;
+
+	SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_BRUSH));
+	SetDCBrushColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
+	SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_PEN));
+	SetDCPenColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
+	
+	SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_BRUSH));
+	SetDCBrushColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
+	SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_PEN));
+	SetDCPenColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
+
+	for (int i = iIndex; i < iIndex2; i++)
+	{
+		for (int j = jIndex; j < jIndex2; j++)
+		{
+			tempPt.x = pt.x + j * 68;
+			tempPt.y = pt.y + i * 68;
+
+			for (int k = 0; k < _vObject.size(); k++)
+			{
+				if (!_vObject[k]._isActived) continue;
+
+				if (PtInRect(&_vObject[k]._rc, tempPt))
+				{
+					RectangleMake(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), _vObject[k]._rc.left, _vObject[k]._rc.top, _vObject[k]._width, _vObject[k]._height);
+					RectangleMake(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), _vObject[k]._rc.left, _vObject[k]._rc.top, _vObject[k]._width, _vObject[k]._height);
+					_vObject[k]._isActived = false;
+					break;
+				}
+			}
+		}
+	}
+}
+
 void mapData::stage1_setting()
 {
 	//1블록 + 다리
