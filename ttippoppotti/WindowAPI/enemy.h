@@ -163,6 +163,7 @@ public:
 	void flyAway();
 	void knockBackMove(bool isLeft);	// 총알맞았을때 뒤로 날아감
 	void dead();
+	void enemyExplode();				// 피가 다 닳았을때 토막남
 	
 	void frameAnimate();	
 			

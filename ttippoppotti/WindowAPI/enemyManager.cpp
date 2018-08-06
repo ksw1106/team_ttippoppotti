@@ -58,6 +58,7 @@ void enemyManager::update(void)
 	
 	this->collision();
 	this->collideWithPBullet();		// 플레이어 총알과 충돌
+	this->collideWithPGrenade();	// 플레이어 수류탄과 충돌	
 	this->enemyDie();
 			
 }
@@ -77,7 +78,6 @@ void enemyManager::render(void)
 		sprintf_s(str, "%d", _vSoldier[i]->getBodyStatus());
 		TextOut(getMemDC(), 300, 10+i*50, str, strlen(str));
 	}
-
 }
 
 //=====================================================================================================================================================================================
@@ -173,7 +173,7 @@ void enemyManager::collision()
 	
 		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_LEFT))
 		{
-			if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
+			if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK || _vSoldier[i]->getBodyStatus() == ENEMY_FLY_AWAY)
 			{
 				if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
 				else _vSoldier[i]->setDirection(true);
@@ -194,7 +194,7 @@ void enemyManager::collision()
 	
 		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_RIGHT))
 		{
-			if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK)
+			if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK && _vSoldier[i]->getBodyStatus() == ENEMY_FLY_AWAY)
 			{
 				if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
 				else _vSoldier[i]->setDirection(true);
@@ -243,7 +243,7 @@ void enemyManager::collideWithPBullet()
 				_vSoldier[i]->setIsUncovered(false);
 				_vSoldier[i]->setIsStrange(false);
 				
-				if (_vSoldier[i]->getBodyStatus() != ENEMY_KNOCK_BACK && _vSoldier[i]->getBodyStatus() != ENEMY_DEAD)
+				if (_vSoldier[i]->getBodyStatus() != ENEMY_KNOCK_BACK && _vSoldier[i]->getBodyStatus() != ENEMY_DEAD && _vSoldier[i]->getBodyStatus() != ENEMY_FLY_AWAY)
 				{					
 					if (_vSoldier[i]->getDirection())
 						_vSoldier[i]->setBodyImageIndex(_vSoldier[i]->getEnemyBodyImage(ENEMY_KNOCK_BACK)->getMaxFrameX()-1);
@@ -252,6 +252,43 @@ void enemyManager::collideWithPBullet()
 					
 					_vSoldier[i]->setBodyStatus(ENEMY_KNOCK_BACK);			
 								
+				}
+
+				if (_vSoldier[i]->getBodyStatus() == ENEMY_DEAD)
+				{
+					_vSoldier[i]->move();
+				}
+			}
+		}
+	}
+}
+
+// 수류탄과 플레이어 충돌
+void enemyManager::collideWithPGrenade()
+{
+	RECT rc;
+	for (int i = 0; i < _vSoldier.size(); ++i)
+	{
+		for (int j = 0; j < _playerManager->getPGrenade()->getVPlayerGrenade().size(); ++j)
+		{
+			if (IntersectRect(&rc, &_playerManager->getPGrenade()->getVPlayerGrenade()[j].rc, &_vSoldier[i]->getRcEnemy()))
+			{
+				if (_vSoldier[i]->getDirection() != _playerManager->getPGrenade()->getVPlayerGrenade()[j].isLeft)
+				{
+					_vSoldier[i]->setDirection(_playerManager->getPGrenade()->getVPlayerGrenade()[j].isLeft);
+				}
+				_vSoldier[i]->setIsUncovered(false);
+				_vSoldier[i]->setIsStrange(false);
+
+				if (_vSoldier[i]->getBodyStatus() != ENEMY_KNOCK_BACK && _vSoldier[i]->getBodyStatus() != ENEMY_DEAD && _vSoldier[i]->getBodyStatus() != ENEMY_FLY_AWAY)
+				{
+					if (_vSoldier[i]->getDirection())
+						_vSoldier[i]->setBodyImageIndex(_vSoldier[i]->getEnemyBodyImage(ENEMY_FLY_AWAY)->getMaxFrameX() - 1);
+					else
+						_vSoldier[i]->setBodyImageIndex(0);
+
+					_vSoldier[i]->setBodyStatus(ENEMY_FLY_AWAY);
+
 				}
 
 				if (_vSoldier[i]->getBodyStatus() == ENEMY_DEAD)
