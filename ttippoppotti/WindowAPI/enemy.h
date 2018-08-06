@@ -1,6 +1,5 @@
 #pragma once
 #include "gameNode.h"
-#include "bullet.h"
 
 #define COOLTIME 7	// _frameIndex 바뀌는 속도
 
@@ -57,8 +56,7 @@ struct brovilImage
 //부모클래스 => 이놈을 상속받아서 보스, 일반몬스터등을 만든다
 class enemy : public gameNode
 {
-private:
-	eBullet * _eBullet;
+private:	
 
 	enemyStatus _enemyStatus;
 	gunStatus _gunStatus;
