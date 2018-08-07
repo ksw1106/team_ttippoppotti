@@ -5,6 +5,7 @@
 struct tagBullet
 {
 	image* bulletImage;
+	image* grenadeImage;
 	RECT rc;
 	float x, y;
 	float fireX, fireY;
