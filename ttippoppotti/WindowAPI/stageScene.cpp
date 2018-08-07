@@ -279,6 +279,10 @@ void stageScene::render(void)
 
 	_playerManager->render();
 	_enemyManager->render();
-	//IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+	if (KEYMANAGER->isToggleKey('8'))
+	{
+		IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+		IMAGEMANAGER->findImage("ladder_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+	}
 	_test->render();
 }
