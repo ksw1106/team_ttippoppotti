@@ -9,7 +9,7 @@
 class CollisionManager : public singletonBase<CollisionManager>
 {
 public:
-	int pixelCollision(RECT rc, float& x, float& y, float speed, float gravity, int dir);
+	int pixelCollision(RECT rc, float& x, float& y, float speed, float gravity, int dir, bool isLadder = false);
 
 	HRESULT init();
 	void release();

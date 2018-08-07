@@ -49,30 +49,47 @@ void playerManager::update(void)
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 	{
 		_player->setIsLeft(true);
-		if (JUMP != _player->getState()
-			&& HANG_FRONT_HOLD != _player->getState())
-		{
-			_player->setState(RUN);
-		}
-		if (!hit_right)
+
+		if (_isLadder)
 		{
 			_player->setX(_player->getX() - _player->getSpeed());
 		}
-		hit_left = false;
+		else
+		{
+			if (JUMP != _player->getState()
+				&& HANG_FRONT_HOLD != _player->getState())
+			{
+				_player->setState(RUN);
+			}
+			if (!hit_right)
+			{
+				_player->setX(_player->getX() - _player->getSpeed());
+			}
+			hit_left = false;
+		}	
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 	{
 		_player->setIsLeft(false);
-		if (JUMP != _player->getState()
-			&& HANG_FRONT_HOLD != _player->getState())
-		{
-			_player->setState(RUN);
-		}
-		if (!hit_left)
+
+		if (_isLadder)
 		{
 			_player->setX(_player->getX() + _player->getSpeed());
 		}
-		hit_right = false;
+		else
+		{
+			_player->setIsLeft(false);
+			if (JUMP != _player->getState()
+				&& HANG_FRONT_HOLD != _player->getState())
+			{
+				_player->setState(RUN);
+			}
+			if (!hit_left)
+			{
+				_player->setX(_player->getX() + _player->getSpeed());
+			}
+			hit_right = false;
+		}
 	}
 	_fireCount++;
 	if (KEYMANAGER->isStayKeyDown('Z'))							// 기본 총알 발사
@@ -150,48 +167,51 @@ void playerManager::update(void)
 
 	if (KEYMANAGER->isOnceKeyDown(VK_UP) && !_player->getIsJump())
 	{
-		_player->setState(JUMP);
-		_player->setGravity(0.0f);
-		_player->setJumpSpeed(20.f);
-		_player->setIsJump(true);
-		hit_left = false;
-		hit_right = false;
-		if (_player->getState() == HANG_FRONT_HOLD || _player->getState() == HANG_BACK_HOLD)
+		if (!_isLadder)
 		{
-			_player->setJumpSpeed(5.f);
-			_isLadder = false;
-		}
+			_player->setState(JUMP);
+			_player->setGravity(0.0f);
+			_player->setJumpSpeed(20.f);
+			_player->setIsJump(true);
+			hit_left = false;
+			hit_right = false;
+			if (_player->getState() == HANG_FRONT_HOLD || _player->getState() == HANG_BACK_HOLD)
+			{
+				_player->setJumpSpeed(5.f);
+				//_isLadder = false;
+			}
+		}	
 	}
-	else if (_player->getState() == LADDER && KEYMANAGER->isStayKeyDown(VK_UP))
+	if (KEYMANAGER->isStayKeyDown(VK_UP))
 	{
 		if (_isLadder)
 		{
-			/*if (_player->getState() == LADDER)
-			{*/
-				//float y = _player->getY();
-				//y -= 0.01;
-				_player->setGravity(0);
-				_player->setIsJump(true);
-				_player->setY(_player->getY() - 0.01f);
-			
-				if (!RED)
-				{
-					_isLadder = false;
-				}
-			/*}*/
+			_player->setY(_player->getY() - _player->getSpeed());
 		}
 	}
+	else if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+	{
+		if (_isLadder)
+		{
+			_player->setY(_player->getY() + _player->getSpeed());
+		}
+		else
+		{
+
+		}
+	}
+
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || KEYMANAGER->isOnceKeyUp('C') || KEYMANAGER->isOnceKeyUp('X') || KEYMANAGER->isOnceKeyUp(VK_UP) && _isLadder == true)
 	{
 		_player->setState(IDLE);
 	}
 
-	if (!hit_left && !hit_right)
+	if (!hit_left && !hit_right && !_isLadder)
 	{
 		_player->setY(_player->getY() + (-sin(_player->getAngle())*_player->getJumpSpeed() + _player->getGravity()));
 	}
 
-	if (hit_left || hit_right)
+	if (hit_left || hit_right && !_isLadder)
 	{
 		_player->setY(_player->getY() + 2.f);
 	}
@@ -207,56 +227,74 @@ void playerManager::update(void)
 	rcPlayer = RectMake(tempX, tempY, 60, 80);
 
 
-	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_TOP))			// 위쪽 벽
+	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_TOP, _isLadder))			// 위쪽 벽
 	{
 	case GREEN:
-		_player->setGravity(0.f);
-		_player->setJumpSpeed(0.f);
-		_player->setIsJump(false);
-		hit_left = false;
-		hit_right = false;
-		if (_player->getState() != JUMP)
+		if (_isLadder)
 		{
-			_player->setState(IDLE);
+			
 		}
+		else
+		{
+			_player->setGravity(0.f);
+			_player->setJumpSpeed(0.f);
+			_player->setIsJump(false);
+			hit_left = false;
+			hit_right = false;
+			if (_player->getState() != JUMP)
+			{
+				_player->setState(IDLE);
+			}
 
-		hit_top = true;
-		_isLadder = false;
+			hit_top = true;
+		}
 		break;
 	case RED:
-		_player->setState(LADDER);
+		//_player->setState(LADDER);
 		_isLadder = true;
 		break;
 	case BLUE:
 		break;
 	default:
+		_isLadder = false;
 		break;
 	}
 	
-	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_BOTTOM))		// 아래쪽 벽
+	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_BOTTOM, _isLadder))		// 아래쪽 벽
 	{
 	case GREEN:
-		_player->setGravity(0.f);
-		_player->setJumpSpeed(0.f);
-		_player->setIsJump(false);
-
-		if (_player->getState() != RUN && _player->getState() != KNIFE && _player->getState() != HANG_FRONT_HOLD)
+		if (_isLadder)
 		{
-			hit_left = false;
-			hit_right = false;
-			_player->setState(IDLE);
-		}
 
-		hit_bottom = true;
-		_isLadder = false;
+		}
+		else
+		{
+			_player->setGravity(0.f);
+			_player->setJumpSpeed(0.f);
+			_player->setIsJump(false);
+
+			if (_player->getState() != RUN && _player->getState() != KNIFE && _player->getState() != HANG_FRONT_HOLD)
+			{
+				hit_left = false;
+				hit_right = false;
+				_player->setState(IDLE);
+			}
+
+			hit_bottom = true;
+		}
 		break;
 	case RED:
-		_player->setState(LADDER);
-		_isLadder = true;
+		if (_player->getIsJump())
+		{
+			_isLadder = true;
+		}
+		//_player->setState(LADDER);
+		//_isLadder = true;
 		break;
 	case BLUE:
 		break;
 	default:
+		_isLadder = false;
 		break;
 	}
 
@@ -266,37 +304,47 @@ void playerManager::update(void)
 	}
 
 	//switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_RIGHT))			// 오른쪽 벽
-	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, _player->getGravity(), PLAYER_RIGHT))			// 오른쪽 벽
+	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, _player->getGravity(), PLAYER_RIGHT, _isLadder))			// 오른쪽 벽
 	{
 	case GREEN:
-		if ((_player->getOldY() - tempY) < 0)
+		if (_isLadder)
 		{
-			_player->setIsJump(false);
-			_player->setGravity(0.f);
-			_player->setJumpSpeed(0.f);
+
 		}
-
-		_player->setIsLeft(false);
-
-		hit_right = true;
-		hit_left = false;
-
-		//_player->setIsCollision(!_player->getIsCollision());
-
-		//if (_player->getState() == JUMP)
-		//{
-		//	_player->setState(HANG_FRONT_HOLD);
-		//}
-
-		if (_player->getState() != HANG_FRONT_HOLD)
+		else
 		{
-			_player->setIsCollision(!_player->getIsCollision());
+			if ((_player->getOldY() - tempY) < 0)
+			{
+				_player->setIsJump(false);
+				_player->setGravity(0.f);
+				_player->setJumpSpeed(0.f);
+			}
+
+			_player->setIsLeft(false);
+
+			hit_right = true;
+			hit_left = false;
+
+			//_player->setIsCollision(!_player->getIsCollision());
+
+			//if (_player->getState() == JUMP)
+			//{
+			//	_player->setState(HANG_FRONT_HOLD);
+			//}
+
+			if (_player->getState() != HANG_FRONT_HOLD)
+			{
+				_player->setIsCollision(!_player->getIsCollision());
+			}
 		}
-		_isLadder = false;
 		break;
 	case RED:
-		_player->setState(LADDER);
-		_isLadder = true;
+		if (_player->getIsJump())
+		{
+			_isLadder = true;
+		}
+		//_player->setState(LADDER);
+		//_isLadder = true;
 		break;
 	case BLUE:
 		break;
@@ -305,40 +353,50 @@ void playerManager::update(void)
 	}
 	
 	//switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_LEFT))			// 왼쪽벽
-	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, _player->getGravity(), PLAYER_LEFT))
+	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, _player->getGravity(), PLAYER_LEFT, _isLadder))
 	{
 	case GREEN:
-		if ((_player->getOldY() - tempY) < 0)
+		if (_isLadder)
 		{
-			_player->setIsJump(false);
-			_player->setGravity(0.f);
-			_player->setJumpSpeed(0.f);
+			
 		}
-		_player->setIsLeft(true);
-
-		hit_left = true;
-		hit_right = false;
-		_isLadder = false;
-		//if (_player->getState() == JUMP)
-		//{
-		//	_player->setState(HANG_FRONT_HOLD);
-		//}
-
-		/*if (_player->getState() != HANG_FRONT_HOLD)
+		else
 		{
-		_player->setIsCollision(!_player->getIsCollision());
-		}*/
+			if ((_player->getOldY() - tempY) < 0)
+			{
+				_player->setIsJump(false);
+				_player->setGravity(0.f);
+				_player->setJumpSpeed(0.f);
+			}
+			_player->setIsLeft(true);
 
-		
-		hit_left = false;
-		hit_right = false;
+			hit_left = true;
+			hit_right = false;
+			//if (_player->getState() == JUMP)
+			//{
+			//	_player->setState(HANG_FRONT_HOLD);
+			//}
 
-		if (_player->getState() == HANG_FRONT_HOLD)
-			_player->setState(JUMP);
+			/*if (_player->getState() != HANG_FRONT_HOLD)
+			{
+			_player->setIsCollision(!_player->getIsCollision());
+			}*/
+
+
+			hit_left = false;
+			hit_right = false;
+
+			if (_player->getState() == HANG_FRONT_HOLD)
+				_player->setState(JUMP);
+		}
 		break;
 	case RED:
-		_player->setState(LADDER);
-		_isLadder = true;
+		if (_player->getIsJump())
+		{
+			_isLadder = true;
+		}
+		//_player->setState(LADDER);
+		
 		break;
 	case BLUE:
 		break;
@@ -346,11 +404,11 @@ void playerManager::update(void)
 		break;
 	}
 	
-	if (hit_left && !hit_right && !hit_bottom)
+	if (hit_left && !hit_right && !hit_bottom && !_isLadder)
 	{
 		_player->setState(HANG_FRONT_HOLD);
 	}
-	else if (hit_right && !hit_left && !hit_bottom)
+	else if (hit_right && !hit_left && !hit_bottom && !_isLadder)
 	{
 		_player->setState(HANG_FRONT_HOLD);
 	}
@@ -483,6 +541,11 @@ void playerManager::update(void)
 	
 	_player->setX(tempX);
 	_player->setY(tempY);
+
+	if (_isLadder)
+	{
+		_player->setGravity(0.f);
+	}
 
 	this->collision();
 	this->rambroDie();
@@ -634,7 +697,7 @@ void playerManager::render(void)
 	_p1Bubble->frameRender(getMemDC(), _p1Bubble->getX() - CAMERAMANAGER->getCamera().left, _p1Bubble->getY() - CAMERAMANAGER->getCamera().top);
 
 	char str[64];
-	sprintf_s(str, "%d", hit_bottom);
+	sprintf_s(str, "%d", _isLadder);
 	TextOut(getMemDC(), 100, 100, str, strlen(str));
 	if (KEYMANAGER->isToggleKey(VK_F8))
 	{

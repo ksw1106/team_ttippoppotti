@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CollisionManager.h"
 
-int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, float gravity, int dir)
+int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, float gravity, int dir, bool isLadder)
 {
 	int _speed = (int)speed; //명시적
 	int _gravity = (int)gravity; //명시적
@@ -20,9 +20,14 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 				return RED;
 			}
 
-			else if ((r == 0 && g == 0 && b == 255))
+			
+			if ((r == 0 && g == 0 && b == 255))
 			{
-				x = i + 1;
+				if (!isLadder)
+				{
+					x = i + 1;
+				}
+				
 				return BLUE;
 			}
 			
@@ -33,7 +38,11 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 
 			if ((r == 0 && g == 255 && b == 0))
 			{
-				x = i + 1;
+				if (!isLadder)
+				{
+					x = i + 1;
+				}
+
 				return GREEN;
 			}
 		}
@@ -53,7 +62,11 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 
 			else if ((r == 0 && g == 0 && b == 255))
 			{
-				y = i + 1;
+				if (!isLadder)
+				{
+
+				}
+					y = i + 1;
 				return BLUE;
 			}
 
@@ -64,7 +77,11 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 
 			if ((r == 0 && g == 255 && b == 0))
 			{
-				y = i + 1;
+				if (!isLadder)
+				{
+					y = i + 1;
+				}
+				
 				return GREEN;
 			}
 		}
@@ -84,7 +101,11 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 
 			else if ((r == 0 && g == 0 && b == 255))
 			{
-				x = i - 1 - (rc.right - rc.left);
+				if (!isLadder)
+				{
+					x = i - 1 - (rc.right - rc.left);
+				}
+				
 				return BLUE;
 			}
 
@@ -95,7 +116,11 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 
 			if ((r == 0 && g == 255 && b == 0))
 			{
-				x = i - 1 - (rc.right - rc.left);
+				if (!isLadder)
+				{
+					x = i - 1 - (rc.right - rc.left);
+				}
+				
 				return GREEN;
 			}
 		}
@@ -115,7 +140,11 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 
 			else if ((r == 0 && g == 0 && b == 255))
 			{
-				y = i - 1 - (rc.bottom - rc.top);
+				if (!isLadder)
+				{
+					y = i - 1 - (rc.bottom - rc.top);
+				}
+				
 				return BLUE;
 			}
 
@@ -126,7 +155,11 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 
 			if ((r == 0 && g == 255 && b == 0))
 			{
-				y = i - 1 - (rc.bottom - rc.top);
+				if (!isLadder)
+				{
+					y = i - 1 - (rc.bottom - rc.top);
+				}
+				
 				return GREEN;
 			}
 		}

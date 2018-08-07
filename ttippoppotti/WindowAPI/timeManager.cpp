@@ -99,7 +99,7 @@ void timeManager::render(HDC hdc)
 	//글자배경모드
 	SetBkMode(hdc, TRANSPARENT);
 	//글자색상
-	SetTextColor(hdc, RGB(0, 255, 0));
+	SetTextColor(hdc, RGB(0, 0, 255));
 
 	//FPS
 	sprintf(str, "FPS: %d", _frameRate);
