@@ -9,7 +9,7 @@
 class CollisionManager : public singletonBase<CollisionManager>
 {
 public:
-	bool pixelCollision(RECT rc, float& x, float& y, float speed, float gravity, int dir);
+	int pixelCollision(RECT rc, float& x, float& y, float speed, float gravity, int dir);
 
 	HRESULT init();
 	void release();

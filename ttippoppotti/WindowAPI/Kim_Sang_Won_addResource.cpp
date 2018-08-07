@@ -4,6 +4,7 @@
 void loadingScene::Kim_Sang_Won_addImage()
 {
 	_loading->loadImage("backGround_pixel", "background_pixel.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_loading->loadImage("ladder_pixel", "ladder_pixel.bmp", 5755, 2878, true, RGB(255, 0, 255));
 	_loading->loadImage("backGround", "background.bmp", 5755, 2878, true, RGB(255, 0, 255));
 	_loading->loadImage("backGround_tree1", "background_tree1.bmp", 5755, 2878, true, RGB(255, 0, 255));
 	_loading->loadImage("backGround_tree2", "background_tree2.bmp", 5755, 2878, true, RGB(255, 0, 255));
