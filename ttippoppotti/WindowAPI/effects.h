@@ -42,6 +42,8 @@ private:
 	bool _isParabola;
 	bool _isExplosion;
 	bool _isStaticAnim;
+	bool _isLoopAnim;
+	bool _isFlyingFlies;
 	bool _isFrameImg;		//프레임이미지냐?
 
 public:
@@ -60,10 +62,16 @@ public:
 	//포물선 발사!
 	void boomParabola();
 
+	//파리날림
+	void activateFlyingFlies(float x, float y);
+
 	//폭발 설정
 	void activateExplosion(float x, float y);
 	//폭발 발사!
 	void boomExplosion();
+
+	//말풍선
+	void activateLoopAnim(float x, float y);
 
 	//총 발사시 이펙트
 	void activateBulletPuff(float x, float y);

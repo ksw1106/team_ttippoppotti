@@ -32,12 +32,14 @@ public:
 	void rockFall(float x, float y, float angle);
 	//³ª¹«ÆÄÆí
 	void woodDebris(float x, float y, float angle);
-
 	//ÃÑ¾ËÀÌÆåÆ®
 	void bulletPuff(float x, float y);
 	//Ä® ÀÌÆåÆ®
 	void knifePuff(float x, float y, bool isLeft);
-
+	//ÆÄ¸®³¯¸²
+	void flyingFlies(float x, float y);
+	//±¸ÇÏ´Â ¸»Ç³¼±
+	void saveBubble(float x, float y);
 	//Æø¹ß
 	void explosion(float x, float y);
 	//Æø¹ß ÃÊ±âÈ­
@@ -52,6 +54,8 @@ public:
 	void playCartridge(string effectName, float x, float y, bool isLeft);
 	void playBulletPuff(string effectName, float x, float y);
 	void playKnifePuff(string effectName, float x, float y, bool isLeft);
+	void playLoopAnim(string effectName, float x, float y);
+	void playFlyingFlies(string effectName, float x, float y);
 
 	effectManager() {}
 	~effectManager() {}

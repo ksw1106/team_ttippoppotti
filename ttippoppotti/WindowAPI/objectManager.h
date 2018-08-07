@@ -29,6 +29,7 @@ class objectManager : public singletonBase<objectManager>
 public:
 	vector<objectA*> getVObject() { return _vObject; }
 	void setMapData(mapData* mapData) { _mapData = mapData;	}
+	void setPlayerManager(playerManager* playerManager) { _playerManager = playerManager; }
 	//오브젝트매니져 초기화
 	HRESULT init();
 	//오브젝트매니져 해제

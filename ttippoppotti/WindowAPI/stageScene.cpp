@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "stageScene.h"
 
+
 HRESULT stageScene::init(void)
 {
 	gameNode::init(TRUE);
@@ -22,6 +23,8 @@ HRESULT stageScene::init(void)
 	_mapData = new mapData;
 	_mapData->init(1);
 
+	
+
 	_test = new testScene_kmy;
 	_test->init();
 
@@ -30,6 +33,7 @@ HRESULT stageScene::init(void)
 	_playerManager->setMapData(_mapData);
 	_enemyManager->setMapData(_mapData);
 	OBJECTMANAGER->setMapData(_mapData);
+	OBJECTMANAGER->setPlayerManager(_playerManager);
 	OBJECTMANAGER->init();				//오브젝트매니져 초기화
 	_playerManager->setEnemyManager(_enemyManager);
 	_enemyManager->setPlayerManager(_playerManager);

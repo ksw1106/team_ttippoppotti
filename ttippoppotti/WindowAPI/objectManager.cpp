@@ -3,6 +3,7 @@
 #include "mapData.h"
 #include "playerManager.h"
 
+
 HRESULT objectManager::init()
 {
 	//여기에서 오브젝트 객체들생성
@@ -12,7 +13,6 @@ HRESULT objectManager::init()
 	//맵번호는 어케 찾냐면 받아놨으니까
 	//_mapData->getObject()[렉트번호].isActived 하면 된다
 	_factory = new objectFactory;
-
 
 	//스테이지에 오브젝트 몇개인지 찾아서 포문돌리자
 	//오브젝트 수만큼 좌표 배열에 넣어두고 밑에 포문 돌려야함
@@ -120,6 +120,7 @@ HRESULT objectManager::init()
 	
 		objectA* object = _factory->createObject(type);
 		object->setPosition(_truckPos[i].x, _truckPos[i].y - object->getImage()->getHeight());
+		object->init();
 	
 		_vObject.push_back(object);
 	}
@@ -127,7 +128,7 @@ HRESULT objectManager::init()
 	_helicopterPos[0].x = 3101, _helicopterPos[0].y = 519;
 	for (int i = 0; i < 1; i++)
 	{
-		type = TRUCK;
+		type = HELICOPTER;
 
 		objectA* object = _factory->createObject(type);
 		object->setPosition(_helicopterPos[i].x, _helicopterPos[i].y);
@@ -144,6 +145,7 @@ HRESULT objectManager::init()
 	
 		objectA* object = _factory->createObject(type);
 		object->setPosition(_amFlagPos[i].x, _amFlagPos[i].y);
+		object->init();
 	
 		_vObject.push_back(object);
 	}
@@ -173,7 +175,9 @@ HRESULT objectManager::init()
 	}
 
 	for (int i = 0; i < _vObject.size(); i++)
+	{
 		_vObject[i]->setState(OBJECT_IDLE);
+	}
 
 	return S_OK;
 }
@@ -186,55 +190,73 @@ void objectManager::release()
 
 void objectManager::update()
 {
-	RECT tempRc;
 	//오브젝트 벡터 돌리면서 업데이트 시켜주면 된다
 	for (int i = 0; i < _vObject.size(); i++)
 	{
 		if (OBJECT_DESTROY == _vObject[i]->getState()) continue;
-
-		_vObject[i]->update();
-		/*for (int j = 0; j < _playerManager->getPBullet()->getVPlayerBullet().size(); j++)
+		RECT tempRc;
+		if (_vObject[i]->getType() == WOODENBOX || _vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED || _vObject[i]->getType() == PRISONER)
 		{
-			if (_vObject[i]->getType() == WOODENBOX)
+			switch (_vObject[i]->getState())
 			{
-				//총알과 박스가 부딪혔을 때
-				if (IntersectRect(&tempRc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vObject[i]->getRect()))
+			case OBJECT_IDLE:
+				for (int j = 0; j < _playerManager->getPBullet()->getVPlayerBullet().size(); j++)
 				{
-					//EFFECTMANAGER->explosion(_vObject[i]->getImage()->getX(), _vObject[i]->getImage()->getY());
-					//EFFECTMANAGER->woodDebris(_vObject[i]->getImage()->getX(), _vObject[i]->getImage()->getY());
-					_vObject[i]->setState(OBJECT_DESTROY);
-
-				}
-			}
-			else if (_vObject[i]->getType() == SKULL_DRUMRED)
-			{
-				if (IntersectRect(&tempRc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vObject[i]->getRect()))
-				{
-					_vObject[i]->setState(OBJECT_DESTROY);
-				}
-			}
-			else if (_vObject[i]->getType() == SKULL_DRUMGRAY)
-			{
-				if (IntersectRect(&tempRc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vObject[i]->getRect()))
-				{
-					_vObject[i]->setState(OBJECT_DESTROY);
-				}
-			}
-			else if (_vObject[i]->getType() == PRISONER)
-			{
-				if (IntersectRect(&tempRc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vObject[i]->getRect()))
-				{
-					_vObject[i]->setState(OBJECT_MOVE);
-				}
-				if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getImage(_playerManager->getPlayer()->getState())->boudingBoxWithFrame(), &_vObject[i]->getRect()))
-				{
-					if (_vObject[i]->getState() == OBJECT_MOVE)
+					if (!_playerManager->getPBullet()->getVPlayerBullet()[j].isActived) continue;
+					//총알과 박스/드럼통/감옥이 부딪혔을 때
+					if (IntersectRect(&tempRc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vObject[i]->getRect()))
 					{
-						_vObject[i]->setState(OBJECT_MOVE);
+						if (_vObject[i]->getType() == WOODENBOX)
+						{
+							//EFFECTMANAGER->woodDebris(_vObject[i]->getImage()->getX(), _vObject[i]->getImage()->getY());
+							_vObject[i]->setState(OBJECT_DESTROY);
+						}
+						else if (_vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED)
+						{
+							for (int k = 0; k < _mapData->getObject().size(); k++)
+							{
+								POINT pt;
+								pt.x = (_vObject[i]->getRect().left + (_vObject[i]->getRect().right - _vObject[i]->getRect().left) / 2);
+								pt.y = (_vObject[i]->getRect().top + (_vObject[i]->getRect().bottom - _vObject[i]->getRect().top) / 2) + 68;
+
+								if (PtInRect(&_mapData->getObject()[k]._rc, pt))
+								{
+									_mapData->deleteMapIndexByIndex(k, 5, 5);
+									break;
+								}
+							}
+							EFFECTMANAGER->explosionStart(_vObject[i]->getRect().left, _vObject[i]->getRect().top);
+							CAMERAMANAGER->CameraShake();
+							_vObject[i]->setState(OBJECT_DESTROY);
+						}
+						else
+						{
+							_vObject[i]->setState(OBJECT_MOVE);
+						}
+						_playerManager->getPBullet()->getVPlayerBullet()[j].isActived = false;
 					}
 				}
+				break;
+			case OBJECT_MOVE:
+				if (_vObject[i]->getType() == PRISONER)
+				{
+					if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getImage(_playerManager->getPlayer()->getState())->boudingBoxWithFrame(), &_vObject[i]->getRect()))
+					{
+
+					}
+				}
+				break;
 			}
-		}*/
+		}
+		else if (_vObject[i]->getType() == AMERICAN_FLAG)
+		{
+			RECT _playerRc = RectMake(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), 60, 80);
+			if (IntersectRect(&tempRc, &_playerRc, &_vObject[i]->getActivationRect()))
+			{
+				_vObject[i]->setState(OBJECT_MOVE);
+			}
+		}	
+		_vObject[i]->update();
 	}
 
 }

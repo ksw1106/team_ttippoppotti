@@ -5,6 +5,7 @@ void objectA::update()
 {
 	if (_type >= 0 && _type <= 6 && !*_targetIsActived)
 		_state = OBJECT_DESTROY;
+	
 	switch (_state)
 	{
 	case OBJECT_IDLE:
@@ -45,7 +46,6 @@ void deadBody::init()
 	_image = IMAGEMANAGER->findImage("human_dead");
 	_count = _index = 0;
 	_animationSpeed = 5;
-	_rc = _image->boudingBoxWithFrame();
 	_isFrameImage = true;
 	_isLeft = false;
 }
@@ -137,22 +137,26 @@ void prisoner::init()
 {
 	_image = IMAGEMANAGER->findImage("prisoner_inJail");
 	_prisonerFreedImage = IMAGEMANAGER->findImage("prisoner_freed");
-	_rc = _image->boudingBox();
+	_count = 0;
 	_isFrameImage = false;
 }
 
 void prisoner::idle()
 {
+	EFFECTMANAGER->saveBubble(_x + 68, _y - 5);
 }
 
 void prisoner::move()
 {
+	_count++;
+	_image = _prisonerFreedImage;
+	if (_count > 10)
+		EFFECTMANAGER->saveBubble(_x + 68, _y - 5);
 }
 
 void woodenBox::init()
 {
 	_image = IMAGEMANAGER->findImage("woodenBox");
-	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -167,7 +171,6 @@ void woodenBox::move()
 void bottleGreen::init()
 {
 	_image = IMAGEMANAGER->findImage("bottle_green");
-	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -182,7 +185,6 @@ void bottleGreen::move()
 void bottleGray::init()
 {
 	_image = IMAGEMANAGER->findImage("bottle_gray");
-	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -197,7 +199,6 @@ void bottleGray::move()
 void bottleBrown::init()
 {
 	_image = IMAGEMANAGER->findImage("bottle_brown");
-	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -212,14 +213,11 @@ void bottleBrown::move()
 void truck::init()
 {
 	_image = IMAGEMANAGER->findImage("truck");
-	_count = _index = 0;
-	_animationSpeed = 5;
 	_isFrameImage = false;
-	_rc = _image->boudingBox();
 	_isLeft = false;
 	_destX = _x;
 	_destY = _y;
-	//_x = -_image->getFrameWidth();
+	_x -= _image->getWidth();
 }
 
 void truck::idle()
@@ -227,7 +225,7 @@ void truck::idle()
 	if (_destX <= _x)
 		_x = _destX;
 	else
-		_x += 3.0f;
+		_x += 5.0f;
 }
 
 void truck::move()
@@ -238,8 +236,7 @@ void helicopter::init()
 {
 	_image = IMAGEMANAGER->findImage("helicopter");
 	_count = _index = 0;
-	_animationSpeed = 5;
-	_rc = _image->boudingBoxWithFrame();
+	_animationSpeed = 0;
 	_isFrameImage = true;
 	_isLeft = false;
 }
@@ -257,32 +254,25 @@ void americanFlag::init()
 	_image = IMAGEMANAGER->findImage("saveFlag");
 	_count = _index = 0;
 	_animationSpeed = 5;
-	_rc = _image->boudingBoxWithFrame();
 	_isFrameImage = true;
 	_isActived = false;
 	_isLeft = false;
 	_destX = _x;
 	_destY = _y;
-	_rc = RectMake(_x - _image->getFrameWidth(), _y, _image->getFrameWidth() * 2, _image->getFrameHeight() * 2);
+	_activationRc = RectMake(_x - _image->getFrameWidth(), _y, _image->getFrameWidth() * 2, _image->getFrameHeight() * 2);
 	_y += _image->getFrameHeight() * 2.5;
 }
 
 void americanFlag::idle()
 {
-	if (_isActived)
-	{
-		if (_y != _destY)
-		{
-			_y -= 3.0f;
-			if (_y <= _destY)
-				_y = _destY;
-		}
-	}
 }
 
 void americanFlag::move()
 {
-	_isActived = true;
+	if (_y <= _destY)
+		_y = _destY;
+	else
+		_y -= 3.0f;
 }
 
 void amFlagPole::init()
@@ -307,8 +297,7 @@ void enemyFlag::init()
 {
 	_image = IMAGEMANAGER->findImage("flag");
 	_count = _index = 0;
-	_animationSpeed = 5;
-	_rc = _image->boudingBoxWithFrame();
+	_animationSpeed = 7;
 	_isFrameImage = true;
 	_isActived = true;
 	_isLeft = false;
@@ -386,4 +375,3 @@ objectA * objectFactory::createObject(OBJECT_TYPE type)
 
 	return _object;
 }
-

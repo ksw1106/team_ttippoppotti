@@ -11,7 +11,7 @@ void loadingScene::Kim_Min_Young_addImage()
 	//_loading->loadImage("UI_rambroWalk", "effectImage/UI_rambro_walk_01.bmp", 262, 156, true, RGB(255, 0, 255));
 	//_loading->loadImage("UI_rambroGrenade", "effectImage/UI_rambro_grenade_01.bmp", 29, 38, true, RGB(255, 0, 255));
 	//_loading->loadImage("UI_statBox", "effectImage/UI_statBox_temp_01.bmp", 445, 114);
-	_loading->loadImage("blood_still1", "effectImage/blood_still_01.bmp", 4, 4, true, RGB(255, 0, 255));
+	_loading->loadImage("blood_still1", "effectImage/blood_still_01.bmp", 4, 4);
 	_loading->loadImage("blood_still2", "effectImage/blood_still_02.bmp", 15, 20, true, RGB(255, 0, 255));
 	_loading->loadImage("blood_still3", "effectImage/blood_still_03.bmp", 15, 20, true, RGB(255, 0, 255));
 	_loading->loadImage("blood_still4", "effectImage/blood_still_04.bmp", 8, 11, true, RGB(255, 0, 255));
@@ -27,8 +27,11 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadImage("explosionFlame6", "effectImage/explosion_flame_06.bmp", 33, 33, true, RGB(255, 0, 255));
 	_loading->loadImage("explosionFlame7", "effectImage/explosion_flame_07.bmp", 33, 33, true, RGB(255, 0, 255));
 	_loading->loadImage("explosionFlame8", "effectImage/explosion_flame_08.bmp", 43, 43, true, RGB(255, 0, 255));
-	_loading->loadImage("p1Bubble_still", "effectImage/p1_bubble_still_01.bmp", 88, 92, true, RGB(255, 0, 255));
+	_loading->loadImage("blackPixelDot", "effectImage/fly_01.bmp", 4, 4);
+	_loading->loadImage("yellowPixelDot", "effectImage/spark_01.bmp", 4, 4);
 	_loading->loadFrameImage("p1Bubble", "effectImage/p1_bubble_01.bmp", 1056, 92, 12, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("saveBubble", "effectImage/save_bubble_01.bmp", 4352, 136, 25, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("saveBubble2", "effectImage/save_bubble_02.bmp", 5248, 128, 32, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("bloodTrailPuff1", "effectImage/bloodTrailPuff_01.bmp", 126, 14, 9, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("bloodTrailPuff2", "effectImage/bloodTrailPuff_02.bmp", 94, 6, 16, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("bloodTrailPuff3", "effectImage/bloodTrailPuff_03.bmp", 154, 13, 11, 1, true, RGB(255, 0, 255));

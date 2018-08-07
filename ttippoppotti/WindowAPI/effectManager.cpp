@@ -42,6 +42,12 @@ HRESULT effectManager::init(void)
 	addEffect("bulletPuff", "bulletPuff", 10, 1, true);
 	addEffect("knifePuff", "whitePuff", 1, 1, true);
 
+	addEffect("saveBubble", "saveBubble2", 5, 1, true);
+
+	addEffect("fliesFlying", "blackPixelDot", 20, 20);
+	
+	addEffect("smallSparks", "yellowPixelDot", 20, 20);
+
 	_count = 0;
 	_isExplosion = false;
 
@@ -151,6 +157,16 @@ void effectManager::bulletPuff(float x, float y)
 void effectManager::knifePuff(float x, float y, bool isLeft)
 {
 	this->playKnifePuff("knifePuff", x, y, isLeft);
+}
+
+void effectManager::flyingFlies(float x, float y)
+{
+	this->playFlyingFlies("fliesFlying", x, y);
+}
+
+void effectManager::saveBubble(float x, float y)
+{
+	playLoopAnim("saveBubble", x, y);
 }
 
 void effectManager::explosion(float x, float y)
@@ -309,6 +325,42 @@ void effectManager::playKnifePuff(string effectName, float x, float y, bool isLe
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
 			mIter->second[i]->activateKnifePuff(x, y, isLeft);
+			return;
+		}
+	}
+}
+
+void effectManager::playLoopAnim(string effectName, float x, float y)
+{
+	miEffect mIter;
+
+	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
+	{
+		if (!(mIter->first == effectName)) continue;
+
+		//이펙트키와 일치하면 이펙트 실행
+		for (int i = 0; i < mIter->second.size(); i++)
+		{
+			if (mIter->second[i]->getIsRunning()) continue;
+			mIter->second[i]->activateLoopAnim(x, y);
+			return;
+		}
+	}
+}
+
+void effectManager::playFlyingFlies(string effectName, float x, float y)
+{
+	miEffect mIter;
+
+	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
+	{
+		if (!(mIter->first == effectName)) continue;
+
+		//이펙트키와 일치하면 이펙트 실행
+		for (int i = 0; i < mIter->second.size(); i++)
+		{
+			if (mIter->second[i]->getIsRunning()) continue;
+			mIter->second[i]->activateFlyingFlies(x, y);
 			return;
 		}
 	}

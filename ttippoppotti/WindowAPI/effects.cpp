@@ -17,15 +17,38 @@ HRESULT effects::init(const char * imageName, int particleMax, bool isFrameImg)
 	_isParabola = false;
 	_isExplosion = false;
 	_isStaticAnim = false;
+	_isLoopAnim = false;
 
 	for (int i = 0; i < _particleMax; i++)
 	{
 		tagParticle particle;
 		ZeroMemory(&particle, sizeof(tagParticle));
 		particle.particleImg = IMAGEMANAGER->findImage(_imageName);
-
+	
 		_vParticle.push_back(particle);
 	}
+	//_particleMax = 5;
+	//for (int i = 0; i < _particleMax; i++)
+	//{
+	//	tagParticle particle;
+	//	ZeroMemory(&particle, sizeof(tagParticle));
+	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame1");
+	//	_vParticle.push_back(particle);
+	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame2");
+	//	_vParticle.push_back(particle);
+	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame3");
+	//	_vParticle.push_back(particle);
+	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame4");
+	//	_vParticle.push_back(particle);
+	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame5");
+	//	_vParticle.push_back(particle);
+	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame6");
+	//	_vParticle.push_back(particle);
+	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame7");
+	//	_vParticle.push_back(particle);
+	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame8");
+	//	_vParticle.push_back(particle);
+	//}
 	return S_OK;
 }
 
@@ -92,6 +115,7 @@ void effects::activateExplosion(float x, float y)
 	_isRunning = true;
 	_isExplosion = true;
 	
+	
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
@@ -99,8 +123,12 @@ void effects::activateExplosion(float x, float y)
 		_vParticle[i].gravity = 0.0f;
 		_vParticle[i].x = x;
 		_vParticle[i].y = y;
-		_vParticle[i].speed = 9.0f;
-		_vParticle[i].count = 0;
+		_vParticle[i].speed = 8.0f;
+		//_vParticle[i].angle = PI / _particleMax * ((i % _particleMax) + 1);
+		//_vParticle[i].gravity = 0.0f;
+		//_vParticle[i].fireX = x;
+		//_vParticle[i].fireY = y;
+		//_vParticle[i].speed = 50.0f * ((i % _particleMax) + 1);
 		if (_isFrameImg)
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 		else
@@ -110,7 +138,6 @@ void effects::activateExplosion(float x, float y)
 }
 void effects::boomExplosion()
 {
-	//_explosionCount++;
 	if (_isExplosion)
 	{
 		for (int i = 0; i < _vParticle.size(); ++i)
@@ -121,26 +148,36 @@ void effects::boomExplosion()
 			else
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
 			_vParticle[i].count++;
-			
-			if (_vParticle[i].count >= 300)
+			if (_vParticle[i].count >= 100)
 			{
-				_vParticle[i].fire = false;
+ 				_vParticle[i].fire = false;
 				_isRunning = false;
 				_isParabola = false;
+				_vParticle[i].count = 0;
 			}
-			//else if (_vParticle[i].count >= 50)
-			//{
-			//	_vParticle[i].speed = 0;
-			//	_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
-			//	_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed;
-			//}
 			else
 			{
 				_vParticle[i].gravity += 0.07f;
 				_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
-				_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
+				_vParticle[i].y += - sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
+				//_vParticle[i].x = _vParticle[i].fireX + cosf(_vParticle[i].angle) * _vParticle[i].speed;
+				//_vParticle[i].y = _vParticle[i].fireY - sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
 			}
 		}
+	}
+}
+
+void effects::activateLoopAnim(float x, float y)
+{
+	_isRunning = true;
+	_isLoopAnim = true;
+	for (int i = 0; i < _particleMax; i++)
+	{
+		_vParticle[i].fire = true;
+		_animationSpeed = 2;
+		_vParticle[i].x = x;
+		_vParticle[i].y = y;
+		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 	}
 }
 
@@ -261,6 +298,11 @@ void effects::boomParabola()
 			}
 		}
 	}
+}
+
+void effects::activateFlyingFlies(float x, float y)
+{
+
 }
 
 void effects::collisionProcess()
