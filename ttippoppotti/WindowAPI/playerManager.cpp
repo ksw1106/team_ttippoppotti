@@ -110,10 +110,15 @@ void playerManager::update(void)
 		else if (!_player->getIsLeft())
 		{
 			_player->setState(KNIFE);
+		}	
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('C'))
+	{
+		if (_player->getImage(5)->getMaxFrameX() > _player->getImage(5)->getFrameX())
+		{
+			_player->setState(KNIFE);
 		}
-		
-		
-		
 	}
 	
 	if (KEYMANAGER->isOnceKeyDown('X'))							// ¼ö·ùÅº
@@ -144,7 +149,7 @@ void playerManager::update(void)
 		}
 	}
 
-	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || (KEYMANAGER->isOnceKeyUp('C') && _player->getImage(KNIFE)->getMaxFrameX()))
+	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || KEYMANAGER->isOnceKeyUp('C'))
 	{
 		_player->setState(IDLE);
 	}

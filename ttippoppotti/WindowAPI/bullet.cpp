@@ -505,6 +505,8 @@ HRESULT pGrenade::init(float range)
 		ZeroMemory(&pGrenade, sizeof(tagBullet));
 		pGrenade.bulletImage = new image;
 		pGrenade.bulletImage->init("player_ramBro/rambro_grenade.bmp", 28, 35, 1, 1, true, RGB(255, 0, 255));
+		pGrenade.grenadeImage = new image;
+		pGrenade.grenadeImage->init("player_ramBro/rambro_grenade_bomb.bmp", 28, 35, 1, 1, true, RGB(255, 0, 255));
 
 		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
 		_vBullet.push_back(pGrenade);
@@ -531,6 +533,12 @@ void pGrenade::render(void)
 			_vBullet[i].bulletImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
 				_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
 				_vBullet[i].bulletImage->getFrameX(), _vBullet[i].bulletImage->getFrameY());
+			if (_vBullet[i].count > 50)
+			{
+				_vBullet[i].grenadeImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
+					_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
+					_vBullet[i].grenadeImage->getFrameX(), _vBullet[i].grenadeImage->getFrameY());
+			}
 		}
 	}
 }
