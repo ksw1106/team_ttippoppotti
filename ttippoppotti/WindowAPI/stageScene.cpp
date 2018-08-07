@@ -84,7 +84,7 @@ void stageScene::release(void)
 void stageScene::update(void)
 {
 	
-	/*switch (soundCount)
+	switch (soundCount)
 	{
 	case 0:
 		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount]))
@@ -114,7 +114,14 @@ void stageScene::update(void)
 			soundCount++;
 		}
 		break;
-	}*/
+	case 4:
+		if (SOUNDMANAGER->isPlaySound(soundName[soundCount - 1]))
+		{
+			SOUNDMANAGER->play("1stage");
+			soundCount++;
+		}
+		break;
+	}
 	
 	
 	
