@@ -25,7 +25,8 @@ HRESULT enemyManager::init(void)
 
 void enemyManager::release(void)
 {
-	_eBullet->release();	
+	_eBullet->release();
+	SAFE_DELETE(_eBullet);
 }
 
 void enemyManager::update(void)

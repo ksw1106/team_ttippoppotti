@@ -121,13 +121,7 @@ void enemy::update(void)
 			_corpse[i].y = _y;
 			_corpse[i].rcCorpse = RectMake(_corpse[i].x, _corpse[i].y, _corpse[i].corpseImage->getWidth(), _corpse[i].corpseImage->getHeight());
 		}
-	}
-		
-	if (_isApart)
-	{
-		++_count;
-		if (_count > 1000) _count = 0;
-	}
+	}	
 }
 
 void enemy::render(void)
@@ -139,6 +133,14 @@ void enemy::render(void)
 		{
 			_enemyImage.bodyImage[_enemyStatus]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top,
 				_enemyImage.bodyImage[_enemyStatus]->getFrameX(), _enemyImage.bodyImage[_enemyStatus]->getFrameY());
+		}
+		// 시체 렌더
+		else
+		{
+			for (int i = 0; i < BODY_PART; ++i)
+			{
+				_corpse[i].corpseImage->render(getMemDC(), _corpse[i].x - CAMERAMANAGER->getCamera().left, _corpse[i].y - CAMERAMANAGER->getCamera().top);
+			}
 		}
 
 		//팔 이미지 렌더
@@ -167,15 +169,7 @@ void enemy::render(void)
 		{
 			_doubtSign->frameRender(getMemDC(), _x + 10 - CAMERAMANAGER->getCamera().left, _y - 50 - CAMERAMANAGER->getCamera().top, _doubtSign->getFrameX(), _doubtSign->getFrameY());
 		}
-
-		//적 시체 폭발 (분해되었을때)
-		if (_isApart || removeCorpse() == false)
-		{			
-			for (int i = 0; i < BODY_PART; ++i)
-			{				
-				_corpse[i].corpseImage->render(getMemDC(), _corpse[i].x - CAMERAMANAGER->getCamera().left, _corpse[i].y - CAMERAMANAGER->getCamera().top);				
-			}
-		}
+		
 	}
 
 	if (KEYMANAGER->isToggleKey(VK_F4))
@@ -197,18 +191,10 @@ void enemy::render(void)
 //======================================================================================================================================
 //======================================================================================================================================
 
-// 카운트 조절
+// 시체 제거
 bool enemy::removeCorpse()
 {
-	if (_isApart)
-	{
-		if (_count % 100 == 0)
-		{
-			return true;
-		}
-		else
-			return false;
-	}
+	return false;
 }
 
 // 에너미 움직임 변화

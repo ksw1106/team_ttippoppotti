@@ -29,7 +29,15 @@ void loadingScene::Lee_Ji_Woong_addImage()
 	_loading->loadFrameImage("ºê·ÎºôÆò»ó½Ã", "enemyImage/brovil_idle.bmp", 320, 160, 4, 2);
 	_loading->loadFrameImage("ºê·Îºô³Ë¹é", "enemyImage/brovil_knock_back.bmp", 800, 160, 10, 2);
 	_loading->loadFrameImage("ºê·Îºô½ÂÈ­", "enemyImage/brovil_disappear.bmp", 1680, 160, 21, 2);	
-	
+
+	_loading->loadFrameImage("Å×·¯ÄßÅÍ ¾ÆÀÌµé(Ç®)", "enemyImage/bosImage/boss_idle_missile_full.bmp", 2880, 512, 9, 2);
+	_loading->loadFrameImage("Å×·¯ÄßÅÍ Á×À½", "enemyImage/bosImage/boss_dead.bmp", 300, 360, 1, 2);
+	_loading->loadFrameImage("Å×·¯ÄßÅÍ ±â°üÃÑ ¹ß»ç", "enemyImage/bosImage/boss_gun_fire.bmp", 480, 160, 4, 2);
+	_loading->loadFrameImage("Å×·¯ÄßÅÍ ±â°üÃÑ ¿¹¿­", "enemyImage/bosImage/boss_gun_ready.bmp", 480, 160, 4, 2);
+	_loading->loadFrameImage("Å×·¯ÄßÅÍ ±â°üÃÑ È¸Àü", "enemyImage/bosImage/boss_gun_rotate.bmp", 1080, 80, 9, 1);
+	_loading->loadFrameImage("Å×·¯ÄßÅÍ ·ÎÄÏ", "enemyImage/bosImage/boss_rocket.bmp", 304, 96, 4, 2);
+	_loading->loadFrameImage("Å×·¯ÄßÅÍ ÇÁ·ÎÆç·¯", "enemyImage/bosImage/propeller.bmp", 800, 52, 4, 1);
+	_loading->loadFrameImage("Å×·¯ÄßÅÍ ÃÑ¾Ë", "enemyImage/bosImage/boss_bullet.bmp", 64, 32, 1, 1);
 }
 
 void loadingScene::Lee_Ji_Woong_addSound()

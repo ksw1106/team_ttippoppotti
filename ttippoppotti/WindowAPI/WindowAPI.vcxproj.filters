@@ -167,6 +167,9 @@
     <ClInclude Include="brovil.h">
       <Filter>MainGame\브로포스\enemy</Filter>
     </ClInclude>
+    <ClInclude Include="boss.h">
+      <Filter>MainGame\브로포스\enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -287,6 +290,9 @@
       <Filter>MainGame\브로포스</Filter>
     </ClCompile>
     <ClCompile Include="brovil.cpp">
+      <Filter>MainGame\브로포스\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="boss.cpp">
       <Filter>MainGame\브로포스\enemy</Filter>
     </ClCompile>
   </ItemGroup>
