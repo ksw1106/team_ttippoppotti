@@ -10,6 +10,8 @@ void loadingScene::Lee_Moon_Gyu_addImage()
 	_loading->loadFrameImage("broforce_hang_backHold", "player_ramBro/broforce_hang_backHold.bmp", 72, 152, 1, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("broforce_knife", "player_ramBro/broforce_knife.bmp", 449, 152, 5, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("broforce_die", "player_ramBro/broforce_die.bmp", 76, 72, 1, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("broforce_ladder", "player_ramBro/broforce_ladder.bmp", 912, 152, 12, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("broforce_fire", "player_ramBro/broforce_fire.bmp", 608, 152, 8, 2, true, RGB(255, 0, 255));
 }
 
 void loadingScene::Lee_Moon_Gyu_addSound()

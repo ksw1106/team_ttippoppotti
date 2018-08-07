@@ -162,7 +162,13 @@
       <Filter>MainGame\브로포스\enemy</Filter>
     </ClInclude>
     <ClInclude Include="titleScene.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>MainGame\브로포스</Filter>
+    </ClInclude>
+    <ClInclude Include="brovil.h">
+      <Filter>MainGame\브로포스\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="boss.h">
+      <Filter>MainGame\브로포스\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -281,7 +287,13 @@
       <Filter>MainGame\브로포스\enemy</Filter>
     </ClCompile>
     <ClCompile Include="titleScene.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>MainGame\브로포스</Filter>
+    </ClCompile>
+    <ClCompile Include="brovil.cpp">
+      <Filter>MainGame\브로포스\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="boss.cpp">
+      <Filter>MainGame\브로포스\enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

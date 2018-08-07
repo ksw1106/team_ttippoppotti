@@ -4,6 +4,7 @@
 void loadingScene::Kim_Sang_Won_addImage()
 {
 	_loading->loadImage("backGround_pixel", "background_pixel.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_loading->loadImage("ladder_pixel", "ladder_pixel.bmp", 5755, 2878, true, RGB(255, 0, 255));
 	_loading->loadImage("backGround", "background.bmp", 5755, 2878, true, RGB(255, 0, 255));
 	_loading->loadImage("backGround_tree1", "background_tree1.bmp", 5755, 2878, true, RGB(255, 0, 255));
 	_loading->loadImage("backGround_tree2", "background_tree2.bmp", 5755, 2878, true, RGB(255, 0, 255));
@@ -21,9 +22,15 @@ void loadingScene::Kim_Sang_Won_addImage()
 
 void loadingScene::Kim_Sang_Won_addSound()
 {
+	//_loading->loadSound("title", "title/sound/title.wav");
+	//_loading->loadSound("eagle", "title/sound/eagle.wav");
+	//_loading->loadSound("broforce", "title/sound/broforce.wav");
+
 	//게임 시작시 3, 2, 1, go!
 	_loading->loadSound("1", "start_one.mp3");
 	_loading->loadSound("2", "start_two.mp3");
 	_loading->loadSound("3", "start_three.mp3");
 	_loading->loadSound("go", "start_go.mp3");
+
+	_loading->loadSound("1stage", "title/sound/1stage.wav", true, true);
 }

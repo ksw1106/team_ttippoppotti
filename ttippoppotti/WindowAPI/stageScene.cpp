@@ -88,7 +88,7 @@ void stageScene::release(void)
 void stageScene::update(void)
 {
 	
-	/*switch (soundCount)
+	switch (soundCount)
 	{
 	case 0:
 		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount]))
@@ -118,7 +118,14 @@ void stageScene::update(void)
 			soundCount++;
 		}
 		break;
-	}*/
+	case 4:
+		if (SOUNDMANAGER->isPlaySound(soundName[soundCount - 1]))
+		{
+			SOUNDMANAGER->play("1stage");
+			soundCount++;
+		}
+		break;
+	}
 	
 	
 	
@@ -276,6 +283,10 @@ void stageScene::render(void)
 
 	_playerManager->render();
 	_enemyManager->render();
-	//IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+	if (KEYMANAGER->isToggleKey('8'))
+	{
+		IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+		IMAGEMANAGER->findImage("ladder_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+	}
 	_test->render();
 }

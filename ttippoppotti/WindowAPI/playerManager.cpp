@@ -20,6 +20,7 @@ HRESULT playerManager::init(void)
 	_change = false;
 	_knifeCount = 0;
 	_knifeCollision = false;
+	_isLadder = false;
 
 	_rcKnife = RectMake(_player->getX(), _player->getY(), 60, 20);
 	_p1Bubble = IMAGEMANAGER->findImage("p1Bubble");
@@ -110,10 +111,15 @@ void playerManager::update(void)
 		else if (!_player->getIsLeft())
 		{
 			_player->setState(KNIFE);
+		}	
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('C'))
+	{
+		if (_player->getImage(5)->getMaxFrameX() > _player->getImage(5)->getFrameX())
+		{
+			_player->setState(KNIFE);
 		}
-		
-		
-		
 	}
 	
 	if (KEYMANAGER->isOnceKeyDown('X'))							// 수류탄
@@ -126,8 +132,20 @@ void playerManager::update(void)
 		{
 			_pGrenade->fire(_player->getX(), _player->getY() + 38, 20, _player->getIsLeft());
 		}
+		
 	}
 
+	if (KEYMANAGER->isStayKeyDown('X'))
+	{
+		if (_player->getIsLeft())
+		{
+			_player->setState(FIRE);
+		}
+		else if (!_player->getIsLeft())
+		{
+			_player->setState(FIRE);
+		}
+	}
 	_pGrenade->update();										// 수류탄 업데이트 ( 무브 )
 
 	if (KEYMANAGER->isOnceKeyDown(VK_UP) && !_player->getIsJump())
@@ -140,11 +158,30 @@ void playerManager::update(void)
 		hit_right = false;
 		if (_player->getState() == HANG_FRONT_HOLD || _player->getState() == HANG_BACK_HOLD)
 		{
-			_player->setJumpSpeed(10.f);
+			_player->setJumpSpeed(5.f);
+			_isLadder = false;
 		}
 	}
-
-	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || (KEYMANAGER->isOnceKeyUp('C') && _player->getImage(KNIFE)->getMaxFrameX()))
+	else if (_player->getState() == LADDER && KEYMANAGER->isStayKeyDown(VK_UP))
+	{
+		if (_isLadder)
+		{
+			/*if (_player->getState() == LADDER)
+			{*/
+				//float y = _player->getY();
+				//y -= 0.01;
+				_player->setGravity(0);
+				_player->setIsJump(true);
+				_player->setY(_player->getY() - 0.01f);
+			
+				if (!RED)
+				{
+					_isLadder = false;
+				}
+			/*}*/
+		}
+	}
+	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || KEYMANAGER->isOnceKeyUp('C') || KEYMANAGER->isOnceKeyUp('X') || KEYMANAGER->isOnceKeyUp(VK_UP) && _isLadder == true)
 	{
 		_player->setState(IDLE);
 	}
@@ -169,8 +206,10 @@ void playerManager::update(void)
 
 	rcPlayer = RectMake(tempX, tempY, 60, 80);
 
-	if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_TOP))				// 위쪽 벽
+
+	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_TOP))			// 위쪽 벽
 	{
+	case GREEN:
 		_player->setGravity(0.f);
 		_player->setJumpSpeed(0.f);
 		_player->setIsJump(false);
@@ -182,9 +221,21 @@ void playerManager::update(void)
 		}
 
 		hit_top = true;
+		_isLadder = false;
+		break;
+	case RED:
+		_player->setState(LADDER);
+		_isLadder = true;
+		break;
+	case BLUE:
+		break;
+	default:
+		break;
 	}
-	else if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_BOTTOM))		// 아래쪽 벽
+	
+	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_BOTTOM))		// 아래쪽 벽
 	{
+	case GREEN:
 		_player->setGravity(0.f);
 		_player->setJumpSpeed(0.f);
 		_player->setIsJump(false);
@@ -196,9 +247,17 @@ void playerManager::update(void)
 			_player->setState(IDLE);
 		}
 
-		//if (_player->getState())
-
 		hit_bottom = true;
+		_isLadder = false;
+		break;
+	case RED:
+		_player->setState(LADDER);
+		_isLadder = true;
+		break;
+	case BLUE:
+		break;
+	default:
+		break;
 	}
 
 	if (_player->getIsJump())
@@ -206,19 +265,22 @@ void playerManager::update(void)
 		hit_bottom = false;
 	}
 
-	if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_RIGHT))				// 오른쪽 벽
+	//switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_RIGHT))			// 오른쪽 벽
+	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, _player->getGravity(), PLAYER_RIGHT))			// 오른쪽 벽
 	{
+	case GREEN:
 		if ((_player->getOldY() - tempY) < 0)
 		{
 			_player->setIsJump(false);
 			_player->setGravity(0.f);
 			_player->setJumpSpeed(0.f);
 		}
-	
+
 		_player->setIsLeft(false);
 
 		hit_right = true;
 		hit_left = false;
+
 		//_player->setIsCollision(!_player->getIsCollision());
 
 		//if (_player->getState() == JUMP)
@@ -230,9 +292,22 @@ void playerManager::update(void)
 		{
 			_player->setIsCollision(!_player->getIsCollision());
 		}
+		_isLadder = false;
+		break;
+	case RED:
+		_player->setState(LADDER);
+		_isLadder = true;
+		break;
+	case BLUE:
+		break;
+	default:
+		break;
 	}
-	else if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_LEFT))				// 왼쪽벽
+	
+	//switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_LEFT))			// 왼쪽벽
+	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, _player->getGravity(), PLAYER_LEFT))
 	{
+	case GREEN:
 		if ((_player->getOldY() - tempY) < 0)
 		{
 			_player->setIsJump(false);
@@ -243,6 +318,7 @@ void playerManager::update(void)
 
 		hit_left = true;
 		hit_right = false;
+		_isLadder = false;
 		//if (_player->getState() == JUMP)
 		//{
 		//	_player->setState(HANG_FRONT_HOLD);
@@ -250,18 +326,26 @@ void playerManager::update(void)
 
 		/*if (_player->getState() != HANG_FRONT_HOLD)
 		{
-			_player->setIsCollision(!_player->getIsCollision());
+		_player->setIsCollision(!_player->getIsCollision());
 		}*/
-	}
-	else
-	{
+
+		
 		hit_left = false;
 		hit_right = false;
 
 		if (_player->getState() == HANG_FRONT_HOLD)
 			_player->setState(JUMP);
+		break;
+	case RED:
+		_player->setState(LADDER);
+		_isLadder = true;
+		break;
+	case BLUE:
+		break;
+	default:
+		break;
 	}
-
+	
 	if (hit_left && !hit_right && !hit_bottom)
 	{
 		_player->setState(HANG_FRONT_HOLD);
@@ -270,6 +354,19 @@ void playerManager::update(void)
 	{
 		_player->setState(HANG_FRONT_HOLD);
 	}
+	/*switch (switch_on)
+	{
+	case GREEN:
+		break;
+	case RED:
+		break;
+	case BLUE:
+		break;
+	default:
+		break;
+	}*/
+	
+	
 
 	/*
 	if (픽셀충돌) 총알 - 픽셀맵
@@ -548,7 +645,7 @@ void playerManager::render(void)
 		RectangleMake(getMemDC(), _player->getX() + 60 - CAMERAMANAGER->getCamera().left, _player->getY() + 30 - CAMERAMANAGER->getCamera().top, 30, 30);
 	}
 	
-	RectangleMake(getMemDC(), rc.left, rc.top, rc.left + (rc.right-rc.left)/2, rc.top + (rc.bottom - rc.top) / 2);
+	//RectangleMake(getMemDC(), rc.left, rc.top, rc.left + (rc.right-rc.left)/2, rc.top + (rc.bottom - rc.top) / 2);
 }
 
 void playerManager::rambroDie()
