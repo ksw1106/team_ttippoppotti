@@ -29,12 +29,26 @@ void objectA::render(HDC hdc)
 			_image->frameRender(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
 		else
 			_image->render(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+		for (int i = 0; i < _vElement.size(); i++)
+		{
+			if(_vElement[i].isFrameImg)
+				_vElement[i].elementImg->frameRender(hdc, _vElement[i].x - CAMERAMANAGER->getCamera().left, _vElement[i].y - CAMERAMANAGER->getCamera().top);
+			else
+				_vElement[i].elementImg->render(hdc, _vElement[i].x - CAMERAMANAGER->getCamera().left, _vElement[i].y - CAMERAMANAGER->getCamera().top);
+		}
 		break;
 	case OBJECT_MOVE:
 		if (_isFrameImage)
 			_image->frameRender(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
 		else
 			_image->render(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+		for (int i = 0; i < _vElement.size(); i++)
+		{
+			if (_vElement[i].isFrameImg)
+				_vElement[i].elementImg->frameRender(hdc, _vElement[i].x - CAMERAMANAGER->getCamera().left, _vElement[i].y - CAMERAMANAGER->getCamera().top);
+			else
+				_vElement[i].elementImg->render(hdc, _vElement[i].x - CAMERAMANAGER->getCamera().left, _vElement[i].y - CAMERAMANAGER->getCamera().top);
+		}
 		break;
 	case OBJECT_DESTROY:
 		break;
@@ -48,11 +62,38 @@ void deadBody::init()
 	_animationSpeed = 5;
 	_isFrameImage = true;
 	_isLeft = false;
+	_isStart = false;
 }
 
 void deadBody::idle()
 {
-	//EFFECTMANAGER->flyingFlies(_x + _image->getFrameWidth() / 2, _y + _image->getFrameHeight() / 2);
+	if (!_isStart)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			tagElement element;
+			ZeroMemory(&element, sizeof(tagElement));
+			element.elementImg = IMAGEMANAGER->findImage("blackPixelDot");
+			element.angle = RND->getFloat(PI2);
+			element.x = _x + _image->getFrameWidth() / 2 + RND->getFromFloatTo(5.0f, 10.0f);
+			element.y = _y + _image->getFrameHeight() / 2 + RND->getFromFloatTo(2.0f, 5.0f) - 5.0f;
+			element.speed = RND->getFromFloatTo(0.5f, 1.5f);
+
+			_vElement.push_back(element);
+		}
+		_isStart = true;
+	}
+	else
+	{
+		for (int i = 0; i < _vElement.size(); ++i)
+		{
+			_vElement[i].x += cosf(_vElement[i].angle + RND->getFloat(1.1f)) * _vElement[i].speed;
+			_vElement[i].y += -sinf(_vElement[i].angle + RND->getFloat(1.1f)) * _vElement[i].speed;
+			_vElement[i].count++;
+			if (_vElement[i].count % 5 == 0)
+				_vElement[i].angle = (i < _vElement.size() / 2) ? _vElement[i].angle + RND->getFloat(PI_4) : _vElement[i].angle - RND->getFloat(PI_4);
+		}
+	}
 }
 
 void deadBody::move()
@@ -62,7 +103,6 @@ void deadBody::move()
 void skull::init()
 {
 	_image = IMAGEMANAGER->findImage("skull");
-	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -77,7 +117,6 @@ void skull::move()
 void skullPole::init()
 {
 	_image = IMAGEMANAGER->findImage("skullPole");
-	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -92,7 +131,6 @@ void skullPole::move()
 void doubleSkullPole::init()
 {
 	_image = IMAGEMANAGER->findImage("doubleSkullPole");
-	_rc = _image->boudingBox();
 	_isFrameImage = false;
 }
 
@@ -107,7 +145,9 @@ void doubleSkullPole::move()
 void skullDrumRed::init()
 {
 	_image = IMAGEMANAGER->findImage("skullDrum_red");
-	_rc = _image->boudingBox();
+	_speed = 8.0f;
+	_gravity = 0.0f;
+	_angle = PI + PI_2;
 	_isFrameImage = false;
 }
 
@@ -122,7 +162,9 @@ void skullDrumRed::move()
 void skullDrumGray::init()
 {
 	_image = IMAGEMANAGER->findImage("skullDrum_gray");
-	_rc = _image->boudingBox();
+	_speed = 8.0f;
+	_gravity = 0.0f;
+	_angle = PI + PI_2;
 	_isFrameImage = false;
 }
 
@@ -138,26 +180,59 @@ void prisoner::init()
 {
 	_image = IMAGEMANAGER->findImage("prisoner_inJail");
 	_prisonerFreedImage = IMAGEMANAGER->findImage("prisoner_freed");
-	_count = 0;
+	_speed = 8.0f;
+	_gravity = 0.0f;
+	_angle = PI + PI_2;
+	_count = _index = 0;
+	_animationSpeed = 3;
+	_isLeft = false;
 	_isFrameImage = false;
+	_activationRc = RectMake(_x - _image->getWidth() * 3, _y - _image->getHeight() * 3, _image->getWidth() * 6, _image->getHeight() * 6);
+	_isActived = false;
+	_isStart = false;
 }
 
 void prisoner::idle()
 {
-	EFFECTMANAGER->saveBubble(_x + 68, _y - 5);
+	//EFFECTMANAGER->saveBubble(_x + 68, _y - 5);
+	if (!_isStart)
+	{
+		for (int i = 0; i < 1; i++)
+		{
+			tagElement element;
+			ZeroMemory(&element, sizeof(tagElement));
+			element.elementImg = IMAGEMANAGER->findImage("saveBubble2");
+			element.isFrameImg = true;
+			element.x = _x - 14;
+			element.y = _y - 65;
+
+			_vElement.push_back(element);
+		}
+		_isStart = true;
+	}
+	else
+		if (_isActived)
+			for (int i = 0; i < _vElement.size(); i++)
+				FRAMEMANAGER->frameChange(_vElement[i].elementImg, _count, _index, _animationSpeed, _isLeft);
 }
 
 void prisoner::move()
 {
-	_count++;
 	_image = _prisonerFreedImage;
-	if (_count > 10)
-		EFFECTMANAGER->saveBubble(_x + 68, _y - 5);
+	_animationSpeed = 2;
+	if (_isActived)
+	{
+		for (int i = 0; i < _vElement.size(); i++)
+			FRAMEMANAGER->frameChange(_vElement[i].elementImg, _count, _index, _animationSpeed, _isLeft);
+	}
 }
 
 void woodenBox::init()
 {
 	_image = IMAGEMANAGER->findImage("woodenBox");
+	_speed = 8.0f;
+	_gravity = 0.0f;
+	_angle = PI + PI_2;
 	_isFrameImage = false;
 }
 
@@ -216,6 +291,9 @@ void truck::init()
 	_image = IMAGEMANAGER->findImage("truck");
 	_isFrameImage = false;
 	_isLeft = false;
+	_speed = 8.0f;
+	_gravity = 0.0f;
+	_angle = PI + PI_2;
 	_destX = _x;
 	_destY = _y;
 	_x -= _image->getWidth();
@@ -279,7 +357,6 @@ void americanFlag::move()
 void amFlagPole::init()
 {
 	_image = IMAGEMANAGER->findImage("saveFlag_pole");
-	_rc = _image->boudingBox();
 	_isActived = true;
 	_isFrameImage = false;
 }

@@ -22,7 +22,7 @@ void cameraManager::CameraShakeOngoing()
 		_shakeCount++;
 	}
 
-	if (_shakeCount > 10)
+	if (_shakeCount > 15)
 	{
 		_shakeStart = false;
 		_shakeCount = 0;

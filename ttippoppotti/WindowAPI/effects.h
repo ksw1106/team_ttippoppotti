@@ -16,6 +16,7 @@ struct tagParticle
 	float radius;
 	bool fire;
 	bool isActive;
+	int alpha;
 	int count;
 	int index;
 };
@@ -33,6 +34,7 @@ private:
 	int _particleMax;			//파편 최대갯수
 	int _x, _y;				//이펙트 터트릴 위치좌표
 	int _falseCount;
+	int _alpha;
 	int _count;
 	int _explosionCount;
 	int _index;
@@ -43,7 +45,9 @@ private:
 	bool _isExplosion;
 	bool _isStaticAnim;
 	bool _isFlyingFlies;
+	bool _isAshes;
 	bool _isFrameImg;		//프레임이미지냐?
+	bool _isAlphaImg;		//알파이미지냐?
 
 public:
 	HRESULT init(const char* imageName, int particleMax, bool isFrameImg);
@@ -55,27 +59,24 @@ public:
 	void activateCartridge(float x, float y, bool isLeft);
 	//중앙폭발
 	void activateBallExplosion(float x, float y);
-
 	//포물선 발사 설정 (피, 낙석, 나무파편)
-	void activateParabola(float x, float y, float angle);
-	//포물선 발사!
+	void activateParabola(float x, float y);
 	void boomParabola();
-
 	//파리날림
 	void activateFlyingFlies(float x, float y);
 	void boomFlyingFlies();
-
+	//재가 되어 날아간당
+	void activateAshes(float x, float y);
+	void boomAshes();
 	//폭발 설정
 	void activateExplosion(float x, float y);
-	//폭발 발사!
 	void boomExplosion();
-
 	//말풍선
 	void activateLoopAnim(float x, float y);
-
 	//총 발사시 이펙트
 	void activateBulletPuff(float x, float y);
 	void activateKnifePuff(float x, float y, bool isLeft);
+
 	void boomStaticAnim();
 
 	//충돌처리

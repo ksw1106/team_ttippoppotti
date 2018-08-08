@@ -44,7 +44,8 @@ HRESULT effectManager::init(void)
 
 	addEffect("saveBubble", "saveBubble2", 5, 1, true);
 
-	addEffect("flyingFlies", "blackPixelDot", 1, 20);
+	addEffect("blackPixelDot", "blackPixelDot", 10, 5);
+	addEffect("blackPixelDot2", "blackPixelDot", 10, 200);
 	
 	addEffect("sparks", "yellowPixelDot", 20, 20);
 
@@ -117,16 +118,16 @@ void effectManager::render(void)
 	}
 }
 
-void effectManager::bloodSplash(float x, float y, float angle)
+void effectManager::bloodSplash(float x, float y)
 {
-	this->playParabola("bloodSplash1", x, y, angle);
-	this->playParabola("bloodSplash2", x, y, angle);
-	this->playParabola("bloodSplash3", x, y, angle);
-	this->playParabola("bloodSplash4", x, y, angle);
-	this->playParabola("bloodSplash5", x, y, angle);
-	this->playParabola("bloodSplash6", x, y, angle);
-	this->playParabola("bloodSplash7", x, y, angle);
-	this->playParabola("bloodSplash8", x, y, angle);
+	this->playParabola("bloodSplash1", x, y);
+	this->playParabola("bloodSplash2", x, y);
+	this->playParabola("bloodSplash3", x, y);
+	this->playParabola("bloodSplash4", x, y);
+	this->playParabola("bloodSplash5", x, y);
+	this->playParabola("bloodSplash6", x, y);
+	this->playParabola("bloodSplash7", x, y);
+	this->playParabola("bloodSplash8", x, y);
 }
 
 void effectManager::cartridge(float x, float y, bool isLeft)
@@ -134,19 +135,29 @@ void effectManager::cartridge(float x, float y, bool isLeft)
 	this->playCartridge("rambro_cartridge", x, y, isLeft);
 }
 
-void effectManager::rockFall(float x, float y, float angle)
+void effectManager::rockFall(float x, float y)
 {
-	this->playParabola("rock1", x, y, angle);
-	this->playParabola("rock2", x, y, angle);
-	this->playParabola("rock3", x, y, angle);
-	this->playParabola("rock4", x, y, angle);
-	this->playParabola("rock5", x, y, angle);
+	this->playParabola("rock1", x, y);
+	this->playParabola("rock2", x, y);
+	this->playParabola("rock3", x, y);
+	this->playParabola("rock4", x, y);
+	this->playParabola("rock5", x, y);
 }
 
-void effectManager::woodDebris(float x, float y, float angle)
+void effectManager::woodDebris(float x, float y)
 {
-	this->playParabola("woodDebris1", x, y, angle);
-	this->playParabola("woodDebris2", x, y, angle);
+	this->playParabola("woodDebris1", x, y);
+	this->playParabola("woodDebris2", x, y);
+}
+
+void effectManager::yellowSparks(float x, float y)
+{
+	this->playParabola("sparks", x, y);
+}
+
+void effectManager::ashes(float x, float y)
+{
+	this->playAshes("blackPixelDot2", x, y);
 }
 
 void effectManager::bulletPuff(float x, float y)
@@ -161,7 +172,7 @@ void effectManager::knifePuff(float x, float y, bool isLeft)
 
 void effectManager::flyingFlies(float x, float y)
 {
-	this->playFlyingFlies("flyingFlies", x, y);
+	this->playFlyingFlies("blackPixelDot", x, y);
 }
 
 void effectManager::saveBubble(float x, float y)
@@ -222,7 +233,7 @@ void effectManager::addEffect(string effectName, const char * imageName, int buf
 	_mEffect.insert(make_pair(effectName, vEffectBuffer));
 }
 
-void effectManager::playParabola(string effectName, float x, float y, float angle)
+void effectManager::playParabola(string effectName, float x, float y)
 {
 	miEffect mIter;
 
@@ -234,7 +245,7 @@ void effectManager::playParabola(string effectName, float x, float y, float angl
 		for (int i = 0; i < mIter->second.size(); i++)
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
-			mIter->second[i]->activateParabola(x, y, angle);
+			mIter->second[i]->activateParabola(x, y);
 			return;
 		}
 	}
@@ -361,6 +372,24 @@ void effectManager::playFlyingFlies(string effectName, float x, float y)
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
 			mIter->second[i]->activateFlyingFlies(x, y);
+			return;
+		}
+	}
+}
+
+void effectManager::playAshes(string effectName, float x, float y)
+{
+	miEffect mIter;
+
+	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
+	{
+		if (!(mIter->first == effectName)) continue;
+
+		//이펙트키와 일치하면 이펙트 실행
+		for (int i = 0; i < mIter->second.size(); i++)
+		{
+			if (mIter->second[i]->getIsRunning()) continue;
+			mIter->second[i]->activateAshes(x, y);
 			return;
 		}
 	}
