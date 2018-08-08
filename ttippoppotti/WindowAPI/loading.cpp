@@ -146,6 +146,11 @@ void loading::loadImage(string keyName, int width, int height)
 
 void loading::loadImage(string keyName, const char * fileName, int width, int height, bool isTrans, COLORREF transColor)
 {
+	if (keyName == "title " + to_string(1))
+	{
+		cout << "test";
+	}
+
 	loadItem* item = new loadItem;
 	item->init(keyName, fileName, width, height, isTrans, transColor);
 	_vLoadItem.push_back(item);
@@ -200,6 +205,18 @@ BOOL loading::loadingDone()
 		case LOAD_KIND_IMAGE_1:
 		{
 			tagImageResource img = item->getImageResource();
+
+		/*	if (img.keyName == "title " + to_string(1))
+			{
+				cout << "test";
+			}
+
+			string str = img.fileName;
+
+			vector<char> writable(str.begin(), str.end());
+			writable.push_back('\0');
+			char* ptr = &writable[0];*/
+
 			IMAGEMANAGER->addImage(img.keyName, img.fileName, img.width, img.height, img.trans, img.transColor);
 		}
 			break;
