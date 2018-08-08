@@ -12,6 +12,7 @@ class playerManager : public gameNode
 private:
 	enemyManager * _enemyManager;
 	player* _player;
+	player* _playerChuck;
 	mapData* _mapData;
 
 	pBullet * _pBullet;

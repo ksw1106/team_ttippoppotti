@@ -444,12 +444,20 @@ void pBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 		_vBullet[i].isActived = true;
 		_vBullet[i].speed = fireSpeed;
 		_vBullet[i].isLeft = isLeft;
-		y = RND->getFromIntTo(y - 20, y + 20);			// y °ªÀ» ·£´ýÀ¸·Î ¹Ù²ãÁà¼­ ÃÑ¾Ë ³ª°¡´Â°Ô ·£´ýÇÏ°Ô ³ª°¨
+		//y = RND->getFromIntTo(y - 20, y + 20);			// y °ªÀ» ·£´ýÀ¸·Î ¹Ù²ãÁà¼­ ÃÑ¾Ë ³ª°¡´Â°Ô ·£´ýÇÏ°Ô ³ª°¨
 		_vBullet[i].x = _vBullet[i].fireX = x;
 		_vBullet[i].y = _vBullet[i].fireY = y;
 		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
 			_vBullet[i].bulletImage->getFrameWidth(),
 			_vBullet[i].bulletImage->getFrameHeight());
+		if (_vBullet[i].isLeft)
+		{
+			_vBullet[i].angle = RND->getFromFloatTo(175.f, 183.f) * PI / 180;
+		}
+		if (!_vBullet[i].isLeft)
+		{
+			_vBullet[i].angle = RND->getFromFloatTo(-5.f, 3.f) * PI / 180;
+		}
 		
 		break;
 	}
@@ -463,13 +471,11 @@ void pBullet::move()
 		{
 			if (_vBullet[i].isLeft)					// ¿ÞÂÊ
 			{
-				_vBullet[i].angle = 180.f * PI / 180;
 				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
 			if (!_vBullet[i].isLeft)				// ¿À¸¥ÂÊ
 			{
-				_vBullet[i].angle = 0.f * PI / 180;
 				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
@@ -583,13 +589,19 @@ void pGrenade::move()
 		{
 			if (_vBullet[i].isLeft)					// ¿ÞÂÊ
 			{
-				_vBullet[i].gravity += 0.90f;	
+				if (_vBullet[i].speed != 0.f)
+				{
+					_vBullet[i].gravity += 0.90f;
+				}
 				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
 			if (!_vBullet[i].isLeft)				// ¿À¸¥ÂÊ
 			{
-				_vBullet[i].gravity += 0.90f;	
+				if (_vBullet[i].speed != 0.f)
+				{
+					_vBullet[i].gravity += 0.90f;
+				}
 				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
@@ -599,6 +611,97 @@ void pGrenade::move()
 				_vBullet[i].bulletImage->getFrameHeight());
 
 			_vBullet[i].count++;
+		}
+	}
+}
+//=============================================================
+//	## GBullet ## (ÇÒ¾Æ¹öÁö ¼ö·ùÅº)
+//=============================================================
+HRESULT GBullet::init(float range)
+{
+	_range = range;
+	_count = 0;
+	for (int i = 0; i < 5; i++)
+	{
+		tagBullet GBullet;
+		ZeroMemory(&GBullet, sizeof(tagBullet));
+		//GBullet.bulletImage = new image;
+		//GBullet.bulletImage->init("player_ramBro/rambro_grenade.bmp", 28, 35, 1, 1, true, RGB(255, 0, 255));
+		
+		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
+		_vBullet.push_back(GBullet);
+	}
+	return S_OK;
+}
+
+void GBullet::release(void)
+{
+}
+
+void GBullet::update(void)
+{
+	move();
+}
+
+void GBullet::render(void)
+{
+}
+
+void GBullet::fire(int x, int y, int fireSpeed, bool isLeft)
+{
+	for (int i = 0; i < _vBullet.size(); i++)
+	{
+		if (_vBullet[i].isActived)continue;
+		_vBullet[i].isActived = true;
+		_vBullet[i].speed = fireSpeed;
+		_vBullet[i].isLeft = isLeft;
+		_vBullet[i].gravity = 0.0f;
+		_vBullet[i].count = 0;		
+		_vBullet[i].x = _vBullet[i].fireX = x;
+		_vBullet[i].y = _vBullet[i].fireY = y;
+		//_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
+		//	_vBullet[i].bulletImage->getFrameWidth(),
+		//	_vBullet[i].bulletImage->getFrameHeight());
+		if (_vBullet[i].isLeft)
+		{
+			_vBullet[i].angle = 10.f * i * PI / 180 + PI / 5;
+		}
+		if (!_vBullet[i].isLeft)
+		{
+			_vBullet[i].angle = 35.f * i*PI / 180 + PI / 5;
+		}
+	}
+}
+
+void GBullet::move()
+{
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		if (_vBullet[i].isActived)
+		{
+			if (_vBullet[i].isLeft)					// ¿ÞÂÊ
+			{
+				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
+				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
+			}
+			if (!_vBullet[i].isLeft)				// ¿À¸¥ÂÊ
+			{
+				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
+				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
+			}
+
+			_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
+				_vBullet[i].bulletImage->getFrameWidth(),
+				_vBullet[i].bulletImage->getFrameHeight());
+
+			float distance = getDistance(_vBullet[i].x, _vBullet[i].y, _vBullet[i].fireX, _vBullet[i].fireY);
+
+			if (distance > _range)
+			{
+				_vBullet[i].isActived = false;
+				if (_vBullet[i].isActived == false)
+					EFFECTMANAGER->bulletPuff(_vBullet[i].x, _vBullet[i].y);
+			}
 		}
 	}
 }

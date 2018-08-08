@@ -7,6 +7,7 @@ HRESULT playerManager::init(void)
 {
 	_player = new player;
 	_player->init();
+	_playerChuck = new player;
 	_pBullet = new pBullet;
 	_pBullet->init(700.f);
 	_pGrenade = new pGrenade;
@@ -49,8 +50,8 @@ void playerManager::update(void)
 	_player->setOldX(_player->getX());
 	_player->setOldY(_player->getY());
 	_player->setRcRambro(_player->getRcRambro());
-	_player->setRcFlash(_player->getRcFlash());
-
+	_player->setrcFlashRight(_player->getrcFlashRight());
+	_player->setrcFlashLeft(_player->getrcFlashLeft());
 	float knifeRightX = _player->getX() + 60;
 	float knifeRightY = _player->getY() + 30;
 	float knifeLeftX = _player->getX() - 20;
@@ -106,7 +107,15 @@ void playerManager::update(void)
 	_fireCount++;
 	if (KEYMANAGER->isStayKeyDown('Z'))							// 기본 총알 발사
 	{
-		_player->setIsFlash(true);
+		if (_player->getIsLeft() == false)
+		{
+			_player->setIsFlash(true);
+		}
+		if (_player->getIsLeft() == true)
+		{
+			_player->setIsFlash(true);
+		}
+			
 		if (_fireCount % 5 == 0)
 		{
 			if (_player->getIsLeft() == false)					// 오른쪽
@@ -414,12 +423,6 @@ void playerManager::update(void)
 			{
 			_player->setIsCollision(!_player->getIsCollision());
 			}*/
-			if (_player->getState() != HANG_FRONT_HOLD)
-			{
-				_player->setIsCollision(!_player->getIsCollision());
-			}
-
-			
 		}
 		break;
 	case RED:
@@ -526,21 +529,22 @@ void playerManager::update(void)
 			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_BOTTOM) == GREEN)
 		{
 			_pGrenade->getVPlayerGrenade()[i].gravity = 0;
-			_pGrenade->getVPlayerGrenade()[i].angle = PI2 - _pGrenade->getVPlayerGrenade()[i].angle;
-			_pGrenade->getVPlayerGrenade()[i].speed *= 0.6f;
+			//_pGrenade->getVPlayerGrenade()[i].angle = PI2 - _pGrenade->getVPlayerGrenade()[i].angle;
+			_pGrenade->getVPlayerGrenade()[i].speed *= 0.5f;
+			
 		}
 		else if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc,		// 위쪽 벽
 			_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y,
 			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_TOP) == GREEN)
 		{
-			_pGrenade->getVPlayerGrenade()[i].angle = PI2 - _pGrenade->getVPlayerGrenade()[i].angle;
+			//_pGrenade->getVPlayerGrenade()[i].angle = PI2 - _pGrenade->getVPlayerGrenade()[i].angle;
 			_pGrenade->getVPlayerGrenade()[i].speed *= 0.5f;
 		}
 		if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc,			// 오른쪽 벽
 			_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y,
 			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_RIGHT) == GREEN)
 		{
-			_pGrenade->getVPlayerGrenade()[i].angle = PI - _pGrenade->getVPlayerGrenade()[i].angle;
+			//_pGrenade->getVPlayerGrenade()[i].angle = PI - _pGrenade->getVPlayerGrenade()[i].angle;
 			_pGrenade->getVPlayerGrenade()[i].speed *= 0.5f;
 			
 		}
@@ -548,7 +552,7 @@ void playerManager::update(void)
 			_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y,
 			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_LEFT) == GREEN)
 		{
-			_pGrenade->getVPlayerGrenade()[i].angle = PI - _pGrenade->getVPlayerGrenade()[i].angle;
+			//_pGrenade->getVPlayerGrenade()[i].angle = PI - _pGrenade->getVPlayerGrenade()[i].angle;
 			_pGrenade->getVPlayerGrenade()[i].speed *= 0.5f;
 		}
 
@@ -559,7 +563,7 @@ void playerManager::update(void)
 			if (!_mapData->getObject()[j]._isActived)continue;
 			if (IntersectRect(&temp, &_mapData->getObject()[j]._rc, &_pGrenade->getVPlayerGrenade()[i].rc))
 			{
-				_mapData->deleteMapIndexByIndex(j, 3, 3);
+				_mapData->deleteMapIndexByIndex(j, 1, 1);
 				_pGrenade->getVPlayerGrenade()[i].isActived = false;
 				break;
 			}		
