@@ -17,9 +17,16 @@ HRESULT enemyManager::init(void)
 	this->setSoldier(3200, 1600);
 	//this->setBrovil(3700, 1000, 5);
 		
+	_boss = new boss;
+	_boss->init(4000.f, 1000.f);
+	
 	_eBullet = new eBullet;
 	_eBullet->init(1, 800.f);
-	
+	_bossBullet = new bossBullet;
+	_bossBullet->init();
+	_bossRocket = new bossRocket;
+	_bossRocket->init(50.f);
+
 	return S_OK;
 }
 
@@ -27,6 +34,12 @@ void enemyManager::release(void)
 {
 	_eBullet->release();
 	SAFE_DELETE(_eBullet);
+	_boss->release();
+	SAFE_DELETE(_boss);
+	_bossBullet->release();
+	SAFE_DELETE(_bossBullet);
+	_bossRocket->release();
+	SAFE_DELETE(_bossRocket);
 }
 
 void enemyManager::update(void)
@@ -44,6 +57,7 @@ void enemyManager::update(void)
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
 		if (!_vSoldier[i]->getIsUncovered()) continue;
+
 		// 플레이어 방향에 맞춰 적방향 바꿈 (발견상태일때)
 		if ((180 / 3.14f * getAngle(_vSoldier[i]->getX(), _vSoldier[i]->getY(), _playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY())) >= 91.f
 			&& (180 / 3.14f * getAngle(_vSoldier[i]->getX(), _vSoldier[i]->getY(), _playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY()) <= 270.f))
@@ -56,7 +70,9 @@ void enemyManager::update(void)
 		}
 	}
 
-	_eBullet->update();
+	// 보스 총알, 로켓 발사
+	this->bossFire();
+
 	
 	// 모든 충돌
 	this->collideWithPixel();
@@ -71,7 +87,12 @@ void enemyManager::update(void)
 	// 플레이어 수류탄과 충돌	
 	this->collideWithPGrenade();	
 
-	this->enemyDie();			
+	this->enemyDie();
+
+	_boss->update();
+	_eBullet->update();
+	_bossBullet->update();
+	_bossRocket->update();
 }
 
 void enemyManager::render(void)
@@ -80,8 +101,11 @@ void enemyManager::render(void)
 	{
 		_vSoldier[i]->render();		
 	}
-
-	_eBullet->render();	
+	
+	_boss->render();
+	_eBullet->render();
+	_bossBullet->render();
+	_bossRocket->render();
 
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
@@ -126,6 +150,26 @@ void enemyManager::enemyFire(int num)
 				getVEnemy()[num]->getY() + _vSoldier[num]->getEnemyBodyImage(_vSoldier[num]->getBodyStatus())->getFrameHeight() / 2,
 				1, getVEnemy()[num]->getDirection());
 	}	
+}
+
+void enemyManager::bossFire()
+{
+	// 보스 발싸! 로켓
+	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
+	{
+		if (_boss->getTerrorKopter().isLeft)
+			_bossRocket->fire(_boss->getTerrorKopter().rcGun.left - 60, _boss->getTerrorKopter().rcGun.top + 20, 3, _boss->getTerrorKopter().isLeft);
+		else
+			_bossRocket->fire(_boss->getTerrorKopter().rcGun.right, _boss->getTerrorKopter().rcGun.top + 20, 3, _boss->getTerrorKopter().isLeft);
+	}
+	// 총알
+	else if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD2))
+	{
+		if (_boss->getTerrorKopter().isLeft)
+			_bossBullet->fire(_boss->getTerrorKopter().rcGun.left - 64, _boss->getTerrorKopter().rcGun.top + 20, _boss->getTerrorKopter().isLeft);
+		else
+			_bossBullet->fire(_boss->getTerrorKopter().rcGun.right, _boss->getTerrorKopter().rcGun.top + 20, _boss->getTerrorKopter().isLeft);
+	}
 }
 
 // 에너미와 픽셀충돌
@@ -309,13 +353,12 @@ void enemyManager::collideWithPBullet()
 					else
 						_vSoldier[i]->setBodyImageIndex(0);
 					
-					_vSoldier[i]->setBodyStatus(ENEMY_KNOCK_BACK);			
-								
+					_vSoldier[i]->setBodyStatus(ENEMY_KNOCK_BACK);								
 				}
 
 				if (_vSoldier[i]->getBodyStatus() == ENEMY_DEAD)
 				{
-					_vSoldier[i]->move();
+					_vSoldier[i]->deadMove();
 				}
 			}
 		}
@@ -354,7 +397,7 @@ void enemyManager::collideWithPGrenade()
 
 				if (_vSoldier[i]->getBodyStatus() == ENEMY_DEAD)
 				{
-					_vSoldier[i]->move();
+					_vSoldier[i]->deadMove();
 				}
 			}
 		}

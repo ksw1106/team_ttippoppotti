@@ -209,7 +209,7 @@ void enemy::changeStatus()
 	}
 	case ENEMY_WALK:
 	{
-		this->move();
+		this->deadMove();
 		break;
 	}
 	case ENEMY_DOUBT:
@@ -283,7 +283,7 @@ void enemy::fall()
 	}
 }
 
-void enemy::move()
+void enemy::deadMove()
 {
 	if (_isLeft)
 	{
