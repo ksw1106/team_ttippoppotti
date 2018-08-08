@@ -13,27 +13,26 @@ HRESULT playerManager::init(void)
 	_pGrenade = new pGrenade;
 	_pGrenade->init(500.f);
 
-	hit_left = hit_right = hit_top = hit_bottom = false;
-	
-	_index = _count = 0;
-	_animationSpeed = 5;
-	_fireCount = 0;
-	_change = false;
-	_knifeCount = 0;
-	_knifeCollision = false;
-	_isLadder = false;
-
-	_rcKnifeRight = RectMake(_player->getX() + 60, _player->getY() + 30, 30, 30);
-	_rcKnifeLeft = RectMake(_player->getX() - 20, _player->getY() + 30, 30, 30);
-
 	_p1Bubble = IMAGEMANAGER->findImage("p1Bubble");
 	_p1Bubble->setX(_player->getX() + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
 	_p1Bubble->setY(_player->getY() - 100);
 
+	_rcKnifeRight = RectMake(_player->getX() + 60, _player->getY() + 30, 30, 30);
+	_rcKnifeLeft = RectMake(_player->getX() - 20, _player->getY() + 30, 30, 30);
+
 	_player->setRcRambro(_player->getRcRambro());
-	_startImg = false;
-	_startCount = 0;
-	_startIndex = 0;
+
+	hit_left = hit_right = hit_top = hit_bottom = false;
+	
+	_index = _count = 0;
+	_animationSpeed = 5;
+
+	_fireCount = 0;
+
+	_knifeCollision = false;
+	_isLadder = false;
+	_change = false;
+	
 	return S_OK;
 }
 
@@ -50,13 +49,14 @@ void playerManager::update(void)
 	_player->setOldX(_player->getX());
 	_player->setOldY(_player->getY());
 	_player->setRcRambro(_player->getRcRambro());
-	_player->setrcFlashRight(_player->getrcFlashRight());
-	_player->setrcFlashLeft(_player->getrcFlashLeft());
-	float knifeRightX = _player->getX() + 60;
-	float knifeRightY = _player->getY() + 30;
-	float knifeLeftX = _player->getX() - 20;
-	float knifeLeftY = _player->getY() + 30;
+	_player->setrcFlashRight(_player->getrcFlashRight());				// 총구 오른쪽 플래쉬 렉트
+	_player->setrcFlashLeft(_player->getrcFlashLeft());					// 총구 왼쪽 플래쉬 렉트
 
+	float knifeRightX = _player->getX() + 60;
+	float knifeRightY = _player->getY() + 30;						
+	float knifeLeftX = _player->getX() - 20;						
+	float knifeLeftY = _player->getY() + 30;						
+																	
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 	{
 		_player->setIsLeft(true);
@@ -104,6 +104,7 @@ void playerManager::update(void)
 			hit_right = false;
 		}
 	}
+
 	_fireCount++;
 	if (KEYMANAGER->isStayKeyDown('Z'))							// 기본 총알 발사
 	{
@@ -120,7 +121,7 @@ void playerManager::update(void)
 		{
 			if (_player->getIsLeft() == false)					// 오른쪽
 			{
-				_pBullet->fire(_player->getX() + 60, _player->getY() + 38, 20, _player->getIsLeft());
+				_pBullet->fire(_player->getX() + 60, _player->getY() + 38, 20, _player->getIsLeft());	
 			}
 			if (_player->getIsLeft() == true)					// 왼쪽
 			{
@@ -129,19 +130,24 @@ void playerManager::update(void)
 			EFFECTMANAGER->cartridge(_player->getX(), _player->getY(), _player->getIsLeft());			// 총알 탄피
 		}
 	}
-	if (KEYMANAGER->isOnceKeyUp('Z'))
+	if (KEYMANAGER->isOnceKeyUp('Z'))			// Z키에서 손때믄 총구앞 이미지 제거용
 	{
 		_player->setIsFlash(false);
 	}
 	_pBullet->update();											// 총알 업데이트 ( 무브 )
 
-	_rcKnifeRight = RectMake(knifeRightX , knifeRightY , 30, 30);
-	_rcKnifeLeft = RectMake(knifeLeftX, knifeLeftY, 30, 30);
+	_rcKnifeRight = RectMake(knifeRightX , knifeRightY , 30, 30);		// 칼빵용 오른쪽 렉트
+	_rcKnifeLeft = RectMake(knifeLeftX, knifeLeftY, 30, 30);			// 칼빵용 왼쪽 렉트
 
 	if (KEYMANAGER->isStayKeyDown('C'))						// 칼빵
 	{
-		//_startImg = true;
-		if (KNIFE != _player->getState())
+		if (KNIFE != _player->getState() && _player->getIsLeft() == false)
+		{
+			_player->setState(KNIFE);
+			_player->setIndex(0);
+			_player->setCount(0);
+		}
+		else if (KNIFE != _player->getState() && _player->getIsLeft() == true)
 		{
 			_player->setState(KNIFE);
 			_player->setIndex(0);
@@ -154,10 +160,10 @@ void playerManager::update(void)
 		_player->setState(IDLE);
 	}
 	
-	//if (KNIFE == _player->getState() && (_player->getIndex() >= _player->getImage(_player->getState())->getMaxFrameX()) && _player->getIsLeft() == true && _player->getImage(_player->getState())->getFrameY())
-	//{
-	//	_player->setState(IDLE);
-	//}
+	if (KNIFE == _player->getState() && (_player->getIndex() >= _player->getImage(_player->getState())->getMaxFrameX()) && _player->getIsLeft() == true && _player->getImage(_player->getState())->getFrameY())
+	{
+		_player->setState(IDLE);
+	}
 	//if (_startImg)
 	//{
 	//	_startCount++;
@@ -177,11 +183,6 @@ void playerManager::update(void)
 	//		_startImg = false;
 	//	}
 	//}
-	
-	
-	
-
-
 	
 	if (KEYMANAGER->isOnceKeyDown('X'))							// 수류탄
 	{
