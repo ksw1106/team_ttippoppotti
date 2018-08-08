@@ -38,7 +38,7 @@ HRESULT objectManager::init()
 	
 		objectA* object = _factory->createObject(type);
 		object->setPosition(_fPos[i].x, _fPos[i].y - object->getImage()->getHeight() + 6);
-		
+
 		_vObject.push_back(object);
 	}
 
@@ -63,11 +63,13 @@ HRESULT objectManager::init()
 	
 		objectA* object = _factory->createObject(type);
 		object->setPosition(_prisonerPos[i].x, _prisonerPos[i].y);
+		object->init();
 		
 		_vObject.push_back(object);
 	}
 
-	_boxPos[0].x = 2873, _boxPos[0].y = 1220;
+	_boxPos[0].x = 800, _boxPos[0].y = 2070;
+	//_boxPos[0].x = 2873, _boxPos[0].y = 1220;
 	_boxPos[1].x = 2941, _boxPos[1].y = 1152;
 	_boxPos[2].x = 3009, _boxPos[2].y = 1354;
 	_boxPos[3].x = 3009, _boxPos[3].y = 1557;
@@ -191,15 +193,47 @@ void objectManager::release()
 void objectManager::update()
 {
 	//오브젝트 벡터 돌리면서 업데이트 시켜주면 된다
+	RECT tempRc;
+	RECT _playerRc = RectMake(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), 60, 80);
 	for (int i = 0; i < _vObject.size(); i++)
 	{
 		if (OBJECT_DESTROY == _vObject[i]->getState()) continue;
-		RECT tempRc;
-		if (_vObject[i]->getType() == WOODENBOX || _vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED || _vObject[i]->getType() == PRISONER)
+		if (_vObject[i]->getType() == WOODENBOX || _vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED || _vObject[i]->getType() == PRISONER)// || _vObject[i]->getType() == AMERICAN_FLAG)
 		{
 			switch (_vObject[i]->getState())
 			{
 			case OBJECT_IDLE:
+				if (IntersectRect(&tempRc, &_playerRc, &_vObject[i]->getRect()))
+				{
+					if (_playerRc.right > _vObject[i]->getRect().left &&
+						_playerRc.bottom > _vObject[i]->getRect().top &&
+						_playerRc.left < _vObject[i]->getRect().left && 
+						_playerRc.top < _vObject[i]->getRect().bottom)
+					{
+						_playerManager->getPlayer()->setX(_playerManager->getPlayer()->getX() - (tempRc.right - tempRc.left));// ->getPlayer()->getImage(_playerManager->getPlayer()->getState())->getFrameWidth());
+					}
+					else if (_playerRc.left < _vObject[i]->getRect().right && 
+						_playerRc.top < _vObject[i]->getRect().bottom &&
+						_playerRc.bottom > _vObject[i]->getRect().top &&
+						_playerRc.right > _vObject[i]->getRect().right)
+					{
+						_playerManager->getPlayer()->setX(_playerManager->getPlayer()->getX() + (tempRc.right - tempRc.left));
+					}
+					if (_playerRc.right > _vObject[i]->getRect().left &&
+						_playerRc.left < _vObject[i]->getRect().right && 
+						_playerRc.top < _vObject[i]->getRect().top &&
+						_playerRc.bottom > _vObject[i]->getRect().top)
+					{
+						_playerManager->getPlayer()->setY(_playerManager->getPlayer()->getY() - (tempRc.bottom - tempRc.top));//- _playerManager->getPlayer()->getImage(_playerManager->getPlayer()->getState())->getFrameHeight());
+					}
+					else if (_playerRc.right > _vObject[i]->getRect().left &&
+						_playerRc.left < _vObject[i]->getRect().right &&
+						_playerRc.top < _vObject[i]->getRect().bottom && 
+						_playerRc.bottom > _vObject[i]->getRect().bottom)
+					{
+						_playerManager->getPlayer()->setY(_playerManager->getPlayer()->getY() + (tempRc.bottom - tempRc.top));
+					}
+				}
 				for (int j = 0; j < _playerManager->getPBullet()->getVPlayerBullet().size(); j++)
 				{
 					if (!_playerManager->getPBullet()->getVPlayerBullet()[j].isActived) continue;
@@ -208,7 +242,7 @@ void objectManager::update()
 					{
 						if (_vObject[i]->getType() == WOODENBOX)
 						{
-							//EFFECTMANAGER->woodDebris(_vObject[i]->getImage()->getX(), _vObject[i]->getImage()->getY());
+							EFFECTMANAGER->woodDebris(_vObject[i]->getRect().left, _vObject[i]->getRect().top);
 							_vObject[i]->setState(OBJECT_DESTROY);
 						}
 						else if (_vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED)
@@ -229,33 +263,40 @@ void objectManager::update()
 							CAMERAMANAGER->CameraShake();
 							_vObject[i]->setState(OBJECT_DESTROY);
 						}
-						else
+						else if (_vObject[i]->getType() == PRISONER)
 						{
+							EFFECTMANAGER->woodDebris(_vObject[i]->getRect().left, _vObject[i]->getRect().top);
 							_vObject[i]->setState(OBJECT_MOVE);
 						}
 						_playerManager->getPBullet()->getVPlayerBullet()[j].isActived = false;
 					}
 				}
+				if (IntersectRect(&tempRc, &_playerRc, &_vObject[i]->getActivationRect()) && _vObject[i]->getType() == PRISONER)
+				{
+					//if (_vObject[i]->getType() == PRISONER)
+						_vObject[i]->setIsActived(true);
+					//if (_vObject[i]->getType() == AMERICAN_FLAG)
+					//	_vObject[i]->setState(OBJECT_MOVE);
+				}
 				break;
 			case OBJECT_MOVE:
 				if (_vObject[i]->getType() == PRISONER)
 				{
-					if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getImage(_playerManager->getPlayer()->getState())->boudingBoxWithFrame(), &_vObject[i]->getRect()))
+					if (IntersectRect(&tempRc, &_playerRc, &_vObject[i]->getRect()))
 					{
 
 					}
 				}
 				break;
 			}
+			//_vObject[i]->setGravity(_vObject[i]->getGravity() + 0.55f);
+			//_vObject[i]->setY(_vObject[i]->getY() + ( - sinf(_vObject[i]->getAngle()) * _vObject[i]->getSpeed() + _vObject[i]->getGravity()));
+			//this->collisionProcess();
 		}
-		else if (_vObject[i]->getType() == AMERICAN_FLAG)
+		else if (IntersectRect(&tempRc, &_playerRc, &_vObject[i]->getActivationRect()) && _vObject[i]->getType() == AMERICAN_FLAG)
 		{
-			RECT _playerRc = RectMake(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), 60, 80);
-			if (IntersectRect(&tempRc, &_playerRc, &_vObject[i]->getActivationRect()))
-			{
-				_vObject[i]->setState(OBJECT_MOVE);
-			}
-		}	
+			_vObject[i]->setState(OBJECT_MOVE);
+		}
 		_vObject[i]->update();
 	}
 
@@ -275,4 +316,33 @@ void objectManager::render(HDC hdc)
 	sprintf_s(str, "%d", _vObject[0]->getTargetIsActived());
 	TextOut(hdc, 100, 700, str, strlen(str));
 
+}
+
+void objectManager::collisionProcess()
+{
+	for (int i = 0; i < _vObject.size(); ++i)
+	{
+		float x = _vObject[i]->getX();
+		float y = _vObject[i]->getY();
+
+		if (COLLISIONMANAGER->pixelCollision(_vObject[i]->getRect(), x, y, _vObject[i]->getSpeed(), _vObject[i]->getGravity(), 3) == GREEN) //아래
+		{
+			_vObject[i]->setGravity(0);
+			_vObject[i]->setSpeed(0);
+		}
+		if (COLLISIONMANAGER->pixelCollision(_vObject[i]->getRect(), x, y, _vObject[i]->getSpeed(), _vObject[i]->getGravity(), 2) == GREEN) //오
+		{
+			_vObject[i]->setSpeed(0);
+		}
+		if (COLLISIONMANAGER->pixelCollision(_vObject[i]->getRect(), x, y, _vObject[i]->getSpeed(), _vObject[i]->getGravity(), 0) == GREEN) //왼
+		{
+			_vObject[i]->setSpeed(0);
+		}
+		if (COLLISIONMANAGER->pixelCollision(_vObject[i]->getRect(), x, y, _vObject[i]->getSpeed(), _vObject[i]->getGravity(), 1) == GREEN) //위
+		{
+			_vObject[i]->setAngle(PI2 - _vObject[i]->getAngle());
+		}
+		_vObject[i]->setX(x);
+		_vObject[i]->setY(y);
+	}
 }

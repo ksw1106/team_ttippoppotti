@@ -4,6 +4,7 @@
 #include "soldier.h"
 #include "brovil.h"
 #include "dog.h"
+#include "boss.h"
 
 class playerManager;
 class mapData;
@@ -16,7 +17,10 @@ private:
 	
 	vector<enemy*> _vSoldier;	// 일반 적	
 		
-	eBullet* _eBullet;			// 총알 클래스		
+	eBullet* _eBullet;			// 총알 클래스
+	bossBullet* _bossBullet;
+	bossRocket* _bossRocket;
+	boss* _boss;				// 보스 클래스
 
 public:
 	void setPlayerManager(playerManager* playerManager) { _playerManager = playerManager; }
@@ -25,8 +29,11 @@ public:
 	// 에너미클래스 벡터 가져오기
 	vector<enemy*> getVEnemy() { return _vSoldier; }
 	
-	// 적 총알클래스 총알벡터 가져오기
+	// 적 총알클래스 가져오기
 	eBullet* getEBullet() { return _eBullet; }
+
+	// 보스 클래스 가져오기
+	boss* getBoss() { return _boss; }
 		
 	HRESULT init(void);
 	void release(void);
@@ -34,6 +41,8 @@ public:
 	void render(void);
 		
 	void enemyFire(int num);
+	// 보스 총알,로켓 발사
+	void bossFire();
 	
 	// 기타 충돌함수
 	void collideWithPixel();
