@@ -52,6 +52,7 @@ void deadBody::init()
 
 void deadBody::idle()
 {
+	//EFFECTMANAGER->flyingFlies(_x + _image->getFrameWidth() / 2, _y + _image->getFrameHeight() / 2);
 }
 
 void deadBody::move()
