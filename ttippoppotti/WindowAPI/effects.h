@@ -42,7 +42,6 @@ private:
 	bool _isParabola;
 	bool _isExplosion;
 	bool _isStaticAnim;
-	bool _isLoopAnim;
 	bool _isFlyingFlies;
 	bool _isFrameImg;		//프레임이미지냐?
 
@@ -64,6 +63,7 @@ public:
 
 	//파리날림
 	void activateFlyingFlies(float x, float y);
+	void boomFlyingFlies();
 
 	//폭발 설정
 	void activateExplosion(float x, float y);

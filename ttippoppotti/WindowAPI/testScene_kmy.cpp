@@ -29,11 +29,8 @@ void testScene_kmy::update(void)
 	}
 	if (KEYMANAGER->isOnceKeyDown('I'))
 	{
-		//¶ÑµÎ¶ÑµÎ
-		EFFECTMANAGER->bulletPuff(800, 2000);
-
-		//Ä®
-		EFFECTMANAGER->knifePuff(900, 2000, false);
+		//ÆÄ¸®³¯¸²
+		EFFECTMANAGER->flyingFlies(900, 2000);
 	}
 }
 
