@@ -17,7 +17,7 @@ HRESULT effects::init(const char * imageName, int particleMax, bool isFrameImg)
 	_isParabola = false;
 	_isExplosion = false;
 	_isStaticAnim = false;
-	_isLoopAnim = false;
+	_isFlyingFlies = false;
 
 	for (int i = 0; i < _particleMax; i++)
 	{
@@ -63,6 +63,7 @@ void effects::update(void)
 		this->boomExplosion();
 		this->boomStaticAnim();
 		this->boomParabola();
+		this->boomFlyingFlies();
 		this->collisionProcess();
 		this->frameChange();
 	}
@@ -170,7 +171,6 @@ void effects::boomExplosion()
 void effects::activateLoopAnim(float x, float y)
 {
 	_isRunning = true;
-	_isLoopAnim = true;
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
@@ -302,7 +302,36 @@ void effects::boomParabola()
 
 void effects::activateFlyingFlies(float x, float y)
 {
+	_isRunning = true;
+	_isFlyingFlies = true;
+	for (int i = 0; i < _particleMax; i++)
+	{
+		_vParticle[i].fire = true;
+		_vParticle[i].angle = RND->getFloat(PI2);
+		_vParticle[i].x = x + RND->getFromFloatTo(5.0f, 10.0f) - 10.0f;
+		_vParticle[i].y = y + RND->getFromFloatTo(2.0f, 10.0f) - 10.0f;
+		_vParticle[i].speed = RND->getFromFloatTo(1.0f, 3.0f);
+		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+	}
+}
 
+void effects::boomFlyingFlies()
+{
+	if (_isFlyingFlies)
+	{
+		for (int i = 0; i < _vParticle.size(); ++i)
+		{
+			if (!_vParticle[i].fire) continue;
+
+			_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
+			_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed;
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+			_vParticle[i].count++;
+			//(조건식)? data1 : data2 ; // ?와 :
+			if (_vParticle[i].count % 5 == 0)
+				_vParticle[i].angle += RND->getFloat(PI_4);
+		}
+	}
 }
 
 void effects::collisionProcess()

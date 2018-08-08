@@ -44,9 +44,9 @@ HRESULT effectManager::init(void)
 
 	addEffect("saveBubble", "saveBubble2", 5, 1, true);
 
-	addEffect("fliesFlying", "blackPixelDot", 20, 20);
+	addEffect("flyingFlies", "blackPixelDot", 1, 20);
 	
-	addEffect("smallSparks", "yellowPixelDot", 20, 20);
+	addEffect("sparks", "yellowPixelDot", 20, 20);
 
 	_count = 0;
 	_isExplosion = false;
@@ -161,7 +161,7 @@ void effectManager::knifePuff(float x, float y, bool isLeft)
 
 void effectManager::flyingFlies(float x, float y)
 {
-	this->playFlyingFlies("fliesFlying", x, y);
+	this->playFlyingFlies("flyingFlies", x, y);
 }
 
 void effectManager::saveBubble(float x, float y)

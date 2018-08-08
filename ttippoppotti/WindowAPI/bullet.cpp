@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "bullet.h"
+
+
 //=============================================================
 //	## bullet ## (°ø¿ëÃÑ¾Ë - ³ÊÈñµéÀÌ ¸¸µé¸é µÈ´Ù)
 //=============================================================
@@ -51,6 +53,7 @@ void bullet::fire(float x, float y, float angle, float speed)
 	bullet.rc = RectMakeCenter(bullet.x, bullet.y,
 		bullet.bulletImage->getWidth(),
 		bullet.bulletImage->getHeight());
+	
 
 	//º¤ÅÍ¿¡ ´ã±â
 	_vBullet.push_back(bullet);
@@ -586,7 +589,7 @@ HRESULT pBullet::init(float range)
 		tagBullet pBullet;
 		ZeroMemory(&pBullet, sizeof(tagBullet));
 		pBullet.bulletImage = new image;
-		pBullet.bulletImage->init("player_ramBro/rambro_bullet.bmp", 50, 40, 1, 1, true, RGB(255, 0, 255));
+		pBullet.bulletImage->init("player_ramBro/rambro_bullet.bmp", 51, 26, 1, 1, true, RGB(255, 0, 255));
 		
 		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
 		_vBullet.push_back(pBullet);
@@ -600,6 +603,7 @@ void pBullet::release(void)
 void pBullet::update(void)
 {
 	move();
+
 };
 void pBullet::render(void)
 {
@@ -630,7 +634,7 @@ void pBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
 			_vBullet[i].bulletImage->getFrameWidth(),
 			_vBullet[i].bulletImage->getFrameHeight());
-
+		
 		break;
 	}
 }
