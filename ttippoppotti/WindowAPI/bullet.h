@@ -1,6 +1,9 @@
 #pragma once
 #include "gameNode.h"
 
+#define BOSS_BULLET_MAX 20
+#define BOSS_ROCKET_MAX 4
+
 //ÃÑ¾Ë ±¸Á¶Ã¼
 struct tagBullet
 {
@@ -19,6 +22,7 @@ struct tagBullet
 	int count;
 	int frameCount;
 	int frameIndex;
+	int frameSpeed;
 };
 
 //=============================================================
@@ -122,9 +126,9 @@ public:
 	~missileM1() {}
 };
 
-//=============================================================
+//============================================================================================
 //	## eBullet ## (Àû ÀÏ¹ÝÃÑ¾Ë)
-//=============================================================
+//============================================================================================
 class eBullet : public gameNode
 {
 private:
@@ -156,6 +160,72 @@ public:
 
 	eBullet() {}
 	~eBullet() {}
+};
+
+//============================================================================================
+//	## bossBullet ## (º¸½º ÃÑ¾Ë)
+//============================================================================================
+class bossBullet : public gameNode
+{
+private:
+
+	float _range;			//ÃÑ¾Ë »ç°Å¸®
+	int _bulletMax;			//ÃÑ¾Ë ÃÖ´ë°¹¼ö
+
+	int _bulletCount;
+	int _count;
+
+	tagBullet _bossBullet[BOSS_BULLET_MAX];
+
+public:
+	HRESULT init();
+	void release(void);
+	void update(void);
+	void render(void);
+
+	//ÃÑ¾Ë¹ß»ç
+	void fire(int x, int y, bool isLeft);
+	//ÃÑ¾Ë¹«ºê
+	void move();
+
+	//ÃÑ¾Ë±¸Á¶Ã¼ °¡Á®¿À±â
+	//tagBullet getBossBullet() { return _bossBullet[BOSS_BULLET_MAX]; }
+
+	bossBullet() {}
+	~bossBullet() {}
+};
+
+//============================================================================================
+//	## bossRocket ## (º¸½º ·ÎÄÏ)
+//============================================================================================
+class bossRocket : public gameNode
+{
+	
+private:
+	float _range;			//ÃÑ¾Ë »ç°Å¸®
+	int _bulletMax;			//ÃÑ¾Ë ÃÖ´ë°¹¼ö
+
+	int _bulletCount;
+	
+	tagBullet _bossRocket[BOSS_ROCKET_MAX];
+
+public:
+	HRESULT init(float range);
+	void release(void);
+	void update(void);
+	void render(void);
+
+	//ÃÑ¾Ë¹ß»ç
+	void fire(int x, int y, int fireSpeed, bool isLeft);
+	//ÃÑ¾Ë¹«ºê
+	void move();
+	//ÃÑ¾Ë¾Ö´Ï¸ÞÀÌ¼Ç	
+	void animation();
+
+	//tagBullet getBossRocket() { return _bossRocket[BOSS_ROCKET_MAX]; }
+	
+	bossRocket() {}
+	~bossRocket() {}
 };
 
 //=============================================================
@@ -219,4 +289,30 @@ public:
 	pGrenade() {}
 	~pGrenade() {}
 };
+//=============================================================
+//	## GBullet ## (ÇÒ¾Æ¹öÁö ÀÏ¹ÝÃÑ¾Ë)
+//=============================================================
+class GBullet : public gameNode
+{
+private:
+	vector<tagBullet> _vBullet;
 
+private:
+	float _range;
+	int _GBulletMax;
+	int _count;
+	
+public:
+
+	HRESULT init(float range);
+	void release(void);
+	void update(void);
+	void render(void);
+
+	void fire(int x, int y, int fireSpeed, bool isLeft);
+
+	void move();
+
+	GBullet() {}
+	~GBullet() {}
+};

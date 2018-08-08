@@ -180,7 +180,7 @@ public:
 	// 중력충돌
 	void fall();	
 	// 움직임
-	void move();	
+	void deadMove();	
 	// 의심?
 	void doubt();	
 	// 발견!
