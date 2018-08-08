@@ -22,11 +22,17 @@ HRESULT playerManager::init(void)
 	_knifeCollision = false;
 	_isLadder = false;
 
-	_rcKnife = RectMake(_player->getX(), _player->getY(), 60, 20);
+	_rcKnifeRight = RectMake(_player->getX() + 60, _player->getY() + 30, 30, 30);
+	_rcKnifeLeft = RectMake(_player->getX() - 20, _player->getY() + 30, 30, 30);
+
 	_p1Bubble = IMAGEMANAGER->findImage("p1Bubble");
 	_p1Bubble->setX(_player->getX() + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
 	_p1Bubble->setY(_player->getY() - 100);
 
+	_player->setRcRambro(_player->getRcRambro());
+	_startImg = false;
+	_startCount = 0;
+	_startIndex = 0;
 	return S_OK;
 }
 
@@ -42,9 +48,13 @@ void playerManager::update(void)
 	_player->update();
 	_player->setOldX(_player->getX());
 	_player->setOldY(_player->getY());
-	
-	float knifeX = _player->getX() + 80;
-	float knifeY = _player->getY() + 30;
+	_player->setRcRambro(_player->getRcRambro());
+	_player->setRcFlash(_player->getRcFlash());
+
+	float knifeRightX = _player->getX() + 60;
+	float knifeRightY = _player->getY() + 30;
+	float knifeLeftX = _player->getX() - 20;
+	float knifeLeftY = _player->getY() + 30;
 
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 	{
@@ -57,7 +67,8 @@ void playerManager::update(void)
 		else
 		{
 			if (JUMP != _player->getState()
-				&& HANG_FRONT_HOLD != _player->getState())
+				&& HANG_FRONT_HOLD != _player->getState()
+				&& HANG_BACK_HOLD != _player->getState())
 			{
 				_player->setState(RUN);
 			}
@@ -80,7 +91,8 @@ void playerManager::update(void)
 		{
 			_player->setIsLeft(false);
 			if (JUMP != _player->getState()
-				&& HANG_FRONT_HOLD != _player->getState())
+				&& HANG_FRONT_HOLD != _player->getState()
+				&& HANG_BACK_HOLD != _player->getState())
 			{
 				_player->setState(RUN);
 			}
@@ -94,6 +106,7 @@ void playerManager::update(void)
 	_fireCount++;
 	if (KEYMANAGER->isStayKeyDown('Z'))							// ±âº» ÃÑ¾Ë ¹ß»ç
 	{
+		_player->setIsFlash(true);
 		if (_fireCount % 5 == 0)
 		{
 			if (_player->getIsLeft() == false)					// ¿À¸¥ÂÊ
@@ -104,40 +117,62 @@ void playerManager::update(void)
 			{
 				_pBullet->fire(_player->getX(), _player->getY() + 38, 20, _player->getIsLeft());
 			}
-			EFFECTMANAGER->cartridge(_player->getX(), _player->getY(), _player->getIsLeft());
+			EFFECTMANAGER->cartridge(_player->getX(), _player->getY(), _player->getIsLeft());			// ÃÑ¾Ë ÅºÇÇ
 		}
 	}
-
+	if (KEYMANAGER->isOnceKeyUp('Z'))
+	{
+		_player->setIsFlash(false);
+	}
 	_pBullet->update();											// ÃÑ¾Ë ¾÷µ¥ÀÌÆ® ( ¹«ºê )
 
-	_rcKnife = RectMake(knifeX , knifeY , 30, 30);
+	_rcKnifeRight = RectMake(knifeRightX , knifeRightY , 30, 30);
+	_rcKnifeLeft = RectMake(knifeLeftX, knifeLeftY, 30, 30);
 
-	if (KEYMANAGER->isStayKeyDown('C'))							// Ä®»§
+	if (KEYMANAGER->isStayKeyDown('C'))						// Ä®»§
 	{
-		_knifeCount++;
-		_knifeCollision = true;
-		if (_knifeCount % 2 == 0)
-		{
-			_knifeCollision = false;
-		}
-		
-		if (_player->getIsLeft())
+		//_startImg = true;
+		if (KNIFE != _player->getState())
 		{
 			_player->setState(KNIFE);
-		}
-		else if (!_player->getIsLeft())
-		{
-			_player->setState(KNIFE);
-		}	
-	}
-
-	if (KEYMANAGER->isOnceKeyDown('C'))
-	{
-		if (_player->getImage(5)->getMaxFrameX() > _player->getImage(5)->getFrameX())
-		{
-			_player->setState(KNIFE);
+			_player->setIndex(0);
+			_player->setCount(0);
 		}
 	}
+	
+	if (KNIFE == _player->getState() && (_player->getIndex() >= _player->getImage(_player->getState())->getMaxFrameX()) && _player->getIsLeft() == false && _player->getImage(_player->getState())->getMaxFrameY())
+	{
+		_player->setState(IDLE);
+	}
+	
+	//if (KNIFE == _player->getState() && (_player->getIndex() >= _player->getImage(_player->getState())->getMaxFrameX()) && _player->getIsLeft() == true && _player->getImage(_player->getState())->getFrameY())
+	//{
+	//	_player->setState(IDLE);
+	//}
+	//if (_startImg)
+	//{
+	//	_startCount++;
+	//	if (_startCount % 30 == 0)
+	//	{
+
+	//		_player->getImage(5)->setFrameY(0);
+	//		_player->getImage(5)->setFrameX(_startIndex);
+	//		_startIndex++;
+
+	//	}
+
+	//	if (10 > _player->getImage(5)->getMaxFrameX())
+	//	{
+	//		_startIndex = 0;
+	//		_startCount = 0;
+	//		_startImg = false;
+	//	}
+	//}
+	
+	
+	
+
+
 	
 	if (KEYMANAGER->isOnceKeyDown('X'))							// ¼ö·ùÅº
 	{
@@ -201,7 +236,7 @@ void playerManager::update(void)
 		}
 	}
 
-	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || KEYMANAGER->isOnceKeyUp('C') || KEYMANAGER->isOnceKeyUp('X') || KEYMANAGER->isOnceKeyUp(VK_UP) && _isLadder == true)
+	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || KEYMANAGER->isOnceKeyUp('X') || KEYMANAGER->isOnceKeyUp(VK_UP))
 	{
 		_player->setState(IDLE);
 	}
@@ -241,7 +276,7 @@ void playerManager::update(void)
 			_player->setIsJump(false);
 			hit_left = false;
 			hit_right = false;
-			if (_player->getState() != JUMP)
+			if (_player->getState() != JUMP && _player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD)
 			{
 				_player->setState(IDLE);
 			}
@@ -303,8 +338,7 @@ void playerManager::update(void)
 		hit_bottom = false;
 	}
 
-	//switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_RIGHT))			// ¿À¸¥ÂÊ º®
-	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, _player->getGravity(), PLAYER_RIGHT, _isLadder))			// ¿À¸¥ÂÊ º®
+	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_RIGHT, _isLadder))			// ¿À¸¥ÂÊ º®
 	{
 	case GREEN:
 		if (_isLadder)
@@ -352,8 +386,7 @@ void playerManager::update(void)
 		break;
 	}
 	
-	//switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_LEFT))			// ¿ÞÂÊº®
-	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, 5, _player->getGravity(), PLAYER_LEFT, _isLadder))
+	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_LEFT, _isLadder))
 	{
 	case GREEN:
 		if (_isLadder)
@@ -381,13 +414,12 @@ void playerManager::update(void)
 			{
 			_player->setIsCollision(!_player->getIsCollision());
 			}*/
+			if (_player->getState() != HANG_FRONT_HOLD)
+			{
+				_player->setIsCollision(!_player->getIsCollision());
+			}
 
-
-			hit_left = false;
-			hit_right = false;
-
-			if (_player->getState() == HANG_FRONT_HOLD)
-				_player->setState(JUMP);
+			
 		}
 		break;
 	case RED:
@@ -403,7 +435,18 @@ void playerManager::update(void)
 	default:
 		break;
 	}
-	
+	//if(true)
+	//{
+	//
+	//}
+	//else
+	//{
+	//	hit_left = false;
+	//	hit_right = false;
+	//
+	//	if (_player->getState() == HANG_FRONT_HOLD)
+	//		_player->setState(JUMP);
+	//}
 	if (hit_left && !hit_right && !hit_bottom && !_isLadder)
 	{
 		_player->setState(HANG_FRONT_HOLD);
@@ -440,8 +483,8 @@ void playerManager::update(void)
 	{
 		if (!_pBullet->getVPlayerBullet()[i].isActived)continue;
 		if (COLLISIONMANAGER->pixelCollision(_pBullet->getVPlayerBullet()[i].rc,				// ¿ÞÂÊ º®¿¡ Ãæµ¹ÇÏ¸é º® Áö¿öÁÖ±â
-			_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y, 
-			_pBullet->getVPlayerBullet()[i].speed, _pBullet->getVPlayerBullet()[i].gravity,	PLAYER_LEFT))
+			_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y,
+			_pBullet->getVPlayerBullet()[i].speed, _pBullet->getVPlayerBullet()[i].gravity, PLAYER_LEFT) == GREEN)
 		{
 			for (int j = 0; j < _mapData->getObject().size(); j++)
 			{
@@ -458,7 +501,7 @@ void playerManager::update(void)
 		}
 		else if (COLLISIONMANAGER->pixelCollision(_pBullet->getVPlayerBullet()[i].rc,				// ¿À¸¥ÂÊ º®¿¡ Ãæµ¹ÇÏ¸é º® Áö¿öÁÖ±â
 			_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y,
-			_pBullet->getVPlayerBullet()[i].speed, _pBullet->getVPlayerBullet()[i].gravity, PLAYER_RIGHT))
+			_pBullet->getVPlayerBullet()[i].speed, _pBullet->getVPlayerBullet()[i].gravity, PLAYER_RIGHT) == GREEN)
 		{
 			for (int j = 0; j < _mapData->getObject().size(); j++)
 			{
@@ -479,8 +522,8 @@ void playerManager::update(void)
 	{
 		if (!_pGrenade->getVPlayerGrenade()[i].isActived)continue;
 		if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc,			// ¾Æ·¡ÂÊ º®
-			_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y, 
-			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_BOTTOM))
+			_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y,
+			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_BOTTOM) == GREEN)
 		{
 			_pGrenade->getVPlayerGrenade()[i].gravity = 0;
 			_pGrenade->getVPlayerGrenade()[i].angle = PI2 - _pGrenade->getVPlayerGrenade()[i].angle;
@@ -488,14 +531,14 @@ void playerManager::update(void)
 		}
 		else if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc,		// À§ÂÊ º®
 			_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y,
-			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_TOP))
+			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_TOP) == GREEN)
 		{
 			_pGrenade->getVPlayerGrenade()[i].angle = PI2 - _pGrenade->getVPlayerGrenade()[i].angle;
 			_pGrenade->getVPlayerGrenade()[i].speed *= 0.5f;
 		}
 		if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc,			// ¿À¸¥ÂÊ º®
 			_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y,
-			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_RIGHT))
+			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_RIGHT) == GREEN)
 		{
 			_pGrenade->getVPlayerGrenade()[i].angle = PI - _pGrenade->getVPlayerGrenade()[i].angle;
 			_pGrenade->getVPlayerGrenade()[i].speed *= 0.5f;
@@ -503,7 +546,7 @@ void playerManager::update(void)
 		}
 		else if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc,		// ¿ÞÂÊ º®
 			_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y,
-			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_LEFT))
+			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_LEFT) == GREEN)
 		{
 			_pGrenade->getVPlayerGrenade()[i].angle = PI - _pGrenade->getVPlayerGrenade()[i].angle;
 			_pGrenade->getVPlayerGrenade()[i].speed *= 0.5f;
@@ -523,13 +566,25 @@ void playerManager::update(void)
 		}
 	}
 
-	if (_knifeCollision)
+	if (_knifeCollision)			// Ä®»§ 
 	{
-		if (COLLISIONMANAGER->pixelCollision(_rcKnife, knifeX, knifeY, 0, 0, PLAYER_RIGHT))
+		if (COLLISIONMANAGER->pixelCollision(_rcKnifeRight, knifeRightX, knifeRightY, _player->getSpeed(), _player->getGravity(), PLAYER_RIGHT))		// Ä®»§ ¿À¸¥ÂÊ º® »Ç°³±â
 		{
 			for (int i = 0; i < _mapData->getObject().size(); i++)
 			{
-				if (IntersectRect(&temp, &_rcKnife, &_mapData->getObject()[i]._rc))
+				if (IntersectRect(&temp, &_rcKnifeRight, &_mapData->getObject()[i]._rc))
+				{
+					_mapData->deleteMap(i);
+					EFFECTMANAGER->knifePuff(_player->getX(), _player->getY(), _player->getIsLeft());
+					break;
+				}
+			}
+		}
+		else if (COLLISIONMANAGER->pixelCollision(_rcKnifeLeft, knifeLeftX, knifeLeftY, _player->getSpeed(), _player->getGravity(), PLAYER_LEFT))		// Ä®»§ ¿ÞÂÊ º® »Ç°³±â
+		{
+			for (int i = 0; i < _mapData->getObject().size(); i++)
+			{
+				if (IntersectRect(&temp, &_rcKnifeLeft, &_mapData->getObject()[i]._rc))
 				{
 					_mapData->deleteMap(i);
 					EFFECTMANAGER->knifePuff(_player->getX(), _player->getY(), _player->getIsLeft());
@@ -691,24 +746,31 @@ void playerManager::update(void)
 void playerManager::render(void)
 {
 	RECT rc = RectMake(_player->getX(), _player->getY(), _player->getImage(_player->getState())->getFrameWidth(), _player->getImage(_player->getState())->getFrameHeight());
-	_player->render();
 	_pBullet->render();
+	_player->render();
 	_pGrenade->render();
 	_p1Bubble->frameRender(getMemDC(), _p1Bubble->getX() - CAMERAMANAGER->getCamera().left, _p1Bubble->getY() - CAMERAMANAGER->getCamera().top);
 
 	char str[64];
-	sprintf_s(str, "%d", _isLadder);
+	sprintf_s(str, "%d", _player->getState());
 	TextOut(getMemDC(), 100, 100, str, strlen(str));
 	if (KEYMANAGER->isToggleKey(VK_F8))
 	{
-		
+		RectangleMake(getMemDC(), _player->getX() - CAMERAMANAGER->getCamera().left, _player->getY() - CAMERAMANAGER->getCamera().top, _player->getWidth(), _player->getHeight());
 	}
 	if (_knifeCollision)
 	{
-		RectangleMake(getMemDC(), _player->getX() + 60 - CAMERAMANAGER->getCamera().left, _player->getY() + 30 - CAMERAMANAGER->getCamera().top, 30, 30);
+		if (_player->getIsLeft() == false)
+		{
+			RectangleMake(getMemDC(), _player->getX() + 60 - CAMERAMANAGER->getCamera().left, _player->getY() + 30 - CAMERAMANAGER->getCamera().top, 30, 30);
+		}
+		if (_player->getIsLeft() == true)
+		{
+			RectangleMake(getMemDC(), _player->getX() - 20 - CAMERAMANAGER->getCamera().left, _player->getY() + 30 - CAMERAMANAGER->getCamera().top, 30, 30);
+		}
 	}
-	
-	//RectangleMake(getMemDC(), rc.left, rc.top, rc.left + (rc.right-rc.left)/2, rc.top + (rc.bottom - rc.top) / 2);
+
+	//RectangleMake(getMemDC(), _player->getX() + 50 - CAMERAMANAGER->getCamera().left, _player->getY() + 30 - CAMERAMANAGER->getCamera().top, 30, 30);
 }
 
 void playerManager::rambroDie()

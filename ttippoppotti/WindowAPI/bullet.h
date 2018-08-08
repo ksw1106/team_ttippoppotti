@@ -19,6 +19,7 @@ struct tagBullet
 	int count;
 	int frameCount;
 	int frameIndex;
+	int countFrame;
 };
 
 //=============================================================

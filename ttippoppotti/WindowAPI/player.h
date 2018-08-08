@@ -18,10 +18,14 @@ class player : public gameNode
 {
 private:
 	image * _ramBro[MAX_STATE];
+	image * _flash;
 	STATE _state;
+	RECT _rcRambro;
 	
 	float _x, _y;
 	float _oldX, _oldY;
+	float _width;
+	float _height;
 	float _angle;
 	float _speed;
 	float _gravity;
@@ -31,18 +35,32 @@ private:
 	int _count;
 	int _animationSpeed;
 
+	int _flashIndex;
+	int _flashCount;
+	int _flashSpeed;
+
 	bool _isCollision;
 	bool _isActived;
 	bool _isLeft;
 	bool _isJump;
 	bool _isFall;
 	bool _isKnife;
+
+	bool _isFlash;
+
+	RECT _rcFlash;
 		
 public:
 	image * getImage(int num) { return _ramBro[num]; }
 
 	STATE getState() { return _state; }
 	void setState(STATE state) { _state = state; }
+
+	RECT getRcRambro() { return _rcRambro; }
+	void setRcRambro(RECT rcRambro) { _rcRambro = rcRambro; }
+
+	RECT getRcFlash() { return _rcFlash; }
+	void setRcFlash(RECT rcFlash) { _rcFlash = rcFlash; }
 
 	float getX() { return _x; }
 	void setX(float x) { _x = x; }
@@ -52,6 +70,10 @@ public:
 	void setOldX(float oldX) { _oldX = oldX; }
 	float getOldY() { return _oldY; }
 	void setOldY(float oldY) { _oldY = oldY; }
+	float getWidth() { return _width; }
+	void setWidth(float width) { _width = width; }
+	float getHeight() { return _height; }
+	void setHeight(float height) { _height = height; }
 	float getAngle() { return _angle; }
 	void setAngle(float angle) { _angle = angle; }
 	float getSpeed() { return _speed; }
@@ -80,6 +102,8 @@ public:
 	void setIsFall(bool isFall) { _isFall = isFall; }
 	bool getIsKnife() { return _isKnife; }
 	void setIsKnife(bool isKnife) { _isKnife = isKnife; }
+	bool getIsFlash() { return _isFlash; }
+	void setIsFlash(bool isFlash) { _isFlash = isFlash; }
 
 	HRESULT init(void);
 	void release(void);
