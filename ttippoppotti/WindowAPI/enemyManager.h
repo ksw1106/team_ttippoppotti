@@ -44,6 +44,7 @@ private:
 	brovil* _brovil;			// 브로빌 클래스
 
 	int _effectCount;
+	int _count;
 	bool _isClear;				// 스테이지 클리어했냐(브로빌 죽음)
 
 
@@ -106,8 +107,9 @@ public:
 	
 	// 스테이지 클리어 조건
 	bool isClear();
-
-	void enemyDie();
+	
+	// 에너미 제거
+	void removeEnemy(int num);
 	
 	// 솔져 클래스 초기화셋팅
 	void setSoldier(int x, int y);
