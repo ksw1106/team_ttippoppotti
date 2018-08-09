@@ -30,7 +30,6 @@ HRESULT stageScene::init(void)
 	_stageClear->init();
 
 	EFFECTMANAGER->init();
-
 	_playerManager->setMapData(_mapData);
 	_enemyManager->setMapData(_mapData);
 	OBJECTMANAGER->setMapData(_mapData);
