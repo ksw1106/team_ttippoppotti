@@ -3,7 +3,6 @@
 #include "bullet.h"  //미사일클래스 사용하기 위해
 
 #define MAX_STATE 9
-#define MAX_STATE1 1
 
 enum STATE
 {
@@ -19,7 +18,6 @@ class player : public gameNode
 {
 private:
 	image * _ramBro[MAX_STATE];
-	image * _chuck[MAX_STATE1];
 	image * _flash;
 	STATE _state;
 	RECT _rcRambro;
@@ -50,6 +48,8 @@ private:
 
 	bool _isFlash;
 
+	bool _rambroChange;
+
 	RECT _rcFlashRight;
 	RECT _rcFlashLeft;
 		
@@ -66,8 +66,6 @@ public:
 	void setrcFlashRight(RECT rcFlashRight) { _rcFlashRight = rcFlashRight; }
 	RECT getrcFlashLeft() { return _rcFlashLeft; }
 	void setrcFlashLeft(RECT rcFlashLeft) { _rcFlashLeft = rcFlashLeft; }
-
-	
 
 	float getX() { return _x; }
 	void setX(float x) { _x = x; }
@@ -112,7 +110,7 @@ public:
 	bool getIsFlash() { return _isFlash; }
 	void setIsFlash(bool isFlash) { _isFlash = isFlash; }
 
-	HRESULT init(void);
+	HRESULT init(int num);
 	void release(void);
 	void update(void);
 	void render(void);

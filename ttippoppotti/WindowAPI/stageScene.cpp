@@ -22,7 +22,6 @@ HRESULT stageScene::init(void)
 
 	_mapData = new mapData;
 	_mapData->init(1);
-	
 
 	_test = new testScene_kmy;
 	_test->init();
