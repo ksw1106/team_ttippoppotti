@@ -885,7 +885,7 @@ void playerManager::collision()
 			if (!_pBullet->getVPlayerBullet()[j].isActived)continue;
 			if (IntersectRect(&rcTemp, &rcEnemy, &_pBullet->getVPlayerBullet()[j].rc))
 			{
-				if (!_enemyManager->getVEnemy()[i]->getIsApart()) continue;
+				if (_enemyManager->getVEnemy()[i]->getIsApart()) continue;
 				if (_pBullet->getVPlayerBullet()[j].isActived == true)
 				{
 
