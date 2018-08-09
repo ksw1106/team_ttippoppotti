@@ -49,7 +49,7 @@ HRESULT effectManager::init(void)
 	
 	addEffect("sparks", "yellowPixelDot", 20, 20);
 
-	addEffect("bigBang", "yellowPixelDot", 10, 1);
+	addEffect("bigBang", "explosionFlame8", 10, 10);
 
 	_count = 0;
 	_isExplosion = false;
@@ -215,8 +215,6 @@ void effectManager::explosion(float x, float y)
 	//this->playBallExplosion("ballFlame1", x, y);
 	this->playBallExplosion("ballFlame2", x, y);
 	//this->playBallExplosion("ballFlame3", x, y);
-
-
 }
 
 void effectManager::explosionStart(float x, float y)
