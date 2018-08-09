@@ -291,4 +291,30 @@ public:
 	pGrenade() {}
 	~pGrenade() {}
 };
+//=============================================================
+//	## GBullet ## (할아버지 일반총알)
+//=============================================================
+class GBullet : public gameNode
+{
+private:
+	vector<tagBullet> _vBullet;
 
+private:
+	float _range;
+	int _GBulletMax;
+	int _count;
+	
+public:
+
+	HRESULT init(float range);
+	void release(void);
+	void update(void);
+	void render(void);
+
+	void fire(int x, int y, int fireSpeed, bool isLeft);
+
+	void move();
+
+	GBullet() {}
+	~GBullet() {}
+};

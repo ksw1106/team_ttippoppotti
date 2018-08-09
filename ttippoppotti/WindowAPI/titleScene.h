@@ -3,7 +3,12 @@
 class titleScene : public gameNode
 {
 	image* title[126];
-	float count;
+	image* startButton[33];
+	image* optionButton[33];
+	image* start;
+	image* option;
+	float count, startCount, optionCount;
+	bool isStart;
 public:
 	HRESULT init(void);
 	void release(void);
@@ -13,4 +18,3 @@ public:
 	titleScene(){}
 	~titleScene() {}
 };
-

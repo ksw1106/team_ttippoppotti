@@ -16,13 +16,13 @@ void testScene_kmy::update(void)
 	if (KEYMANAGER->isOnceKeyDown('O'))
 	{
 		//낙석주의
-		EFFECTMANAGER->rockFall(1000, 1800, 0.0f);
+		EFFECTMANAGER->rockFall(1000, 1800);
 		
 		//호러주의
-		EFFECTMANAGER->bloodSplash(1100, 1800, 0.0f);
+		EFFECTMANAGER->bloodSplash(1100, 1800);
 		
 		//나무파편주의
-		EFFECTMANAGER->woodDebris(900, 1800, 0.0f);
+		EFFECTMANAGER->woodDebris(900, 1800);
 
 		//펑
 		EFFECTMANAGER->explosionStart(500, 2000);
@@ -31,6 +31,10 @@ void testScene_kmy::update(void)
 	{
 		//파리날림
 		EFFECTMANAGER->flyingFlies(900, 2000);
+
+		EFFECTMANAGER->yellowSparks(800, 2000);
+
+		EFFECTMANAGER->ashes(700, 2000);
 	}
 }
 

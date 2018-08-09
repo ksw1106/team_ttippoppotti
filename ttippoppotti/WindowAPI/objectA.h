@@ -30,10 +30,29 @@ enum OBJECT_STATE
 	OBJECT_DESTROY
 };
 
+struct tagElement
+{
+	image* elementImg;
+	RECT rc;
+	float x, y;
+	float fireX, fireY;
+	float speed;
+	float angle;
+	float gravity;
+	float radius;
+	bool fire;
+	bool isActive;
+	bool isFrameImg;
+	int alpha;
+	int count;
+	int index;
+};
+
 //겟셋 필요한거 만들기
 class objectA
 {
 protected:
+	vector<tagElement> _vElement;
 	OBJECT_TYPE _type;
 	OBJECT_STATE _state;
 	RECT _rc;
@@ -43,20 +62,27 @@ protected:
 	float _destX, _destY;
 	float _speed;
 	float _angle;
+	float _gravity;
+	bool _isStart;
 	bool _isActived;
 	bool* _targetIsActived;
-	int _count, _index;
-	int _animationSpeed;
 	bool _isLeft;
 	bool _isFrameImage;
+	int _count, _index;
+	int _animationSpeed;
 public:
+	vector<tagElement> getVElement() { return _vElement; }
 	OBJECT_TYPE getType() { return _type; }
 	OBJECT_STATE getState() { return _state; }
 	float getX() { return _x; }
 	float getY() { return _y; }
 	float getDestX() { return _destX; }
 	float getDestY() { return _destY; }
+	float getGravity() { return _gravity; }
+	float getSpeed() { return _speed; }
+	float getAngle() { return _angle; }
 	bool* getTargetIsActived() { return _targetIsActived; }
+	bool getIsActived() { return _isActived; }
 	bool getIsFrameImage() { return _isFrameImage; }
 	image* getImage() { return _image; }
 	RECT getRect()
@@ -73,10 +99,16 @@ public:
 	}
 	RECT getActivationRect() { return _activationRc; }
 
+	void setX(float x) { _x = x; }
+	void setY(float y) { _y = y; }
 	void setState(OBJECT_STATE state) { _state = state; }
 	void setPosition(float x, float y) { _x = x, _y = y; }
 	void setDestPosition(float destX, float destY) { _destX = destX, _destY = destY; }
+	void setAngle(float angle) { _angle = angle; }
+	void setSpeed(float speed) { _speed = speed; }
+	void setGravity(float gravity) { _gravity = gravity; }
 	void setTargetIsActived(bool* targetIsActived) { _targetIsActived = targetIsActived; }
+	void setIsActived(bool isActived) { _isActived = isActived; }
 	void setType(OBJECT_TYPE type) { _type = type; }
 	virtual void init() = 0;
 	virtual void update();

@@ -22,7 +22,6 @@ HRESULT stageScene::init(void)
 
 	_mapData = new mapData;
 	_mapData->init(1);
-
 	
 
 	_test = new testScene_kmy;
@@ -45,10 +44,10 @@ HRESULT stageScene::init(void)
 	}
 
 	_backGround[0]._image = IMAGEMANAGER->findImage("backGround");
-	//_backGround[1]._image = IMAGEMANAGER->findImage("backGround_tree4");
-	//_backGround[2]._image = IMAGEMANAGER->findImage("backGround_tree3");
-	//_backGround[3]._image = IMAGEMANAGER->findImage("backGround_tree2");
-	//_backGround[4]._image = IMAGEMANAGER->findImage("backGround_tree1");
+	/*_backGround[1]._image = IMAGEMANAGER->findImage("backGround_tree4");
+	_backGround[2]._image = IMAGEMANAGER->findImage("backGround_tree3");
+	_backGround[3]._image = IMAGEMANAGER->findImage("backGround_tree2");
+	_backGround[4]._image = IMAGEMANAGER->findImage("backGround_tree1");*/
 	_backGround[1]._image = IMAGEMANAGER->findImage("backGround_rock");
 	_backGround[2]._image = IMAGEMANAGER->findImage("backGround_object");
 

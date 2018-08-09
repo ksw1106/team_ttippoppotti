@@ -12,6 +12,7 @@ class playerManager : public gameNode
 private:
 	enemyManager * _enemyManager;
 	player* _player;
+	player* _playerChuck;
 	mapData* _mapData;
 
 	pBullet * _pBullet;
@@ -21,21 +22,17 @@ private:
 	RECT temp;			
 	bool hit_left, hit_right, hit_top, hit_bottom;
 
-	float _ground;
 	int _count, _index, _animationSpeed;
-	int count = 0;
+
 	int _fireCount;
-	bool _change;
-	bool _isLadder;
 
 	RECT _rcKnifeRight;
 	RECT _rcKnifeLeft;
-	int _knifeCount;
 	bool _knifeCollision;
 
-	bool _startImg;
-	int _startCount;
-	int _startIndex;
+	bool _isLadder;
+
+	bool _change;
 
 public:
 
