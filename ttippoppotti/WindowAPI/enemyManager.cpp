@@ -22,13 +22,17 @@ HRESULT enemyManager::init(void)
 	
 	_eBullet = new eBullet;
 	_eBullet->init(1, 800.f);
+
 	_bossBullet = new bossBullet;
 	_bossBullet->init();
+
 	_bossRocket = new bossRocket;
 	_bossRocket->init(50.f);
+
 	_brovil = new brovil;
 	_brovil->init(3200, 1000);
 
+	_effectCount = 0;
 	_isClear = false;
 
 	return S_OK;
@@ -150,6 +154,19 @@ void enemyManager::setSoldier(int x, int y)
 
 void enemyManager::setBrovil(int x, int y)
 {
+	
+}
+
+bool enemyManager::isEffect(int frame)
+{
+	_effectCount++;
+	if (_effectCount > frame)
+	{
+		_effectCount = 0;
+		return false;
+	}
+	else
+		return true;
 	
 }
 
@@ -395,7 +412,6 @@ void enemyManager::collideWithPBullet()
 		{
 			if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vSoldier[i]->getRcEnemy()))
 			{	
-				if (!_playerManager->getPBullet()->getVPlayerBullet()[j].isActived) continue;
 				if (_vSoldier[i]->getIsApart()) continue;
 
 				if (_vSoldier[i]->getDirection() != _playerManager->getPBullet()->getVPlayerBullet()[j].isLeft)
@@ -548,8 +564,11 @@ void enemyManager::collideBrovilwithPBullet()
 				_brovil->deadMove();
 			}
 
-			EFFECTMANAGER->bloodSplash(_brovil->getX() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameWidth()/2, _brovil->getY() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameHeight()/2,
-				_brovil->getDirection());
+			if (this->isEffect(2))
+			{
+				EFFECTMANAGER->bloodSplash(_brovil->getX() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameWidth()/2, _brovil->getY() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameHeight()/2,
+					_brovil->getDirection());
+			}
 			// Á×Àº Àû º¤ÅÍ¿¡ ´ã±â
 			this->saveEnemy(BROVIL, BULLET, _brovil->getDirection());
 			_isClear = true;
