@@ -406,6 +406,7 @@ HRESULT bossBullet::init()
 		_bossBullet[i].speed = 20.f;
 	}
 
+	_interval = 0;
 	_range = 800.f;
 	
 	return S_OK;
@@ -423,6 +424,9 @@ void bossBullet::release(void)
 void bossBullet::update(void)
 {
 	this->move();	
+
+	_interval++;
+	if (_interval > 1000) _interval = 0;
 }
 
 void bossBullet::render(void)
@@ -433,29 +437,38 @@ void bossBullet::render(void)
 		{
 			_bossBullet[i].bulletImage->render(getMemDC(), _bossBullet[i].rc.left - CAMERAMANAGER->getCamera().left, _bossBullet[i].rc.top - CAMERAMANAGER->getCamera().top);
 		}
+
+		if (!_bossBullet[i].fire) continue;
+
+		if (KEYMANAGER->isToggleKey(VK_F11))
+		{
+			RectangleMake(getMemDC(), _bossBullet[i].rc.left - CAMERAMANAGER->getCamera().left, _bossBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
+				_bossBullet[i].rc.right - _bossBullet[i].rc.left, _bossBullet[i].rc.bottom - _bossBullet[i].rc.top);
+		}
 	}
 }
 
 void bossBullet::fire(int x, int y, bool isLeft)
 {
+	if (_interval % 5 != 0) return;
+
 	for (int i = 0; i < BOSS_BULLET_MAX; ++i)
 	{
-		++_count;
-		if (_count % 5 != 0) continue;
-
 		if (_bossBullet[i].fire) continue;
 		
 		_bossBullet[i].fire = true;
 		_bossBullet[i].x = _bossBullet[i].fireX = x;
 		_bossBullet[i].y = _bossBullet[i].fireY = y;
-		_bossBullet[i].rc = RectMake(_bossBullet[i].x, _bossBullet[i].y, _bossBullet[i].bulletImage->getFrameWidth(), _bossBullet[i].bulletImage->getFrameHeight());
+		_bossBullet[i].rc = RectMake(_bossBullet[i].x, _bossBullet[i].y, _bossBullet[i].bulletImage->getWidth(), _bossBullet[i].bulletImage->getHeight());
 
 		if (isLeft == true)
-			_bossBullet[i].angle = PI;
-		
+		{
+			_bossBullet[i].angle = PI + RND->getFromFloatTo(-0.05f, 0.05f);
+		}
 		else
-			_bossBullet[i].angle = 0.f;
-				
+		{
+			_bossBullet[i].angle = 0.f + RND->getFromFloatTo(-0.05f, +0.05f);
+		}
 		break;
 	}
 }
@@ -468,7 +481,7 @@ void bossBullet::move()
 
 		_bossBullet[i].x += cosf(_bossBullet[i].angle) * _bossBullet[i].speed;
 		_bossBullet[i].y += -sinf(_bossBullet[i].angle) * _bossBullet[i].speed;
-		_bossBullet[i].rc = RectMake(_bossBullet[i].x, _bossBullet[i].y, _bossBullet[i].bulletImage->getFrameWidth(), _bossBullet[i].bulletImage->getFrameHeight());	
+		_bossBullet[i].rc = RectMake(_bossBullet[i].x, _bossBullet[i].y, _bossBullet[i].bulletImage->getWidth(), _bossBullet[i].bulletImage->getHeight());	
 
 		float distance = getDistance(_bossBullet[i].fireX, _bossBullet[i].fireY, _bossBullet[i].x, _bossBullet[i].y);
 		if (distance > _range)
@@ -492,6 +505,7 @@ HRESULT bossRocket::init(float range)
 		_bossRocket[i].frameSpeed = 5;
 	}
 
+	_interval = 0;
 	_range = range;
 	
 	return S_OK;
@@ -505,6 +519,9 @@ void bossRocket::update(void)
 {
 	this->move();
 	this->animation();
+
+	_interval++;
+	if (_interval > 1000) _interval = 0;
 }
 
 void bossRocket::render(void)
@@ -521,6 +538,8 @@ void bossRocket::render(void)
 
 void bossRocket::fire(int x, int y, int fireSpeed, bool isLeft)
 {
+	if (_interval % 10 != 0) return;
+
 	for (int i = 0; i < BOSS_ROCKET_MAX; ++i)
 	{
 		if (_bossRocket[i].fire) continue;
@@ -560,7 +579,7 @@ void bossRocket::move()
 		{
 			_bossRocket[i].gravity += 0.5f;
 		}
-		if (distance > 1000)
+		if (distance > 1500.f)
 		{
 			_bossRocket[i].fire = false;
 		}

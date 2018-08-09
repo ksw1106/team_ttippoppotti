@@ -26,12 +26,14 @@ struct tagBossImage
 	image* gunImage[3];
 	image* propellerImage;
 	image* rotorImage;
+	image* bulletFireImage;
 	int bodyIndex;
 	int gunIndex;
 	int propellerIndex;
 	int rotorIndex;
 	int frameCount;
 	int frameSpeed;
+	
 };
 
 struct tagBoss
@@ -41,11 +43,15 @@ struct tagBoss
 	RECT rcGun;
 	RECT rcWing;
 	float x, y;
+	float startX, startY;
 	float speed;
 	float angle;
 	float gravity;
+	float distance;
+		
 	int count;
 	int hp;
+	bool isMove;
 	bool isAlive;
 	bool isLeft;
 };
@@ -61,6 +67,10 @@ private:
 
 	int _count;
 	int _stateNum;
+	int _bulletEffectIndex;
+	int _bulletEffectCount;
+	int _bulletEffectSpeed;
+
 
 public:
 	tagBoss getTerrorKopter() { return _terrorKopter; }
@@ -92,6 +102,7 @@ public:
 	void controlAI();
 	// 상하좌우로 움직임
 	void move();
+	void startMove(float x, float y);
 
 	boss() {}
 	~boss() {}

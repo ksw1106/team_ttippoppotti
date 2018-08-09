@@ -40,10 +40,7 @@ HRESULT enemy::initSoldier(float x, float y)
 		
 	_frameSpeed = 5;
 	_count = 0;
-
-	_warnSign->setFrameY(0);
-	_doubtSign->setFrameY(0);
-		
+			
 	this->corpseInit();	
 	
 	_angle = 0;
@@ -121,7 +118,9 @@ void enemy::update(void)
 			_corpse[i].y = _y;
 			_corpse[i].rcCorpse = RectMake(_corpse[i].x, _corpse[i].y, _corpse[i].corpseImage->getWidth(), _corpse[i].corpseImage->getHeight());
 		}
-	}	
+	}
+
+	this->controlAI();
 }
 
 void enemy::render(void)
@@ -197,6 +196,18 @@ bool enemy::removeCorpse()
 	return false;
 }
 
+void enemy::controlAI()
+{
+	//int count = RND->getFromIntTo(0, );
+	//
+	//switch (count)
+	//{
+	//case : 
+	//default:
+	//	break;
+	//}
+}
+
 // 에너미 움직임 변화
 void enemy::changeStatus()
 {
@@ -209,8 +220,16 @@ void enemy::changeStatus()
 	}
 	case ENEMY_WALK:
 	{
-		this->deadMove();
-		break;
+		if (_isAlive)
+		{
+
+			break;
+		}
+		else
+		{
+			this->deadMove();
+			break;
+		}
 	}
 	case ENEMY_DOUBT:
 	{
@@ -348,8 +367,7 @@ void enemy::flyAway()
 	if (_kbSpeed <= 0.f)
 	{
 		_enemyStatus = ENEMY_DEAD;		
-	}	
-	
+	}		
 }
 
 // 발사시 에너미 프레임 움직임

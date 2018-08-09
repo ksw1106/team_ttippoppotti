@@ -2,21 +2,39 @@
 #include "player.h"
 #include "enemyManager.h"
 
-HRESULT player::init(void)
+HRESULT player::init(int num)
 {
-	_ramBro[IDLE] = IMAGEMANAGER->findImage("broforce_idle");
-	_ramBro[RUN] = IMAGEMANAGER->findImage("broforce_run (1)");
-	//_ramBro[FAST_RUN] = IMAGEMANAGER->addFrameImage("broforce_run (2)", "broforce_run (2).bmp", 448, 128, 8, 2, true, RGB(255, 0, 255));
-	_ramBro[JUMP] = IMAGEMANAGER->findImage("broforce_jump");
-	_ramBro[HANG_FRONT_HOLD] = IMAGEMANAGER->findImage("broforce_hang_forntHold");
-	_ramBro[HANG_BACK_HOLD] = IMAGEMANAGER->findImage("broforce_hang_backHold");
-	_ramBro[KNIFE] = IMAGEMANAGER->findImage("broforce_knife");
-	_ramBro[DIE] = IMAGEMANAGER->findImage("broforce_die");
-	_ramBro[LADDER] = IMAGEMANAGER->findImage("broforce_ladder");
-	_ramBro[FIRE] = IMAGEMANAGER->findImage("broforce_fire");
-	//_ramBro[ROLL] = IMAGEMANAGER->addFrameImage("broforce_roll", "broforce_roll.bmp", 936, 136, 13, 2, true, RGB(255, 0, 255));
-
-	_chuck[IDLE] = IMAGEMANAGER->findImage("chuck_idle");
+	if (num == 0)
+	{
+		// rambro
+		_ramBro[IDLE] = IMAGEMANAGER->findImage("broforce_idle");
+		_ramBro[RUN] = IMAGEMANAGER->findImage("broforce_run (1)");
+		//_ramBro[FAST_RUN] = IMAGEMANAGER->addFrameImage("broforce_run (2)", "broforce_run (2).bmp", 448, 128, 8, 2, true, RGB(255, 0, 255));
+		_ramBro[JUMP] = IMAGEMANAGER->findImage("broforce_jump");
+		_ramBro[HANG_FRONT_HOLD] = IMAGEMANAGER->findImage("broforce_hang_frontHold");
+		_ramBro[HANG_BACK_HOLD] = IMAGEMANAGER->findImage("broforce_hang_backHold");
+		_ramBro[KNIFE] = IMAGEMANAGER->findImage("broforce_knife");
+		_ramBro[DIE] = IMAGEMANAGER->findImage("broforce_die");
+		_ramBro[LADDER] = IMAGEMANAGER->findImage("broforce_ladder");
+		_ramBro[FIRE] = IMAGEMANAGER->findImage("broforce_fire");
+		//_ramBro[ROLL] = IMAGEMANAGER->addFrameImage("broforce_roll", "broforce_roll.bmp", 936, 136, 13, 2, true, RGB(255, 0, 255));
+	}
+	else
+	{
+		// chuck
+		_ramBro[IDLE] = IMAGEMANAGER->findImage("chuck_idle");
+		_ramBro[RUN] = IMAGEMANAGER->findImage("chuck_run");
+		//_chuck[FAST_RUN] = IMAGEMANAGER->findImage("chuck_fast_run");
+		_ramBro[JUMP] = IMAGEMANAGER->findImage("chuck_jump");
+		_ramBro[HANG_FRONT_HOLD] = IMAGEMANAGER->findImage("chuck_hang_frontHold");
+		_ramBro[HANG_BACK_HOLD] = IMAGEMANAGER->findImage("chuck_hang_backHold");
+		_ramBro[KNIFE] = IMAGEMANAGER->findImage("chuck_knife");
+		_ramBro[DIE] = IMAGEMANAGER->findImage("chuck_die");
+		_ramBro[LADDER] = IMAGEMANAGER->findImage("chuck_ladder");
+		_ramBro[FIRE] = IMAGEMANAGER->findImage("chuck_fire");
+		//_chuck[ROLL] = IMAGEMANAGER->findImage("chuck_roll");
+	}
+	
 
 	_flash = IMAGEMANAGER->findImage("broforce_flash");
 
@@ -36,6 +54,8 @@ HRESULT player::init(void)
 	_isActived = _isLeft = _isJump = _isFall = false;
 	_isCollision = false;
 	_isFlash = false;
+
+	_rambroChange = false;
 
 	_flashCount = _flashIndex = _flashSpeed = 0;
 
@@ -59,9 +79,8 @@ void player::update(void)
 	_gravity += 0.98f;
 
 	FRAMEMANAGER->frameChange(_ramBro[_state], _count, _index, _animationSpeed, _isLeft);
-
-	//FRAMEMANAGER->frameChange(_chuck[_state], _count, _index, _animationSpeed, _isLeft);
-
+	
+	
 	FRAMEMANAGER->frameChange(_flash, _flashCount, _flashIndex, _flashSpeed, _isLeft);				// ÃÑ±¸ ¾Õ¿¡ ¹ÝÂ¦ÀÌ
 
 }
@@ -69,9 +88,13 @@ void player::update(void)
 void player::render(void)
 {
 	if (_state == HANG_FRONT_HOLD)
+	{
 		_ramBro[_state + _isCollision]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+	}
 	else
+	{
 		_ramBro[_state]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+	}
 
 	if (_isFlash)
 	{
