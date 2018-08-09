@@ -43,7 +43,9 @@ private:
 	boss* _boss;				// 보스 클래스
 	brovil* _brovil;			// 브로빌 클래스
 
+	int _effectCount;
 	bool _isClear;				// 스테이지 클리어했냐(브로빌 죽음)
+
 
 public:
 	void setPlayerManager(playerManager* playerManager) { _playerManager = playerManager; }
@@ -110,6 +112,8 @@ public:
 	// 솔져 클래스 초기화셋팅
 	void setSoldier(int x, int y);
 	void setBrovil(int x, int y);
+
+	bool isEffect(int frame);
 		
 	enemyManager() {}
 	~enemyManager() {}
