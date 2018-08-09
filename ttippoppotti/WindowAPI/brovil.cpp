@@ -149,6 +149,7 @@ void brovil::changeStatus()
 	{	
 		_isAlive = false;
 		this->enemyExplode();
+		
 		break;
 	}
 	case BROVIL_DISAPPEAR:
@@ -263,6 +264,7 @@ void brovil::enemyExplode()
 	if (_isApart)
 	{
 		this->partMove();
+		EFFECTMANAGER->ashes(_x + _brovilImage.brovilImg[_brovilStatus]->getFrameWidth() / 2, _y + _brovilImage.brovilImg[_brovilStatus]->getFrameHeight() / 2);
 	}
 }
 

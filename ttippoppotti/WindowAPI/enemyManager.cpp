@@ -395,6 +395,7 @@ void enemyManager::collideWithPBullet()
 		{
 			if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vSoldier[i]->getRcEnemy()))
 			{	
+				if (!_playerManager->getPBullet()->getVPlayerBullet()[j].isActived) continue;
 				if (_vSoldier[i]->getIsApart()) continue;
 
 				if (_vSoldier[i]->getDirection() != _playerManager->getPBullet()->getVPlayerBullet()[j].isLeft)
@@ -423,6 +424,7 @@ void enemyManager::collideWithPBullet()
 
 				// Á×Àº Àû º¤ÅÍ¿¡ ´ã±â
 				this->saveEnemy(SOLDIER, BULLET, _vSoldier[i]->getDirection());
+				break;
 			}
 		}
 	}
@@ -546,6 +548,8 @@ void enemyManager::collideBrovilwithPBullet()
 				_brovil->deadMove();
 			}
 
+			EFFECTMANAGER->bloodSplash(_brovil->getX() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameWidth()/2, _brovil->getY() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameHeight()/2,
+				_brovil->getDirection());
 			// Á×Àº Àû º¤ÅÍ¿¡ ´ã±â
 			this->saveEnemy(BROVIL, BULLET, _brovil->getDirection());
 			_isClear = true;
