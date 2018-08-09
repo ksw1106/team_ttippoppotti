@@ -17,6 +17,7 @@ private:
 
 	pBullet * _pBullet;
 	pGrenade * _pGrenade;
+	gBullet * _gBullet;
 	image * _p1Bubble;
 	
 	RECT temp;			
@@ -25,6 +26,7 @@ private:
 	int _count, _index, _animationSpeed;
 
 	int _fireCount;
+	bool _rambroFire;
 
 	RECT _rcKnifeRight;
 	RECT _rcKnifeLeft;
@@ -44,6 +46,7 @@ public:
 
 	pBullet* getPBullet() { return _pBullet; }
 	pGrenade* getPGrenade() { return _pGrenade; }
+	gBullet* getGBullet() { return _gBullet; }
 
 	HRESULT init(void);
 	void release(void);
