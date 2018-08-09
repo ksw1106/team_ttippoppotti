@@ -812,33 +812,33 @@ void pGrenade::move()
 //=============================================================
 //	## Gbullet ## (ÇÒ¾Æ¹öÁö ÀÏ¹ÝÃÑ¾Ë)
 //=============================================================
-HRESULT GBullet::init(float range)
+HRESULT gBullet::init(float range)
 {
 	_range = range;
 
 	for (int i = 0; i < 5; i++)
 	{
-		tagBullet GBullet;
-		ZeroMemory(&GBullet, sizeof(tagBullet));
-		GBullet.bulletImage = new image;
-		GBullet.bulletImage->init("player_chuck/chuck_bullet.bmp", 20, 16, 1, 1, true, RGB(255, 0, 255));
+		tagBullet gBullet;
+		ZeroMemory(&gBullet, sizeof(tagBullet));
+		gBullet.bulletImage = new image;
+		gBullet.bulletImage->init("player_chuck/chuck_bullet.bmp", 20, 16, 1, 1, true, RGB(255, 0, 255));
 
 		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
-		_vBullet.push_back(GBullet);
+		_vBullet.push_back(gBullet);
 	}
 	return S_OK;
 }
 
-void GBullet::release(void)
+void gBullet::release(void)
 {
 }
 
-void GBullet::update(void)
+void gBullet::update(void)
 {
 	move();
 }
 
-void GBullet::render(void)
+void gBullet::render(void)
 {
 	for (int i = 0; i < _vBullet.size(); ++i)
 	{
@@ -851,7 +851,7 @@ void GBullet::render(void)
 	}
 }
 
-void GBullet::fire(int x, int y, int fireSpeed, bool isLeft)
+void gBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 {
 	for (int i = 0; i < _vBullet.size(); i++)
 	{
@@ -868,16 +868,16 @@ void GBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 			_vBullet[i].bulletImage->getFrameHeight());
 		if (_vBullet[i].isLeft)
 		{
-			_vBullet[i].angle = 145.f * i * PI / 180 * 5;
+			_vBullet[i].angle = 168.f * i * (PI / 180) + 25;
 		}
 		if (!_vBullet[i].isLeft)
 		{
-			_vBullet[i].angle = 35.f * i *PI / 180 * 5;
+			_vBullet[i].angle = 10.f * i * (PI / 180) + 25;
 		}
 	}
 }
 
-void GBullet::move()
+void gBullet::move()
 {
 	for (int i = 0; i < _vBullet.size(); ++i)
 	{

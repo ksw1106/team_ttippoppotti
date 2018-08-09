@@ -172,7 +172,14 @@ void brovil::corpseInit()
 {
 	for (int i = 0; i < BODY_PART; ++i)
 	{
-		_brovilCorpse[i].angle = RND->getFromFloatTo(PI / 8, PI / 8 * 7);
+		if (_isLeft)
+		{
+			_brovilCorpse[i].angle = RND->getFromFloatTo(PI/2 + 0.2f, PI - 0.2f);
+		}
+		else
+		{
+			_brovilCorpse[i].angle = RND->getFromFloatTo(0.2f, PI/2 - 0.2f);
+		}
 		_brovilCorpse[i].speed = RND->getFromFloatTo(6.f, 9.f);
 		_brovilCorpse[i].gravity = 0.0f;
 		_brovilCorpse[i].corpseImage = new image;
