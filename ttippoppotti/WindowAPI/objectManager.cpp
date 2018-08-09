@@ -101,8 +101,8 @@ HRESULT objectManager::init()
 		_vObject.push_back(object);
 	}
 
-	_prisonerPos[0].x = 3280, _prisonerPos[0].y = 1558;
-	_prisonerPos[1].x = 3685, _prisonerPos[1].y = 2099;
+	_prisonerPos[0].x = 3685, _prisonerPos[0].y = 2099;
+	//_prisonerPos[1].x = 3280, _prisonerPos[1].y = 1558;
 	for (int i = 0; i < 1; i++)
 	{
 		type = PRISONER;

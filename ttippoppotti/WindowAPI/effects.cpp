@@ -15,6 +15,7 @@ HRESULT effects::init(const char * imageName, int particleMax, bool isFrameImg)
 	_animationSpeed = 2;
 	_explosionCount = 0;
 	_alpha = 0;
+
 	_isParabola = false;
 	_isExplosion = false;
 	_isStaticAnim = false;
@@ -202,27 +203,27 @@ void effects::activateBigBang(float x, float y)
 {
 	_isRunning = true;
 	_isBigBang = true;
-	//for (int i = 0; i < 5; i++)
-	//{
-	//	tagParticle particle;
-	//	ZeroMemory(&particle, sizeof(tagParticle));
-	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame1");
-	//	_vParticle.push_back(particle);
-	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame2");
-	//	_vParticle.push_back(particle);
-	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame3");
-	//	_vParticle.push_back(particle);
-	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame4");
-	//	_vParticle.push_back(particle);
-	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame5");
-	//	_vParticle.push_back(particle);
-	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame6");
-	//	_vParticle.push_back(particle);
-	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame7");
-	//	_vParticle.push_back(particle);
-	//	particle.particleImg = IMAGEMANAGER->findImage("explosionFlame8");
-	//	_vParticle.push_back(particle);
-	//}
+	for (int i = 0; i < 5; i++)
+	{
+		tagParticle particle;
+		ZeroMemory(&particle, sizeof(tagParticle));
+		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame1");
+		_vParticle.push_back(particle);
+		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame2");
+		_vParticle.push_back(particle);
+		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame3");
+		_vParticle.push_back(particle);
+		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame4");
+		_vParticle.push_back(particle);
+		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame5");
+		_vParticle.push_back(particle);
+		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame6");
+		_vParticle.push_back(particle);
+		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame7");
+		_vParticle.push_back(particle);
+		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame8");
+		_vParticle.push_back(particle);
+	}
 	for (int i = 0; i < _vParticle.size(); i++)
 	{
 		_vParticle[i].angle = PI / _vParticle.size() * ((i % _vParticle.size()) + 1);
@@ -256,8 +257,10 @@ void effects::boomBigBang()
 			}
 			else
 			{
-				_vParticle[i].x = _vParticle[i].fireX + cosf(_vParticle[i].angle) * _vParticle[i].speed;
-				_vParticle[i].y = _vParticle[i].fireY - sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
+				//_vParticle[i].x = _vParticle[i].fireX + cosf(_vParticle[i].angle) * _vParticle[i].speed;
+				//_vParticle[i].y = _vParticle[i].fireY - sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
+				_vParticle[i].x += _vParticle[i].fireX + cosf(_vParticle[i].angle) * _vParticle[i].speed;
+				_vParticle[i].y += _vParticle[i].fireY - sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
 			}
 			if (_isFrameImg)
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
@@ -384,8 +387,8 @@ void effects::boomFlyingFlies()
 		{
 			if (!_vParticle[i].fire) continue;
 
-			_vParticle[i].x += cosf(_vParticle[i].angle + RND->getFloat(1.0f)) * _vParticle[i].speed;
-			_vParticle[i].y += -sinf(_vParticle[i].angle + RND->getFloat(1.0f)) * _vParticle[i].speed;
+			_vParticle[i].x += cosf(_vParticle[i].angle + RND->getFloat(2.0f)) * _vParticle[i].speed;
+			_vParticle[i].y += -sinf(_vParticle[i].angle + RND->getFloat(2.0f)) * _vParticle[i].speed;
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
 			_vParticle[i].count++;
 			if (_vParticle[i].count % 5 == 0)
