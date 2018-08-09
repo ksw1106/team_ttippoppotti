@@ -12,7 +12,7 @@ class playerManager : public gameNode
 private:
 	enemyManager * _enemyManager;
 	player* _player;
-	player* _playerChuck;
+	player* _playerChange[2];
 	mapData* _mapData;
 
 	pBullet * _pBullet;
@@ -32,7 +32,9 @@ private:
 
 	bool _isLadder;
 
-	bool _change;
+	bool _rambroChange;
+
+	RECT _rc8;
 
 public:
 

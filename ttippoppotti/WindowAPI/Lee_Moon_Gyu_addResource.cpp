@@ -19,8 +19,8 @@ void loadingScene::Lee_Moon_Gyu_addImage()
 	_loading->loadFrameImage("chuck_idle", "player_chuck/chuck_idle.bmp", 130, 209, 1, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("chuck_run", "player_chuck/chuck_run.bmp", 836, 209, 8, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("chuck_jump", "player_chuck/chuck_jump.bmp", 314, 209, 3, 2, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("chuck_hang_frontHold", "player_chuck/chuck_hang_frontHold.bmp", 105, 209, 3, 2, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("chuck_hang_backHold", "player_chuck/chuck_hang_backHold.bmp", 105, 209, 3, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("chuck_hang_frontHold", "player_chuck/chuck_hang_frontHold.bmp", 105, 209, 1, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("chuck_hang_backHold", "player_chuck/chuck_hang_backHold.bmp", 105, 209, 1, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("chuck_knife", "player_chuck/chuck_knife.bmp", 523, 209, 5, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("chuck_die", "player_chuck/chuck_die.bmp", 314, 209, 3, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("chuck_ladder", "player_chuck/chuck_ladder.bmp", 1254, 209, 12, 2, true, RGB(255, 0, 255));
