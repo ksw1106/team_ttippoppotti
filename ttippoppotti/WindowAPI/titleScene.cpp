@@ -115,7 +115,7 @@ void titleScene::update(void)
 		SOUNDMANAGER->play("slash");
 	}
 
-	if (KEYMANAGER->isOnceKeyDown(VK_RETURN) && isStart)
+	if (KEYMANAGER->isOnceKeyDown(VK_RETURN) && isStart && count >= 62.f)
 	{
 		SOUNDMANAGER->stop("title");
 		SCENEMANAGER->loadScene("·Îµù¾À");

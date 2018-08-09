@@ -27,13 +27,13 @@ public:
 	//탄피
 	void cartridge(float x, float y, bool isLeft);
 	//피
-	void bloodSplash(float x, float y);
+	void bloodSplash(float x, float y, bool isLeft);
 	//낙석
-	void rockFall(float x, float y);
+	void rockFall(float x, float y, bool isLeft);
 	//나무파편
-	void woodDebris(float x, float y);
+	void woodDebris(float x, float y, bool isLeft);
 	//스파크 튐
-	void yellowSparks(float x, float y);
+	void yellowSparks(float x, float y, bool isLeft);
 	//재로 변하여 날아갑니다
 	void ashes(float x, float y);
 	//총알이펙트
@@ -44,6 +44,8 @@ public:
 	void flyingFlies(float x, float y);
 	//구하는 말풍선
 	void saveBubble(float x, float y);
+	//대폭발
+	void bigBang(float x, float y);
 	//폭발
 	void explosion(float x, float y);
 	//폭발 초기화
@@ -52,7 +54,7 @@ public:
 	//이펙트 추가(이펙트키값, 이미지키값, 1회당 출력갯수, 버퍼갯수, 애니메이션이냐?)
 	void addEffect(string effectName, const char* imageName, int buffer, int count = 1, bool isFrameImg = false);
 	//이펙트 플레이
-	void playParabola(string effectName, float x, float y);
+	void playParabola(string effectName, float x, float y, bool isLeft);
 	void playExplosion(string effectName, float x, float y);
 	void playBallExplosion(string effectName, float x, float y);
 	void playCartridge(string effectName, float x, float y, bool isLeft);
@@ -61,6 +63,7 @@ public:
 	void playLoopAnim(string effectName, float x, float y);
 	void playFlyingFlies(string effectName, float x, float y);
 	void playAshes(string effectName, float x, float y);
+	void playBigBang(string effectName, float x, float y);
 	effectManager() {}
 	~effectManager() {}
 };
