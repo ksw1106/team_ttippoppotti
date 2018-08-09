@@ -5,6 +5,8 @@ class titleScene : public gameNode
 	image* title[126];
 	image* startButton[33];
 	image* optionButton[33];
+	image* start;
+	image* option;
 	float count, startCount, optionCount;
 	bool isStart;
 public:
@@ -16,4 +18,3 @@ public:
 	titleScene(){}
 	~titleScene() {}
 };
-
