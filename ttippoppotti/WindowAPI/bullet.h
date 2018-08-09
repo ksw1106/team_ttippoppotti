@@ -169,7 +169,6 @@ public:
 class bossBullet : public gameNode
 {
 private:
-
 	float _range;			//총알 사거리
 	int _bulletMax;			//총알 최대갯수
 
@@ -188,9 +187,9 @@ public:
 	void fire(int x, int y, bool isLeft);
 	//총알무브
 	void move();
-
+	
 	//총알구조체 가져오기
-	//tagBullet getBossBullet() { return _bossBullet[BOSS_BULLET_MAX]; }
+	tagBullet* getBossBullet() { return _bossBullet; }
 
 	bossBullet() {}
 	~bossBullet() {}
@@ -200,8 +199,7 @@ public:
 //	## bossRocket ## (보스 로켓)
 //============================================================================================
 class bossRocket : public gameNode
-{
-	
+{	
 private:
 	float _range;			//총알 사거리
 	int _bulletMax;			//총알 최대갯수
@@ -224,7 +222,7 @@ public:
 	//총알애니메이션	
 	void animation();
 
-	//tagBullet getBossRocket() { return _bossRocket[BOSS_ROCKET_MAX]; }
+	tagBullet* getBossRocket() { return _bossRocket; }
 	
 	bossRocket() {}
 	~bossRocket() {}

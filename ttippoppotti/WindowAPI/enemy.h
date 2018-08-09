@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "bullet.h"
 
 #define COOLTIME 7	// _frameIndex 바뀌는 속도
 #define BODY_PART 4
@@ -72,7 +73,7 @@ private:
 	
 	float _x, _y;
 	int _hp;
-	
+		
 	bool _isAlive;
 	bool _isLeft;
 	bool _isFire;
@@ -113,6 +114,7 @@ public:
 	bool getIsUncovered() { return _isUncovered; }
 	bool getIsStrange() { return _isStrange; }
 	bool getIsFire() { return _isFire; }
+	bool getIsApart() { return _isApart; }
 	enemyStatus getBodyStatus() { return _enemyStatus; }
 	gunStatus getArmStatus() { return _gunStatus; }
 	
@@ -120,8 +122,7 @@ public:
 	float getEnemyAngle() { return _angle; }
 	int getRandomNum() { return _randomNumber; }
 	float getAccel() { return _accel; }
-	bool getIsOn() { return _isOn; }
-	bool getIsApart() { return _isApart; }
+	bool getIsOn() { return _isOn; }	
 			
 	void setRcEnemy(RECT rcEnemy) { _rcEnemy = rcEnemy; }
 	void setEnemySightRC(RECT rcEnemySight) { _rcEnemySight = rcEnemySight; }
@@ -149,6 +150,7 @@ public:
 	void setIsOn(bool isOn) { _isOn = isOn; }
 	void setIsApart(bool isApart) { _isApart = isApart; }
 	
+	void controlAI();
 	// 에너미 움직임 변화
 	void changeStatus();
 	// 적 시체 초기화

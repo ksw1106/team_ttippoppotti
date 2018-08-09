@@ -888,6 +888,7 @@ void playerManager::collision()
 				if (!_enemyManager->getVEnemy()[i]->getIsApart()) continue;
 				if (_pBullet->getVPlayerBullet()[j].isActived == true)
 				{
+
 					_pBullet->getVPlayerBullet()[j].isActived = false;
 					if (_pBullet->getVPlayerBullet()[j].isActived == false)
 					{
