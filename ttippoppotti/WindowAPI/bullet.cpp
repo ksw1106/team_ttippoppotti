@@ -437,6 +437,14 @@ void bossBullet::render(void)
 		{
 			_bossBullet[i].bulletImage->render(getMemDC(), _bossBullet[i].rc.left - CAMERAMANAGER->getCamera().left, _bossBullet[i].rc.top - CAMERAMANAGER->getCamera().top);
 		}
+
+		if (!_bossBullet[i].fire) continue;
+
+		if (KEYMANAGER->isToggleKey(VK_F11))
+		{
+			RectangleMake(getMemDC(), _bossBullet[i].rc.left - CAMERAMANAGER->getCamera().left, _bossBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
+				_bossBullet[i].rc.right - _bossBullet[i].rc.left, _bossBullet[i].rc.bottom - _bossBullet[i].rc.top);
+		}
 	}
 }
 
@@ -451,14 +459,16 @@ void bossBullet::fire(int x, int y, bool isLeft)
 		_bossBullet[i].fire = true;
 		_bossBullet[i].x = _bossBullet[i].fireX = x;
 		_bossBullet[i].y = _bossBullet[i].fireY = y;
-		_bossBullet[i].rc = RectMake(_bossBullet[i].x, _bossBullet[i].y, _bossBullet[i].bulletImage->getFrameWidth(), _bossBullet[i].bulletImage->getFrameHeight());
+		_bossBullet[i].rc = RectMake(_bossBullet[i].x, _bossBullet[i].y, _bossBullet[i].bulletImage->getWidth(), _bossBullet[i].bulletImage->getHeight());
 
 		if (isLeft == true)
+		{
 			_bossBullet[i].angle = PI + RND->getFromFloatTo(-0.05f, 0.05f);
-		
+		}
 		else
-			_bossBullet[i].angle = 0.f + RND->getFromFloatTo(- 0.05f, + 0.05f);
-				
+		{
+			_bossBullet[i].angle = 0.f + RND->getFromFloatTo(-0.05f, +0.05f);
+		}
 		break;
 	}
 }
@@ -471,7 +481,7 @@ void bossBullet::move()
 
 		_bossBullet[i].x += cosf(_bossBullet[i].angle) * _bossBullet[i].speed;
 		_bossBullet[i].y += -sinf(_bossBullet[i].angle) * _bossBullet[i].speed;
-		_bossBullet[i].rc = RectMake(_bossBullet[i].x, _bossBullet[i].y, _bossBullet[i].bulletImage->getFrameWidth(), _bossBullet[i].bulletImage->getFrameHeight());	
+		_bossBullet[i].rc = RectMake(_bossBullet[i].x, _bossBullet[i].y, _bossBullet[i].bulletImage->getWidth(), _bossBullet[i].bulletImage->getHeight());	
 
 		float distance = getDistance(_bossBullet[i].fireX, _bossBullet[i].fireY, _bossBullet[i].x, _bossBullet[i].y);
 		if (distance > _range)

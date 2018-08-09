@@ -118,7 +118,9 @@ void enemy::update(void)
 			_corpse[i].y = _y;
 			_corpse[i].rcCorpse = RectMake(_corpse[i].x, _corpse[i].y, _corpse[i].corpseImage->getWidth(), _corpse[i].corpseImage->getHeight());
 		}
-	}	
+	}
+
+	this->controlAI();
 }
 
 void enemy::render(void)
@@ -194,6 +196,18 @@ bool enemy::removeCorpse()
 	return false;
 }
 
+void enemy::controlAI()
+{
+	//int count = RND->getFromIntTo(0, );
+	//
+	//switch (count)
+	//{
+	//case : 
+	//default:
+	//	break;
+	//}
+}
+
 // 에너미 움직임 변화
 void enemy::changeStatus()
 {
@@ -206,8 +220,16 @@ void enemy::changeStatus()
 	}
 	case ENEMY_WALK:
 	{
-		this->deadMove();
-		break;
+		if (_isAlive)
+		{
+
+			break;
+		}
+		else
+		{
+			this->deadMove();
+			break;
+		}
 	}
 	case ENEMY_DOUBT:
 	{

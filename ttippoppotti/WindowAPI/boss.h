@@ -33,6 +33,7 @@ struct tagBossImage
 	int rotorIndex;
 	int frameCount;
 	int frameSpeed;
+	
 };
 
 struct tagBoss
@@ -42,11 +43,15 @@ struct tagBoss
 	RECT rcGun;
 	RECT rcWing;
 	float x, y;
+	float startX, startY;
 	float speed;
 	float angle;
 	float gravity;
+	float distance;
+		
 	int count;
 	int hp;
+	bool isMove;
 	bool isAlive;
 	bool isLeft;
 };
@@ -97,6 +102,7 @@ public:
 	void controlAI();
 	// 상하좌우로 움직임
 	void move();
+	void startMove(float x, float y);
 
 	boss() {}
 	~boss() {}

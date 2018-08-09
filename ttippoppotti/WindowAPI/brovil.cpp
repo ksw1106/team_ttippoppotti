@@ -9,14 +9,14 @@ HRESULT brovil::init(float x, float y)
 	_brovilImage.brovilImg[BROVIL_IDLE] = IMAGEMANAGER->findImage("브로빌평상시");
 	_brovilImage.brovilImg[BROVIL_WALK] = IMAGEMANAGER->findImage("브로빌걸음");
 	_brovilImage.brovilImg[BROVIL_KNOCK_BACK] = IMAGEMANAGER->findImage("브로빌넉백");
-	_brovilImage.brovilImg[BROVIL_DEAD] = IMAGEMANAGER->findImage("브로빌죽음");
+	_brovilImage.brovilImg[BROVIL_DEAD] = IMAGEMANAGER->findImage("브로빌시체");
 	_brovilImage.brovilImg[BROVIL_DISAPPEAR] = IMAGEMANAGER->findImage("브로빌승화");
 	_brovilImage.brovilImg[BROVIL_FLY_AWAY] = IMAGEMANAGER->findImage("브로빌점프");
 
 	_brovilImage.frameCount = _brovilImage.frameIndex = 0;
-	_brovilImage.frameSpeed = 3;
+	_brovilImage.frameSpeed = 8;
 	
-	this->initSign();
+	//this->initSign();
 	this->corpseInit();
 
 	_brovilStatus = BROVIL_IDLE;
@@ -40,14 +40,14 @@ HRESULT brovil::init(float x, float y)
 
 void brovil::release(void)
 {
-	_warnSign->release();
-	SAFE_DELETE(_warnSign);
-	_doubtSign->release();
-	SAFE_DELETE(_doubtSign);	
+	//_warnSign->release();
+	//SAFE_DELETE(_warnSign);
+	//_doubtSign->release();
+	//SAFE_DELETE(_doubtSign);	
 	for (int i = 0; i < BODY_PART; ++i)
 	{
-		_corpse[i].corpseImage->release();
-		SAFE_DELETE(_corpse[i].corpseImage);
+		_brovilCorpse[i].corpseImage->release();
+		SAFE_DELETE(_brovilCorpse[i].corpseImage);
 	}
 }
 
@@ -55,9 +55,20 @@ void brovil::update(void)
 {
 	this->fall();
 	this->changeStatus();
+	this->frameAnimate();
 
 	_rcBrovil = RectMake(_x, _y, _brovilImage.brovilImg[_brovilStatus]->getFrameWidth(), _brovilImage.brovilImg[_brovilStatus]->getFrameHeight());
 
+	// 시체상태가 아닐때, 렉트 움직임
+	for (int i = 0; i < BODY_PART; ++i)
+	{
+		if (!_isApart)
+		{
+			_brovilCorpse[i].x = _x;
+			_brovilCorpse[i].y = _y;
+			_brovilCorpse[i].rcCorpse = RectMake(_brovilCorpse[i].x, _brovilCorpse[i].y, _brovilCorpse[i].corpseImage->getWidth(), _brovilCorpse[i].corpseImage->getHeight());
+		}
+	}
 }
 
 void brovil::render(void)
@@ -76,23 +87,22 @@ void brovil::render(void)
 		{
 			for (int i = 0; i < BODY_PART; ++i)
 			{
-				_corpse[i].corpseImage->render(getMemDC(), _corpse[i].x - CAMERAMANAGER->getCamera().left, _corpse[i].y - CAMERAMANAGER->getCamera().top);
+				_brovilCorpse[i].corpseImage->render(getMemDC(), _brovilCorpse[i].x - CAMERAMANAGER->getCamera().left, _brovilCorpse[i].y - CAMERAMANAGER->getCamera().top);
 			}
 		}
 		
 
-		// 플레이어 발견했을때, 느낌표 말풍선!
-		if (_isUncovered && _warnFrameIndex < _warnSign->getMaxFrameX())
-		{
-			_warnSign->frameRender(getMemDC(), _x + 10 - CAMERAMANAGER->getCamera().left, _y - 50 - CAMERAMANAGER->getCamera().top, _warnSign->getFrameX(), _warnSign->getFrameY());
-		}
-
-		// 적 (아군) 시체를 발견했을때 물음표 말풍선!
-		if (_isStrange && _doubtFrameIndex < _doubtSign->getMaxFrameX())
-		{
-			_doubtSign->frameRender(getMemDC(), _x + 10 - CAMERAMANAGER->getCamera().left, _y - 50 - CAMERAMANAGER->getCamera().top, _doubtSign->getFrameX(), _doubtSign->getFrameY());
-		}
-
+		//// 플레이어 발견했을때, 느낌표 말풍선!
+		//if (_isUncovered && _warnFrameIndex < _warnSign->getMaxFrameX())
+		//{
+		//	_warnSign->frameRender(getMemDC(), _x + 10 - CAMERAMANAGER->getCamera().left, _y - 50 - CAMERAMANAGER->getCamera().top, _warnSign->getFrameX(), _warnSign->getFrameY());
+		//}
+		//
+		//// 적 (아군) 시체를 발견했을때 물음표 말풍선!
+		//if (_isStrange && _doubtFrameIndex < _doubtSign->getMaxFrameX())
+		//{
+		//	_doubtSign->frameRender(getMemDC(), _x + 10 - CAMERAMANAGER->getCamera().left, _y - 50 - CAMERAMANAGER->getCamera().top, _doubtSign->getFrameX(), _doubtSign->getFrameY());
+		//}
 	}
 
 	if (KEYMANAGER->isToggleKey(VK_F4))
@@ -110,11 +120,9 @@ void brovil::render(void)
 	}
 }
 
-//==============================================================================================
-//==============================================================================================
-//==============================================================================================
-//==============================================================================================
-//==============================================================================================
+//==============================================================================================================================================================
+//==============================================================================================================================================================
+//==============================================================================================================================================================
 
 void brovil::changeStatus()
 {
@@ -135,22 +143,22 @@ void brovil::changeStatus()
 		_isAlive = false;
 		this->knockBackMove(_isLeft);
 		
-		// 플레이어 발견!
-		this->discover();
-
-		// 아군 시체 발견
-		this->doubt();
-
 		break;
 	}
 	case BROVIL_DEAD:
 	{	
+		_isAlive = false;
 		this->enemyExplode();
 		break;
 	}
 	case BROVIL_DISAPPEAR:
 	{
-		
+		_isAlive = false;
+		break;
+	}
+	case BROVIL_FLY_AWAY:
+	{
+		this->flyAway();
 		break;
 	}
 	
@@ -163,15 +171,15 @@ void brovil::corpseInit()
 {
 	for (int i = 0; i < BODY_PART; ++i)
 	{
-		_corpse[i].angle = RND->getFromFloatTo(PI / 8, PI / 8 * 7);
-		_corpse[i].speed = RND->getFromFloatTo(6.f, 9.f);
-		_corpse[i].gravity = 0.0f;
-		_corpse[i].corpseImage = new image;
+		_brovilCorpse[i].angle = RND->getFromFloatTo(PI / 8, PI / 8 * 7);
+		_brovilCorpse[i].speed = RND->getFromFloatTo(6.f, 9.f);
+		_brovilCorpse[i].gravity = 0.0f;
+		_brovilCorpse[i].corpseImage = new image;
 	}
-	_corpse[0].corpseImage->init("enemyImage/brovil_part_head.bmp", 18, 32, true, RGB(255, 0, 255));
-	_corpse[1].corpseImage->init("enemyImage/brovil_part_body.bmp", 40, 44, true, RGB(255, 0, 255));
-	_corpse[2].corpseImage->init("enemyImage/brovil_part_arm.bmp", 12, 28, true, RGB(255, 0, 255));
-	_corpse[3].corpseImage->init("enemyImage/brovil_part_leg.bmp", 16, 16, true, RGB(255, 0, 255));
+	_brovilCorpse[0].corpseImage->init("enemyImage/brovil_part_head.bmp", 18, 32, true, RGB(255, 0, 255));
+	_brovilCorpse[1].corpseImage->init("enemyImage/brovil_part_body.bmp", 40, 44, true, RGB(255, 0, 255));
+	_brovilCorpse[2].corpseImage->init("enemyImage/brovil_part_arm.bmp", 12, 28, true, RGB(255, 0, 255));
+	_brovilCorpse[3].corpseImage->init("enemyImage/brovil_part_leg.bmp", 16, 16, true, RGB(255, 0, 255));
 }
 
 void brovil::fall()
@@ -201,16 +209,6 @@ void brovil::deadMove()
 	}
 	_x += cosf(_angle)* _speed;
 	_y += -sinf(_angle)* _speed;
-}
-
-void brovil::doubt()
-{
-
-}
-
-void brovil::discover()
-{
-
 }
 
 void brovil::flyAway()
@@ -272,13 +270,13 @@ void brovil::partMove()
 {
 	for (int i = 0; i < 4; ++i)
 	{
-		_corpse[i].x += cosf(_corpse[i].angle) * _corpse[i].speed;
-		_corpse[i].y += -sinf(_corpse[i].angle) * _corpse[i].speed + _corpse[i].gravity;
-		_corpse[i].gravity += 0.4f;
-		_corpse[i].speed -= 0.2f;
-		_corpse[i].rcCorpse = RectMake(_corpse[i].x, _corpse[i].y, _corpse[i].corpseImage->getWidth(), _corpse[i].corpseImage->getHeight());
+		_brovilCorpse[i].x += cosf(_brovilCorpse[i].angle) * _brovilCorpse[i].speed;
+		_brovilCorpse[i].y += -sinf(_brovilCorpse[i].angle) * _brovilCorpse[i].speed + _brovilCorpse[i].gravity;
+		_brovilCorpse[i].gravity += 0.4f;
+		_brovilCorpse[i].speed -= 0.2f;
+		_brovilCorpse[i].rcCorpse = RectMake(_brovilCorpse[i].x, _brovilCorpse[i].y, _brovilCorpse[i].corpseImage->getWidth(), _brovilCorpse[i].corpseImage->getHeight());
 
-		if (_corpse[i].speed <= 0.f) _corpse[i].speed = 0;
+		if (_brovilCorpse[i].speed <= 0.f) _brovilCorpse[i].speed = 0.f;
 	}
 }
 
@@ -301,36 +299,35 @@ void brovil::frameAnimate()
 			{
 				_brovilStatus = BROVIL_DEAD;
 			}
-
 		}
 
-		FRAMEMANAGER->frameChange(_brovilImage.brovilImg[_brovilStatus], _brovilImage.frameCount, _brovilImage.frameIndex, _brovilImage.frameSpeed, _isLeft);
+		FRAMEMANAGER->frameChange(_brovilImage.brovilImg[BROVIL_KNOCK_BACK], _brovilImage.frameCount, _brovilImage.frameIndex, _brovilImage.frameSpeed, _isLeft);
 	}
 	else if (_brovilStatus == BROVIL_DEAD)
 	{
 		FRAMEMANAGER->frameChange(_brovilImage.brovilImg[BROVIL_DEAD], _brovilImage.frameCount, _brovilImage.frameIndex, _brovilImage.frameSpeed, _isLeft);
 	}	
-	else if (_brovilStatus == BROVIL_DISAPPEAR)
-	{
-		FRAMEMANAGER->frameChange(_brovilImage.brovilImg[BROVIL_DISAPPEAR], _brovilImage.frameCount, _brovilImage.frameIndex, _brovilImage.frameSpeed, _isLeft);
-	}
+	//else if (_brovilStatus == BROVIL_DISAPPEAR)
+	//{
+	//	FRAMEMANAGER->frameChange(_brovilImage.brovilImg[BROVIL_DISAPPEAR], _brovilImage.frameCount, _brovilImage.frameIndex, _brovilImage.frameSpeed, _isLeft);
+	//}
 	else
 	{
-		_brovilImage.frameSpeed = 10;
+		_brovilImage.frameSpeed = 8;
 		FRAMEMANAGER->frameChange(_brovilImage.brovilImg[_brovilStatus], _brovilImage.frameCount, _brovilImage.frameIndex, _brovilImage.frameSpeed, _isLeft);		
 	}
 
-	// 플레이어 만났을 때 '!' 프레임 한번만 돌게
-	if (_isUncovered && _warnFrameIndex < _warnSign->getMaxFrameX())
-	{
-		FRAMEMANAGER->frameChange(_warnSign, _warnFrameCount, _warnFrameIndex, _frameSpeed, 0);
-	}
-
-	// 에너미 아군 시체 만났을때, '?' 프레임 한번만 돌게
-	if (_isStrange && _doubtFrameIndex < _doubtSign->getMaxFrameX())
-	{
-		FRAMEMANAGER->frameChange(_doubtSign, _doubtFrameCount, _doubtFrameIndex, _frameSpeed, 0);
-	}
+	//// 플레이어 만났을 때 '!' 프레임 한번만 돌게
+	//if (_isUncovered && _warnFrameIndex < _warnSign->getMaxFrameX())
+	//{
+	//	FRAMEMANAGER->frameChange(_warnSign, _warnFrameCount, _warnFrameIndex, _frameSpeed, 0);
+	//}
+	//
+	//// 에너미 아군 시체 만났을때, '?' 프레임 한번만 돌게
+	//if (_isStrange && _doubtFrameIndex < _doubtSign->getMaxFrameX())
+	//{
+	//	FRAMEMANAGER->frameChange(_doubtSign, _doubtFrameCount, _doubtFrameIndex, _frameSpeed, 0);
+	//}
 }
 
 void brovil::initSign()

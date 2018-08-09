@@ -849,6 +849,7 @@ void playerManager::collision()
 			{
 				if (_pBullet->getVPlayerBullet()[j].isActived == true)
 				{
+
 					_pBullet->getVPlayerBullet()[j].isActived = false;
 					if (_pBullet->getVPlayerBullet()[j].isActived == false)
 						EFFECTMANAGER->bulletPuff(_pBullet->getVPlayerBullet()[j].x, _pBullet->getVPlayerBullet()[j].y);

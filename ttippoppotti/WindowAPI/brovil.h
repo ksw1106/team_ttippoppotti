@@ -38,7 +38,7 @@ private:
 	brovilStatus _brovilStatus;
 	brovilImage _brovilImage;
 
-	brovilCorpse _corpse[BODY_PART];
+	brovilCorpse _brovilCorpse[BODY_PART];
 
 	image * _warnSign;
 	image * _doubtSign;
@@ -74,13 +74,13 @@ public:
 	void update(void);
 	void render(void);
 
-	image* getBrovilImage() { return _brovilImage.brovilImg[_brovilStatus]; }
+	image* getBrovilImage(brovilStatus brovilStatus) { return _brovilImage.brovilImg[brovilStatus]; }
 	brovilStatus getBrovilStatus() { return _brovilStatus; }
 	
-	brovilCorpse* getCorpse() { return _corpse; }
+	brovilCorpse* getCorpse() { return _brovilCorpse; }
 
-	void setBrovilStatus(brovilStatus brovilStatus) { _brovilStatus = brovilStatus; }
-
+	int getBrovilImageIndex() { return _brovilImage.frameIndex; }
+	RECT getRcBrovil() { return _rcBrovil; }
 	float getSpeed() { return _speed; }
 	float getGravity() { return _gravity; }
 	float getX() { return _x; }
@@ -95,6 +95,8 @@ public:
 	bool getIsOn() { return _isOn; }
 	bool getIsApart() { return _isApart; }
 
+	void setBrovilImageIndex(int index) { _brovilImage.frameIndex = index; }
+	void setBrovilStatus(brovilStatus brovilStatus) { _brovilStatus = brovilStatus; }
 	void setRcBrovil(RECT rcBrovil) { _rcBrovil = rcBrovil; }
 	void setRcBrovilSight(RECT rcBrovilSight) { _rcBrovilSight = rcBrovilSight; }
 	void setSpeed(float speed) { _speed = speed; }
@@ -119,10 +121,6 @@ public:
 	void fall();
 	// 움직임
 	void deadMove();
-	// 의심?
-	void doubt();
-	// 발견!
-	void discover();	
 	// 폭발되었을때 날라감
 	void flyAway();
 	// 총알맞았을때 뒤로 날아감

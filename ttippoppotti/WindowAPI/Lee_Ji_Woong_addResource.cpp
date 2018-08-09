@@ -24,12 +24,12 @@ void loadingScene::Lee_Ji_Woong_addImage()
 	_loading->loadFrameImage("군견평상시", "enemyImage/dog_idle.bmp", 1280, 160, 16, 2);
 	_loading->loadFrameImage("군견공격", "enemyImage/dog_assault.bmp", 960, 160, 12, 2);
 
-	_loading->loadFrameImage("브로빌시체", "enemyImage/brovil_dead.bmp", 80, 160, 1, 2);
+	_loading->loadFrameImage("브로빌시체", "enemyImage/brovil_dead.bmp", 100, 88, 1, 2);
 	_loading->loadFrameImage("브로빌걸음", "enemyImage/brovil_walk.bmp", 960, 160, 12, 2);
-	_loading->loadFrameImage("브로빌평상시", "enemyImage/brovil_idle.bmp", 320, 160, 4, 2);
-	_loading->loadFrameImage("브로빌넉백", "enemyImage/brovil_knock_back.bmp", 800, 160, 10, 2);
+	_loading->loadFrameImage("브로빌평상시", "enemyImage/brovil_idle.bmp", 222, 152, 4, 2);
+	_loading->loadFrameImage("브로빌넉백", "enemyImage/brovil_knock_back.bmp", 750, 150, 10, 2);
 	_loading->loadFrameImage("브로빌승화", "enemyImage/brovil_disappear.bmp", 1680, 160, 21, 2);	
-	_loading->loadFrameImage("브로빌점프", "enemyImage/brovil_fly_away", 1040, 160, 13, 2);
+	_loading->loadFrameImage("브로빌점프", "enemyImage/brovil_fly_away.bmp", 1040, 160, 13, 2);
 			
 	_loading->loadFrameImage("테러콥터 아이들", "enemyImage/bossImage/boss_idle.bmp", 1280, 512, 4, 2);
 	_loading->loadFrameImage("테러콥터 회전", "enemyImage/bossImage/boss_turn.bmp", 2880, 512, 9, 2);
@@ -39,11 +39,9 @@ void loadingScene::Lee_Ji_Woong_addImage()
 	_loading->loadFrameImage("테러콥터 기관총 회전", "enemyImage/bossImage/boss_gun_rotate.bmp", 1080, 100, 9, 2);	
 	_loading->loadFrameImage("테러콥터 프로펠러", "enemyImage/bossImage/propeller.bmp", 800, 104, 4, 2);
 	_loading->loadFrameImage("테러콥터 총알 효과", "enemyBullet/boss_bullet_effect.bmp", 128, 56, 4, 2);
-	_loading->loadFrameImage("테러콥터 로켓", "enemyBullet/boss_rocket.bmp", 304, 96, 4, 2);
-	
+	_loading->loadFrameImage("테러콥터 로켓", "enemyBullet/boss_rocket.bmp", 304, 96, 4, 2);	
 }
 
 void loadingScene::Lee_Ji_Woong_addSound()
 {
-
 }
