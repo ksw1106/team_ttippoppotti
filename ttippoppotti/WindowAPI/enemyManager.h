@@ -18,9 +18,10 @@ private:
 	vector<enemy*> _vSoldier;	// 일반 적	
 		
 	eBullet* _eBullet;			// 총알 클래스
-	bossBullet* _bossBullet;
-	bossRocket* _bossRocket;
+	bossBullet* _bossBullet;	// 보스총알 클래스
+	bossRocket* _bossRocket;	// 보스로켓 클래스
 	boss* _boss;				// 보스 클래스
+	brovil* _brovil;			// 브로빌 클래스
 
 public:
 	void setPlayerManager(playerManager* playerManager) { _playerManager = playerManager; }
@@ -33,7 +34,7 @@ public:
 	eBullet* getEBullet() { return _eBullet; }
 
 	// 보스 클래스 가져오기
-	boss* getBoss() { return _boss; }
+	boss* getBoss() { return _boss; }	
 		
 	HRESULT init(void);
 	void release(void);
@@ -56,6 +57,10 @@ public:
 	void collideWithPBullet();	
 	// 플레이어 수류탄과 충돌함수
 	void collideWithPGrenade();		
+	// 에너미 총알 vs 픽셀
+	void collideBulletWithPixel();
+	// 브로빌과 플레이어 총알 충돌
+	void collideBrovilwithPBullet();
 
 	void enemyDie();
 	

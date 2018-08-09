@@ -40,10 +40,7 @@ HRESULT enemy::initSoldier(float x, float y)
 		
 	_frameSpeed = 5;
 	_count = 0;
-
-	_warnSign->setFrameY(0);
-	_doubtSign->setFrameY(0);
-		
+			
 	this->corpseInit();	
 	
 	_angle = 0;
@@ -348,8 +345,7 @@ void enemy::flyAway()
 	if (_kbSpeed <= 0.f)
 	{
 		_enemyStatus = ENEMY_DEAD;		
-	}	
-	
+	}		
 }
 
 // 발사시 에너미 프레임 움직임

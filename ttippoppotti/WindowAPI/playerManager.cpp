@@ -169,9 +169,6 @@ void playerManager::update(void)
 	//	}
 	//}
 	
-	
-	
-
 
 	
 	if (KEYMANAGER->isOnceKeyDown('X'))							// ¼ö·ùÅº
@@ -455,6 +452,7 @@ void playerManager::update(void)
 	{
 		_player->setState(HANG_FRONT_HOLD);
 	}
+
 	/*switch (switch_on)
 	{
 	case GREEN:

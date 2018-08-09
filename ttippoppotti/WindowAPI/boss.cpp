@@ -15,6 +15,7 @@ HRESULT boss::init(float x, float y)
 	_terrorKopter.img.gunImage[BB_FIRE] = IMAGEMANAGER->findImage("≈◊∑Øƒﬂ≈Õ ±‚∞¸√— πﬂªÁ");	
 
 	_terrorKopter.img.propellerImage = IMAGEMANAGER->findImage("≈◊∑Øƒﬂ≈Õ «¡∑Œ∆Á∑Ø");
+	_terrorKopter.img.bulletFireImage = IMAGEMANAGER->findImage("≈◊∑Øƒﬂ≈Õ √—æÀ »ø∞˙");
 
 	_terrorKopter.angle = 0.f;
 	_terrorKopter.speed = 5.f;
@@ -30,6 +31,10 @@ HRESULT boss::init(float x, float y)
 	_gunStatus = BB_ROTATE;
 	
 	_count = 0;
+
+	_bulletEffectIndex = 0;
+	_bulletEffectCount = 0;
+	_bulletEffectSpeed = 1;
 	
 	return S_OK;
 }
@@ -45,6 +50,9 @@ void boss::update(void)
 	this->terrorKopterMove();
 	this->frameAnimate();
 
+	// ∏ˆ≈Î ∑∫∆Æ
+	_terrorKopter.rcBody = RectMake(_terrorKopter.x + _terrorKopter.img.bodyImage[_bodyStatus]->getFrameWidth() / 4, _terrorKopter.y + 40,
+		_terrorKopter.img.bodyImage[_bodyStatus]->getFrameWidth() / 2, _terrorKopter.img.bodyImage[_bodyStatus]->getFrameHeight() / 5 * 3);
 	// ±‚∞¸√— ∑∫∆Æ
 	_terrorKopter.rcGun = RectMake(_terrorKopter.x + 100, _terrorKopter.y + 210, _terrorKopter.img.gunImage[_gunStatus]->getFrameWidth(), _terrorKopter.img.gunImage[_gunStatus]->getFrameHeight());
 }
@@ -66,8 +74,20 @@ void boss::render(void)
 	_terrorKopter.img.gunImage[_gunStatus]->frameRender(getMemDC(), _terrorKopter.x + 100 - CAMERAMANAGER->getCamera().left, _terrorKopter.y + 205 - CAMERAMANAGER->getCamera().top,
 		_terrorKopter.img.gunImage[_gunStatus]->getFrameX(), _terrorKopter.img.gunImage[_gunStatus]->getFrameY());
 
+	// √—æÀ »ø∞˙
+	if (_gunStatus == BB_FIRE)
+	{
+		if (_terrorKopter.isLeft)
+			_terrorKopter.img.bulletFireImage->frameRender(getMemDC(), _terrorKopter.rcGun.left - 30 - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.bottom, _terrorKopter.img.bulletFireImage->getFrameX(), _terrorKopter.img.bulletFireImage->getFrameY());
+		else
+			_terrorKopter.img.bulletFireImage->frameRender(getMemDC(), _terrorKopter.rcGun.right, _terrorKopter.rcGun.bottom, _terrorKopter.img.bulletFireImage->getFrameX(), _terrorKopter.img.bulletFireImage->getFrameY());
+	}
+
+	// ∑∫∆Æ »Æ¿Œ
 	if (KEYMANAGER->isToggleKey(VK_F10))
 	{
+		RectangleMake(getMemDC(), _terrorKopter.rcBody.left - CAMERAMANAGER->getCamera().left, _terrorKopter.rcBody.top - CAMERAMANAGER->getCamera().top,
+			_terrorKopter.rcBody.right - _terrorKopter.rcBody.left, _terrorKopter.rcBody.bottom - _terrorKopter.rcBody.top);
 		RectangleMake(getMemDC(), _terrorKopter.rcGun.left - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.top - CAMERAMANAGER->getCamera().top,
 			_terrorKopter.img.gunImage[_gunStatus]->getFrameWidth(), _terrorKopter.img.gunImage[_gunStatus]->getFrameHeight());
 	}
@@ -205,11 +225,31 @@ void boss::rocketFire()
 void boss::frameAnimate()
 {
 	// ∫ª√º
-	FRAMEMANAGER->frameChange(_terrorKopter.img.bodyImage[_bodyStatus], _terrorKopter.img.frameCount, _terrorKopter.img.bodyIndex, _terrorKopter.img.frameSpeed, _terrorKopter.isLeft);
+	if (_status != B_TURN)
+	{
+		FRAMEMANAGER->frameChange(_terrorKopter.img.bodyImage[_bodyStatus], _terrorKopter.img.frameCount, _terrorKopter.img.bodyIndex, _terrorKopter.img.frameSpeed, _terrorKopter.isLeft);
+	}
+	// ∫ª√º∞° ≈œ«“∂ß,
+	else if (_status == B_TURN)
+	{
+		if (_terrorKopter.isLeft)
+		{
+			if (_terrorKopter.img.bodyIndex <= 0) _terrorKopter.img.bodyIndex = 0;			
+			FRAMEMANAGER->frameChange(_terrorKopter.img.bodyImage[_bodyStatus], _terrorKopter.img.frameCount, _terrorKopter.img.bodyIndex, _terrorKopter.img.frameSpeed, _terrorKopter.isLeft);
+		}
+		else
+		{
+			if (_terrorKopter.img.bodyIndex >= 8) _terrorKopter.img.bodyIndex = 8;
+			FRAMEMANAGER->frameChange(_terrorKopter.img.bodyImage[_bodyStatus], _terrorKopter.img.frameCount, _terrorKopter.img.bodyIndex, _terrorKopter.img.frameSpeed, _terrorKopter.isLeft);
+		}
+	}
 	// «¡∑Œ∆Á∑Ø
 	FRAMEMANAGER->frameChange(_terrorKopter.img.propellerImage, _terrorKopter.img.frameCount, _terrorKopter.img.propellerIndex, _terrorKopter.img.frameSpeed, _terrorKopter.isLeft);
 	// ±‚∞¸√—
 	FRAMEMANAGER->frameChange(_terrorKopter.img.gunImage[_gunStatus], _terrorKopter.img.frameCount, _terrorKopter.img.gunIndex, _terrorKopter.img.frameSpeed, _terrorKopter.isLeft);
+	// √—æÀ»ø∞˙
+	FRAMEMANAGER->frameChange(_terrorKopter.img.bulletFireImage, _bulletEffectCount, _bulletEffectIndex, _bulletEffectSpeed, _terrorKopter.isLeft);
+	
 }
 
 void boss::controlAI()

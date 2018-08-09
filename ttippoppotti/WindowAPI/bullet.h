@@ -23,6 +23,7 @@ struct tagBullet
 	int frameCount;
 	int frameIndex;
 	int frameSpeed;
+	
 };
 
 //=============================================================
@@ -173,7 +174,7 @@ private:
 	int _bulletMax;			//ÃÑ¾Ë ÃÖ´ë°¹¼ö
 
 	int _bulletCount;
-	int _count;
+	int _interval;
 
 	tagBullet _bossBullet[BOSS_BULLET_MAX];
 
@@ -206,6 +207,7 @@ private:
 	int _bulletMax;			//ÃÑ¾Ë ÃÖ´ë°¹¼ö
 
 	int _bulletCount;
+	int _interval;
 	
 	tagBullet _bossRocket[BOSS_ROCKET_MAX];
 

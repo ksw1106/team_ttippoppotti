@@ -24,26 +24,8 @@ enum gunStatus
 	GUN_RELOAD = 4,
 };
 
-enum brovilStatus
-{
-	BROVIL_IDLE,
-	BROVIL_WALK,
-	BROVIL_KNOCK_BACK,
-	BROVIL_DEAD,
-	BROVIL_DISAPPEAR,
-};
-
 enum {ENEMY_LEFT, ENEMY_TOP, ENEMY_RIGHT, ENEMY_BOTTOM};
 
-struct corpse
-{
-	image* corpseImage;
-	RECT rcCorpse;
-	float x, y;
-	float angle;
-	float speed;
-	float gravity;
-};
 struct enemyImage
 {
 	image* bodyImage[7];
@@ -54,12 +36,14 @@ struct enemyImage
 	int speed;	
 };
 
-struct brovilImage
+struct enemyCorpse
 {
-	image* brovilImg[5];
-	int count;
-	int index;
-	int speed;
+	image* corpseImage;
+	RECT rcCorpse;
+	float x, y;
+	float angle;
+	float speed;
+	float gravity;
 };
 
 
@@ -70,22 +54,15 @@ private:
 
 	enemyStatus _enemyStatus;	
 	gunStatus _gunStatus;
-	brovilStatus _brovilStatus;
-	
 	enemyImage _enemyImage;
-	brovilImage _brovilImage;
-
-	corpse _corpse[BODY_PART];
-
-	//image * _bodyImage[6];
-	//image * _armImage[5];
-	//image * _brovilImage[5];
+	
+	enemyCorpse _corpse[BODY_PART];
+		
 	image * _warnSign;
 	image * _doubtSign;
 	
 	RECT _rcEnemy;
-	RECT _rcEnemySight;
-	RECT _rcEnemyCorpse[4];
+	RECT _rcEnemySight;	
 
 	float _angle;	
 	float _speed;
@@ -112,16 +89,15 @@ private:
 	int _frameSpeed;
 
 public:
-	HRESULT initSoldier(float x, float y);
-	
+	HRESULT initSoldier(float x, float y);	
 	void release(void);
 	void update(void);
 	void render(void);
 
 	image* getEnemyBodyImage(enemyStatus enemyStat) { return _enemyImage.bodyImage[enemyStat]; }
 	image* getEnemyArmImage(gunStatus armStat) { return _enemyImage.armImage[armStat]; }
-	image* getBrovilImage() { return _brovilImage.brovilImg[_brovilStatus]; }
-	corpse* getCorpse() { return _corpse; }
+	
+	enemyCorpse* getCorpse() { return _corpse; }
 
 	RECT getRcEnemy() { return _rcEnemy; }
 	RECT getRcEnemySight() { return _rcEnemySight; }
@@ -139,7 +115,7 @@ public:
 	bool getIsFire() { return _isFire; }
 	enemyStatus getBodyStatus() { return _enemyStatus; }
 	gunStatus getArmStatus() { return _gunStatus; }
-	brovilStatus getBrovilStatus() { return _brovilStatus; }	
+	
 	
 	float getEnemyAngle() { return _angle; }
 	int getRandomNum() { return _randomNumber; }
@@ -163,7 +139,7 @@ public:
 	void setIsFire(bool isFire) { _isFire = isFire; }
 	void setBodyStatus(enemyStatus enemyStat) { _enemyStatus = enemyStat; }
 	void setArmStatus(gunStatus gunStat) { _gunStatus = gunStat; }
-	void setBrovilStatus(brovilStatus brovilStatus) { _brovilStatus = brovilStatus; }
+	
 	void setBodyImageIndex(int bodyImageIndex) { _enemyImage.bodyImageIndex = bodyImageIndex; }
 	void setArmImageIndex(int armImageIndex) { _enemyImage.armImageIndex = armImageIndex; }
 		

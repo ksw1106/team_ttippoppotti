@@ -26,6 +26,7 @@ struct tagBossImage
 	image* gunImage[3];
 	image* propellerImage;
 	image* rotorImage;
+	image* bulletFireImage;
 	int bodyIndex;
 	int gunIndex;
 	int propellerIndex;
@@ -61,6 +62,10 @@ private:
 
 	int _count;
 	int _stateNum;
+	int _bulletEffectIndex;
+	int _bulletEffectCount;
+	int _bulletEffectSpeed;
+
 
 public:
 	tagBoss getTerrorKopter() { return _terrorKopter; }
