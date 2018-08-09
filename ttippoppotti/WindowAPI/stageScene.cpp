@@ -26,6 +26,9 @@ HRESULT stageScene::init(void)
 	_test = new testScene_kmy;
 	_test->init();
 
+	_stageClear = new stageClear;
+	_stageClear->init();
+
 	EFFECTMANAGER->init();
 
 	_playerManager->setMapData(_mapData);
@@ -70,6 +73,8 @@ HRESULT stageScene::init(void)
 	_camDebug = false;
 	_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
 	CAMERAMANAGER->setCamera(_rcCamera);
+
+	_isClear = false;
 	return S_OK;
 }
 
@@ -81,6 +86,7 @@ void stageScene::release(void)
 	SAFE_DELETE(_playerManager);
 	SAFE_DELETE(_enemyManager);
 	SAFE_DELETE(_mapData);
+	SAFE_DELETE(_stageClear);
 }
 
 void stageScene::update(void)
@@ -133,6 +139,13 @@ void stageScene::update(void)
 	_test->update();
 	//이곳에서 계산식, 키보드, 마우스등등 업데이트를 한다
 	//간단하게 이곳에서 코딩한다고 생각하면 된다
+
+	if (KEYMANAGER->isOnceKeyDown('T'))
+	{
+		_isClear = true;
+		SOUNDMANAGER->stop("stage1");
+		SOUNDMANAGER->play("clear");
+	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F9))
 		_camDebug = !_camDebug;
@@ -234,6 +247,11 @@ void stageScene::update(void)
 	}
 
 	OBJECTMANAGER->update();
+
+	if (_isClear)
+	{
+		_stageClear->update();
+	}
 }
 
 void stageScene::render(void)
@@ -287,4 +305,8 @@ void stageScene::render(void)
 		IMAGEMANAGER->findImage("ladder_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	}
 	_test->render();
+
+	//테스트
+	if (_isClear)
+		_stageClear->render();
 }

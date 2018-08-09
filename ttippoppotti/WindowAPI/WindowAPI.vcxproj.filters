@@ -170,6 +170,9 @@
     <ClInclude Include="boss.h">
       <Filter>MainGame\브로포스\enemy</Filter>
     </ClInclude>
+    <ClInclude Include="stageClear.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -294,6 +297,9 @@
     </ClCompile>
     <ClCompile Include="boss.cpp">
       <Filter>MainGame\브로포스\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="stageClear.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

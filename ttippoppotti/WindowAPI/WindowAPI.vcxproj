@@ -179,6 +179,7 @@
     <ClInclude Include="soldier.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stage2Scene.h" />
+    <ClInclude Include="stageClear.h" />
     <ClInclude Include="stageScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="testScene_kmy.h" />
@@ -221,6 +222,7 @@
     <ClCompile Include="soldier.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stage2Scene.cpp" />
+    <ClCompile Include="stageClear.cpp" />
     <ClCompile Include="stageScene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
