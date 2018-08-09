@@ -46,11 +46,12 @@ private:
 	bool _isStaticAnim;
 	bool _isFlyingFlies;
 	bool _isAshes;
+	bool _isBigBang;
 	bool _isFrameImg;		//프레임이미지냐?
 	bool _isAlphaImg;		//알파이미지냐?
 
 public:
-	HRESULT init(const char* imageName, int particleMax, bool isFrameImg);
+	HRESULT init(const char* imageName, int particleMax = 0, bool isFrameImg = false);
 	void release(void);
 	void update(void);
 	void render(void);
@@ -60,7 +61,7 @@ public:
 	//중앙폭발
 	void activateBallExplosion(float x, float y);
 	//포물선 발사 설정 (피, 낙석, 나무파편)
-	void activateParabola(float x, float y);
+	void activateParabola(float x, float y, bool isLeft);
 	void boomParabola();
 	//파리날림
 	void activateFlyingFlies(float x, float y);
@@ -76,6 +77,9 @@ public:
 	//총 발사시 이펙트
 	void activateBulletPuff(float x, float y);
 	void activateKnifePuff(float x, float y, bool isLeft);
+	//대폭발 설정
+	void activateBigBang(float x, float y);
+	void boomBigBang();
 
 	void boomStaticAnim();
 

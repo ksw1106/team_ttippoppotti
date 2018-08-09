@@ -11,11 +11,10 @@ enum OBJECT_TYPE
 	BOTTLEGRAY,
 	BOTTLEBROWN,
 	//static
-	PRISONER,
-	SAVE_BUBBLE,
 	WOODENBOX,
 	SKULL_DRUMRED,
 	SKULL_DRUMGRAY,
+	PRISONER,
 	TRUCK,
 	HELICOPTER,
 	AMFLAG_POLE,
@@ -48,10 +47,13 @@ struct tagElement
 	int index;
 };
 
+class mapData;
+
 //겟셋 필요한거 만들기
 class objectA
 {
 protected:
+	mapData * _mapData;
 	vector<tagElement> _vElement;
 	OBJECT_TYPE _type;
 	OBJECT_STATE _state;
@@ -99,6 +101,7 @@ public:
 	}
 	RECT getActivationRect() { return _activationRc; }
 
+	void setMapData(mapData* mapData) { _mapData = mapData; }
 	void setX(float x) { _x = x; }
 	void setY(float y) { _y = y; }
 	void setState(OBJECT_STATE state) { _state = state; }

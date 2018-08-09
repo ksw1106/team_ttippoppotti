@@ -1,10 +1,35 @@
 #include "stdafx.h"
 #include "objectA.h"
+#include "mapData.h"
 
 void objectA::update()
 {
-	if (_type >= 0 && _type <= 6 && !*_targetIsActived)
+	if (_type <= 9 && !*_targetIsActived)
+	{
+		if (_state == OBJECT_IDLE)
+		{
+			if (_type == 7)
+				EFFECTMANAGER->woodDebris(_x, _y, RND->getInt(2));
+			else if (_type == 8 || _type == 9)
+			{
+				for (int k = 0; k < _mapData->getObject().size(); k++)
+				{
+					POINT pt;
+					pt.x = (_rc.left + (_rc.right - _rc.left) / 2);
+					pt.y = (_rc.top + (_rc.bottom - _rc.top) / 2) + 68;
+
+					if (PtInRect(&_mapData->getObject()[k]._rc, pt))
+					{
+						_mapData->deleteMapIndexByIndex(k, 5, 5);
+						break;
+					}
+				}
+				EFFECTMANAGER->explosionStart(_x, _y);
+				CAMERAMANAGER->CameraShake();
+			}
+		}
 		_state = OBJECT_DESTROY;
+	}
 	
 	switch (_state)
 	{
