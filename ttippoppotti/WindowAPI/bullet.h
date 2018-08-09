@@ -313,6 +313,7 @@ public:
 
 	void move();
 
+	vector<tagBullet>& getVPlayerGBullet() { return _vBullet; }
 	GBullet() {}
 	~GBullet() {}
 };
