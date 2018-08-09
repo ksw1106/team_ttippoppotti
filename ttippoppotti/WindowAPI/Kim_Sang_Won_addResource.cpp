@@ -33,4 +33,5 @@ void loadingScene::Kim_Sang_Won_addSound()
 	_loading->loadSound("go", "start_go.mp3");
 
 	_loading->loadSound("1stage", "title/sound/1stage.wav", true, true);
+	_loading->loadSound("clear", "areaClear/sound/clear.wav", true, true);
 }
