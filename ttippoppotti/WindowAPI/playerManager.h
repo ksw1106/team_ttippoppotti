@@ -18,6 +18,8 @@ private:
 	pBullet * _pBullet;
 	pGrenade * _pGrenade;
 	gBullet * _gBullet;
+	gMissile * _gMissile;
+	xMissile * _xMissile;
 	image * _p1Bubble;
 	
 	RECT temp;			
@@ -38,6 +40,15 @@ private:
 
 	RECT _rc8;
 
+	RECT _rcMissileRight;
+	RECT _rcMissileLeft;
+	bool _rambroGrenade;
+	int _grenadeCount;
+	bool _isGrenade;
+
+	bool _xMissileCollision;
+	bool _xMissileColl;
+
 public:
 
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }
@@ -47,6 +58,8 @@ public:
 	pBullet* getPBullet() { return _pBullet; }
 	pGrenade* getPGrenade() { return _pGrenade; }
 	gBullet* getGBullet() { return _gBullet; }
+	gMissile* getGMissile() { return _gMissile; }
+	xMissile* getXMissile() { return _xMissile; }
 
 	HRESULT init(void);
 	void release(void);

@@ -29,6 +29,8 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadImage("explosionFlame8", "effectImage/explosion_flame_08.bmp", 43, 43, true, RGB(255, 0, 255));
 	_loading->loadImage("blackPixelDot", "effectImage/fly_01.bmp", 4, 4);
 	_loading->loadImage("yellowPixelDot", "effectImage/spark_01.bmp", 4, 4);
+	_loading->loadImage("lightOrangePixelDot", "effectImage/lightOrange_dot_01.bmp", 4, 4);
+	_loading->loadImage("orangePixelDot", "effectImage/orange_dot_01.bmp", 5, 5);
 	_loading->loadFrameImage("p1Bubble", "effectImage/p1_bubble_01.bmp", 1056, 92, 12, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("saveBubble", "effectImage/save_bubble_01.bmp", 4352, 136, 25, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("saveBubble2", "effectImage/save_bubble_02.bmp", 5248, 128, 32, 1, true, RGB(255, 0, 255));
@@ -42,11 +44,13 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadFrameImage("rambro_cartridge", "effectImage/rambro_cartridge_01.bmp", 40, 10, 4, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("woodDebris1", "effectImage/wood_debris_01.bmp", 136, 34, 4, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("woodDebris2", "effectImage/wood_debris_02.bmp", 104, 26, 4, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("woodDebris1b", "effectImage/wood_debris_01b.bmp", 272, 34, 8, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("woodDebris2b", "effectImage/wood_debris_02b.bmp", 208, 26, 8, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("smoke1", "effectImage/smoke_01.bmp", 448, 32, 14, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("smoke2", "effectImage/smoke_02.bmp", 480, 32, 15, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("whitePuff", "effectImage/whitePuffPop_01.bmp", 384, 64, 6, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("yellowPuff", "effectImage/bulletPuff_01.bmp", 528, 66, 8, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("redPuff", "effectImage/redPuffPop_01.bmp", 768, 88, 6, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("redPuff", "effectImage/redPuffPop_01.bmp", 960, 110, 6, 1, true, RGB(255, 0, 255));
 
 	_loading->loadImage("skull", "objectImage/skull_01.bmp", 20, 20, true, RGB(255, 0, 255));
 	_loading->loadImage("skullPole", "objectImage/skull_pole_01.bmp", 23, 77, true, RGB(255, 0, 255));

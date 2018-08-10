@@ -37,11 +37,13 @@ private:
 	int _alpha;
 	int _count;
 	int _explosionCount;
+	int _bigBangCount;
 	int _index;
 	int _animationSpeed;
 	float _effectFPS;		//이펙트 속도
 	bool _isRunning;		//이펙트 재생중이냐?
 	bool _isParabola;
+	bool _isFountain;
 	bool _isExplosion;
 	bool _isStaticAnim;
 	bool _isFlyingFlies;
@@ -49,6 +51,7 @@ private:
 	bool _isBigBang;
 	bool _isFrameImg;		//프레임이미지냐?
 	bool _isAlphaImg;		//알파이미지냐?
+	
 
 public:
 	HRESULT init(const char* imageName, int particleMax = 0, bool isFrameImg = false);
@@ -63,6 +66,9 @@ public:
 	//포물선 발사 설정 (피, 낙석, 나무파편)
 	void activateParabola(float x, float y, bool isLeft);
 	void boomParabola();
+
+	void activateFountain(float x, float y);
+	void boomFountain();
 	//파리날림
 	void activateFlyingFlies(float x, float y);
 	void boomFlyingFlies();

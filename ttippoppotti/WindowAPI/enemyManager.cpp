@@ -111,13 +111,13 @@ void enemyManager::update(void)
 	this->collideWithBossBullet();
 	this->collideWithBossRocket();
 	this->bossDirChange();
+	this->PBulletHitBoss();
 	
 	_boss->update();
 	_eBullet->update();
 	_bossBullet->update();
 	_bossRocket->update();
 	_brovil->update();
-
 	
 }
 
@@ -128,11 +128,11 @@ void enemyManager::render(void)
 		_vSoldier[i]->render();		
 	}
 	
-	_boss->render();
 	_eBullet->render();
+	_brovil->render();
+	_boss->render();
 	_bossBullet->render();
 	_bossRocket->render();
-	_brovil->render();
 
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
@@ -407,17 +407,31 @@ void enemyManager::collideWithBossRocket()
 	}
 }
 
+// 보스 움직임 변화 (플레이어 위치에 따라)
 void enemyManager::bossDirChange()
-{
-	++_count;
-	if (_count > 200) 
+{	
+	if (!_boss->radarIn(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), 1000.f))
 	{
-		_count = 0;
-		_choice = RND->getFromIntTo(0, 3);
+		// 플레이어가 보스보다 왼쪽이면 상태 바꿔줌
+		if (_playerManager->getPlayer()->getX() + 30 < _boss->getTerrorKopter().x + _boss->getTerrorKopter().img.bodyImage[_boss->getBodyStatus()]->getFrameWidth() / 2)
+		{
+			_boss->setStatus(LEFT_MOVE);
+		}
+		else if (_playerManager->getPlayer()->getX() + 30 > _boss->getTerrorKopter().x + _boss->getTerrorKopter().img.bodyImage[_boss->getBodyStatus()]->getFrameWidth() / 2)
+		{
+			_boss->setStatus(RIGHT_MOVE);
+		}
 	}
-	switch (_choice)
+	else
 	{
-		if (_choice == 0) break;
+		++_count;
+		if (_count > 200)
+		{
+			_count = 0;
+			_choice = RND->getFromIntTo(0, 3);
+		}
+		switch (_choice)
+		{
 		case 0:
 		{
 			_boss->setStatus(LEFT_FIRE_BULLET);
@@ -439,26 +453,35 @@ void enemyManager::bossDirChange()
 			break;
 		}
 
-	default:
-		break;
-	}
-	// 플레이어가 보스보다 왼쪽이면 상태 바꿔줌
-	if (_playerManager->getPlayer()->getX() + 30 < _boss->getTerrorKopter().x + _boss->getTerrorKopter().img.bodyImage[_boss->getBodyStatus()]->getFrameWidth() / 2)
-	{
-		_boss->setStatus(LEFT_MOVE);			
-	}
-	else if (_playerManager->getPlayer()->getX() + 30 > _boss->getTerrorKopter().x + _boss->getTerrorKopter().img.bodyImage[_boss->getBodyStatus()]->getFrameWidth()/2)
-	{	
-		_boss->setStatus(RIGHT_MOVE);
-	}
+		default:
+			break;
+		}
 
-	if (_boss->getStatus() == LEFT_FIRE_BULLET || _boss->getStatus() == RIGHT_FIRE_BULLET)
+		if (_boss->getStatus() == LEFT_FIRE_BULLET || _boss->getStatus() == RIGHT_FIRE_BULLET)
+		{
+			_boss->verticalMove(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), _boss->getTerrorKopter().angle);
+		}
+		else if (_boss->getStatus() == LEFT_FIRE_ROCKET || _boss->getStatus() == RIGHT_FIRE_ROCKET)
+		{
+			_boss->bombAttack(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), _boss->getTerrorKopter().angle);
+		}
+	}	
+}
+
+// 보스가 플레이어 총알에 맞음
+void enemyManager::PBulletHitBoss()
+{
+	RECT rc;
+	for (int i = 0; i < _playerManager->getPBullet()->getVPlayerBullet().size();)
 	{
-		_boss->verticalMove(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), _boss->getTerrorKopter().angle);
-	}
-	else if (_boss->getStatus() == LEFT_FIRE_ROCKET || _boss->getStatus() == RIGHT_FIRE_ROCKET)
-	{
-		_boss->bombAttack(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), _boss->getTerrorKopter().angle);
+		if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[i].rc, &_boss->getTerrorKopter().rcBody))
+		{			
+			_playerManager->getPBullet()->removeBullet(i);
+		}
+		else
+		{
+			++i;
+		}
 	}
 }
 

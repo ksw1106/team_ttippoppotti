@@ -8,7 +8,7 @@ HRESULT boss::init(float x, float y)
 		
 	_terrorKopter.img.bodyImage[B_IDLE] = IMAGEMANAGER->findImage("Å×·¯ÄßÅÍ ¾ÆÀÌµé");
 	_terrorKopter.img.bodyImage[B_TURN] = IMAGEMANAGER->findImage("Å×·¯ÄßÅÍ È¸Àü");
-	_terrorKopter.img.bodyImage[B_DEATH] = IMAGEMANAGER->findImage("Å×·¯ÄßÅÍ Á×À½");
+	_terrorKopter.img.bodyImage[B_DEATH] = IMAGEMANAGER->findImage("Å×·¯ÄßÅÍ ½ÃÃ¼");
 	
 	_terrorKopter.img.gunImage[BB_READY] = IMAGEMANAGER->findImage("Å×·¯ÄßÅÍ ±â°üÃÑ ¿¹¿­");
 	_terrorKopter.img.gunImage[BB_ROTATE] = IMAGEMANAGER->findImage("Å×·¯ÄßÅÍ ±â°üÃÑ È¸Àü");
@@ -23,6 +23,7 @@ HRESULT boss::init(float x, float y)
 	_terrorKopter.y = y;
 	_terrorKopter.isAttack = false;
 	_terrorKopter.isTurning = false;
+	_terrorKopter.isAlive = true;
 
 	_terrorKopter.img.bodyIndex = _terrorKopter.img.gunIndex = _terrorKopter.img.propellerIndex = _terrorKopter.img.rotorIndex = 0;
 	_terrorKopter.img.frameCount = 1;
@@ -48,8 +49,10 @@ void boss::release(void)
 
 void boss::update(void)
 {		
-	
-	this->terrorKopterMove();
+	if (_terrorKopter.isAlive)
+	{
+		this->terrorKopterMove();
+	}	
 	this->frameAnimate();
 
 	// ¸öÅë ·ºÆ®
@@ -62,34 +65,37 @@ void boss::update(void)
 void boss::render(void)
 {
 	if (CAMERAMANAGER->CameraIn(_terrorKopter.rcBody))
-	{
+	{		
 		// Å×·¯ÄßÅÍ º»Ã¼
 		_terrorKopter.img.bodyImage[_bodyStatus]->frameRender(getMemDC(), _terrorKopter.x - CAMERAMANAGER->getCamera().left, _terrorKopter.y - CAMERAMANAGER->getCamera().top,
 			_terrorKopter.img.bodyImage[_bodyStatus]->getFrameX(), _terrorKopter.img.bodyImage[_bodyStatus]->getFrameY());
-
-		// ÇÁ·ÎÆç·¯
-		if (_bodyStatus != B_TURN)
+		
+		if (_terrorKopter.isAlive)
 		{
-			_terrorKopter.img.propellerImage->frameRender(getMemDC(), _terrorKopter.x + 50 - CAMERAMANAGER->getCamera().left, _terrorKopter.y + 20 - CAMERAMANAGER->getCamera().top,
-				_terrorKopter.img.propellerImage->getFrameX(), _terrorKopter.img.propellerImage->getFrameY());
-		}
-
-		// ±â°üÃÑ
-		_terrorKopter.img.gunImage[_gunStatus]->frameRender(getMemDC(), _terrorKopter.x + 100 - CAMERAMANAGER->getCamera().left, _terrorKopter.y + 205 - CAMERAMANAGER->getCamera().top,
-			_terrorKopter.img.gunImage[_gunStatus]->getFrameX(), _terrorKopter.img.gunImage[_gunStatus]->getFrameY());
-
-		// ÃÑ¾Ë È¿°ú
-		if (_gunStatus == BB_FIRE)
-		{
-			if (_terrorKopter.isLeft)
+			// ÇÁ·ÎÆç·¯
+			if (_bodyStatus != B_TURN)
 			{
-				_terrorKopter.img.bulletFireImage->frameRender(getMemDC(), _terrorKopter.rcGun.left - 30 - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.bottom - 30 - CAMERAMANAGER->getCamera().top,
-					_terrorKopter.img.bulletFireImage->getFrameX(), _terrorKopter.img.bulletFireImage->getFrameY());
+				_terrorKopter.img.propellerImage->frameRender(getMemDC(), _terrorKopter.x + 50 - CAMERAMANAGER->getCamera().left, _terrorKopter.y + 20 - CAMERAMANAGER->getCamera().top,
+					_terrorKopter.img.propellerImage->getFrameX(), _terrorKopter.img.propellerImage->getFrameY());
 			}
-			else
-				_terrorKopter.img.bulletFireImage->frameRender(getMemDC(), _terrorKopter.rcGun.right - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.bottom - 30 - CAMERAMANAGER->getCamera().top,
-					_terrorKopter.img.bulletFireImage->getFrameX(), _terrorKopter.img.bulletFireImage->getFrameY());
-		}
+
+			// ±â°üÃÑ
+			_terrorKopter.img.gunImage[_gunStatus]->frameRender(getMemDC(), _terrorKopter.x + 100 - CAMERAMANAGER->getCamera().left, _terrorKopter.y + 205 - CAMERAMANAGER->getCamera().top,
+				_terrorKopter.img.gunImage[_gunStatus]->getFrameX(), _terrorKopter.img.gunImage[_gunStatus]->getFrameY());
+
+			// ÃÑ¾Ë È¿°ú
+			if (_gunStatus == BB_FIRE)
+			{
+				if (_terrorKopter.isLeft)
+				{
+					_terrorKopter.img.bulletFireImage->frameRender(getMemDC(), _terrorKopter.rcGun.left - 30 - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.bottom - 30 - CAMERAMANAGER->getCamera().top,
+						_terrorKopter.img.bulletFireImage->getFrameX(), _terrorKopter.img.bulletFireImage->getFrameY());
+				}
+				else
+					_terrorKopter.img.bulletFireImage->frameRender(getMemDC(), _terrorKopter.rcGun.right - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.bottom - 30 - CAMERAMANAGER->getCamera().top,
+						_terrorKopter.img.bulletFireImage->getFrameX(), _terrorKopter.img.bulletFireImage->getFrameY());
+			}
+		}		
 
 		// ·ºÆ® È®ÀÎ
 		if (KEYMANAGER->isToggleKey(VK_F10))
@@ -102,6 +108,11 @@ void boss::render(void)
 	}	
 }
 
+//===================================================================================================//===================================================================================================
+//===================================================================================================//===================================================================================================
+//===================================================================================================//===================================================================================================
+
+// »óÅÂ¸¶´Ù ´Ù¸¥ ¿òÁ÷ÀÓ
 void boss::terrorKopterMove()
 {
 	switch (_status)
@@ -119,8 +130,7 @@ void boss::terrorKopterMove()
 			this->idleMovement();
 			
 			break;
-		}
-		
+		}		
 		case LEFT_MOVE:
 		{
 			_terrorKopter.isLeft = true;
@@ -161,6 +171,18 @@ void boss::terrorKopterMove()
 			_terrorKopter.isLeft = false;			
 			this->rocketFire();
 
+			break;
+		}
+		case LEFT_DEAD:
+		{
+			_terrorKopter.isLeft = true;
+			this->bossDie();
+			break;
+		}
+		case RIGHT_DEAD:
+		{
+			_terrorKopter.isLeft = false;
+			this->bossDie();
 			break;
 		}
 		
@@ -241,12 +263,39 @@ void boss::frameAnimate()
 
 void boss::verticalMove(float x, float y, float angle)
 {
-	_terrorKopter.y += -sinf(getAngle(x, y, _terrorKopter.x, _terrorKopter.y))* _terrorKopter.speed;
+	if (_terrorKopter.y < y-100)
+	{
+		_terrorKopter.y += _terrorKopter.speed;
+	}
+	else if (_terrorKopter.y > y+100)
+	{
+		_terrorKopter.y -= _terrorKopter.speed;
+	}
+	else
+	{
+		_terrorKopter.y += sinf(getAngle(_terrorKopter.x, _terrorKopter.y, x, y))* _terrorKopter.speed;
+	}
 }
 
 void boss::bombAttack(float x, float y, float angle)
 {	
-	_terrorKopter.x += cosf(getAngle(x, y - 500, _terrorKopter.x, _terrorKopter.y))* _terrorKopter.speed * 1.5f;
+	_terrorKopter.x += cosf(getAngle(_terrorKopter.x, _terrorKopter.y, x, y))* _terrorKopter.speed * 1.5f;
+}
+
+void boss::bossDie()
+{
+	_terrorKopter.isAlive = false;
+	_bodyStatus = B_DEATH;
+}
+
+bool boss::radarIn(float x, float y, float distance)
+{
+	if (distance < getDistance(_terrorKopter.x, _terrorKopter.y, x, y))
+	{
+		return false;
+	}
+	else 
+		return true;
 }
 
 void boss::move()
