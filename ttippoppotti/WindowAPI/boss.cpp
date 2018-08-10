@@ -18,9 +18,11 @@ HRESULT boss::init(float x, float y)
 	_terrorKopter.img.bulletFireImage = IMAGEMANAGER->findImage("테러콥터 총알 효과");
 
 	_terrorKopter.angle = 0.f;
-	_terrorKopter.speed = 5.f;
+	_terrorKopter.speed = 3.f;
 	_terrorKopter.x = x;
 	_terrorKopter.y = y;
+	_terrorKopter.isAttack = false;
+	_terrorKopter.isTurning = false;
 
 	_terrorKopter.img.bodyIndex = _terrorKopter.img.gunIndex = _terrorKopter.img.propellerIndex = _terrorKopter.img.rotorIndex = 0;
 	_terrorKopter.img.frameCount = 1;
@@ -35,7 +37,7 @@ HRESULT boss::init(float x, float y)
 	_bulletEffectIndex = 0;
 	_bulletEffectCount = 0;
 	_bulletEffectSpeed = 3;
-	
+		
 	return S_OK;
 }
 
@@ -45,8 +47,8 @@ void boss::release(void)
 }
 
 void boss::update(void)
-{	
-	this->controlAI();
+{		
+	
 	this->terrorKopterMove();
 	this->frameAnimate();
 
@@ -97,8 +99,7 @@ void boss::render(void)
 			RectangleMake(getMemDC(), _terrorKopter.rcGun.left - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.top - CAMERAMANAGER->getCamera().top,
 				_terrorKopter.img.gunImage[_gunStatus]->getFrameWidth(), _terrorKopter.img.gunImage[_gunStatus]->getFrameHeight());
 		}
-	}
-	
+	}	
 }
 
 void boss::terrorKopterMove()
@@ -107,93 +108,57 @@ void boss::terrorKopterMove()
 	{
 		case LEFT_IDLE:
 		{
-			_terrorKopter.isLeft = true;
-			_bodyStatus = B_IDLE;
-			_gunStatus = BB_READY;
+			_terrorKopter.isLeft = true;			
 			this->idleMovement();
 			
 			break;		
 		}
 		case RIGHT_IDLE:
 		{
-			_terrorKopter.isLeft = false;
-			_bodyStatus = B_IDLE;
-			_gunStatus = BB_READY;
+			_terrorKopter.isLeft = false;			
 			this->idleMovement();
 			
 			break;
 		}
-		case LEFT_TO_RIGHT:
-		{
-			_terrorKopter.isLeft = false;
-			_bodyStatus = B_TURN;
-			_gunStatus = BB_ROTATE;
-			this->leftToRight();
-			
-			this->startMove(_terrorKopter.x, _terrorKopter.y);
-			break;
-		}
-		case RIGHT_TO_LEFT:
-		{
-			_terrorKopter.isLeft = true;
-			_bodyStatus = B_TURN;
-			_gunStatus = BB_ROTATE;
-			this->rightToLeft();
-
-			this->startMove(_terrorKopter.x, _terrorKopter.y);
-			break;
-		}
+		
 		case LEFT_MOVE:
 		{
 			_terrorKopter.isLeft = true;
-			_bodyStatus = B_IDLE;
-			_gunStatus = BB_READY;
-
-			
 			this->move();
+
 			break;
 		}
 		case RIGHT_MOVE:
 		{
 			_terrorKopter.isLeft = false;
-			_bodyStatus = B_IDLE;
-			_gunStatus = BB_READY;
-
 			this->move();
+
 			break;
 		}
 		case LEFT_FIRE_BULLET:
 		{
-			_terrorKopter.isLeft = true;
-			_bodyStatus = B_IDLE;
-			_gunStatus = BB_FIRE;
-			this->fireBullet();
+			_terrorKopter.isLeft = true;			
+			this->fireBullet();			
 
 			break;
 		}
 		case RIGHT_FIRE_BULLET:
 		{
-			_terrorKopter.isLeft = false;
-			_bodyStatus = B_IDLE;
-			_gunStatus = BB_FIRE;
+			_terrorKopter.isLeft = false;			
 			this->fireBullet();
 
 			break;
 		}
 		case LEFT_FIRE_ROCKET:
 		{
-			_terrorKopter.isLeft = true;
-			_bodyStatus = B_IDLE;
-			_gunStatus = BB_READY;
+			_terrorKopter.isLeft = true;			
 			this->rocketFire();
 
 			break;
 		}
 		case RIGHT_FIRE_ROCKET:
 		{
-			_terrorKopter.isLeft = false;
-			_bodyStatus = B_IDLE;
-			_gunStatus = BB_READY;
+			_terrorKopter.isLeft = false;			
 			this->rocketFire();
 
 			break;
@@ -208,6 +173,9 @@ void boss::terrorKopterMove()
 
 void boss::idleMovement()
 {	
+	_bodyStatus = B_IDLE;
+	_gunStatus = BB_READY;
+
 	if (_terrorKopter.angle >= 2 * PI) _terrorKopter.angle = 0.f;	 
 	_terrorKopter.angle += 0.05f;
 	_terrorKopter.y += -sinf(_terrorKopter.angle) * _terrorKopter.speed;		
@@ -215,22 +183,39 @@ void boss::idleMovement()
 
 void boss::leftToRight()
 {
-
+	_bodyStatus = B_TURN;
+	_gunStatus = BB_ROTATE;
+	if (_terrorKopter.img.bodyIndex >= _terrorKopter.img.bodyImage[_bodyStatus]->getMaxFrameX()) _terrorKopter.img.bodyIndex = _terrorKopter.img.bodyImage[_bodyStatus]->getMaxFrameX();
+	if (_terrorKopter.img.gunIndex >= _terrorKopter.img.gunImage[_gunStatus]->getMaxFrameX()) _terrorKopter.img.gunIndex = _terrorKopter.img.gunImage[_gunStatus]->getMaxFrameX();
+	if (_terrorKopter.img.gunIndex == _terrorKopter.img.gunImage[_gunStatus]->getMaxFrameX() &&
+		_terrorKopter.img.bodyIndex == _terrorKopter.img.bodyImage[_bodyStatus]->getMaxFrameX())
+	{		
+		_status = RIGHT_IDLE;
+	}
 }
 
 void boss::rightToLeft()
 {
-
+	_bodyStatus = B_TURN;
+	_gunStatus = BB_ROTATE;
+	if (_terrorKopter.img.bodyIndex <= 0) _terrorKopter.img.bodyIndex = 0;
+	if (_terrorKopter.img.gunIndex <= 0) _terrorKopter.img.gunIndex = 0;
+	if (_terrorKopter.img.bodyIndex == 0 && _terrorKopter.img.gunIndex == 0)
+	{		
+		_status = LEFT_IDLE;
+	}
 }
 
 void boss::fireBullet()
 {
-
+	_bodyStatus = B_IDLE;
+	_gunStatus = BB_FIRE;	
 }
 
 void boss::rocketFire()
 {
-
+	_bodyStatus = B_IDLE;
+	_gunStatus = BB_READY;
 }
 
 void boss::frameAnimate()
@@ -243,16 +228,7 @@ void boss::frameAnimate()
 	// 본체가 턴할때,
 	else if (_status == B_TURN)
 	{
-		if (_terrorKopter.isLeft)
-		{
-			if (_terrorKopter.img.bodyIndex <= 0) _terrorKopter.img.bodyIndex = 0;			
-			FRAMEMANAGER->frameChange(_terrorKopter.img.bodyImage[_bodyStatus], _terrorKopter.img.frameCount, _terrorKopter.img.bodyIndex, _terrorKopter.img.frameSpeed, _terrorKopter.isLeft);
-		}
-		else
-		{
-			if (_terrorKopter.img.bodyIndex >= 8) _terrorKopter.img.bodyIndex = 8;
-			FRAMEMANAGER->frameChange(_terrorKopter.img.bodyImage[_bodyStatus], _terrorKopter.img.frameCount, _terrorKopter.img.bodyIndex, _terrorKopter.img.frameSpeed, _terrorKopter.isLeft);
-		}
+		FRAMEMANAGER->frameChange(_terrorKopter.img.bodyImage[B_TURN], _terrorKopter.img.frameCount, _terrorKopter.img.bodyIndex, _terrorKopter.img.frameSpeed, _terrorKopter.isLeft);		
 	}
 	// 프로펠러
 	FRAMEMANAGER->frameChange(_terrorKopter.img.propellerImage, _terrorKopter.img.frameCount, _terrorKopter.img.propellerIndex, _terrorKopter.img.frameSpeed, _terrorKopter.isLeft);
@@ -263,100 +239,36 @@ void boss::frameAnimate()
 	
 }
 
-void boss::controlAI()
+void boss::verticalMove(float x, float y, float angle)
 {
-	++_count;
-	if (_count == 150)
-	{
-		_stateNum = RND->getFromIntTo(0,9);
-	}
-	if (_count > 150) _count = 0;
+	_terrorKopter.y += -sinf(getAngle(x, y, _terrorKopter.x, _terrorKopter.y))* _terrorKopter.speed;
+}
 
-	switch (_stateNum)
-	{
-	case 0:
-	{
-		_status = LEFT_IDLE;
-		break;
-	}
-	case 1:
-	{
-		_status = RIGHT_IDLE;
-		break;
-	}
-	case 2:
-	{
-		_status = LEFT_TO_RIGHT;
-		break;
-	}
-	case 3:
-	{
-		_status = RIGHT_TO_LEFT;
-		break;
-	}
-	case 4:
-	{
-		_status = LEFT_FIRE_BULLET;
-		break;
-	}
-	case 5:
-	{
-		_status = RIGHT_FIRE_BULLET;
-		break;
-	}
-	case 6:
-	{
-		_status = LEFT_FIRE_ROCKET;
-		break;
-	}
-	case 7:
-	{
-		_status = RIGHT_FIRE_ROCKET;
-		break;
-	}	
-	case 8:
-	{
-		_status = LEFT_MOVE;
-		break;
-	}
-	case 9:
-	{
-		_status = RIGHT_MOVE;
-		break;
-	}
-
-	default:
-		break;
-	}
+void boss::bombAttack(float x, float y, float angle)
+{	
+	_terrorKopter.x += cosf(getAngle(x, y - 500, _terrorKopter.x, _terrorKopter.y))* _terrorKopter.speed * 1.5f;
 }
 
 void boss::move()
-{
-	if (_terrorKopter.isMove)
-	{
-		if (_status == LEFT_MOVE)
-		{
-			_terrorKopter.angle = PI;
-		}
-		else if (_status == RIGHT_MOVE)
-		{
-			_terrorKopter.angle = 0.f;
-		}
-		_terrorKopter.x += cosf(_terrorKopter.angle) * _terrorKopter.speed;
+{		
+	_bodyStatus = B_IDLE;
+	_gunStatus = BB_READY;
 
-		float distance = getDistance(_terrorKopter.startX, _terrorKopter.startY, _terrorKopter.x, _terrorKopter.y);
-		if (distance > 200.f)
-		{
-			_terrorKopter.isMove = false;
-		}
+	if (_status == LEFT_MOVE)
+	{
+		_terrorKopter.angle = PI;
+	}
+	else if (_status == RIGHT_MOVE)
+	{
+		_terrorKopter.angle = 0.f;
+	}
+	_terrorKopter.x += cosf(_terrorKopter.angle) * _terrorKopter.speed;
+
+	float distance = getDistance(_terrorKopter.startX, _terrorKopter.startY, _terrorKopter.x, _terrorKopter.y);
+	if (distance > 200.f)
+	{
+		_terrorKopter.isMove = false;
 	}
 }
 
-void boss::startMove(float x, float y)
-{
-	if (_terrorKopter.isMove) return;
 
-	_terrorKopter.startX = x;
-	_terrorKopter.startY = y;
-
-}
