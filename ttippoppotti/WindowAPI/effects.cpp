@@ -163,7 +163,7 @@ void effects::activateLoopAnim(float x, float y)
 	}
 }
 
-void effects::activateBulletPuff(float x, float y)
+void effects::activateEllipsePuff(float x, float y)
 {
 	_isRunning = true;
 	_isStaticAnim = true;
@@ -171,13 +171,14 @@ void effects::activateBulletPuff(float x, float y)
 	{
 		_vParticle[i].fire = true;
 		_index = _count = 0;
+		_animationSpeed = 0;
 		_vParticle[i].x = x;
 		_vParticle[i].y = y;
 		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 	}
 }
 
-void effects::activateKnifePuff(float x, float y, bool isLeft)
+void effects::activateEllipsePuff(float x, float y, bool isLeft)
 {
 	_isRunning = true;
 	_isStaticAnim = true;
@@ -257,20 +258,20 @@ void effects::boomBigBang()
 					_alpha = 255;
 					if (_vParticle[i].count > 10)
 					{
-						_vParticle[i].particleImg = IMAGEMANAGER->findImage("smoke1");
-						if (!_isFrameImg)
-						{
-							_index = 0;
-							_isFrameImg = true;
-						}
-						else
-						{
-							if (_index >= _vParticle[i].particleImg->getMaxFrameX())
-							{
-								_vParticle[i].fire = false;
-								_explosionCount++;
-							}
-						}
+						//_vParticle[i].particleImg = IMAGEMANAGER->findImage("smoke1");
+						//if (!_isFrameImg)
+						//{
+						//	_index = 0;
+						//	_isFrameImg = true;
+						//}
+						//else
+						//{
+						//	if (_index >= _vParticle[i].particleImg->getMaxFrameX())
+						//	{
+						//		_vParticle[i].fire = false;
+						//		_explosionCount++;
+						//	}
+						//}
 					}
 				}
 				else
@@ -450,6 +451,7 @@ void effects::boomAshes()
 			if (_vParticle[i].count >= 100)
 			{
 				_vParticle[i].fire = false;
+				_isRunning = false;
 				_vParticle[i].count = 0;
 			}
 			else
