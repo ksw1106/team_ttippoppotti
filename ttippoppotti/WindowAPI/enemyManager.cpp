@@ -54,6 +54,10 @@ void enemyManager::release(void)
 
 void enemyManager::update(void)
 {
+	// 보스 총알, 로켓 발사
+	this->bossBulletFire();
+	this->bossRocketFire();
+	
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{		
 		_vSoldier[i]->update();		
@@ -80,9 +84,6 @@ void enemyManager::update(void)
 		}
 	}
 
-	// 보스 총알, 로켓 발사
-	this->bossBulletFire();
-	this->bossRocketFire();
 		
 	// 에너미 픽셀(지형) 충돌
 	this->collideWithPixel();
@@ -115,6 +116,8 @@ void enemyManager::update(void)
 	_bossBullet->update();
 	_bossRocket->update();
 	_brovil->update();
+
+	
 }
 
 void enemyManager::render(void)
@@ -155,16 +158,17 @@ void enemyManager::setBrovil(int x, int y)
 }
 
 bool enemyManager::isEffect(int frame)
-{
-	_effectCount++;
-	if (_effectCount >= frame)
+{	
+	if (!_isEffect)
 	{
-		_effectCount = 0;
-		return false;
+		_isEffect = true;
+		return true;
 	}
 	else
-		return true;
-	
+	{
+		_isEffect = false;
+		return false;
+	}
 }
 
 void enemyManager::enemyFire(int num)
@@ -247,7 +251,8 @@ void enemyManager::collideWithPixel()
 		// 윗 천장과 충돌
 		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_TOP))
 		{
-			_vSoldier[i]->setEnemyAngle(2 * PI - _vSoldier[i]->getEnemyAngle());				
+			_vSoldier[i]->setEnemyAngle(2 * PI - _vSoldier[i]->getEnemyAngle());	
+			
 		}
 		else
 		{
@@ -257,12 +262,11 @@ void enemyManager::collideWithPixel()
 		// 적 왼쪽 벽과 충돌
 		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_LEFT))
 		{
-			_vSoldier[i]->setEnemyAngle(PI - _vSoldier[i]->getEnemyAngle());					
-			//if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK || _vSoldier[i]->getBodyStatus() == ENEMY_FLY_AWAY)
-			//{
-			//	//if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
-			//	//else _vSoldier[i]->setDirection(true);
-			//}			
+			_vSoldier[i]->setEnemyAngle(PI - _vSoldier[i]->getEnemyAngle());
+			if (_vSoldier[i]->getIsAlive())
+			{
+				_vSoldier[i]->setDirection(0);		
+			}
 		}	
 		else
 		{
@@ -272,12 +276,11 @@ void enemyManager::collideWithPixel()
 		// 적 오른쪽 벽과 충돌
 		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_RIGHT))
 		{
-			_vSoldier[i]->setEnemyAngle(PI - _vSoldier[i]->getEnemyAngle());					
-			//if (_vSoldier[i]->getBodyStatus() == ENEMY_KNOCK_BACK && _vSoldier[i]->getBodyStatus() == ENEMY_FLY_AWAY)
-			//{
-			//	//if (_vSoldier[i]->getDirection()) _vSoldier[i]->setDirection(false);
-			//	//else _vSoldier[i]->setDirection(true);
-			//}			
+			_vSoldier[i]->setEnemyAngle(PI - _vSoldier[i]->getEnemyAngle());		
+			if (_vSoldier[i]->getIsAlive())
+			{
+				_vSoldier[i]->setDirection(1);			
+			}
 		}	
 		else
 		{
@@ -344,15 +347,12 @@ void enemyManager::collideWithSight()
 		float x = _vSoldier[i]->getRcEnemySight().left;
 		float y = _vSoldier[i]->getRcEnemySight().top;
 
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemySight(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_LEFT)) continue;
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemySight(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_RIGHT)) continue;
-			
 		if (IntersectRect(&rc, &_vSoldier[i]->getRcEnemySight(), &rcPlayer))
 		{
 			if (!_vSoldier[i]->getIsAlive()) continue;
 			// 말풍선 띄우기
 			_vSoldier[i]->setIsUncovered(true);
-		}
+		}				
 	}
 }
 
@@ -418,11 +418,7 @@ void enemyManager::collideWithPBullet()
 			{	
 				if (_vSoldier[i]->getIsApart()) continue;
 
-				if (_vSoldier[i]->getDirection() != _playerManager->getPBullet()->getVPlayerBullet()[j].isLeft)
-				{
-					_vSoldier[i]->setDirection(_playerManager->getPBullet()->getVPlayerBullet()[j].isLeft);
-				}
-			
+				_vSoldier[i]->setDirection(_playerManager->getPBullet()->getVPlayerBullet()[j].isLeft);
 				_vSoldier[i]->setIsUncovered(false);
 				_vSoldier[i]->setIsStrange(false);
 				_vSoldier[i]->setHP(_vSoldier[i]->getHP() - 1);
@@ -443,12 +439,12 @@ void enemyManager::collideWithPBullet()
 				}
 
 				// 피터지는 효과
-				//if (this->isEffect(2))
-				//{
-				//	EFFECTMANAGER->bloodSplash(_vSoldier[i]->getX() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameWidth() / 2,
-				//		_vSoldier[i]->getY() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameHeight() / 2,
-				//		_vSoldier[i]->getDirection());
-				//}
+				if (_isEffect)
+				{
+					EFFECTMANAGER->bloodSplash(_vSoldier[i]->getX() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameWidth() / 2,
+						_vSoldier[i]->getY() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameHeight() / 2,
+						_vSoldier[i]->getDirection());
+				}
 
 				// 죽은 적 벡터에 담기
 				this->saveEnemy(SOLDIER, BULLET, _vSoldier[i]->getDirection());

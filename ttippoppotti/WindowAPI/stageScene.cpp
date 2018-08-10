@@ -34,7 +34,7 @@ HRESULT stageScene::init(void)
 	_enemyManager->setMapData(_mapData);
 	OBJECTMANAGER->setMapData(_mapData);
 	OBJECTMANAGER->setPlayerManager(_playerManager);
-	OBJECTMANAGER->init();				//오브젝트매니져 초기화
+	OBJECTMANAGER->init(1);				//오브젝트매니져 초기화
 	_playerManager->setEnemyManager(_enemyManager);
 	_enemyManager->setPlayerManager(_playerManager);
 
