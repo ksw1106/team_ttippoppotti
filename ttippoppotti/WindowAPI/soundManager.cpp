@@ -133,7 +133,7 @@ void soundManager::pause(string keyName)
 	}
 }
 
-void soundManager::resume(string keyName)
+void soundManager::resume(string keyName, float volume)
 {
 	int count = 0;
 	arrSoundIter iter = _mTotalSound.begin();
@@ -143,7 +143,22 @@ void soundManager::resume(string keyName)
 		{
 			//사운드 다시재생
 			_channel[count]->setPaused(false);
+
 			break;
+		}
+	}
+}
+
+void soundManager::volumeSetting(string keyName, float volume)
+{
+	int count = 0;
+	arrSoundIter iter = _mTotalSound.begin();
+	for (iter; iter != _mTotalSound.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			//볼륨세팅
+			_channel[count]->setVolume(volume);
 		}
 	}
 }

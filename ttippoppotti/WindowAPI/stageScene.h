@@ -25,28 +25,7 @@ private:
 
 	RECT _rcCamera;
 	world _backGround[7];
-	image* _helicopter;
-	image* _saveFlag;
-	//image* _humanDead;
-	image* _flag;
-	float _flagX, _flagY;
-	float _x, _y;
 
-	int _flagCount;
-	int _flagIndex;
-	int _flagSpeed;
-
-	int _fcount;
-	int _findex;
-	int _fspeed;
-	int _hcount;
-	int _hindex;
-	int _hspeed;
-	int _count;
-	int _index;
-	int _speed;
-	bool _isLeft;
-	bool _isDown;
 	bool _camDebug;
 
 	const char* soundName[4];
