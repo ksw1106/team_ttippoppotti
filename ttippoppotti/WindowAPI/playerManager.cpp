@@ -541,7 +541,7 @@ void playerManager::update(void)
 	맵 deleteMap(i) 인가 써주고
 	*/
 
-
+	// rambro bullet 
 	for (int i = 0; i < _pBullet->getVPlayerBullet().size(); i++)  // 총알이랑 벽이랑 충돌하면 벽 지워주기
 	{
 		if (!_pBullet->getVPlayerBullet()[i].isActived)continue;
@@ -619,6 +619,94 @@ void playerManager::update(void)
 					if (_pBullet->getVPlayerBullet()[i].isActived == false)
 					{
 						EFFECTMANAGER->bulletPuff(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y);
+					}
+					break;
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	// chuck bullet 
+	for (int i = 0; i < _gBullet->getVPlayergBullet().size(); i++)  // 총알이랑 벽이랑 충돌하면 벽 지워주기
+	{
+		if (!_gBullet->getVPlayergBullet()[i].isActived)continue;
+		switch (COLLISIONMANAGER->pixelCollision(_gBullet->getVPlayergBullet()[i].rc,				// 왼쪽 벽에 충돌하면 벽 지워주기
+			_gBullet->getVPlayergBullet()[i].x, _gBullet->getVPlayergBullet()[i].y,
+			_gBullet->getVPlayergBullet()[i].speed, _gBullet->getVPlayergBullet()[i].gravity, PLAYER_LEFT))
+		{
+		case GREEN:
+			for (int j = 0; j < _mapData->getObject().size(); j++)
+			{
+				if (!_mapData->getObject()[j]._isActived)continue;
+				if (IntersectRect(&temp, &_mapData->getObject()[j]._rc, &_gBullet->getVPlayergBullet()[i].rc))
+				{
+					_gBullet->getVPlayergBullet()[i].isActived = false;
+					_mapData->deleteMap(j);
+					if (_gBullet->getVPlayergBullet()[i].isActived == false)
+					{
+						EFFECTMANAGER->bulletPuff(_gBullet->getVPlayergBullet()[i].x, _gBullet->getVPlayergBullet()[i].y);
+					}
+					break;
+				}
+			}
+			break;
+		case RED:
+			break;
+		case BLUE:
+			for (int j = 0; j < _mapData->getObject().size(); j++)
+			{
+				if (!_mapData->getObject()[j]._isActived)continue;
+				if (IntersectRect(&temp, &_mapData->getObject()[j]._rc, &_gBullet->getVPlayergBullet()[i].rc))
+				{
+					_gBullet->getVPlayergBullet()[i].isActived = false;
+					_mapData->deleteMap(j);
+					if (_gBullet->getVPlayergBullet()[i].isActived == false)
+					{
+						EFFECTMANAGER->bulletPuff(_gBullet->getVPlayergBullet()[i].x, _gBullet->getVPlayergBullet()[i].y);
+					}
+					break;
+				}
+			}
+			break;
+		default:
+			break;
+		}
+		switch (COLLISIONMANAGER->pixelCollision(_gBullet->getVPlayergBullet()[i].rc,				// 오른쪽 벽에 충돌하면 벽 지워주기
+			_gBullet->getVPlayergBullet()[i].x, _gBullet->getVPlayergBullet()[i].y,
+			_gBullet->getVPlayergBullet()[i].speed, _gBullet->getVPlayergBullet()[i].gravity, PLAYER_RIGHT))
+		{
+		case GREEN:
+			for (int j = 0; j < _mapData->getObject().size(); j++)
+			{
+				if (!_mapData->getObject()[j]._isActived) continue;
+				if (IntersectRect(&temp, &_gBullet->getVPlayergBullet()[i].rc, &_mapData->getObject()[j]._rc))
+				{
+					_gBullet->getVPlayergBullet()[i].isActived = false;
+					_mapData->deleteMap(j);
+					if (_gBullet->getVPlayergBullet()[i].isActived == false)
+					{
+						EFFECTMANAGER->bulletPuff(_gBullet->getVPlayergBullet()[i].x, _gBullet->getVPlayergBullet()[i].y);
+					}
+					break;
+				}
+			}
+			break;
+		case RED:
+			break;
+		case BLUE:
+			for (int j = 0; j < _mapData->getObject().size(); j++)
+			{
+				if (!_mapData->getObject()[j]._isActived)continue;
+				if (IntersectRect(&temp, &_mapData->getObject()[j]._rc, &_gBullet->getVPlayergBullet()[i].rc))
+				{
+					_gBullet->getVPlayergBullet()[i].isActived = false;
+					_mapData->deleteMap(j);
+					if (_gBullet->getVPlayergBullet()[i].isActived == false)
+					{
+						EFFECTMANAGER->bulletPuff(_gBullet->getVPlayergBullet()[i].x, _gBullet->getVPlayergBullet()[i].y);
 					}
 					break;
 				}

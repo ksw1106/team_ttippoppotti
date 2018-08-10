@@ -544,21 +544,22 @@ void bossRocket::fire(int x, int y, int fireSpeed, bool isLeft)
 	{
 		if (_bossRocket[i].fire) continue;
 
-		_bossRocket[i].fire = true;
-		_bossRocket[i].x = _bossRocket[i].fireX = x;
-		_bossRocket[i].y = _bossRocket[i].fireY = y;
-		_bossRocket[i].gravity = 0.f;
 		_bossRocket[i].isLeft = isLeft;
-		_bossRocket[i].rc = RectMake(_bossRocket[i].x, _bossRocket[i].y, _bossRocket[i].bulletImage->getFrameWidth(), _bossRocket[i].bulletImage->getFrameHeight());
-
 		if (isLeft)
 		{
 			_bossRocket[i].angle = PI;
 		}
 		else
 		{
-			_bossRocket[i].angle = 0.f;			
+			_bossRocket[i].angle = 0.f;
 		}
+		_bossRocket[i].fire = true;
+		_bossRocket[i].x = _bossRocket[i].fireX = x;
+		_bossRocket[i].y = _bossRocket[i].fireY = y;
+		_bossRocket[i].gravity = 0.f;
+		_bossRocket[i].rc = RectMake(_bossRocket[i].x, _bossRocket[i].y, _bossRocket[i].bulletImage->getFrameWidth(), _bossRocket[i].bulletImage->getFrameHeight());
+
+		
 
 		break;
 	}
@@ -749,6 +750,7 @@ void pGrenade::render(void)
 				_vBullet[i].grenadeImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
 					_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
 					_vBullet[i].grenadeImage->getFrameX(), _vBullet[i].grenadeImage->getFrameY());
+				EFFECTMANAGER->grenadePuff(_vBullet[i].bulletImage->getFrameX() - CAMERAMANAGER->getCamera().left, _vBullet[i].bulletImage->getFrameY() -CAMERAMANAGER->getCamera().top);
 			}
 		}
 	}
@@ -822,7 +824,6 @@ HRESULT gBullet::init(float range)
 		ZeroMemory(&gBullet, sizeof(tagBullet));
 		gBullet.bulletImage = new image;
 		gBullet.bulletImage->init("player_chuck/chuck_bullet.bmp", 20, 16, 1, 1, true, RGB(255, 0, 255));
-
 		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
 		_vBullet.push_back(gBullet);
 	}
@@ -868,11 +869,11 @@ void gBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 			_vBullet[i].bulletImage->getFrameHeight());
 		if (_vBullet[i].isLeft)
 		{
-			_vBullet[i].angle = 168.f * i * (PI / 180) + 25;
+			_vBullet[i].angle = (RND->getFromFloatTo(190.f, 195.f) - 7 * i) * (PI / 180);
 		}
 		if (!_vBullet[i].isLeft)
 		{
-			_vBullet[i].angle = 10.f * i * (PI / 180) + 25;
+			_vBullet[i].angle = (RND->getFromFloatTo(-15.f, -10.f) + 7 * i) * (PI / 180);
 		}
 	}
 }

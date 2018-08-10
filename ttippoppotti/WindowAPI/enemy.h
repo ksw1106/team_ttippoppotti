@@ -89,6 +89,8 @@ private:
 	int _warnFrameIndex, _doubtFrameIndex;
 	int _warnFrameCount, _doubtFrameCount;
 	int _frameSpeed;
+	int _phase;
+	int _direction;
 
 public:
 	HRESULT initSoldier(float x, float y);	
@@ -151,6 +153,9 @@ public:
 	void setIsOn(bool isOn) { _isOn = isOn; }
 	void setIsApart(bool isApart) { _isApart = isApart; }
 	
+	// 좌우로 이동
+	void walk();
+	// 에이아이 변화
 	void controlAI();
 	// 에너미 움직임 변화
 	void changeStatus();

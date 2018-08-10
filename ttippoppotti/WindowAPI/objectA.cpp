@@ -24,7 +24,7 @@ void objectA::update()
 						break;
 					}
 				}
-				EFFECTMANAGER->explosionStart(_x, _y);
+				EFFECTMANAGER->explosion(_x, _y);
 				CAMERAMANAGER->CameraShake();
 			}
 		}

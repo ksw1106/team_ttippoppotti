@@ -313,7 +313,7 @@ void objectManager::update()
 									break;
 								}
 							}
-							EFFECTMANAGER->explosionStart(_vObject[i]->getRect().left, _vObject[i]->getRect().top);
+							EFFECTMANAGER->explosion(_vObject[i]->getRect().left, _vObject[i]->getRect().top);
 							CAMERAMANAGER->CameraShake();
 							_vObject[i]->setState(OBJECT_DESTROY);
 						}
