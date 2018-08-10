@@ -170,7 +170,7 @@ void effects::activateEllipsePuff(float x, float y)
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
-		_index = _count = 0;
+		_vParticle[i].index = _count = 0;
 		_animationSpeed = 0;
 		_vParticle[i].x = x;
 		_vParticle[i].y = y;
@@ -185,7 +185,7 @@ void effects::activateEllipsePuff(float x, float y, bool isLeft)
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
-		_index = _count = 0;
+		_vParticle[i].index = _count = 0;
 		if (isLeft)
 			_vParticle[i].x = x;
 		else //플레이어 오른
@@ -202,44 +202,45 @@ void effects::activateBigBang(float x, float y)
 	_isAlphaImg = true;
 
 	_vParticle.clear();
-	int particleMax = RND->getFromIntTo(4, 5);
+	int particleMax = RND->getFromIntTo(4, 6);
 
-	for (int i = 0; i < particleMax; i++)
+	tagParticle particle;
+	ZeroMemory(&particle, sizeof(tagParticle));
+	for (int i = 8; i > 0; i--)
 	{
-		tagParticle particle;
-		ZeroMemory(&particle, sizeof(tagParticle));
-		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame1");
-		_vParticle.push_back(particle);
-		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame2");
-		_vParticle.push_back(particle);
-		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame3");
-		_vParticle.push_back(particle);
-		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame4");
-		_vParticle.push_back(particle);
-		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame5");
-		_vParticle.push_back(particle);
-		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame6");
-		_vParticle.push_back(particle);
-		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame7");
-		_vParticle.push_back(particle);
-		particle.particleImg = IMAGEMANAGER->findImage("explosionFlame8");
-		_vParticle.push_back(particle);
+		for (int j = 0; j < particleMax; j++)
+		{
+			particle.particleImg = IMAGEMANAGER->findImage(("explosionFlame" + to_string(i)));
+			_vParticle.push_back(particle);
+			particle.particleImg = IMAGEMANAGER->findImage(("explosionFlame" + to_string(i)));
+			_vParticle.push_back(particle);
+		}
 	}
-	for (int i = 0; i < _vParticle.size(); i++)
+	float gravity = 0;
+	for (int i = 0; i < _vParticle.size(); i += particleMax)
 	{
-		_vParticle[i].fire = true;
-		_alpha = 0;
-		_vParticle[i].angle = PI / particleMax * ((i % particleMax) + 1);
-		_vParticle[i].gravity = 0.0f;
-		_vParticle[i].speed = 50.0f * ((i % particleMax) + 1);
-		_vParticle[i].fireX = x;// +cosf(_vParticle[i].angle) * (((i % particleMax) + 1) * 2);
-		_vParticle[i].fireY = y;// -sinf(_vParticle[i].angle) * (((i % particleMax) + 1) * 2);
-		_vParticle[i].x = _vParticle[i].fireX + cosf(_vParticle[i].angle) * _vParticle[i].speed;
-		_vParticle[i].y = _vParticle[i].fireY - sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
-		if (_isFrameImg)
-			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
-		else
-			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+		for (int j = 0; j < particleMax || i + j < _vParticle.size(); ++j)
+		{
+
+			_vParticle[i + j].fire = true;
+			_vParticle[i + j].alpha = 0;
+			_vParticle[i + j].count = 0;
+			_vParticle[i + j].angle = PI / particleMax * (((i + j) % particleMax) + 1);
+			//_vParticle[i + j].gravity = ((i+j) % particleMax) + 1;
+			_vParticle[i + j].speed = 4.5f * ((i + j) + 1) + RND->getFloat(2.0f);
+			_vParticle[i + j].fireX = x;
+			_vParticle[i + j].fireY = y;
+			_vParticle[i + j].x = _vParticle[i + j].fireX + cosf(_vParticle[i + j].angle) * _vParticle[i + j].speed;
+			if (i > 0)
+				_vParticle[i + j].y = _vParticle[i - 1].y - sinf(_vParticle[i + j].angle) * _vParticle[i + j].speed + gravity;
+			else
+				_vParticle[i + j].y = _vParticle[i + j].fireY - sinf(_vParticle[i + j].angle) * _vParticle[i + j].speed + gravity;
+			if (_isFrameImg)
+				_vParticle[i + j].rc = RectMakeCenter(_vParticle[i + j].x, _vParticle[i + j].y, _vParticle[i + j].particleImg->getFrameWidth(), _vParticle[i + j].particleImg->getFrameHeight());
+			else
+				_vParticle[i + j].rc = RectMakeCenter(_vParticle[i + j].x, _vParticle[i + j].y, _vParticle[i + j].particleImg->getWidth(), _vParticle[i + j].particleImg->getHeight());
+		}
+		gravity += 0.85;
 	}
 }
 
@@ -253,29 +254,31 @@ void effects::boomBigBang()
 			_vParticle[i].count++;
 			if (_vParticle[i].count % 2 == 0)
 			{
-				if (_alpha >= 255)
+				if (_vParticle[i].alpha >= 255)
 				{
-					_alpha = 255;
+					_vParticle[i].alpha = 255;
 					if (_vParticle[i].count > 10)
 					{
-						//_vParticle[i].particleImg = IMAGEMANAGER->findImage("smoke1");
-						//if (!_isFrameImg)
-						//{
-						//	_index = 0;
-						//	_isFrameImg = true;
-						//}
-						//else
-						//{
-						//	if (_index >= _vParticle[i].particleImg->getMaxFrameX())
-						//	{
-						//		_vParticle[i].fire = false;
-						//		_explosionCount++;
-						//	}
-						//}
+						_imageName = "smoke1";
+						//_imageName = ("smoke" + to_string(RND->getFromIntTo(1, 2)));
+						_vParticle[i].particleImg = IMAGEMANAGER->findImage(_imageName);
+						if (!_isFrameImg)
+						{
+							_vParticle[i].index = 0;
+							_isFrameImg = true;
+						}
+						else
+						{
+							if (_vParticle[i].index >= _vParticle[i].particleImg->getMaxFrameX())
+							{
+								_vParticle[i].fire = false;
+								_explosionCount++;
+							}
+						}
 					}
 				}
 				else
-					_alpha += 15;
+					_vParticle[i].alpha += 15;
 			}
 			if (_explosionCount >= _vParticle.size())
 			{
@@ -298,7 +301,7 @@ void effects::boomStaticAnim()
 	{
 		for (int i = 0; i < _particleMax; i++)
 		{
-			if (_index >= _vParticle[i].particleImg->getMaxFrameX())
+			if (_vParticle[i].index >= _vParticle[i].particleImg->getMaxFrameX())
 			{
 				_vParticle[i].fire = false;
 				_isRunning = false;
@@ -505,5 +508,6 @@ void effects::collisionProcess()
 void effects::frameChange()
 {
 	image* img = IMAGEMANAGER->findImage(_imageName);
-	FRAMEMANAGER->frameChange(img, _count, _index, _animationSpeed, false);
+	for (int i = 0; i < _vParticle.size(); ++i)
+		FRAMEMANAGER->frameChange(img, _count, _vParticle[i].index, _animationSpeed, false);
 }

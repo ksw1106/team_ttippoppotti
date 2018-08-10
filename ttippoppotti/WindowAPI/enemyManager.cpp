@@ -18,7 +18,7 @@ HRESULT enemyManager::init(void)
 	//this->setBrovil(3700, 1000, 5);
 		
 	_boss = new boss;
-	_boss->init(4000.f, 1000.f);
+	_boss->init(4000.f, 800.f);
 	
 	_eBullet = new eBullet;
 	_eBullet->init(1, 800.f);
@@ -110,6 +110,7 @@ void enemyManager::update(void)
 	// 보스 총알, 로켓과 플레이어 충돌
 	this->collideWithBossBullet();
 	this->collideWithBossRocket();
+	this->bossDirChange();
 	
 	_boss->update();
 	_eBullet->update();
@@ -403,6 +404,61 @@ void enemyManager::collideWithBossRocket()
 			// 총알 제거
 			_bossRocket->getBossRocket()[i].fire = false;
 		}
+	}
+}
+
+void enemyManager::bossDirChange()
+{
+	++_count;
+	if (_count > 200) 
+	{
+		_count = 0;
+		_choice = RND->getFromIntTo(0, 3);
+	}
+	switch (_choice)
+	{
+		if (_choice == 0) break;
+		case 0:
+		{
+			_boss->setStatus(LEFT_FIRE_BULLET);
+			break;
+		}
+		case 1:
+		{
+			_boss->setStatus(RIGHT_FIRE_BULLET);
+			break;
+		}
+		case 2:
+		{
+			_boss->setStatus(LEFT_FIRE_ROCKET);
+			break;
+		}
+		case 3:
+		{
+			_boss->setStatus(RIGHT_FIRE_ROCKET);
+			break;
+		}
+
+	default:
+		break;
+	}
+	// 플레이어가 보스보다 왼쪽이면 상태 바꿔줌
+	if (_playerManager->getPlayer()->getX() + 30 < _boss->getTerrorKopter().x + _boss->getTerrorKopter().img.bodyImage[_boss->getBodyStatus()]->getFrameWidth() / 2)
+	{
+		_boss->setStatus(LEFT_MOVE);			
+	}
+	else if (_playerManager->getPlayer()->getX() + 30 > _boss->getTerrorKopter().x + _boss->getTerrorKopter().img.bodyImage[_boss->getBodyStatus()]->getFrameWidth()/2)
+	{	
+		_boss->setStatus(RIGHT_MOVE);
+	}
+
+	if (_boss->getStatus() == LEFT_FIRE_BULLET || _boss->getStatus() == RIGHT_FIRE_BULLET)
+	{
+		_boss->verticalMove(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), _boss->getTerrorKopter().angle);
+	}
+	else if (_boss->getStatus() == LEFT_FIRE_ROCKET || _boss->getStatus() == RIGHT_FIRE_ROCKET)
+	{
+		_boss->bombAttack(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), _boss->getTerrorKopter().angle);
 	}
 }
 

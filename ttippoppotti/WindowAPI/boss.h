@@ -54,6 +54,8 @@ struct tagBoss
 	bool isMove;
 	bool isAlive;
 	bool isLeft;
+	bool isAttack;
+	bool isTurning;
 };
 
 class boss : public gameNode
@@ -81,8 +83,17 @@ public:
 	void render(void);
 
 	bossStatus getStatus() { return _status; }
+	void setStatus(bossStatus bossStatus) { _status = bossStatus; }
+
 	bossBodyStatus getBodyStatus() { return _bodyStatus; }
 	bossGunStatus getGunStatus() { return _gunStatus; }
+
+	bool getIsTurning() { return _terrorKopter.isTurning; }
+	void setIsTurning(bool isTurning) { _terrorKopter.isTurning = isTurning; }
+	bool getIsLeft() { return _terrorKopter.isLeft; }
+	void setIsLeft(bool isLeft) { _terrorKopter.isLeft = isLeft; }
+	bool getIsMoving() { return _terrorKopter.isMove;}
+	void setIsMoving(bool isMove) { _terrorKopter.isMove = isMove; }
 
 	// 보스 움직임 바뀜
 	void terrorKopterMove();
@@ -98,12 +109,13 @@ public:
 	void rocketFire();
 	// 프레임 체인지	
 	void frameAnimate();
-	// AI 조절
-	void controlAI();
+	
 	// 상하좌우로 움직임
+	void verticalMove(float x, float y, float angle);
+	void bombAttack(float x, float y, float angle);
+	
 	void move();
-	void startMove(float x, float y);
-
+	
 	boss() {}
 	~boss() {}
 };

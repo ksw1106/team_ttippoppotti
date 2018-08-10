@@ -45,6 +45,7 @@ private:
 
 	int _effectCount;
 	int _count;
+	int _choice;
 	bool _isClear;				// 스테이지 클리어했냐(브로빌 죽음)
 	bool _isEffect;
 
@@ -63,6 +64,7 @@ public:
 	// 죽은 에너미 정보 벡터에 담기
 	vector<deadEnemy> _vDeadEnemyInfo;
 	vector<deadEnemy> getVDeadEnemyInfo() {	return _vDeadEnemyInfo;	}
+	void addVDeadEnemyInfo(deadEnemy dEnemy) { _vDeadEnemyInfo.push_back(dEnemy); }
 		
 	HRESULT init(void);
 	void release(void);
@@ -93,8 +95,10 @@ public:
 	// 에너미 총알 vs 플레이어 충돌
 	void collideWithPlayer();
 	
+	// 보스
 	void collideWithBossBullet();
 	void collideWithBossRocket();
+	void bossDirChange();
 	
 	// 브로빌 vs 플레이어 총알 충돌
 	void collideBrovilwithPBullet();

@@ -74,7 +74,7 @@ public:
 	void boomExplosion();
 	//말풍선
 	void activateLoopAnim(float x, float y);
-	//총 발사시 이펙트
+	//동그라미 이펙트
 	void activateEllipsePuff(float x, float y);
 	void activateEllipsePuff(float x, float y, bool isLeft);
 	//대폭발 설정
