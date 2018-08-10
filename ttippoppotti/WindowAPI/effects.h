@@ -75,8 +75,8 @@ public:
 	//∏ª«≥º±
 	void activateLoopAnim(float x, float y);
 	//√— πﬂªÁΩ√ ¿Ã∆Â∆Æ
-	void activateBulletPuff(float x, float y);
-	void activateKnifePuff(float x, float y, bool isLeft);
+	void activateEllipsePuff(float x, float y);
+	void activateEllipsePuff(float x, float y, bool isLeft);
 	//¥Î∆¯πﬂ º≥¡§
 	void activateBigBang(float x, float y);
 	void boomBigBang();

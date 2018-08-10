@@ -18,6 +18,7 @@ private:
 	int _count;
 	float _x, _y;
 	bool _isExplosion;
+	bool _isGrenadePuff;
 public:
 	HRESULT init(void);
 	void release(void);
@@ -38,6 +39,10 @@ public:
 	void ashes(float x, float y);
 	//ÃÑ¾ËÀÌÆåÆ®
 	void bulletPuff(float x, float y);
+	//¼ö·ùÅº ÀÌÆåÆ®
+	void grenadePuff(float x, float y);
+	//¼ö·ùÅº ÀÌÆåÆ® ÃÊ±âÈ­
+	void grenadePuffStart(float x, float y);
 	//Ä® ÀÌÆåÆ®
 	void knifePuff(float x, float y, bool isLeft);
 	//ÆÄ¸®³¯¸²
@@ -58,8 +63,8 @@ public:
 	void playExplosion(string effectName, float x, float y);
 	void playBallExplosion(string effectName, float x, float y);
 	void playCartridge(string effectName, float x, float y, bool isLeft);
-	void playBulletPuff(string effectName, float x, float y);
-	void playKnifePuff(string effectName, float x, float y, bool isLeft);
+	void playEllipsePuff(string effectName, float x, float y);
+	void playEllipsePuff(string effectName, float x, float y, bool isLeft);
 	void playLoopAnim(string effectName, float x, float y);
 	void playFlyingFlies(string effectName, float x, float y);
 	void playAshes(string effectName, float x, float y);
