@@ -9,6 +9,8 @@ struct tagBullet
 {
 	image* bulletImage;
 	image* grenadeImage;
+	image* missileImageRight;
+	image* missileImageLeft;
 	RECT rc;
 	float x, y;
 	float fireX, fireY;
@@ -316,4 +318,62 @@ public:
 	vector<tagBullet>& getVPlayergBullet() { return _vBullet; }
 	gBullet() {}
 	~gBullet() {}
+};
+
+//=============================================================
+//	## gMissile ## (할아버지 미사일)
+//=============================================================
+class gMissile : public gameNode
+{
+private:
+	vector<tagBullet> _vBullet;
+
+private:
+	float _range;
+	int _gMissileMax;
+	int _count;
+
+public:
+
+	HRESULT init(float range);
+	void release(void);
+	void update(void);
+	void render(void);
+
+	void fire(int x, int y, int fireSpeed, bool isLeft);
+
+	void move();
+
+	vector<tagBullet>& getVPlayergMissile() { return _vBullet; }
+	gMissile() {}
+	~gMissile() {}
+};
+
+//=============================================================
+//	## xMissile ## (할아버지 미사일 X )
+//=============================================================
+class xMissile : public gameNode
+{
+private:
+	vector<tagBullet> _vBullet;
+
+private:
+	float _range;
+	int _xMissileMax;
+	int _count;
+
+public:
+
+	HRESULT init(float range);
+	void release(void);
+	void update(void);
+	void render(void);
+
+	void fire(int x, int y, int fireSpeed, bool isLeft);
+
+	void move();
+
+	vector<tagBullet>& getVPlayerxMissile() { return _vBullet; }
+	xMissile() {}
+	~xMissile() {}
 };

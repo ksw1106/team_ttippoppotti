@@ -721,6 +721,7 @@ HRESULT pGrenade::init(float range)
 		// 벡터에 총알담기
 		_vBullet.push_back(pGrenade);
 	}
+	
 	return S_OK;
 }
 
@@ -748,7 +749,7 @@ void pGrenade::render(void)
 				_vBullet[i].grenadeImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
 					_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
 					_vBullet[i].grenadeImage->getFrameX(), _vBullet[i].grenadeImage->getFrameY());
-				EFFECTMANAGER->grenadePuff(_vBullet[i].bulletImage->getFrameX() - CAMERAMANAGER->getCamera().left, _vBullet[i].bulletImage->getFrameY() -CAMERAMANAGER->getCamera().top);
+				EFFECTMANAGER->grenadePuff(_vBullet[i].rc.left+73 , _vBullet[i].rc.top+73);
 			}
 		}
 	}
@@ -905,6 +906,237 @@ void gBullet::move()
 				if (_vBullet[i].isActived == false)
 					EFFECTMANAGER->bulletPuff(_vBullet[i].x, _vBullet[i].y);
 			}
+		}
+	}
+}
+//=============================================================
+//	## gMissile ## (할아버지 미사일)
+//=============================================================
+HRESULT gMissile::init(float range)
+{
+	_range = range;
+	for (int i = 0; i < 5; i++)
+	{
+		tagBullet pMissile;
+		ZeroMemory(&pMissile, sizeof(tagBullet));
+		pMissile.missileImageRight = new image;
+		pMissile.missileImageRight->init("player_chuck/chuck_missile_right.bmp", 62, 63, 1, 1, true, RGB(255, 0, 255));
+		pMissile.missileImageLeft = new image;
+		pMissile.missileImageLeft->init("player_chuck/chuck_missile_left.bmp", 62, 63, 1, 1, true, RGB(255, 0, 255));
+
+		_vBullet.push_back(pMissile);
+	}
+	return S_OK;
+}
+
+void gMissile::release(void)
+{
+}
+
+void gMissile::update(void)
+{
+	move();
+}
+
+void gMissile::render(void)
+{
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		if (_vBullet[i].isActived == true)
+		{
+			if (_vBullet[i].isLeft == false)
+			{
+				_vBullet[i].missileImageRight->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
+					_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
+					_vBullet[i].missileImageRight->getFrameX(), _vBullet[i].missileImageRight->getFrameY());
+			}
+			if (_vBullet[i].isLeft == true)
+			{
+
+				_vBullet[i].missileImageLeft->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
+					_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
+					_vBullet[i].missileImageLeft->getFrameX(), _vBullet[i].missileImageLeft->getFrameY());
+			}
+			
+		}
+	}
+}
+
+void gMissile::fire(int x, int y, int fireSpeed, bool isLeft)
+{
+	for (int i = 0; i < _vBullet.size(); i++)
+	{
+		if (_vBullet[i].isActived)continue;
+		_vBullet[i].isActived = true;
+		_vBullet[i].speed = fireSpeed;
+		_vBullet[i].isLeft = isLeft;
+		_vBullet[i].gravity = 0.0f;
+		_vBullet[i].count = 0;
+		if (!_vBullet[i].isLeft)
+		{
+			x = 110 + x;
+			y = y - 60;
+		}
+		if (_vBullet[i].isLeft)
+		{
+			x = x - 90;
+			y = y - 80;
+		}
+		_vBullet[i].x = _vBullet[i].fireX = x;
+		_vBullet[i].y = _vBullet[i].fireY = y;
+		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
+			_vBullet[i].missileImageRight->getFrameWidth(),
+			_vBullet[i].missileImageRight->getFrameHeight());
+		if (_vBullet[i].isLeft)
+		{
+			//_vBullet[i].angle = 190.f * (PI / 180);
+			_vBullet[i].angle = PI + PI_4;
+		}
+		if (!_vBullet[i].isLeft)
+		{
+			//_vBullet[i].angle = -20.f * (PI / 180);
+			_vBullet[i].angle = - PI_4;
+		}
+	}
+}
+
+void gMissile::move()
+{
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		if (_vBullet[i].isActived)
+		{
+			if (_vBullet[i].isLeft)					// 왼쪽
+			{
+				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
+				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
+			}
+			if (!_vBullet[i].isLeft)				// 오른쪽
+			{
+				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
+				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
+			}
+
+			_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
+				_vBullet[i].missileImageRight->getFrameWidth(),
+				_vBullet[i].missileImageRight->getFrameHeight());
+
+			float distance = getDistance(_vBullet[i].x, _vBullet[i].y, _vBullet[i].fireX, _vBullet[i].fireY);
+
+			if (distance > _range)
+			{
+				_vBullet[i].isActived = false;
+			}
+		}
+	}
+}
+//=============================================================
+//	## xMissile ## (할아버지 미사일 x)
+//=============================================================
+HRESULT xMissile::init(float range)
+{
+	_range = range;
+	for (int i = 0; i < 5; i++)
+	{
+		tagBullet xMissile;
+		ZeroMemory(&xMissile, sizeof(tagBullet));
+		xMissile.missileImageRight = new image;
+		xMissile.missileImageRight->init("player_chuck/missile_X.bmp", 64, 64, 1, 1, true, RGB(255, 0, 255));
+		//xMissile.missileImageLeft = new image;
+		//xMissile.missileImageLeft->init("player_chuck/chuck_missile_left.bmp", 62, 63, 1, 1, true, RGB(255, 0, 255));
+
+		_vBullet.push_back(xMissile);
+	}
+	return S_OK;
+}
+
+void xMissile::release(void)
+{
+}
+
+void xMissile::update(void)
+{
+	move();
+}
+
+void xMissile::render(void)
+{
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		if (_vBullet[i].isActived == true)
+		{
+			_vBullet[i].missileImageRight->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
+				_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
+				_vBullet[i].missileImageRight->getFrameX(), _vBullet[i].missileImageRight->getFrameY());
+		}
+	}
+}
+
+void xMissile::fire(int x, int y, int fireSpeed, bool isLeft)
+{
+	for (int i = 0; i < _vBullet.size(); i++)
+	{
+		if (_vBullet[i].isActived)continue;
+		_vBullet[i].isActived = true;
+		_vBullet[i].speed = fireSpeed;
+		_vBullet[i].isLeft = isLeft;
+		_vBullet[i].gravity = 0.0f;
+		_vBullet[i].count = 0;
+		if (!_vBullet[i].isLeft)
+		{
+			x = 110 + x;
+			y = y - 60;
+		}
+		if (_vBullet[i].isLeft)
+		{
+			x = x - 90;
+			y = y - 80;
+		}
+		_vBullet[i].x = _vBullet[i].fireX = x;
+		_vBullet[i].y = _vBullet[i].fireY = y;
+		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
+			_vBullet[i].missileImageRight->getFrameWidth(),
+			_vBullet[i].missileImageRight->getFrameHeight());
+		if (_vBullet[i].isLeft)
+		{
+			//_vBullet[i].angle = 190.f * (PI / 180);
+			_vBullet[i].angle = PI + PI_4;
+		}
+		if (!_vBullet[i].isLeft)
+		{
+			//_vBullet[i].angle = -20.f * (PI / 180);
+			_vBullet[i].angle = -PI_4;
+		}
+	}
+}
+
+void xMissile::move()
+{
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		if (_vBullet[i].isActived)
+		{
+			if (_vBullet[i].isLeft)					// 왼쪽
+			{
+				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
+				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
+			}
+			if (!_vBullet[i].isLeft)				// 오른쪽
+			{
+				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
+				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
+			}
+
+			_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
+				_vBullet[i].missileImageRight->getFrameWidth(),
+				_vBullet[i].missileImageRight->getFrameHeight());
+
+			//float distance = getDistance(_vBullet[i].x, _vBullet[i].y, _vBullet[i].fireX, _vBullet[i].fireY);
+			//
+			//if (distance > _range)
+			//{
+			//	_vBullet[i].isActived = false;
+			//}
 		}
 	}
 }

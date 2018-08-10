@@ -25,7 +25,7 @@ void testScene_kmy::update(void)
 		EFFECTMANAGER->woodDebris(900, 1800, true);
 
 		//Æã
-		EFFECTMANAGER->explosionStart(500, 2000);
+		EFFECTMANAGER->explosion(500, 2000);
 	}
 	if (KEYMANAGER->isOnceKeyDown('I'))
 	{
@@ -39,6 +39,10 @@ void testScene_kmy::update(void)
 		EFFECTMANAGER->bigBang(900, 1900);
 
 		EFFECTMANAGER->grenadePuff(800, 1800);
+	}
+	if (KEYMANAGER->isOnceKeyDown('U'))
+	{
+		EFFECTMANAGER->bloodFountain(1000, 2100);
 	}
 }
 

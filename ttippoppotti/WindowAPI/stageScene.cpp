@@ -28,6 +28,7 @@ HRESULT stageScene::init(void)
 
 	_stageClear = new stageClear;
 	_stageClear->init();
+	_stageClear->setEnemyManager(_enemyManager);
 
 	EFFECTMANAGER->init();
 	_playerManager->setMapData(_mapData);

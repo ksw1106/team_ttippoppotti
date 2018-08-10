@@ -31,6 +31,12 @@ private:
 	float _gravity;
 	float _jumpSpeed;
 
+	float _skyRightX, _skyRightY;
+	float _skyRightW, _skyRightH;
+
+	float _skyLeftX, _skyLeftY;
+	int _skyLeftW, _skyLeftH;
+
 	int _index;
 	int _count;
 	int _animationSpeed;
@@ -52,6 +58,9 @@ private:
 
 	RECT _rcFlashRight;
 	RECT _rcFlashLeft;
+
+	RECT _rcSkyRight;
+	RECT _rcSkyLeft;
 		
 public:
 	image * getImage(int num) { return _ramBro[num]; }
@@ -66,6 +75,10 @@ public:
 	void setrcFlashRight(RECT rcFlashRight) { _rcFlashRight = rcFlashRight; }
 	RECT getrcFlashLeft() { return _rcFlashLeft; }
 	void setrcFlashLeft(RECT rcFlashLeft) { _rcFlashLeft = rcFlashLeft; }
+	RECT getrcSkyRight() { return _rcSkyRight; }
+	void setrcSkyRight(RECT rcSkyRight) { _rcSkyRight = rcSkyRight; }
+	RECT getrcSkyLeft() { return _rcSkyLeft; }
+	void setrcSkyLeft(RECT rcSkyLeft) { _rcSkyLeft = rcSkyLeft; }
 
 	float getX() { return _x; }
 	void setX(float x) { _x = x; }
@@ -87,6 +100,24 @@ public:
 	void setGravity(float gravity) { _gravity = gravity; }
 	float getJumpSpeed() { return _jumpSpeed; }
 	void setJumpSpeed(float jumpSpeed) { _jumpSpeed = jumpSpeed; }
+
+	float getSkyRightX() { return _skyRightX; }
+	void setSkyRightX(float skyRightX) { _skyRightX = skyRightX; }
+	float getSkyRightY() { return _skyRightY; }
+	void setSkyRightY(float skyRightY) { _skyRightY = skyRightY; }
+	float getSkyRightW() { return _skyRightW; }
+	void setSkyRightW(float skyRightW) { _skyRightW = skyRightW; }
+	float getSkyRightH() { return _skyRightH; }
+	void setSkyRightH(float skyRightH) { _skyRightH = skyRightH; }
+
+	float getSkyLeftX() { return _skyLeftX; }
+	void setSkyLeftX(float skyLeftX) { _skyLeftX = skyLeftX; }
+	float getSkyLeftY() { return _skyLeftY; }
+	void setSkyLeftY(float skyLeftY) { _skyLeftY = skyLeftY; }
+	float getSkyLeftW() { return _skyLeftW; }
+	void setSkyLeftW(float skyLeftW) { _skyLeftW = skyLeftW; }
+	float getSkyLeftH() { return _skyLeftH; }
+	void setSkyLeftH(float skyLeftH) { _skyLeftH = skyLeftH; }
 	
 	int getIndex() { return _index; }
 	void setIndex(int index) { _index = index; }

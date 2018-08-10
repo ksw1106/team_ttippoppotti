@@ -30,14 +30,13 @@ void loadingScene::Kim_Sang_Won_addImage()
 	_loading->loadImage("8", "number/clear/8.bmp", 53, 76, true, RGB(255, 0, 255));
 	_loading->loadImage("9", "number/clear/9.bmp", 48, 76, true, RGB(255, 0, 255));
 	_loading->loadImage("timeDot", "number/clear/timeDot.bmp", 19, 19);
+
+	_loading->loadImage("dead_soldier_idle", "dead_soldier_idle.bmp", 68, 72, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("dead_soldier_dead", "dead_soldier_idle.bmp", 90, 100, 1, 2);
 }
 
 void loadingScene::Kim_Sang_Won_addSound()
 {
-	//_loading->loadSound("title", "title/sound/title.wav");
-	//_loading->loadSound("eagle", "title/sound/eagle.wav");
-	//_loading->loadSound("broforce", "title/sound/broforce.wav");
-
 	//게임 시작시 3, 2, 1, go!
 	_loading->loadSound("1", "start_one.mp3");
 	_loading->loadSound("2", "start_two.mp3");
