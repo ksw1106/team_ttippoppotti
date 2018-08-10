@@ -30,6 +30,8 @@ public:
 	void cartridge(float x, float y, bool isLeft);
 	//피
 	void bloodSplash(float x, float y, bool isLeft);
+	//피 분수
+	void bloodFountain(float x, float y);
 	//낙석
 	void rockFall(float x, float y, bool isLeft);
 	//나무파편
@@ -63,6 +65,7 @@ public:
 	void addEffect(string effectName, const char* imageName, int buffer, int count = 1, bool isFrameImg = false);
 	//이펙트 플레이
 	void playParabola(string effectName, float x, float y, bool isLeft);
+	void playFountain(string effectName, float x, float y);
 	void playExplosion(string effectName, float x, float y);
 	void playBallExplosion(string effectName, float x, float y);
 	void playCartridge(string effectName, float x, float y, bool isLeft);
