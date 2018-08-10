@@ -63,6 +63,21 @@ HRESULT player::init(int num)
 	_rcFlashRight = RectMake(_x + 50, _y, 30, 30);
 	_rcFlashLeft = RectMake(_x - 68, _y, 30, 30);
 
+	//_rcMissileLeft = RectMake(1500.f, 1000.f, 100, 10);
+	//_rcMissileRight = RectMake(100.f, 1000.f, 100, 10);
+	_skyRightX = 100.f;
+	_skyRightY = 1200.f;
+	_skyRightW = 100;
+	_skyRightH = 10;
+
+	_skyLeftX = 1500.f;
+	_skyLeftY = 1200.f;
+	_skyLeftW = 100;
+	_skyLeftH = 10;
+
+	_rcSkyRight = RectMake(_skyRightX, _skyRightY, _skyRightW, _skyRightH);
+	_rcSkyLeft = RectMake(_skyLeftX, _skyLeftY, _skyLeftW, _skyLeftH);
+
 	return S_OK;
 }
 
@@ -73,8 +88,12 @@ void player::release(void)
 void player::update(void)
 {
 	_rcRambro = RectMake(_x, _y, _width, _height);
+
 	_rcFlashRight = RectMake(_x + 50, _y, 30, 30);
 	_rcFlashLeft = RectMake(_x - 68, _y, 30, 30);
+
+	_rcSkyRight = RectMake(_skyRightX, _skyRightY, _skyRightW, _skyRightH);
+	_rcSkyLeft = RectMake(_skyLeftX, _skyLeftY, _skyLeftW, _skyLeftH);
 
 	_gravity += 0.98f;
 

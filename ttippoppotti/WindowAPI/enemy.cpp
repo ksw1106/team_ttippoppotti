@@ -294,6 +294,7 @@ void enemy::changeStatus()
 	{
 		//if (_isFire) break;
 		this->fireMovement();
+		
 		break;
 	}
 	case ENEMY_KNOCK_BACK:
