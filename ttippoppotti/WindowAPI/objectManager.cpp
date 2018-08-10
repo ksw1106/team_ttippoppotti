@@ -4,7 +4,7 @@
 #include "playerManager.h"
 
 
-HRESULT objectManager::init()
+HRESULT objectManager::init(int num)
 {
 	//여기에서 오브젝트 객체들생성
 	//팩토리 패턴에서 에너미 매니저 init 보고 하면 된다
@@ -12,192 +12,201 @@ HRESULT objectManager::init()
 	//자기 아래 렉트 isActived 연결 해줘야 한다
 	//맵번호는 어케 찾냐면 받아놨으니까
 	//_mapData->getObject()[렉트번호].isActived 하면 된다
+	if (num == 1)
+	{
+		OBJECT_TYPE type;
+
+		_fPos[0].x = _mapData->getObject()[8]._rc.left, _fPos[0].y = _mapData->getObject()[8]._rc.top;
+		_fPos[1].x = _mapData->getObject()[10]._rc.left, _fPos[1].y = _mapData->getObject()[10]._rc.top;
+		_fPos[2].x = _mapData->getObject()[235]._rc.left, _fPos[2].y = _mapData->getObject()[235]._rc.top;
+		_fPos[3].x = _mapData->getObject()[137]._rc.left, _fPos[3].y = _mapData->getObject()[137]._rc.top;
+		_fPos[4].x = _mapData->getObject()[457]._rc.left, _fPos[4].y = _mapData->getObject()[457]._rc.top;
+		_fPos[5].x = _mapData->getObject()[462]._rc.left, _fPos[5].y = _mapData->getObject()[462]._rc.top;
+		_fPos[6].x = _mapData->getObject()[365]._rc.left, _fPos[6].y = _mapData->getObject()[365]._rc.top;
+		_fPos[7].x = _mapData->getObject()[435]._rc.left, _fPos[7].y = _mapData->getObject()[435]._rc.top;
+		_fPos[8].x = _mapData->getObject()[444]._rc.left, _fPos[8].y = _mapData->getObject()[444]._rc.top;
+		_fPos[9].x = _mapData->getObject()[410]._rc.left, _fPos[9].y = _mapData->getObject()[410]._rc.top;
+		_fPos[10].x = _mapData->getObject()[420]._rc.left, _fPos[10].y = _mapData->getObject()[420]._rc.top;
+		_fPos[11].x = _mapData->getObject()[390]._rc.left, _fPos[11].y = _mapData->getObject()[390]._rc.top;
+
+		for (int i = 0; i < 12; i++)
+		{
+			type = (OBJECT_TYPE)RND->getFromIntTo(0, 6);
+
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_fPos[i].x, _fPos[i].y - object->getImage()->getHeight() + 6);
+
+			_vObject.push_back(object);
+		}
+
+		//_boxPos[0].x = 800, _boxPos[0].y = 2070;
+		_boxPos[0].x = 2873, _boxPos[0].y = 1220;
+		_boxPos[1].x = 2941, _boxPos[1].y = 1152;
+		_boxPos[2].x = 3009, _boxPos[2].y = 1354;
+		_boxPos[3].x = 3009, _boxPos[3].y = 1557;
+		_boxPos[4].x = 3009, _boxPos[4].y = 1625;
+		_boxPos[5].x = 4024, _boxPos[5].y = 1354;
+		_boxPos[6].x = 3956, _boxPos[6].y = 1422;
+		_boxPos[7].x = 4024, _boxPos[7].y = 1422;
+		_boxPos[8].x = 4024, _boxPos[8].y = 1558;
+		_boxPos[9].x = 4024, _boxPos[9].y = 1626;
+		_boxPos[10].x = 3956, _boxPos[10].y = 1558;
+		_boxPos[11].x = 3956, _boxPos[11].y = 1626;
+		_boxPos[12].x = 3888, _boxPos[12].y = 1558;
+		_boxPos[13].x = 3888, _boxPos[13].y = 1626;
+		for (int i = 0; i < 14; i++)
+		{
+			type = WOODENBOX;
+
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_boxPos[i].x, _boxPos[i].y);
+
+			_vObject.push_back(object);
+		}
+
+		_drumRedPos[0].x = 3009, _drumRedPos[0].y = 1422;
+		for (int i = 0; i < 1; i++)
+		{
+			type = SKULL_DRUMRED;
+
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_drumRedPos[i].x, _drumRedPos[i].y);
+
+			_vObject.push_back(object);
+		}
+
+		_drumGrayPos[0].x = 2941, _drumGrayPos[0].y = 1220;
+		for (int i = 0; i < 1; i++)
+		{
+			type = SKULL_DRUMGRAY;
+
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_drumGrayPos[i].x, _drumGrayPos[i].y);
+
+			_vObject.push_back(object);
+		}
+
+		_truckPos[0].x = 160, _truckPos[0].y = 2164;
+		for (int i = 0; i < 1; i++)
+		{
+			type = TRUCK;
+
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_truckPos[i].x, _truckPos[i].y - object->getImage()->getHeight());
+			object->init();
+
+			_vObject.push_back(object);
+		}
+
+		_prisonerPos[0].x = 3685, _prisonerPos[0].y = 2099;
+		//_prisonerPos[1].x = 3280, _prisonerPos[1].y = 1558;
+		for (int i = 0; i < 1; i++)
+		{
+			type = PRISONER;
+
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_prisonerPos[i].x, _prisonerPos[i].y);
+			object->init();
+
+			_vObject.push_back(object);
+		}
+
+		//_helicopterPos[0].x = 3101, _helicopterPos[0].y = 519;
+		//for (int i = 0; i < 1; i++)
+		//{
+		//	type = HELICOPTER;
+		//
+		//	objectA* object = _factory->createObject(type);
+		//	object->setPosition(_helicopterPos[i].x, _helicopterPos[i].y);
+		//
+		//	_vObject.push_back(object);
+		//}
+
+		_amFlagPos[0].x = 1853, _amFlagPos[0].y = 1225;
+		_amFlagPos[1].x = 2923, _amFlagPos[1].y = 2037;
+		_amFlagPos[2].x = 3324, _amFlagPos[2].y = 902;
+		for (int i = 0; i < 3; i++)
+		{
+			type = AMERICAN_FLAG;
+
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_amFlagPos[i].x, _amFlagPos[i].y);
+			object->init();
+
+			_vObject.push_back(object);
+		}
+
+		_amFlagPolePos[0].x = 1840, _amFlagPolePos[0].y = 1424;
+		_amFlagPolePos[1].x = 2909, _amFlagPolePos[1].y = 2236;
+		for (int i = 0; i < 2; i++)
+		{
+			type = AMFLAG_POLE;
+
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_amFlagPolePos[i].x, _amFlagPolePos[i].y - object->getImage()->getHeight());
+
+			_vObject.push_back(object);
+		}
+
+		_enemyFlagPos[0].x = 2949, _enemyFlagPos[0].y = 1084;
+		_enemyFlagPos[1].x = 4099, _enemyFlagPos[1].y = 1084;
+		for (int i = 0; i < 2; i++)
+		{
+			type = ENEMY_FLAG;
+
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_enemyFlagPos[i].x, _enemyFlagPos[i].y - object->getImage()->getHeight());
+
+			_vObject.push_back(object);
+		}
+
+		_vObject[0]->setTargetIsActived(&_mapData->getObject()[8]._isActived);
+		_vObject[1]->setTargetIsActived(&_mapData->getObject()[10]._isActived);
+		_vObject[2]->setTargetIsActived(&_mapData->getObject()[235]._isActived);
+		_vObject[3]->setTargetIsActived(&_mapData->getObject()[137]._isActived);
+		_vObject[4]->setTargetIsActived(&_mapData->getObject()[457]._isActived);
+		_vObject[5]->setTargetIsActived(&_mapData->getObject()[462]._isActived);
+		_vObject[6]->setTargetIsActived(&_mapData->getObject()[465]._isActived);
+		_vObject[7]->setTargetIsActived(&_mapData->getObject()[435]._isActived);
+		_vObject[8]->setTargetIsActived(&_mapData->getObject()[444]._isActived);
+		_vObject[9]->setTargetIsActived(&_mapData->getObject()[410]._isActived);
+		_vObject[10]->setTargetIsActived(&_mapData->getObject()[420]._isActived);
+		_vObject[11]->setTargetIsActived(&_mapData->getObject()[390]._isActived);
+
+		_vObject[12]->setTargetIsActived(&_mapData->getObject()[406]._isActived);
+		_vObject[13]->setTargetIsActived(&_mapData->getObject()[407]._isActived);
+		_vObject[14]->setTargetIsActived(&_mapData->getObject()[433]._isActived);
+		_vObject[15]->setTargetIsActived(&_mapData->getObject()[455]._isActived);
+		_vObject[16]->setTargetIsActived(&_mapData->getObject()[455]._isActived);
+		_vObject[17]->setTargetIsActived(&_mapData->getObject()[446]._isActived);
+		_vObject[18]->setTargetIsActived(&_mapData->getObject()[445]._isActived);
+		_vObject[19]->setTargetIsActived(&_mapData->getObject()[446]._isActived);
+		_vObject[20]->setTargetIsActived(&_mapData->getObject()[469]._isActived);
+		_vObject[21]->setTargetIsActived(&_mapData->getObject()[469]._isActived);
+		_vObject[22]->setTargetIsActived(&_mapData->getObject()[468]._isActived);
+		_vObject[23]->setTargetIsActived(&_mapData->getObject()[468]._isActived);
+		_vObject[24]->setTargetIsActived(&_mapData->getObject()[467]._isActived);
+		_vObject[25]->setTargetIsActived(&_mapData->getObject()[467]._isActived);
+		_vObject[26]->setTargetIsActived(&_mapData->getObject()[433]._isActived);	//빨간드럼통
+		_vObject[27]->setTargetIsActived(&_mapData->getObject()[407]._isActived);	//회색드럼통
+
+		for (int i = 0; i < _vObject.size(); i++)
+		{
+			_vObject[i]->setState(OBJECT_IDLE);
+			_vObject[i]->setMapData(_mapData);
+		}
+	}
+	else if(num == 2)
+	{
+		//2스테이지
+	}
+	
 	_factory = new objectFactory;
 
 	//스테이지에 오브젝트 몇개인지 찾아서 포문돌리자
 	//오브젝트 수만큼 좌표 배열에 넣어두고 밑에 포문 돌려야함
 
-	OBJECT_TYPE type;
-
-	_fPos[0].x = _mapData->getObject()[8]._rc.left, _fPos[0].y = _mapData->getObject()[8]._rc.top;
-	_fPos[1].x = _mapData->getObject()[10]._rc.left, _fPos[1].y = _mapData->getObject()[10]._rc.top;
-	_fPos[2].x = _mapData->getObject()[235]._rc.left, _fPos[2].y = _mapData->getObject()[235]._rc.top;
-	_fPos[3].x = _mapData->getObject()[137]._rc.left, _fPos[3].y = _mapData->getObject()[137]._rc.top;
-	_fPos[4].x = _mapData->getObject()[457]._rc.left, _fPos[4].y = _mapData->getObject()[457]._rc.top;
-	_fPos[5].x = _mapData->getObject()[462]._rc.left, _fPos[5].y = _mapData->getObject()[462]._rc.top;
-	_fPos[6].x = _mapData->getObject()[365]._rc.left, _fPos[6].y = _mapData->getObject()[365]._rc.top;
-	_fPos[7].x = _mapData->getObject()[435]._rc.left, _fPos[7].y = _mapData->getObject()[435]._rc.top;
-	_fPos[8].x = _mapData->getObject()[444]._rc.left, _fPos[8].y = _mapData->getObject()[444]._rc.top;
-	_fPos[9].x = _mapData->getObject()[410]._rc.left, _fPos[9].y = _mapData->getObject()[410]._rc.top;
-	_fPos[10].x = _mapData->getObject()[420]._rc.left, _fPos[10].y = _mapData->getObject()[420]._rc.top;
-	_fPos[11].x = _mapData->getObject()[390]._rc.left, _fPos[11].y = _mapData->getObject()[390]._rc.top;
-
-	for (int i = 0; i < 12; i++)
-	{
-		type = (OBJECT_TYPE)RND->getFromIntTo(0, 6);
 	
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_fPos[i].x, _fPos[i].y - object->getImage()->getHeight() + 6);
-
-		_vObject.push_back(object);
-	}
-
-	//_boxPos[0].x = 800, _boxPos[0].y = 2070;
-	_boxPos[0].x = 2873, _boxPos[0].y = 1220;
-	_boxPos[1].x = 2941, _boxPos[1].y = 1152;
-	_boxPos[2].x = 3009, _boxPos[2].y = 1354;
-	_boxPos[3].x = 3009, _boxPos[3].y = 1557;
-	_boxPos[4].x = 3009, _boxPos[4].y = 1625;
-	_boxPos[5].x = 4024, _boxPos[5].y = 1354;
-	_boxPos[6].x = 3956, _boxPos[6].y = 1422;
-	_boxPos[7].x = 4024, _boxPos[7].y = 1422;
-	_boxPos[8].x = 4024, _boxPos[8].y = 1558;
-	_boxPos[9].x = 4024, _boxPos[9].y = 1626;
-	_boxPos[10].x = 3956, _boxPos[10].y = 1558;
-	_boxPos[11].x = 3956, _boxPos[11].y = 1626;
-	_boxPos[12].x = 3888, _boxPos[12].y = 1558;
-	_boxPos[13].x = 3888, _boxPos[13].y = 1626;
-	for (int i = 0; i < 14; i++)
-	{
-		type = WOODENBOX;
-	
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_boxPos[i].x, _boxPos[i].y);
-		
-		_vObject.push_back(object);
-	}
-
-	_drumRedPos[0].x = 3009, _drumRedPos[0].y = 1422;
-	for (int i = 0; i < 1; i++)
-	{
-		type = SKULL_DRUMRED;
-	
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_drumRedPos[i].x, _drumRedPos[i].y);
-		
-		_vObject.push_back(object);
-	}
-
-	_drumGrayPos[0].x = 2941, _drumGrayPos[0].y = 1220;
-	for (int i = 0; i < 1; i++)
-	{
-		type = SKULL_DRUMGRAY;
-	
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_drumGrayPos[i].x, _drumGrayPos[i].y);
-		
-		_vObject.push_back(object);
-	}
-	
-	_truckPos[0].x = 160, _truckPos[0].y = 2164;
-	for (int i = 0; i < 1; i++)
-	{
-		type = TRUCK;
-	
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_truckPos[i].x, _truckPos[i].y - object->getImage()->getHeight());
-		object->init();
-	
-		_vObject.push_back(object);
-	}
-
-	_prisonerPos[0].x = 3685, _prisonerPos[0].y = 2099;
-	//_prisonerPos[1].x = 3280, _prisonerPos[1].y = 1558;
-	for (int i = 0; i < 1; i++)
-	{
-		type = PRISONER;
-	
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_prisonerPos[i].x, _prisonerPos[i].y);
-		object->init();
-		
-		_vObject.push_back(object);
-	}
-
-	//_helicopterPos[0].x = 3101, _helicopterPos[0].y = 519;
-	//for (int i = 0; i < 1; i++)
-	//{
-	//	type = HELICOPTER;
-	//
-	//	objectA* object = _factory->createObject(type);
-	//	object->setPosition(_helicopterPos[i].x, _helicopterPos[i].y);
-	//
-	//	_vObject.push_back(object);
-	//}
-
-	_amFlagPos[0].x = 1853, _amFlagPos[0].y = 1225;
-	_amFlagPos[1].x = 2923, _amFlagPos[1].y = 2037;
-	_amFlagPos[2].x = 3324, _amFlagPos[2].y = 902;
-	for (int i = 0; i < 3; i++)
-	{
-		type = AMERICAN_FLAG;
-	
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_amFlagPos[i].x, _amFlagPos[i].y);
-		object->init();
-	
-		_vObject.push_back(object);
-	}
-
-	_amFlagPolePos[0].x = 1840, _amFlagPolePos[0].y = 1424;
-	_amFlagPolePos[1].x = 2909, _amFlagPolePos[1].y = 2236;
-	for (int i = 0; i < 2; i++)
-	{
-		type = AMFLAG_POLE;
-	
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_amFlagPolePos[i].x, _amFlagPolePos[i].y - object->getImage()->getHeight());
-	
-		_vObject.push_back(object);
-	}
-
-	_enemyFlagPos[0].x = 2949, _enemyFlagPos[0].y = 1084;
-	_enemyFlagPos[1].x = 4099, _enemyFlagPos[1].y = 1084;
-	for (int i = 0; i < 2; i++)
-	{
-		type = ENEMY_FLAG;
-	
-		objectA* object = _factory->createObject(type);
-		object->setPosition(_enemyFlagPos[i].x, _enemyFlagPos[i].y - object->getImage()->getHeight());
-	
-		_vObject.push_back(object);
-	}
-
-	_vObject[0]->setTargetIsActived(&_mapData->getObject()[8]._isActived);
-	_vObject[1]->setTargetIsActived(&_mapData->getObject()[10]._isActived);
-	_vObject[2]->setTargetIsActived(&_mapData->getObject()[235]._isActived);
-	_vObject[3]->setTargetIsActived(&_mapData->getObject()[137]._isActived);
-	_vObject[4]->setTargetIsActived(&_mapData->getObject()[457]._isActived);
-	_vObject[5]->setTargetIsActived(&_mapData->getObject()[462]._isActived);
-	_vObject[6]->setTargetIsActived(&_mapData->getObject()[465]._isActived);
-	_vObject[7]->setTargetIsActived(&_mapData->getObject()[435]._isActived);
-	_vObject[8]->setTargetIsActived(&_mapData->getObject()[444]._isActived);
-	_vObject[9]->setTargetIsActived(&_mapData->getObject()[410]._isActived);
-	_vObject[10]->setTargetIsActived(&_mapData->getObject()[420]._isActived);
-	_vObject[11]->setTargetIsActived(&_mapData->getObject()[390]._isActived);
-
-	_vObject[12]->setTargetIsActived(&_mapData->getObject()[406]._isActived);
-	_vObject[13]->setTargetIsActived(&_mapData->getObject()[407]._isActived);
-	_vObject[14]->setTargetIsActived(&_mapData->getObject()[433]._isActived);
-	_vObject[15]->setTargetIsActived(&_mapData->getObject()[455]._isActived);
-	_vObject[16]->setTargetIsActived(&_mapData->getObject()[455]._isActived);
-	_vObject[17]->setTargetIsActived(&_mapData->getObject()[446]._isActived);
-	_vObject[18]->setTargetIsActived(&_mapData->getObject()[445]._isActived);
-	_vObject[19]->setTargetIsActived(&_mapData->getObject()[446]._isActived);
-	_vObject[20]->setTargetIsActived(&_mapData->getObject()[469]._isActived);
-	_vObject[21]->setTargetIsActived(&_mapData->getObject()[469]._isActived);
-	_vObject[22]->setTargetIsActived(&_mapData->getObject()[468]._isActived);
-	_vObject[23]->setTargetIsActived(&_mapData->getObject()[468]._isActived);
-	_vObject[24]->setTargetIsActived(&_mapData->getObject()[467]._isActived);
-	_vObject[25]->setTargetIsActived(&_mapData->getObject()[467]._isActived);
-	_vObject[26]->setTargetIsActived(&_mapData->getObject()[433]._isActived);	//빨간드럼통
-	_vObject[27]->setTargetIsActived(&_mapData->getObject()[407]._isActived);	//회색드럼통
-
-	for (int i = 0; i < _vObject.size(); i++)
-	{
-		_vObject[i]->setState(OBJECT_IDLE);
-		_vObject[i]->setMapData(_mapData);
-	}
 
 
 	return S_OK;

@@ -21,6 +21,8 @@ private:
 	gameNode* _currentScene;	//ÇöÀç¾À
 
 public:
+	gameNode * getCurrentScene() { return _currentScene; }
+
 	HRESULT init(void);
 	void release(void);
 	void update(void);
