@@ -20,6 +20,8 @@ HRESULT playerManager::init(void)
 	_pBullet->init(700.f);
 	_pGrenade = new pGrenade;
 	_pGrenade->init(500.f);
+	_gBullet = new gBullet;
+	_gBullet->init(300.f);
 
 	_p1Bubble = IMAGEMANAGER->findImage("p1Bubble");
 	_p1Bubble->setX(_player->getX() + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
@@ -37,6 +39,7 @@ HRESULT playerManager::init(void)
 
 	_knifeCollision = false;
 	_isLadder = false;
+	_rambroFire = false;
 	
 	_rc8 = RectMake(500.f, 2100.f, 60, 60);
 
@@ -115,33 +118,61 @@ void playerManager::update(void)
 	_fireCount++;
 	if (KEYMANAGER->isStayKeyDown('Z'))							// ±âº» ÃÑ¾Ë ¹ß»ç
 	{
-		if (_player->getIsLeft() == false)
+		if (!_rambroFire)						// rambro Àü¿ë
 		{
-			_player->setIsFlash(true);
-		}
-		if (_player->getIsLeft() == true)
-		{
-			_player->setIsFlash(true);
-		}
+			if (_player->getIsLeft() == false)
+			{
+				_player->setIsFlash(true);
+			}
+			if (_player->getIsLeft() == true)
+			{
+				_player->setIsFlash(true);
+			}
 
-		if (_fireCount % 5 == 0)
+			if (_fireCount % 5 == 0)
+			{
+				if (_player->getIsLeft() == false)					// ¿À¸¥ÂÊ
+				{
+					_pBullet->fire(_player->getX() + 60, _player->getY() + 38, 20, _player->getIsLeft());
+				}
+				if (_player->getIsLeft() == true)					// ¿ÞÂÊ
+				{
+					_pBullet->fire(_player->getX(), _player->getY() + 38, 20, _player->getIsLeft());
+				}
+				EFFECTMANAGER->cartridge(_player->getX(), _player->getY(), _player->getIsLeft());			// ÃÑ¾Ë ÅºÇÇ
+			}
+		}
+		if (_rambroFire)						// chuck Àü¿ë
 		{
-			if (_player->getIsLeft() == false)					// ¿À¸¥ÂÊ
+			if (_player->getIsLeft() == false)
 			{
-				_pBullet->fire(_player->getX() + 60, _player->getY() + 38, 20, _player->getIsLeft());
+				_player->setIsFlash(true);
 			}
-			if (_player->getIsLeft() == true)					// ¿ÞÂÊ
+			if (_player->getIsLeft() == true)
 			{
-				_pBullet->fire(_player->getX(), _player->getY() + 38, 20, _player->getIsLeft());
+				_player->setIsFlash(true);
 			}
-			EFFECTMANAGER->cartridge(_player->getX(), _player->getY(), _player->getIsLeft());			// ÃÑ¾Ë ÅºÇÇ
+
+			if (_fireCount % 5 == 0)
+			{
+				if (_player->getIsLeft() == false)					// ¿À¸¥ÂÊ
+				{
+					_gBullet->fire(_player->getX() + 60, _player->getY() + 38, 20, _player->getIsLeft());
+				}
+				if (_player->getIsLeft() == true)					// ¿ÞÂÊ
+				{
+					_gBullet->fire(_player->getX(), _player->getY() + 38, 20, _player->getIsLeft());
+				}
+				EFFECTMANAGER->cartridge(_player->getX(), _player->getY(), _player->getIsLeft());			// ÃÑ¾Ë ÅºÇÇ
+			}
 		}
 	}
 	if (KEYMANAGER->isOnceKeyUp('Z'))			// ZÅ°¿¡¼­ ¼Õ¶§¹È ÃÑ±¸¾Õ ÀÌ¹ÌÁö Á¦°Å¿ë
 	{
 		_player->setIsFlash(false);
 	}
-	_pBullet->update();											// ÃÑ¾Ë ¾÷µ¥ÀÌÆ® ( ¹«ºê )
+	_pBullet->update();											// rambro ÃÑ¾Ë ¾÷µ¥ÀÌÆ® ( ¹«ºê )
+	_gBullet->update();											// chuck ÃÑ¾Ë ¾÷µ¥ÀÌÆ® ( ¹«ºê )
 
 	if (_knifeCollision)
 	{
@@ -679,6 +710,7 @@ void playerManager::update(void)
 		_rambroChange = true;
 		_playerChange[1]->init(1);
 		_player = _playerChange[_rambroChange];
+		_rambroFire = true;
 	}
 	_player->setX(tempX);
 	_player->setY(tempY);
@@ -834,9 +866,10 @@ void playerManager::update(void)
 void playerManager::render(void)
 {
 	RECT rc = RectMake(_player->getX(), _player->getY(), _player->getImage(_player->getState())->getFrameWidth(), _player->getImage(_player->getState())->getFrameHeight());
-	_pBullet->render();
 	_player->render();
+	_pBullet->render();
 	_pGrenade->render();
+	_gBullet->render();
 	_p1Bubble->frameRender(getMemDC(), _p1Bubble->getX() - CAMERAMANAGER->getCamera().left, _p1Bubble->getY() - CAMERAMANAGER->getCamera().top);
 
 	char str[64];
@@ -885,7 +918,7 @@ void playerManager::collision()
 			if (!_pBullet->getVPlayerBullet()[j].isActived)continue;
 			if (IntersectRect(&rcTemp, &rcEnemy, &_pBullet->getVPlayerBullet()[j].rc))
 			{
-				if (!_enemyManager->getVEnemy()[i]->getIsApart()) continue;
+				if (_enemyManager->getVEnemy()[i]->getIsApart()) continue;
 				if (_pBullet->getVPlayerBullet()[j].isActived == true)
 				{
 

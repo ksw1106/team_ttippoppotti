@@ -83,6 +83,7 @@ private:
 	bool _isApart;			// 시체 토막!
 			
 	int _count;				// 카운트
+	int _fireCount;
 	int _randomNumber;
 	int _kbIndex;
 	int _warnFrameIndex, _doubtFrameIndex;
@@ -175,9 +176,7 @@ public:
 	void partMove();		
 	// 프레임 애니메이션
 	void frameAnimate();	
-	// 시체조각 삭제
-	bool removeCorpse();
-			
+				
 	enemy() {}
 	virtual ~enemy() {}
 };

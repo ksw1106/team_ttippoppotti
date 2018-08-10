@@ -114,11 +114,6 @@ void effects::activateExplosion(float x, float y)
 		_vParticle[i].x = x;
 		_vParticle[i].y = y;
 		_vParticle[i].speed = 8.0f;
-		//_vParticle[i].angle = PI / _particleMax * ((i % _particleMax) + 1);
-		//_vParticle[i].gravity = 0.0f;
-		//_vParticle[i].fireX = x;
-		//_vParticle[i].fireY = y;
-		//_vParticle[i].speed = 50.0f * ((i % _particleMax) + 1);
 		if (_isFrameImg)
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 		else
@@ -202,8 +197,13 @@ void effects::activateKnifePuff(float x, float y, bool isLeft)
 void effects::activateBigBang(float x, float y)
 {
 	_isRunning = true;
-	_isBigBang = true;
-	for (int i = 0; i < 5; i++)
+	_isBigBang = true;	
+	_isAlphaImg = true;
+
+	_vParticle.clear();
+	int particleMax = RND->getFromIntTo(4, 5);
+
+	for (int i = 0; i < particleMax; i++)
 	{
 		tagParticle particle;
 		ZeroMemory(&particle, sizeof(tagParticle));
@@ -226,18 +226,19 @@ void effects::activateBigBang(float x, float y)
 	}
 	for (int i = 0; i < _vParticle.size(); i++)
 	{
-		_vParticle[i].angle = PI / _vParticle.size() * ((i % _vParticle.size()) + 1);
+		_vParticle[i].fire = true;
+		_alpha = 0;
+		_vParticle[i].angle = PI / particleMax * ((i % particleMax) + 1);
 		_vParticle[i].gravity = 0.0f;
-		_vParticle[i].x = x;
-		_vParticle[i].y = y;
-		_vParticle[i].fireX = x;
-		_vParticle[i].fireY = y;
-		_vParticle[i].speed = 50.0f * ((i % _vParticle.size()) + 1);
+		_vParticle[i].speed = 50.0f * ((i % particleMax) + 1);
+		_vParticle[i].fireX = x;// +cosf(_vParticle[i].angle) * (((i % particleMax) + 1) * 2);
+		_vParticle[i].fireY = y;// -sinf(_vParticle[i].angle) * (((i % particleMax) + 1) * 2);
+		_vParticle[i].x = _vParticle[i].fireX + cosf(_vParticle[i].angle) * _vParticle[i].speed;
+		_vParticle[i].y = _vParticle[i].fireY - sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
 		if (_isFrameImg)
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 		else
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
-
 	}
 }
 
@@ -248,25 +249,44 @@ void effects::boomBigBang()
 		for (int i = 0; i < _vParticle.size(); ++i)
 		{
 			if (!_vParticle[i].fire) continue;
-			if (_vParticle[i].count >= 100)
+			_vParticle[i].count++;
+			if (_vParticle[i].count % 2 == 0)
 			{
-				_vParticle[i].fire = false;
-				_isRunning = false;
-				_isParabola = false;
-				_vParticle[i].count = 0;
+				if (_alpha >= 255)
+				{
+					_alpha = 255;
+					if (_vParticle[i].count > 10)
+					{
+						_vParticle[i].particleImg = IMAGEMANAGER->findImage("smoke1");
+						if (!_isFrameImg)
+						{
+							_index = 0;
+							_isFrameImg = true;
+						}
+						else
+						{
+							if (_index >= _vParticle[i].particleImg->getMaxFrameX())
+							{
+								_vParticle[i].fire = false;
+								_explosionCount++;
+							}
+						}
+					}
+				}
+				else
+					_alpha += 15;
 			}
-			else
+			if (_explosionCount >= _vParticle.size())
 			{
-				//_vParticle[i].x = _vParticle[i].fireX + cosf(_vParticle[i].angle) * _vParticle[i].speed;
-				//_vParticle[i].y = _vParticle[i].fireY - sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
-				_vParticle[i].x += _vParticle[i].fireX + cosf(_vParticle[i].angle) * _vParticle[i].speed;
-				_vParticle[i].y += _vParticle[i].fireY - sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
+				_isRunning = false;
+				_isBigBang = false;
+				_vParticle[i].count = 0;
+				_explosionCount = 0;
 			}
 			if (_isFrameImg)
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 			else
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
-			_vParticle[i].count++;
 		}
 	}
 }
@@ -406,7 +426,7 @@ void effects::activateAshes(float x, float y)
 	{
 		_vParticle[i].fire = true;
 		_vParticle[i].angle = RND->getFloat(PI);
-		_vParticle[i].x = x - 125.0f;
+		_vParticle[i].x = x + RND->getFloat(50.0f);
 		_vParticle[i].y = y ;
 		_vParticle[i].speed = RND->getFromFloatTo(1.0f, 15.0f);
 		_vParticle[i].alpha = 255;

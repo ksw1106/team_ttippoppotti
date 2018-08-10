@@ -290,16 +290,16 @@ public:
 	~pGrenade() {}
 };
 //=============================================================
-//	## GBullet ## (할아버지 일반총알)
+//	## gBullet ## (할아버지 일반총알)
 //=============================================================
-class GBullet : public gameNode
+class gBullet : public gameNode
 {
 private:
 	vector<tagBullet> _vBullet;
 
 private:
 	float _range;
-	int _GBulletMax;
+	int _gBulletMax;
 	int _count;
 	
 public:
@@ -313,6 +313,7 @@ public:
 
 	void move();
 
-	GBullet() {}
-	~GBullet() {}
+	vector<tagBullet>& getVPlayergBullet() { return _vBullet; }
+	gBullet() {}
+	~gBullet() {}
 };

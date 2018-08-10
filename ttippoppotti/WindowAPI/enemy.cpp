@@ -40,6 +40,7 @@ HRESULT enemy::initSoldier(float x, float y)
 		
 	_frameSpeed = 5;
 	_count = 0;
+	_fireCount = 0;		// 사격애니메이션용 카운트
 			
 	this->corpseInit();	
 	
@@ -80,6 +81,9 @@ void enemy::release(void)
 
 void enemy::update(void)
 {			
+	++_fireCount;
+	if (_fireCount > 1000) _fireCount = 0;
+
 	// 밑에 없으면 떨어짐
 	this->fall();	
 	// 에너미 움직임 변화
@@ -186,15 +190,9 @@ void enemy::render(void)
 	}	
 }
 
-//======================================================================================================================================
-//======================================================================================================================================
-//======================================================================================================================================
-
-// 시체 제거
-bool enemy::removeCorpse()
-{
-	return false;
-}
+//===========================================================================================================================================================================================================
+//===========================================================================================================================================================================================================
+//===========================================================================================================================================================================================================
 
 void enemy::controlAI()
 {
@@ -275,8 +273,15 @@ void enemy::changeStatus()
 void enemy::corpseInit()
 {
 	for (int i = 0; i < BODY_PART; ++i)
-	{
-		_corpse[i].angle = RND->getFromFloatTo(PI/8, PI/8*7);
+	{		
+		if (_isLeft)
+		{
+			_corpse[i].angle = RND->getFromFloatTo(PI/2 + 0.2f, PI - 0.2f);
+		}
+		else
+		{
+			_corpse[i].angle = RND->getFromFloatTo(0.2f, PI / 2 - 0.2f);
+		}
 		_corpse[i].speed = RND->getFromFloatTo(6.f, 9.f);
 		_corpse[i].gravity = 0.0f;
 		_corpse[i].corpseImage = new image;
@@ -510,13 +515,14 @@ void enemy::enemyExplode()
 	if (_isApart)
 	{
 		this->partMove();
+		
 	}
 }
 
 void enemy::partMove()
 {
 	for (int i = 0; i < 4; ++i)
-	{		
+	{				
 		_corpse[i].x += cosf(_corpse[i].angle) * _corpse[i].speed;
 		_corpse[i].y += - sinf(_corpse[i].angle) * _corpse[i].speed + _corpse[i].gravity;
 		_corpse[i].gravity += 0.4f;

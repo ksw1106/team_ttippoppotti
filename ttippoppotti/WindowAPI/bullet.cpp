@@ -647,13 +647,19 @@ void pBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 		_vBullet[i].isActived = true;
 		_vBullet[i].speed = fireSpeed;
 		_vBullet[i].isLeft = isLeft;
-		y = RND->getFromIntTo(y - 20, y + 20);			// y °ªÀ» ·£´ýÀ¸·Î ¹Ù²ãÁà¼­ ÃÑ¾Ë ³ª°¡´Â°Ô ·£´ýÇÏ°Ô ³ª°¨
 		_vBullet[i].x = _vBullet[i].fireX = x;
 		_vBullet[i].y = _vBullet[i].fireY = y;
 		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
 			_vBullet[i].bulletImage->getFrameWidth(),
 			_vBullet[i].bulletImage->getFrameHeight());
-		
+		if (_vBullet[i].isLeft)
+		{
+			_vBullet[i].angle = RND->getFromFloatTo(175.f, 183.f) * PI / 180;
+		}
+		if (!_vBullet[i].isLeft)
+		{
+			_vBullet[i].angle = RND->getFromFloatTo(-5.f, 3.f) * PI / 180;
+		}
 		break;
 	}
 }
@@ -666,13 +672,11 @@ void pBullet::move()
 		{
 			if (_vBullet[i].isLeft)					// ¿ÞÂÊ
 			{
-				_vBullet[i].angle = 180.f * PI / 180;
 				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
 			if (!_vBullet[i].isLeft)				// ¿À¸¥ÂÊ
 			{
-				_vBullet[i].angle = 0.f * PI / 180;
 				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
 			}
@@ -805,4 +809,103 @@ void pGrenade::move()
 		}
 	}
 }
+//=============================================================
+//	## Gbullet ## (ÇÒ¾Æ¹öÁö ÀÏ¹ÝÃÑ¾Ë)
+//=============================================================
+HRESULT gBullet::init(float range)
+{
+	_range = range;
 
+	for (int i = 0; i < 5; i++)
+	{
+		tagBullet gBullet;
+		ZeroMemory(&gBullet, sizeof(tagBullet));
+		gBullet.bulletImage = new image;
+		gBullet.bulletImage->init("player_chuck/chuck_bullet.bmp", 20, 16, 1, 1, true, RGB(255, 0, 255));
+
+		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
+		_vBullet.push_back(gBullet);
+	}
+	return S_OK;
+}
+
+void gBullet::release(void)
+{
+}
+
+void gBullet::update(void)
+{
+	move();
+}
+
+void gBullet::render(void)
+{
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		if (_vBullet[i].isActived == true)
+		{
+			_vBullet[i].bulletImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
+				_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
+				_vBullet[i].bulletImage->getFrameX(), _vBullet[i].bulletImage->getFrameY());
+		}
+	}
+}
+
+void gBullet::fire(int x, int y, int fireSpeed, bool isLeft)
+{
+	for (int i = 0; i < _vBullet.size(); i++)
+	{
+		if (_vBullet[i].isActived)continue;
+		_vBullet[i].isActived = true;
+		_vBullet[i].speed = fireSpeed;
+		_vBullet[i].isLeft = isLeft;
+		_vBullet[i].gravity = 0.0f;
+		_vBullet[i].count = 0;
+		_vBullet[i].x = _vBullet[i].fireX = x;
+		_vBullet[i].y = _vBullet[i].fireY = y;
+		_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
+			_vBullet[i].bulletImage->getFrameWidth(),
+			_vBullet[i].bulletImage->getFrameHeight());
+		if (_vBullet[i].isLeft)
+		{
+			_vBullet[i].angle = 168.f * i * (PI / 180) + 25;
+		}
+		if (!_vBullet[i].isLeft)
+		{
+			_vBullet[i].angle = 10.f * i * (PI / 180) + 25;
+		}
+	}
+}
+
+void gBullet::move()
+{
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		if (_vBullet[i].isActived)
+		{
+			if (_vBullet[i].isLeft)					// ¿ÞÂÊ
+			{
+				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
+				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
+			}
+			if (!_vBullet[i].isLeft)				// ¿À¸¥ÂÊ
+			{
+				_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
+				_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
+			}
+
+			_vBullet[i].rc = RectMakeCenter(_vBullet[i].x, _vBullet[i].y,
+				_vBullet[i].bulletImage->getFrameWidth(),
+				_vBullet[i].bulletImage->getFrameHeight());
+
+			float distance = getDistance(_vBullet[i].x, _vBullet[i].y, _vBullet[i].fireX, _vBullet[i].fireY);
+
+			if (distance > _range)
+			{
+				_vBullet[i].isActived = false;
+				if (_vBullet[i].isActived == false)
+					EFFECTMANAGER->bulletPuff(_vBullet[i].x, _vBullet[i].y);
+			}
+		}
+	}
+}

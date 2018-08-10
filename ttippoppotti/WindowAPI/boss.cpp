@@ -59,42 +59,46 @@ void boss::update(void)
 
 void boss::render(void)
 {
-	// Å×·¯ÄßÅÍ º»Ã¼
-	_terrorKopter.img.bodyImage[_bodyStatus]->frameRender(getMemDC(), _terrorKopter.x - CAMERAMANAGER->getCamera().left, _terrorKopter.y - CAMERAMANAGER->getCamera().top,
-		_terrorKopter.img.bodyImage[_bodyStatus]->getFrameX(), _terrorKopter.img.bodyImage[_bodyStatus]->getFrameY());
-	
-	// ÇÁ·ÎÆç·¯
-	if (_bodyStatus != B_TURN)
+	if (CAMERAMANAGER->CameraIn(_terrorKopter.rcBody))
 	{
-		_terrorKopter.img.propellerImage->frameRender(getMemDC(), _terrorKopter.x + 50 - CAMERAMANAGER->getCamera().left, _terrorKopter.y + 20 - CAMERAMANAGER->getCamera().top,
-			_terrorKopter.img.propellerImage->getFrameX(), _terrorKopter.img.propellerImage->getFrameY());
-	}
+		// Å×·¯ÄßÅÍ º»Ã¼
+		_terrorKopter.img.bodyImage[_bodyStatus]->frameRender(getMemDC(), _terrorKopter.x - CAMERAMANAGER->getCamera().left, _terrorKopter.y - CAMERAMANAGER->getCamera().top,
+			_terrorKopter.img.bodyImage[_bodyStatus]->getFrameX(), _terrorKopter.img.bodyImage[_bodyStatus]->getFrameY());
 
-	// ±â°üÃÑ
-	_terrorKopter.img.gunImage[_gunStatus]->frameRender(getMemDC(), _terrorKopter.x + 100 - CAMERAMANAGER->getCamera().left, _terrorKopter.y + 205 - CAMERAMANAGER->getCamera().top,
-		_terrorKopter.img.gunImage[_gunStatus]->getFrameX(), _terrorKopter.img.gunImage[_gunStatus]->getFrameY());
-
-	// ÃÑ¾Ë È¿°ú
-	if (_gunStatus == BB_FIRE)
-	{
-		if (_terrorKopter.isLeft)
+		// ÇÁ·ÎÆç·¯
+		if (_bodyStatus != B_TURN)
 		{
-			_terrorKopter.img.bulletFireImage->frameRender(getMemDC(), _terrorKopter.rcGun.left - 30 - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.bottom - 30 - CAMERAMANAGER->getCamera().top,
-				_terrorKopter.img.bulletFireImage->getFrameX(), _terrorKopter.img.bulletFireImage->getFrameY());
+			_terrorKopter.img.propellerImage->frameRender(getMemDC(), _terrorKopter.x + 50 - CAMERAMANAGER->getCamera().left, _terrorKopter.y + 20 - CAMERAMANAGER->getCamera().top,
+				_terrorKopter.img.propellerImage->getFrameX(), _terrorKopter.img.propellerImage->getFrameY());
 		}
-		else
-			_terrorKopter.img.bulletFireImage->frameRender(getMemDC(), _terrorKopter.rcGun.right - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.bottom - 30 - CAMERAMANAGER->getCamera().top,
-				_terrorKopter.img.bulletFireImage->getFrameX(), _terrorKopter.img.bulletFireImage->getFrameY());
-	}
 
-	// ·ºÆ® È®ÀÎ
-	if (KEYMANAGER->isToggleKey(VK_F10))
-	{
-		RectangleMake(getMemDC(), _terrorKopter.rcBody.left - CAMERAMANAGER->getCamera().left, _terrorKopter.rcBody.top - CAMERAMANAGER->getCamera().top,
-			_terrorKopter.rcBody.right - _terrorKopter.rcBody.left, _terrorKopter.rcBody.bottom - _terrorKopter.rcBody.top);
-		RectangleMake(getMemDC(), _terrorKopter.rcGun.left - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.top - CAMERAMANAGER->getCamera().top,
-			_terrorKopter.img.gunImage[_gunStatus]->getFrameWidth(), _terrorKopter.img.gunImage[_gunStatus]->getFrameHeight());
+		// ±â°üÃÑ
+		_terrorKopter.img.gunImage[_gunStatus]->frameRender(getMemDC(), _terrorKopter.x + 100 - CAMERAMANAGER->getCamera().left, _terrorKopter.y + 205 - CAMERAMANAGER->getCamera().top,
+			_terrorKopter.img.gunImage[_gunStatus]->getFrameX(), _terrorKopter.img.gunImage[_gunStatus]->getFrameY());
+
+		// ÃÑ¾Ë È¿°ú
+		if (_gunStatus == BB_FIRE)
+		{
+			if (_terrorKopter.isLeft)
+			{
+				_terrorKopter.img.bulletFireImage->frameRender(getMemDC(), _terrorKopter.rcGun.left - 30 - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.bottom - 30 - CAMERAMANAGER->getCamera().top,
+					_terrorKopter.img.bulletFireImage->getFrameX(), _terrorKopter.img.bulletFireImage->getFrameY());
+			}
+			else
+				_terrorKopter.img.bulletFireImage->frameRender(getMemDC(), _terrorKopter.rcGun.right - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.bottom - 30 - CAMERAMANAGER->getCamera().top,
+					_terrorKopter.img.bulletFireImage->getFrameX(), _terrorKopter.img.bulletFireImage->getFrameY());
+		}
+
+		// ·ºÆ® È®ÀÎ
+		if (KEYMANAGER->isToggleKey(VK_F10))
+		{
+			RectangleMake(getMemDC(), _terrorKopter.rcBody.left - CAMERAMANAGER->getCamera().left, _terrorKopter.rcBody.top - CAMERAMANAGER->getCamera().top,
+				_terrorKopter.rcBody.right - _terrorKopter.rcBody.left, _terrorKopter.rcBody.bottom - _terrorKopter.rcBody.top);
+			RectangleMake(getMemDC(), _terrorKopter.rcGun.left - CAMERAMANAGER->getCamera().left, _terrorKopter.rcGun.top - CAMERAMANAGER->getCamera().top,
+				_terrorKopter.img.gunImage[_gunStatus]->getFrameWidth(), _terrorKopter.img.gunImage[_gunStatus]->getFrameHeight());
+		}
 	}
+	
 }
 
 void boss::terrorKopterMove()
