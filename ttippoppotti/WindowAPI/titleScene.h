@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+
 class titleScene : public gameNode
 {
 	image* title[126];
