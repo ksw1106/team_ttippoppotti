@@ -39,8 +39,9 @@ HRESULT effectManager::init(void)
 
 	addEffect("rambro_cartridge", "rambro_cartridge", 50, 1, true);
 
-	addEffect("bulletPuff", "bulletPuff", 10, 1, true);
+	addEffect("bulletPuff", "yellowPuff", 20, 1, true);
 	addEffect("knifePuff", "whitePuff", 1, 1, true);
+	addEffect("grenadePuff", "redPuff", 1, 1, true);
 
 	addEffect("saveBubble", "saveBubble2", 5, 1, true);
 
@@ -52,7 +53,7 @@ HRESULT effectManager::init(void)
 	addEffect("bigBang", "explosionFlame8", 10, 10);
 
 	_count = 0;
-	_isExplosion = false;
+	_isExplosion = _isGrenadePuff = false;
 
 	return S_OK;
 }
@@ -76,7 +77,12 @@ void effectManager::update(void)
 {
 	if (_isExplosion)
 	{
-		explosion(_x, _y);
+		explosionStart(_x, _y);
+		_count++;
+	}
+	else if (_isGrenadePuff)
+	{
+		grenadePuffStart(_x, _y);
 		_count++;
 	}
 
@@ -164,12 +170,35 @@ void effectManager::ashes(float x, float y)
 
 void effectManager::bulletPuff(float x, float y)
 {
-	this->playBulletPuff("bulletPuff", x, y);
+	this->playEllipsePuff("bulletPuff", x, y);
+}
+
+void effectManager::grenadePuff(float x, float y)
+{
+	_isGrenadePuff = true;
+	_x = x;
+	_y = y;
+}
+
+void effectManager::grenadePuffStart(float x, float y)
+{
+	if (_count > 20)
+		this->playEllipsePuff("grenadePuff", x, y);
+	else if (_count > 10)
+		this->playEllipsePuff("grenadePuff", x, y);
+	else
+		this->playEllipsePuff("grenadePuff", x, y);
+
+	if (_count > 30)
+	{
+		_isGrenadePuff = false;
+		_count = 0;
+	}
 }
 
 void effectManager::knifePuff(float x, float y, bool isLeft)
 {
-	this->playKnifePuff("knifePuff", x, y, isLeft);
+	this->playEllipsePuff("knifePuff", x, y, isLeft);
 }
 
 void effectManager::flyingFlies(float x, float y)
@@ -187,7 +216,7 @@ void effectManager::bigBang(float x, float y)
 	this->playBigBang("bigBang", x, y);
 }
 
-void effectManager::explosion(float x, float y)
+void effectManager::explosionStart(float x, float y)
 { 
 	if (_count > 35)
 		this->playExplosion("flame8", x, y);
@@ -217,7 +246,7 @@ void effectManager::explosion(float x, float y)
 	//this->playBallExplosion("ballFlame3", x, y);
 }
 
-void effectManager::explosionStart(float x, float y)
+void effectManager::explosion(float x, float y)
 {
 	_isExplosion = true;
 	_x = x;
@@ -310,7 +339,7 @@ void effectManager::playCartridge(string effectName, float x, float y, bool isLe
 	}
 }
 
-void effectManager::playBulletPuff(string effectName, float x, float y)
+void effectManager::playEllipsePuff(string effectName, float x, float y)
 {
 	miEffect mIter;
 
@@ -322,13 +351,13 @@ void effectManager::playBulletPuff(string effectName, float x, float y)
 		for (int i = 0; i < mIter->second.size(); i++)
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
-			mIter->second[i]->activateBulletPuff(x, y);
+			mIter->second[i]->activateEllipsePuff(x, y);
 			return;
 		}
 	}
 }
 
-void effectManager::playKnifePuff(string effectName, float x, float y, bool isLeft)
+void effectManager::playEllipsePuff(string effectName, float x, float y, bool isLeft)
 {
 	miEffect mIter;
 
@@ -340,7 +369,7 @@ void effectManager::playKnifePuff(string effectName, float x, float y, bool isLe
 		for (int i = 0; i < mIter->second.size(); i++)
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
-			mIter->second[i]->activateKnifePuff(x, y, isLeft);
+			mIter->second[i]->activateEllipsePuff(x, y, isLeft);
 			return;
 		}
 	}

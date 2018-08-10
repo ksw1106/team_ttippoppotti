@@ -18,6 +18,18 @@ void loadingScene::Kim_Sang_Won_addImage()
 	_loading->loadFrameImage("helicopter", "objectImage/helicopter.bmp", 1625, 419, 5, 1);
 	_loading->loadFrameImage("saveFlag", "objectImage/saveFlag.bmp", 3234, 88, 33, 1);
 	_loading->loadFrameImage("flag", "objectImage/flag.bmp", 3650.f, 972.f, 2048, 112, 32, 1);
+
+	_loading->loadImage("0", "number/clear/0.bmp", 48, 76, true, RGB(255, 0, 255));
+	_loading->loadImage("1", "number/clear/1.bmp", 43, 76, true, RGB(255, 0, 255));
+	_loading->loadImage("2", "number/clear/2.bmp", 48, 76, true, RGB(255, 0, 255));
+	_loading->loadImage("3", "number/clear/3.bmp", 50, 76, true, RGB(255, 0, 255));
+	_loading->loadImage("4", "number/clear/4.bmp", 52, 76, true, RGB(255, 0, 255));
+	_loading->loadImage("5", "number/clear/5.bmp", 49, 76, true, RGB(255, 0, 255));
+	_loading->loadImage("6", "number/clear/6.bmp", 48, 76, true, RGB(255, 0, 255));
+	_loading->loadImage("7", "number/clear/7.bmp", 50, 76, true, RGB(255, 0, 255));
+	_loading->loadImage("8", "number/clear/8.bmp", 53, 76, true, RGB(255, 0, 255));
+	_loading->loadImage("9", "number/clear/9.bmp", 48, 76, true, RGB(255, 0, 255));
+	_loading->loadImage("timeDot", "number/clear/timeDot.bmp", 19, 19);
 }
 
 void loadingScene::Kim_Sang_Won_addSound()
@@ -33,5 +45,5 @@ void loadingScene::Kim_Sang_Won_addSound()
 	_loading->loadSound("go", "start_go.mp3");
 
 	_loading->loadSound("1stage", "title/sound/1stage.wav", true, true);
-	_loading->loadSound("clear", "areaClear/sound/clear.wav", true, true);
+	_loading->loadSound("clear", "stageClear/sound/clear.wav", true, true);
 }

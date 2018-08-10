@@ -36,7 +36,9 @@ void testScene_kmy::update(void)
 
 		EFFECTMANAGER->ashes(700, 2000);
 
-		EFFECTMANAGER->bigBang(900, 1800);
+		EFFECTMANAGER->bigBang(900, 1900);
+
+		EFFECTMANAGER->grenadePuff(800, 1800);
 	}
 }
 
