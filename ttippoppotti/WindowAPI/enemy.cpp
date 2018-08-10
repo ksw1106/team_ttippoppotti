@@ -125,6 +125,9 @@ void enemy::update(void)
 	}
 
 	this->controlAI();
+
+	if (_isLeft) _angle = PI;
+	else _angle = 0.f;
 }
 
 void enemy::render(void)
@@ -194,16 +197,64 @@ void enemy::render(void)
 //===========================================================================================================================================================================================================
 //===========================================================================================================================================================================================================
 
+void enemy::walk()
+{	
+	if (_isLeft)
+	{
+		_x -= _speed/2;
+	}
+	else
+	{
+		_x += _speed/2;
+	}
+}
+
 void enemy::controlAI()
 {
-	//int count = RND->getFromIntTo(0, );
-	//
-	//switch (count)
-	//{
-	//case : 
-	//default:
-	//	break;
-	//}
+	if (!_isAlive || _isUncovered || _isStrange || _isApart)
+	{
+
+	}
+	else
+	{
+		++_count;
+		if (_count % 30 == 0)
+		{
+			_phase = RND->getFromIntTo(0, 2);
+			_direction = RND->getFromIntTo(0,1);
+			if (_direction == 1)
+			{
+				_isLeft = true;
+			}
+			else
+			{
+				_isLeft = false;
+			}
+		}
+		
+		switch (_phase)
+		{
+			case 0:
+			{
+				_enemyStatus = ENEMY_IDLE;
+				break;
+			}
+			case 1:
+			{
+				_enemyStatus = ENEMY_IDLE;
+				break;
+			}
+			case 2:
+			{
+				_enemyStatus = ENEMY_WALK;
+				break;
+			}
+		default:
+			break;
+		}
+	}
+
+	if (_count >= 500) _count = 0;	
 }
 
 // 에너미 움직임 변화
@@ -220,7 +271,7 @@ void enemy::changeStatus()
 	{
 		if (_isAlive)
 		{
-
+			walk();
 			break;
 		}
 		else
@@ -466,7 +517,7 @@ void enemy::frameAnimate()
 	}
 	else
 	{
-		_enemyImage.speed = 10;
+		_enemyImage.speed = 8;
 		FRAMEMANAGER->frameChange(_enemyImage.bodyImage[_enemyStatus], _enemyImage.count, _enemyImage.bodyImageIndex, _enemyImage.speed, _isLeft);
 		FRAMEMANAGER->frameChange(_enemyImage.armImage[_gunStatus], _enemyImage.count, _enemyImage.armImageIndex, _enemyImage.speed, _isLeft);
 	}
