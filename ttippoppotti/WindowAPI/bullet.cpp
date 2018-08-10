@@ -868,11 +868,11 @@ void gBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 			_vBullet[i].bulletImage->getFrameHeight());
 		if (_vBullet[i].isLeft)
 		{
-			_vBullet[i].angle = 168.f * i * (PI / 180) + 25;
+			_vBullet[i].angle = (RND->getFromFloatTo(190.f, 195.f) - 7 * i) * (PI / 180);
 		}
 		if (!_vBullet[i].isLeft)
 		{
-			_vBullet[i].angle = 10.f * i * (PI / 180) + 25;
+			_vBullet[i].angle = (RND->getFromFloatTo(-15.f, -10.f) + 7 * i) * (PI / 180);
 		}
 	}
 }
