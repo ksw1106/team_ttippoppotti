@@ -32,7 +32,7 @@ public:
 	void setPlayerManager(playerManager* playerManager) { _playerManager = playerManager; }
 	void collisionProcess();
 	//오브젝트매니져 초기화
-	HRESULT init();
+	HRESULT init(int num);
 	//오브젝트매니져 해제
 	void release();
 	void update();

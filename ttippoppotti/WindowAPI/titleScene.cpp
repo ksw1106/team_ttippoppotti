@@ -118,6 +118,7 @@ void titleScene::update(void)
 	if (KEYMANAGER->isOnceKeyDown(VK_RETURN) && isStart && count >= 62.f)
 	{
 		SOUNDMANAGER->stop("title");
+		SCENEMANAGER->getCurrentScene()->release();
 		SCENEMANAGER->loadScene("·Îµù¾À");
 	}
 

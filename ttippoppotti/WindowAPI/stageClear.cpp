@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "stageClear.h"
-
+#include "enemyManager.h"
 
 
 HRESULT stageClear::init(void)
@@ -30,7 +30,8 @@ HRESULT stageClear::init(void)
 	enemyBoardX = 1920.f;
 
 	_isPrintImage = _isPrintEnemy = _isPrintTime = _isCalculateTime = false;
-
+	_isAddEnemy = _isShowEnemy = false;
+	_enemyCount = 0;
 	ZeroMemory(timePos, sizeof(POINT));
 
 	timePos[0].x = 1135, timePos[0].y = 609;
@@ -46,7 +47,6 @@ HRESULT stageClear::init(void)
 	timeDiv[2] = 10;
 	timeDiv[3] = 1;
 
-
 	return S_OK;
 }
 
@@ -56,6 +56,9 @@ void stageClear::release(void)
 	{
 		SAFE_DELETE(_clear[i]);
 	}
+	SAFE_DELETE(_clearBlank);
+	SAFE_DELETE(_enemyBoard);
+	SAFE_DELETE(_timeBoard);
 }
 
 void stageClear::update(void)
@@ -85,15 +88,76 @@ void stageClear::update(void)
 	{
 		enemyBoardX += cosf(180.f) * 100.f;
 	}
+	
+	if (enemyBoardX <= 745.f && !_isShowEnemy)
+	{
+		_clearCount++;
+		if (_clearCount >= 20.f)
+		{
+			_isShowEnemy = true;
+			_clearCount = 0;
+
+			//테스트용 적 벡터 만들기(나중에 지워야함)
+			for (int i = 0; i < 4; i++)
+			{
+				deadEnemy dEnemy;
+				ZeroMemory(&dEnemy, sizeof(deadEnemy));
+
+				dEnemy.isLeft = RND->getFromIntTo(0, 1);
+				dEnemy._enemyType = SOLDIER;
+
+				_enemyManager->addVDeadEnemyInfo(dEnemy);
+			}
+
+			for (int i = 0; i < _enemyManager->getVDeadEnemyInfo().size(); i++)
+			{
+				enemyList eList;
+				ZeroMemory(&eList, sizeof(enemyList));
+
+				switch (_enemyManager->getVDeadEnemyInfo()[i]._deadType)
+				{
+				case SOLDIER:
+					eList.image[0] = IMAGEMANAGER->findImage("dead_soldier_idle");
+					eList.isFrameImage[0] = false;
+					eList.image[1] = IMAGEMANAGER->findImage("dead_soldier_dead");
+					eList.isFrameImage[1] = true;
+					break;
+				case BROVIL:
+					break;
+				case TERROCOPTER:
+					break;
+				}
+
+				_enemyList.push_back(eList);
+
+			}
+		}
+	}
+
+
+
+	//적 죽는표현
+	if (_isShowEnemy)
+	{
+		//병사 종류
+		//죽는 방식
+		//방향
+
+		if (_enemyCount <= _enemyManager->getVDeadEnemyInfo().size() - 1)
+		{
+			for (int i = 0; i < _enemyCount; i++)
+			{
+				switch (_enemyManager->getVDeadEnemyInfo()[i]._enemyType)
+				{
+
+				}
+			}
+		}	
+	}
 
 	if (enemyBoardX <= 745.f && !_isPrintTime)
 	{
-		_clearCount++;
-		if (_clearCount >= 50.f)
-		{
-			_isPrintTime = true;
-			_clearCount = 0;
-		}
+
 	}
 
 	if (_isPrintTime && timeBoardX >= 745.f)
@@ -104,7 +168,7 @@ void stageClear::update(void)
 	if (timeBoardX <= 745.f && !_isCalculateTime)
 	{
 		_clearCount++;
-		if (_clearCount >= 30.f)
+		if (_clearCount >= 20.f)
 		{
 			_isCalculateTime = true;
 			_clearCount = 0;
