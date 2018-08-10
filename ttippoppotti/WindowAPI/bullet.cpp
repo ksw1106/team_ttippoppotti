@@ -749,6 +749,7 @@ void pGrenade::render(void)
 				_vBullet[i].grenadeImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
 					_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
 					_vBullet[i].grenadeImage->getFrameX(), _vBullet[i].grenadeImage->getFrameY());
+				EFFECTMANAGER->grenadePuff(_vBullet[i].bulletImage->getFrameX() - CAMERAMANAGER->getCamera().left, _vBullet[i].bulletImage->getFrameY() -CAMERAMANAGER->getCamera().top);
 			}
 		}
 	}
@@ -822,7 +823,6 @@ HRESULT gBullet::init(float range)
 		ZeroMemory(&gBullet, sizeof(tagBullet));
 		gBullet.bulletImage = new image;
 		gBullet.bulletImage->init("player_chuck/chuck_bullet.bmp", 20, 16, 1, 1, true, RGB(255, 0, 255));
-
 		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
 		_vBullet.push_back(gBullet);
 	}
