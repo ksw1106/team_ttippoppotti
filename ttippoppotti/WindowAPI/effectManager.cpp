@@ -176,8 +176,8 @@ void effectManager::bulletPuff(float x, float y)
 void effectManager::grenadePuff(float x, float y)
 {
 	_isGrenadePuff = true;
-	_x = x;
-	_y = y;
+	_x = x - 64;
+	_y = y - 44;
 }
 
 void effectManager::grenadePuffStart(float x, float y)
