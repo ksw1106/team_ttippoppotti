@@ -19,6 +19,7 @@ private:
 	float _x, _y;
 	bool _isExplosion;
 	bool _isGrenadePuff;
+	bool _isBigBang;
 public:
 	HRESULT init(void);
 	void release(void);
@@ -51,6 +52,8 @@ public:
 	void saveBubble(float x, float y);
 	//대폭발
 	void bigBang(float x, float y);
+	//대폭발 초기화
+	void bigBangStart(float x, float y);
 	//폭발
 	void explosion(float x, float y);
 	//폭발 초기화

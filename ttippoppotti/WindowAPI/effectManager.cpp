@@ -5,14 +5,14 @@
 
 HRESULT effectManager::init(void)
 {
-	addEffect("bloodSplash1", "blood_still1", 10, 10);
-	addEffect("bloodSplash2", "blood_still2", 10, 10);
-	addEffect("bloodSplash3", "blood_still3", 10, 10);
-	addEffect("bloodSplash4", "blood_still4", 10, 10);
-	addEffect("bloodSplash5", "blood_still5", 10, 10);
-	addEffect("bloodSplash6", "blood_still6", 10, 10);
-	addEffect("bloodSplash7", "blood_still7", 10, 10);
-	addEffect("bloodSplash8", "blood_still8", 10, 10);
+	addEffect("bloodSplash1", "blood_still1", 10, 5);
+	addEffect("bloodSplash2", "blood_still2", 10, 5);
+	addEffect("bloodSplash3", "blood_still3", 10, 5);
+	addEffect("bloodSplash4", "blood_still4", 10, 5);
+	addEffect("bloodSplash5", "blood_still5", 10, 5);
+	addEffect("bloodSplash6", "blood_still6", 10, 5);
+	addEffect("bloodSplash7", "blood_still7", 10, 5);
+	addEffect("bloodSplash8", "blood_still8", 10, 5);
 
 	addEffect("rock1", "rock_big1", 10, 10);
 	addEffect("rock2", "rock_big2", 10, 10);
@@ -53,7 +53,7 @@ HRESULT effectManager::init(void)
 	addEffect("bigBang", "explosionFlame8", 10, 10);
 
 	_count = 0;
-	_isExplosion = _isGrenadePuff = false;
+	_isExplosion = _isGrenadePuff = _isBigBang = false;
 
 	return S_OK;
 }
@@ -78,6 +78,11 @@ void effectManager::update(void)
 	if (_isExplosion)
 	{
 		explosionStart(_x, _y);
+		_count++;
+	}
+	else if (_isBigBang)
+	{
+		bigBangStart(_x, _y);
 		_count++;
 	}
 	else if (_isGrenadePuff)
@@ -182,14 +187,11 @@ void effectManager::grenadePuff(float x, float y)
 
 void effectManager::grenadePuffStart(float x, float y)
 {
-	if (_count > 20)
+	if (_count < 15)
+	{
 		this->playEllipsePuff("grenadePuff", x, y);
-	else if (_count > 10)
-		this->playEllipsePuff("grenadePuff", x, y);
+	}
 	else
-		this->playEllipsePuff("grenadePuff", x, y);
-
-	if (_count > 30)
 	{
 		_isGrenadePuff = false;
 		_count = 0;
@@ -214,6 +216,19 @@ void effectManager::saveBubble(float x, float y)
 void effectManager::bigBang(float x, float y)
 {
 	this->playBigBang("bigBang", x, y);
+	//_isBigBang = true;
+	//_x = x;
+	//_y = y;
+}
+
+void effectManager::bigBangStart(float x, float y)
+{
+	this->playBigBang("bigBang", x, y);
+	if (_count > 40)
+	{
+		_isBigBang = false;
+		_count = 0;
+	}
 }
 
 void effectManager::explosionStart(float x, float y)
@@ -249,8 +264,8 @@ void effectManager::explosionStart(float x, float y)
 void effectManager::explosion(float x, float y)
 {
 	_isExplosion = true;
-	_x = x;
-	_y = y;
+	_x = x - 64;
+	_y = y - 44;
 }
 
 void effectManager::addEffect(string effectName, const char * imageName, int buffer, int count, bool isFrameImg)
