@@ -7,7 +7,8 @@ enum bossStatus
 	LEFT_TO_RIGHT, RIGHT_TO_LEFT,
 	LEFT_MOVE, RIGHT_MOVE,
 	LEFT_FIRE_BULLET, RIGHT_FIRE_BULLET,
-	LEFT_FIRE_ROCKET, RIGHT_FIRE_ROCKET
+	LEFT_FIRE_ROCKET, RIGHT_FIRE_ROCKET,
+	LEFT_DEAD, RIGHT_DEAD
 };
 
 enum bossBodyStatus
@@ -32,8 +33,7 @@ struct tagBossImage
 	int propellerIndex;
 	int rotorIndex;
 	int frameCount;
-	int frameSpeed;
-	
+	int frameSpeed;	
 };
 
 struct tagBoss
@@ -88,6 +88,8 @@ public:
 	bossBodyStatus getBodyStatus() { return _bodyStatus; }
 	bossGunStatus getGunStatus() { return _gunStatus; }
 
+	RECT getRcBoss() { return _terrorKopter.rcBody; }
+	void setRcBoss(RECT rc) { _terrorKopter.rcBody = rc; }
 	bool getIsTurning() { return _terrorKopter.isTurning; }
 	void setIsTurning(bool isTurning) { _terrorKopter.isTurning = isTurning; }
 	bool getIsLeft() { return _terrorKopter.isLeft; }
@@ -113,6 +115,8 @@ public:
 	// 상하좌우로 움직임
 	void verticalMove(float x, float y, float angle);
 	void bombAttack(float x, float y, float angle);
+	void bossDie();
+	bool radarIn(float x, float y, float distance);
 	
 	void move();
 	

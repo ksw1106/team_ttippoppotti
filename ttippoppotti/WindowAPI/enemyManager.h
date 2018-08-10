@@ -79,7 +79,6 @@ public:
 	
 	// 에너미 시야 vs 플레이어 충돌
 	void collideWithSight();
-	
 	// 에너미 vs 픽셀
 	void collideWithPixel();
 	// 에너미 vs 플레이어 총알
@@ -99,7 +98,9 @@ public:
 	void collideWithBossBullet();
 	void collideWithBossRocket();
 	void bossDirChange();
-	
+	// 보스 vs 플레이어 총알
+	void PBulletHitBoss();
+		
 	// 브로빌 vs 플레이어 총알 충돌
 	void collideBrovilwithPBullet();
 	// 브로빌 vs 플레이어 수류탄 충돌

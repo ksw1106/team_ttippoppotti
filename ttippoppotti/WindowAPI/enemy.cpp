@@ -133,7 +133,7 @@ void enemy::update(void)
 void enemy::render(void)
 {
 	if (CAMERAMANAGER->CameraIn(getRcEnemy()))
-	{
+	{		
 		//몸통 이미지 렌더
 		if (!_isApart)	// 분해되지 않았을때
 		{
@@ -145,7 +145,7 @@ void enemy::render(void)
 		{
 			for (int i = 0; i < BODY_PART; ++i)
 			{
-				_corpse[i].corpseImage->render(getMemDC(), _corpse[i].x - CAMERAMANAGER->getCamera().left, _corpse[i].y - CAMERAMANAGER->getCamera().top);
+				_corpse[i].corpseImage->rotateRender(getMemDC(), _corpse[i].x - CAMERAMANAGER->getCamera().left, _corpse[i].y - CAMERAMANAGER->getCamera().top, _corpse[i].angle);
 			}
 		}
 
@@ -174,8 +174,7 @@ void enemy::render(void)
 		if (_isStrange && _doubtFrameIndex < _doubtSign->getMaxFrameX())
 		{
 			_doubtSign->frameRender(getMemDC(), _x + 10 - CAMERAMANAGER->getCamera().left, _y - 50 - CAMERAMANAGER->getCamera().top, _doubtSign->getFrameX(), _doubtSign->getFrameY());
-		}
-		
+		}		
 	}
 
 	if (KEYMANAGER->isToggleKey(VK_F4))
@@ -544,11 +543,11 @@ void enemy::knockBackMove(bool isLeft)
 	{
 		if (isLeft)
 		{		
-			_angle = PI / 5 * 4;
+			_angle = PI - 0.4f;
 		}
 		else
 		{		
-			_angle = PI / 5;
+			_angle = 0.4f;
 		}	
 		_x += cosf(_angle)*_kbSpeed;
 		_y += -sinf(_angle)*_kbSpeed;
