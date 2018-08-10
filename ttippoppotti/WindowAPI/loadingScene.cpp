@@ -29,6 +29,7 @@ void loadingScene::update(void)
 	//로딩완료후 씬변경
 	if (_loading->loadingDone())
 	{
+		SCENEMANAGER->getCurrentScene()->release();
 		SCENEMANAGER->loadScene("스테이지씬");
 	}
 
