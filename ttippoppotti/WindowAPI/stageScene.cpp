@@ -142,6 +142,7 @@ void stageScene::update(void)
 	if (KEYMANAGER->isOnceKeyDown('T'))
 	{
 		_isClear = true;
+		_stageClear->setClearTime(TIMEMANAGER->getWorldTime());
 		SOUNDMANAGER->stop("stage1");
 		SOUNDMANAGER->play("clear");
 	}
