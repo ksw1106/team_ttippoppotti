@@ -54,6 +54,10 @@ void enemyManager::release(void)
 
 void enemyManager::update(void)
 {
+	// 보스 총알, 로켓 발사
+	this->bossBulletFire();
+	this->bossRocketFire();
+	
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{		
 		_vSoldier[i]->update();		
@@ -80,9 +84,6 @@ void enemyManager::update(void)
 		}
 	}
 
-	// 보스 총알, 로켓 발사
-	this->bossBulletFire();
-	this->bossRocketFire();
 		
 	// 에너미 픽셀(지형) 충돌
 	this->collideWithPixel();
@@ -346,15 +347,12 @@ void enemyManager::collideWithSight()
 		float x = _vSoldier[i]->getRcEnemySight().left;
 		float y = _vSoldier[i]->getRcEnemySight().top;
 
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemySight(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_LEFT)) continue;
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemySight(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_RIGHT)) continue;
-			
 		if (IntersectRect(&rc, &_vSoldier[i]->getRcEnemySight(), &rcPlayer))
 		{
 			if (!_vSoldier[i]->getIsAlive()) continue;
 			// 말풍선 띄우기
 			_vSoldier[i]->setIsUncovered(true);
-		}
+		}				
 	}
 }
 

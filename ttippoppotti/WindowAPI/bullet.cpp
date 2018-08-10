@@ -544,21 +544,22 @@ void bossRocket::fire(int x, int y, int fireSpeed, bool isLeft)
 	{
 		if (_bossRocket[i].fire) continue;
 
-		_bossRocket[i].fire = true;
-		_bossRocket[i].x = _bossRocket[i].fireX = x;
-		_bossRocket[i].y = _bossRocket[i].fireY = y;
-		_bossRocket[i].gravity = 0.f;
 		_bossRocket[i].isLeft = isLeft;
-		_bossRocket[i].rc = RectMake(_bossRocket[i].x, _bossRocket[i].y, _bossRocket[i].bulletImage->getFrameWidth(), _bossRocket[i].bulletImage->getFrameHeight());
-
 		if (isLeft)
 		{
 			_bossRocket[i].angle = PI;
 		}
 		else
 		{
-			_bossRocket[i].angle = 0.f;			
+			_bossRocket[i].angle = 0.f;
 		}
+		_bossRocket[i].fire = true;
+		_bossRocket[i].x = _bossRocket[i].fireX = x;
+		_bossRocket[i].y = _bossRocket[i].fireY = y;
+		_bossRocket[i].gravity = 0.f;
+		_bossRocket[i].rc = RectMake(_bossRocket[i].x, _bossRocket[i].y, _bossRocket[i].bulletImage->getFrameWidth(), _bossRocket[i].bulletImage->getFrameHeight());
+
+		
 
 		break;
 	}
