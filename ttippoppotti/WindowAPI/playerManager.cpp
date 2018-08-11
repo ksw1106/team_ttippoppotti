@@ -59,11 +59,6 @@ HRESULT playerManager::init(int num)
 		_player->setrcSkyRight(_player->getrcSkyRight());
 		_player->setrcSkyLeft(_player->getrcSkyLeft());
 	}
-	else if (num == 2)
-	{
-
-	}
-	
 
 	return S_OK;
 }
@@ -937,11 +932,11 @@ void playerManager::update(void)
 									_xMissile->getVPlayerxMissile()[k].isActived = false;
 									for (int l = 0; l < _gMissile->getVPlayergMissile().size(); l++)
 									{
-										if (_player->getIsLeft() == false)
+										if (!_player->getIsLeft())
 										{
 											_gMissile->fire(_player->getSkyRightX() + 50, _player->getSkyRightY() + 10, 10, _player->getIsLeft());
 										}
-										if (_player->getIsLeft() == true)
+										else
 										{
 											_gMissile->fire(_player->getSkyLeftX() + 50, _player->getSkyLeftY() + 10, 10, _player->getIsLeft());
 										}
