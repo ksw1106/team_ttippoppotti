@@ -579,10 +579,122 @@ void playerManager::update(void)
 	맵 deleteMap(i) 인가 써주고
 	*/
 
+	//플레이어와 오브젝트 충돌
+	for (int k = 0; k < OBJECTMANAGER->getVObject().size(); k++)
+	{
+		if (OBJECT_DESTROY == OBJECTMANAGER->getVObject()[k]->getState()) continue;
+		if (OBJECTMANAGER->getVObject()[k]->getType() == WOODENBOX || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED ||
+			OBJECTMANAGER->getVObject()[k]->getType() == PRISONER || OBJECTMANAGER->getVObject()[k]->getType() == AMERICAN_FLAG || OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
+		{
+			switch (OBJECTMANAGER->getVObject()[k]->getState())
+			{
+			case OBJECT_IDLE:
+				//오브젝트와 플레이어가 충돌했을 때 (수류탄과의 충돌도 똑같이 해줘야 한다! +앵글 바꾸는것 더해줄것)
+				if (IntersectRect(&temp, &_player->getRcRambro(), &OBJECTMANAGER->getVObject()[k]->getRect()) &&
+					OBJECTMANAGER->getVObject()[k]->getType() != AMERICAN_FLAG && OBJECTMANAGER->getVObject()[k]->getType() != HELICOPTER) 
+				{
+					int width = _player->getRcRambro().right - _player->getRcRambro().left;
+					int height = _player->getRcRambro().bottom - _player->getRcRambro().top;
+
+					if (_player->getRcRambro().left + width / 2 < temp.left)
+						_player->setX(_player->getX() - (temp.right - temp.left)); //왼 쪽에서 부딪혔을 때
+					else if (_player->getRcRambro().left + width / 2 > temp.right)
+						_player->setX(_player->getX() + (temp.right - temp.left)); //오른쪽
+
+					if (_player->getRcRambro().top + height / 2 < temp.top)
+						_player->setY(_player->getY() - (temp.bottom - temp.top)); //위에서 눌러찍었을 때
+					else if (_player->getRcRambro().top + height / 2 > temp.bottom)
+						_player->setY(_player->getY() + (temp.bottom - temp.top)); 
+				}
+				if (IntersectRect(&temp, &_player->getRcRambro(), &OBJECTMANAGER->getVObject()[k]->getActivationRect()))
+				{
+					if (OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
+						OBJECTMANAGER->getVObject()[k]->setIsActived(true);
+					if (OBJECTMANAGER->getVObject()[k]->getType() == AMERICAN_FLAG || OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
+						OBJECTMANAGER->getVObject()[k]->setState(OBJECT_MOVE);
+				}
+				break;
+			case OBJECT_MOVE:
+				if (OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
+				{
+					if (IntersectRect(&temp, &_player->getRcRambro(), &OBJECTMANAGER->getVObject()[k]->getRect()))
+					{
+						//할아버지 등장 시점 
+						OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
+					}
+					else
+					{
+						//OBJECTMANAGER->getVObject()[k]->setGravity(OBJECTMANAGER->getVObject()[k]->getGravity() + 0.55f);
+						//OBJECTMANAGER->getVObject()[k]->setY(OBJECTMANAGER->getVObject()[k]->getY() + (-sinf(OBJECTMANAGER->getVObject()[k]->getAngle()) * OBJECTMANAGER->getVObject()[k]->getSpeed() + _vObject[i]->getGravity()));
+						//OBJECTMANAGER->collisionProcess();
+					}
+				}
+				if (OBJECTMANAGER->getVObject()[k]->getType() == AMERICAN_FLAG)
+				{
+					//부활 좌표 저장 시점
+				}
+				if (OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
+				{
+					//헬리콥터 사다리에 매달림
+				}
+				break;
+			}
+		}
+	}
+
 	// rambro bullet 
 	for (int i = 0; i < _pBullet->getVPlayerBullet().size(); i++)  // 총알이랑 벽이랑 충돌하면 벽 지워주기
 	{
 		if (!_pBullet->getVPlayerBullet()[i].isActived)continue;
+		for (int k = 0; k < OBJECTMANAGER->getVObject().size(); k++)
+		{
+			if (OBJECT_DESTROY == OBJECTMANAGER->getVObject()[k]->getState()) continue;
+			if (OBJECTMANAGER->getVObject()[k]->getType() == WOODENBOX || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY ||
+				OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED || OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
+			{
+				switch (OBJECTMANAGER->getVObject()[k]->getState())
+				{
+				case OBJECT_IDLE:
+					//총알과 박스/드럼통/감옥이 부딪혔을 때 (수류탄에도 똑같이 적용해 줄 것!)
+					if (IntersectRect(&temp, &_pBullet->getVPlayerBullet()[i].rc, &OBJECTMANAGER->getVObject()[k]->getRect()))
+					{
+						if (OBJECTMANAGER->getVObject()[k]->getType() == WOODENBOX)
+						{
+							EFFECTMANAGER->woodDebris(OBJECTMANAGER->getVObject()[i]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top, _player->getIsLeft());
+							OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
+						}
+						else if (OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED)
+						{
+							for (int k = 0; k < _mapData->getObject().size(); k++)
+							{
+								POINT pt;
+								pt.x = (OBJECTMANAGER->getVObject()[k]->getRect().left + (OBJECTMANAGER->getVObject()[k]->getRect().right - OBJECTMANAGER->getVObject()[k]->getRect().left) / 2);
+								pt.y = (OBJECTMANAGER->getVObject()[k]->getRect().top + (OBJECTMANAGER->getVObject()[k]->getRect().bottom - OBJECTMANAGER->getVObject()[k]->getRect().top) / 2) + 68;
+
+								if (PtInRect(&_mapData->getObject()[k]._rc, pt))
+								{
+									_mapData->deleteMapIndexByIndex(k, 5, 5);
+									break;
+								}
+							}
+							EFFECTMANAGER->explosion(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top);
+							CAMERAMANAGER->CameraShake();
+							OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
+						}
+						else if (OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
+						{
+							EFFECTMANAGER->woodDebris(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top, _player->getIsLeft());
+							OBJECTMANAGER->getVObject()[k]->setState(OBJECT_MOVE);
+						}
+						EFFECTMANAGER->bulletPuff(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y);
+						_pBullet->getVPlayerBullet()[i].isActived = false;
+					}
+					break;
+				case OBJECT_MOVE:
+					break;
+				}
+			}
+		}
 		switch (COLLISIONMANAGER->pixelCollision(_pBullet->getVPlayerBullet()[i].rc,				// 왼쪽 벽에 충돌하면 벽 지워주기
 			_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y,
 			_pBullet->getVPlayerBullet()[i].speed, _pBullet->getVPlayerBullet()[i].gravity, PLAYER_LEFT))
