@@ -39,6 +39,15 @@ HRESULT effectManager::init(void)
 
 	addEffect("rambro_cartridge", "rambro_cartridge", 50, 1, true);
 
+	addEffect("rambro_head", "rambro_head", 5, 1, true);
+	addEffect("rambro_arm", "rambro_arm", 5, 1, true);
+	addEffect("rambro_leg", "rambro_leg", 5, 1, true);
+	addEffect("rambro_uppderBody", "rambro_uppderBody", 5, 1, true);
+	addEffect("chuck_head", "chuck_head", 5, 1, true);
+	addEffect("chuck_arm", "chuck_arm", 5, 1, true);
+	addEffect("chuck_leg", "chuck_leg", 5, 1, true);
+	addEffect("chuck_upperBody", "chuck_upperBody", 5, 1, true);
+
 	addEffect("bulletPuff", "yellowPuff", 20, 1, true);
 	addEffect("knifePuff", "whitePuff", 1, 1, true);
 	addEffect("grenadePuff", "redPuff", 1, 1, true);
@@ -129,7 +138,6 @@ void effectManager::render(void)
 
 void effectManager::bloodSplash(float x, float y, bool isLeft)
 {
-	this->playParabola("bloodSplash1", x, y, isLeft);
 	this->playParabola("bloodSplash2", x, y, isLeft);
 	this->playParabola("bloodSplash3", x, y, isLeft);
 	this->playParabola("bloodSplash4", x, y, isLeft);
@@ -137,7 +145,12 @@ void effectManager::bloodSplash(float x, float y, bool isLeft)
 	this->playParabola("bloodSplash6", x, y, isLeft);
 	this->playParabola("bloodSplash7", x, y, isLeft);
 	this->playParabola("bloodSplash8", x, y, isLeft);
-	//this->playFountain("bloodSplash1", x, y);
+	this->playFountain("bloodSplash1", x, y);
+}
+
+void effectManager::bloodBlotch(float x, float y)
+{
+
 }
 
 void effectManager::bloodFountain(float x, float y)
@@ -150,6 +163,58 @@ void effectManager::bloodFountain(float x, float y)
 	this->playFountain("bloodSplash6", x, y);
 	this->playFountain("bloodSplash7", x, y);
 	this->playFountain("bloodSplash8", x, y);
+}
+
+void effectManager::RambroBloodFountain(float x, float y)
+{
+	this->playFountain("bloodSplash1", x, y);
+	this->playFountain("bloodSplash1", x, y);
+	this->playFountain("bloodSplash2", x, y);
+	this->playFountain("bloodSplash2", x, y);
+	this->playFountain("bloodSplash3", x, y);
+	this->playFountain("bloodSplash3", x, y);
+	this->playFountain("bloodSplash4", x, y);
+	this->playFountain("bloodSplash4", x, y);
+	this->playFountain("bloodSplash5", x, y);
+	this->playFountain("bloodSplash5", x, y);
+	this->playFountain("bloodSplash6", x, y);
+	this->playFountain("bloodSplash6", x, y);
+	this->playFountain("bloodSplash7", x, y);
+	this->playFountain("bloodSplash7", x, y);
+	this->playFountain("bloodSplash8", x, y);
+	this->playFountain("bloodSplash8", x, y);
+	this->playFountain("rambro_head", x, y);
+	this->playFountain("rambro_arm", x, y);
+	this->playFountain("rambro_arm", x, y);
+	this->playFountain("rambro_leg", x, y);
+	this->playFountain("rambro_leg", x, y);
+	this->playFountain("rambro_uppperBody", x, y);
+}
+
+void effectManager::chuckBloodFountain(float x, float y)
+{
+	this->playFountain("bloodSplash1", x, y);
+	this->playFountain("bloodSplash1", x, y);
+	this->playFountain("bloodSplash2", x, y);
+	this->playFountain("bloodSplash2", x, y);
+	this->playFountain("bloodSplash3", x, y);
+	this->playFountain("bloodSplash3", x, y);
+	this->playFountain("bloodSplash4", x, y);
+	this->playFountain("bloodSplash4", x, y);
+	this->playFountain("bloodSplash5", x, y);
+	this->playFountain("bloodSplash5", x, y);
+	this->playFountain("bloodSplash6", x, y);
+	this->playFountain("bloodSplash6", x, y);
+	this->playFountain("bloodSplash7", x, y);
+	this->playFountain("bloodSplash7", x, y);
+	this->playFountain("bloodSplash8", x, y);
+	this->playFountain("bloodSplash8", x, y);
+	this->playFountain("chuck_head", x, y);
+	this->playFountain("chuck_arm", x, y);
+	this->playFountain("chuck_arm", x, y);
+	this->playFountain("chuck_leg", x, y);
+	this->playFountain("chuck_leg", x, y);
+	this->playFountain("chuck_upperBody", x, y);
 }
 
 void effectManager::cartridge(float x, float y, bool isLeft)
@@ -190,8 +255,8 @@ void effectManager::bulletPuff(float x, float y)
 void effectManager::grenadePuff(float x, float y)
 {
 	_isGrenadePuff = true;
-	_x = x - 960 / 2;
-	_y = y - 110 / 2;
+	_x = x;// -960 / 2;
+	_y = y;// -110 / 2;
 }
 
 void effectManager::grenadePuffStart(float x, float y)
@@ -292,6 +357,24 @@ void effectManager::playParabola(string effectName, float x, float y, bool isLef
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
 			mIter->second[i]->activateParabola(x, y, isLeft);
+			return;
+		}
+	}
+}
+
+void effectManager::playBlotch(string effectName, float x, float y)
+{
+	miEffect mIter;
+
+	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
+	{
+		if (!(mIter->first == effectName)) continue;
+
+		//이펙트키와 일치하면 이펙트 실행
+		for (int i = 0; i < mIter->second.size(); i++)
+		{
+			if (mIter->second[i]->getIsRunning()) continue;
+			mIter->second[i]->activateBlotch(x, y);
 			return;
 		}
 	}

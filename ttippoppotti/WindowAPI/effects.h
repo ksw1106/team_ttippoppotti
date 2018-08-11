@@ -10,12 +10,14 @@ struct tagParticle
 	RECT rc;
 	float x, y;
 	float fireX, fireY;
+	float oldX, oldY;
 	float speed;
 	float angle;
 	float gravity;
 	float radius;
 	bool fire;
 	bool isActive;
+	bool isFrameImg;
 	int alpha;
 	int count;
 	int index;
@@ -43,12 +45,15 @@ private:
 	float _effectFPS;		//이펙트 속도
 	bool _isRunning;		//이펙트 재생중이냐?
 	bool _isParabola;
+	bool _isLeft;
 	bool _isFountain;
 	bool _isExplosion;
 	bool _isStaticAnim;
 	bool _isFlyingFlies;
 	bool _isAshes;
 	bool _isBigBang;
+	bool _isMissileTrail;
+	bool _isMissilePuff;
 	bool _isFrameImg;		//프레임이미지냐?
 	bool _isAlphaImg;		//알파이미지냐?
 	
@@ -66,9 +71,11 @@ public:
 	//포물선 발사 설정 (피, 낙석, 나무파편)
 	void activateParabola(float x, float y, bool isLeft);
 	void boomParabola();
-
+	//분수
 	void activateFountain(float x, float y);
-	void boomFountain();
+	//핏자국
+	void activateBlotch(float x, float y);
+	void boomBlotch();
 	//파리날림
 	void activateFlyingFlies(float x, float y);
 	void boomFlyingFlies();
@@ -86,6 +93,12 @@ public:
 	//대폭발 설정
 	void activateBigBang(float x, float y);
 	void boomBigBang();
+
+	//미사일
+	void activateMissileTrail(float x, float y, bool isLeft);
+	void boomMissileTrail();
+	void activateMmissilePuff(float x, float y);
+	void boomMissilePuff();
 
 	void boomStaticAnim();
 

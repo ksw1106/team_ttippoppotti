@@ -31,6 +31,9 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadImage("yellowPixelDot", "effectImage/spark_01.bmp", 4, 4);
 	_loading->loadImage("lightOrangePixelDot", "effectImage/lightOrange_dot_01.bmp", 4, 4);
 	_loading->loadImage("orangePixelDot", "effectImage/orange_dot_01.bmp", 5, 5);
+	_loading->loadFrameImage("missileTrail1", "effectImage/missile_trail_white_01.bmp", 1199, 2400, 1, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("missileTrail2", "effectImage/missile_trail_blue_01.bmp", 1199, 2400, 1, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("missileTrail3", "effectImage/missile_trail_red_01.bmp", 1199, 2400, 1, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("p1Bubble", "effectImage/p1_bubble_01.bmp", 1056, 92, 12, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("saveBubble", "effectImage/save_bubble_01.bmp", 4352, 136, 25, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("saveBubble2", "effectImage/save_bubble_02.bmp", 5248, 128, 32, 1, true, RGB(255, 0, 255));
@@ -51,6 +54,14 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadFrameImage("whitePuff", "effectImage/whitePuffPop_01.bmp", 384, 64, 6, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("yellowPuff", "effectImage/bulletPuff_01.bmp", 528, 66, 8, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("redPuff", "effectImage/redPuffPop_01.bmp", 960, 110, 6, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("rambro_head","player_ramBro/rambro_bodyParts_head_01.bmp", 304, 38, 8, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("rambro_arm", "player_ramBro/rambro_bodyParts_arm_01.bmp", 192, 24, 8, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("rambro_leg", "player_ramBro/rambro_bodyParts_leg_01.bmp", 200, 25, 8, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("rambro_uppderBody", "player_ramBro/redPuffPop_01.bmp", 408, 51, 8, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("chuck_head", "player_chuck/chuck_bodyParts_head_01.bmp", 320, 40, 8, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("chuck_arm", "player_chuck/chuck_bodyParts_arm_01.bmp", 224, 28, 8, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("chuck_leg", "player_chuck/chuck_bodyParts_leg_01.bmp", 176, 22, 8, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("chuck_upperBody", "player_chuck/chuck_bodyParts_upperBody_01.bmp", 384, 48, 8, 1, true, RGB(255, 0, 255));
 
 	_loading->loadImage("skull", "objectImage/skull_01.bmp", 20, 20, true, RGB(255, 0, 255));
 	_loading->loadImage("skullPole", "objectImage/skull_pole_01.bmp", 23, 77, true, RGB(255, 0, 255));
