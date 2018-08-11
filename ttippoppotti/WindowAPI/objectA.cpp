@@ -47,36 +47,39 @@ void objectA::update()
 }
 void objectA::render(HDC hdc)
 {
-	switch (_state)
+	if (_isStart)
 	{
-	case OBJECT_IDLE:
-		if (_isFrameImage)
-			_image->frameRender(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
-		else
-			_image->render(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
-		for (int i = 0; i < _vElement.size(); i++)
+		switch (_state)
 		{
-			if(_vElement[i].isFrameImg)
-				_vElement[i].elementImg->frameRender(hdc, _vElement[i].x - CAMERAMANAGER->getCamera().left, _vElement[i].y - CAMERAMANAGER->getCamera().top);
+		case OBJECT_IDLE:
+			if (_isFrameImage)
+				_image->frameRender(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
 			else
-				_vElement[i].elementImg->render(hdc, _vElement[i].x - CAMERAMANAGER->getCamera().left, _vElement[i].y - CAMERAMANAGER->getCamera().top);
-		}
-		break;
-	case OBJECT_MOVE:
-		if (_isFrameImage)
-			_image->frameRender(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
-		else
-			_image->render(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
-		for (int i = 0; i < _vElement.size(); i++)
-		{
-			if (_vElement[i].isFrameImg)
-				_vElement[i].elementImg->frameRender(hdc, _vElement[i].x - CAMERAMANAGER->getCamera().left, _vElement[i].y - CAMERAMANAGER->getCamera().top);
+				_image->render(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+			for (int i = 0; i < _vElement.size(); i++)
+			{
+				if (_vElement[i].isFrameImg)
+					_vElement[i].elementImg->frameRender(hdc, _vElement[i].x - CAMERAMANAGER->getCamera().left, _vElement[i].y - CAMERAMANAGER->getCamera().top);
+				else
+					_vElement[i].elementImg->render(hdc, _vElement[i].x - CAMERAMANAGER->getCamera().left, _vElement[i].y - CAMERAMANAGER->getCamera().top);
+			}
+			break;
+		case OBJECT_MOVE:
+			if (_isFrameImage)
+				_image->frameRender(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
 			else
-				_vElement[i].elementImg->render(hdc, _vElement[i].x - CAMERAMANAGER->getCamera().left, _vElement[i].y - CAMERAMANAGER->getCamera().top);
+				_image->render(hdc, _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+			for (int i = 0; i < _vElement.size(); i++)
+			{
+				if (_vElement[i].isFrameImg)
+					_vElement[i].elementImg->frameRender(hdc, _vElement[i].x - CAMERAMANAGER->getCamera().left, _vElement[i].y - CAMERAMANAGER->getCamera().top);
+				else
+					_vElement[i].elementImg->render(hdc, _vElement[i].x - CAMERAMANAGER->getCamera().left, _vElement[i].y - CAMERAMANAGER->getCamera().top);
+			}
+			break;
+		case OBJECT_DESTROY:
+			break;
 		}
-		break;
-	case OBJECT_DESTROY:
-		break;
 	}
 }
 
@@ -128,6 +131,7 @@ void deadBody::move()
 void skull::init()
 {
 	_image = IMAGEMANAGER->findImage("skull");
+	_isStart = true;
 	_isFrameImage = false;
 }
 
@@ -142,6 +146,7 @@ void skull::move()
 void skullPole::init()
 {
 	_image = IMAGEMANAGER->findImage("skullPole");
+	_isStart = true;
 	_isFrameImage = false;
 }
 
@@ -156,6 +161,7 @@ void skullPole::move()
 void doubleSkullPole::init()
 {
 	_image = IMAGEMANAGER->findImage("doubleSkullPole");
+	_isStart = true;
 	_isFrameImage = false;
 }
 
@@ -173,6 +179,7 @@ void skullDrumRed::init()
 	_speed = 8.0f;
 	_gravity = 0.0f;
 	_angle = PI + PI_2;
+	_isStart = true;
 	_isFrameImage = false;
 }
 
@@ -190,6 +197,7 @@ void skullDrumGray::init()
 	_speed = 8.0f;
 	_gravity = 0.0f;
 	_angle = PI + PI_2;
+	_isStart = true;
 	_isFrameImage = false;
 }
 
@@ -258,6 +266,7 @@ void woodenBox::init()
 	_speed = 8.0f;
 	_gravity = 0.0f;
 	_angle = PI + PI_2;
+	_isStart = true;
 	_isFrameImage = false;
 }
 
@@ -272,6 +281,7 @@ void woodenBox::move()
 void bottleGreen::init()
 {
 	_image = IMAGEMANAGER->findImage("bottle_green");
+	_isStart = true;
 	_isFrameImage = false;
 }
 
@@ -286,6 +296,7 @@ void bottleGreen::move()
 void bottleGray::init()
 {
 	_image = IMAGEMANAGER->findImage("bottle_gray");
+	_isStart = true;
 	_isFrameImage = false;
 }
 
@@ -300,6 +311,7 @@ void bottleGray::move()
 void bottleBrown::init()
 {
 	_image = IMAGEMANAGER->findImage("bottle_brown");
+	_isStart = true;
 	_isFrameImage = false;
 }
 
@@ -315,6 +327,7 @@ void truck::init()
 {
 	_image = IMAGEMANAGER->findImage("truck");
 	_isFrameImage = false;
+	_isStart = true;
 	_isLeft = false;
 	_speed = 8.0f;
 	_gravity = 0.0f;
@@ -341,16 +354,54 @@ void helicopter::init()
 	_image = IMAGEMANAGER->findImage("helicopter");
 	_count = _index = 0;
 	_animationSpeed = 0;
+	_isStart = false;
 	_isFrameImage = true;
 	_isLeft = false;
+	_destX = _x;
+	_destY = _y;
+	_x -= _image->getFrameWidth() * 2;
+	_y -= _image->getFrameHeight() * 2;
 }
 
 void helicopter::idle()
 {
+	if (!_isStart)
+	{
+		for (int i = 0; i < 1; i++)
+		{
+			tagElement element;
+			ZeroMemory(&element, sizeof(tagElement));
+			element.elementImg = IMAGEMANAGER->findImage("ladder");
+			element.isFrameImg = true;
+			element.x = _x - 169;
+			element.y = _y - 182;
+
+			_vElement.push_back(element);
+		}
+		_isStart = true;
+	}
+	else
+	{
+
+		if (_destX >= _x)
+			_x = _destX;
+		else
+			_x += 2.0f;
+
+		if (_destY >= _y)
+			_y = _destY;
+		else
+			_y += 2.0f;
+		
+		for (int i = 0; i < _vElement.size(); i++)
+			_activationRc = RectMake(_vElement[i].x, _vElement[i].y, _vElement[i].elementImg->getWidth(), _vElement[i].elementImg->getHeight());
+	}
 }
 
 void helicopter::move()
 {
+	for (int i = 0; i < _vElement.size(); i++)
+		_activationRc = RectMake(_vElement[i].x, _vElement[i].y, _vElement[i].elementImg->getWidth(), _vElement[i].elementImg->getHeight());
 }
 
 void americanFlag::init()
@@ -359,6 +410,7 @@ void americanFlag::init()
 	_count = _index = 0;
 	_animationSpeed = 5;
 	_isFrameImage = true;
+	_isStart = false;
 	_isActived = false;
 	_isLeft = false;
 	_destX = _x;
@@ -376,24 +428,26 @@ void americanFlag::move()
 	if (_y <= _destY)
 		_y = _destY;
 	else
+	{
 		_y -= 3.0f;
+		if (_y <= _destY + _image->getFrameHeight() * 1.5)
+			_isStart = true;
+	}
 }
 
 void amFlagPole::init()
 {
 	_image = IMAGEMANAGER->findImage("saveFlag_pole");
-	_isActived = true;
+	_isStart = true;
 	_isFrameImage = false;
 }
 
 void amFlagPole::idle()
 {
-	_isActived = true;
 }
 
 void amFlagPole::move()
 {
-	_isActived = true;
 }
 
 void enemyFlag::init()
