@@ -32,6 +32,10 @@ HRESULT enemyManager::init(void)
 	_brovil = new brovil;
 	_brovil->init(3200, 1000);
 
+	_hpBar = new progressBar;
+	_hpBar->init("enemyImage/bossImage/boss_hpbar_red","enemyImage/bossImage/boss_hpbar_white","enemyImage/bossImage/boss_hpbar_black",
+		WINSIZEX/2 - 1062/2, 57, WINSIZEX/2 - 1062/2, 57, WINSIZEX/2 - 1076/2, 50, 1062, 17, 1062, 17, 1076, 30);
+	
 	_effectCount = _count = 0;
 	_isClear = false;
 
@@ -50,6 +54,8 @@ void enemyManager::release(void)
 	SAFE_DELETE(_bossRocket);
 	_brovil->release();
 	SAFE_DELETE(_brovil);
+	_hpBar->release();
+	SAFE_DELETE(_hpBar);
 }
 
 void enemyManager::update(void)
@@ -59,33 +65,24 @@ void enemyManager::update(void)
 	_bossBullet->update();
 	_bossRocket->update();
 	_brovil->update();
-
+	_hpBar->update();
+	_hpBar->setGauge(_boss->getHP(), 100);
+	
+	this->changeDirection();
+	
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{		
-		_vSoldier[i]->update();		
-				
-		if (_vSoldier[i]->getIsFire() && _vSoldier[i]->getIsAlive())
-		{
-			this->enemyFire(i);
-		}				
+		_vSoldier[i]->update();			
 	}
-
+	
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
-		if (!_vSoldier[i]->getIsUncovered()) continue;
-
-		// 플레이어 방향에 맞춰 적방향 바꿈 (발견상태일때)
-		if ((180 / 3.14f * getAngle(_vSoldier[i]->getX(), _vSoldier[i]->getY(), _playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY())) >= 91.f
-			&& (180 / 3.14f * getAngle(_vSoldier[i]->getX(), _vSoldier[i]->getY(), _playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY()) <= 270.f))
+		if (_vSoldier[i]->getIsAlive())
 		{
-			_vSoldier[i]->setDirection(true);			
-		}
-		else
-		{
-			_vSoldier[i]->setDirection(false);
+			this->enemyFire(i);
 		}
 	}
-
+	
 		
 	// 에너미 픽셀(지형) 충돌
 	this->collideWithPixel();
@@ -114,8 +111,10 @@ void enemyManager::update(void)
 	this->collideWithBossRocket();
 	this->bossDirChange();
 	this->PBulletHitBoss();
-	
-	
+
+	// 할아버지 총알 vs 에너미 충돌
+	this->collideWithGBullet();
+	this->collideBossWithGBullet();
 	
 	// 보스 총알, 로켓 발사
 	this->bossBulletFire();
@@ -134,6 +133,11 @@ void enemyManager::render(void)
 	_boss->render();
 	_bossBullet->render();
 	_bossRocket->render();
+	
+	if (_boss->getIsAlive())
+	{
+		_hpBar->render();
+	}
 
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
@@ -224,6 +228,25 @@ void enemyManager::saveEnemy(enemyType enemy, deadType deadType, bool isLeft)
 	_deadEnemy._deadType = deadType;
 	_deadEnemy.isLeft = isLeft;
 	_vDeadEnemyInfo.push_back(_deadEnemy);
+}
+
+void enemyManager::changeDirection()
+{
+	for (int i = 0; i < _vSoldier.size(); ++i)
+	{
+		if (!_vSoldier[i]->getIsUncovered()) continue;
+
+		// 플레이어 방향에 맞춰 적방향 바꿈 (발견상태일때)
+		if ((180 / 3.14f * getAngle(_vSoldier[i]->getX(), _vSoldier[i]->getY(), _playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY())) >= 91.f
+			&& (180 / 3.14f * getAngle(_vSoldier[i]->getX(), _vSoldier[i]->getY(), _playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY()) <= 270.f))
+		{
+			_vSoldier[i]->setDirection(true);
+		}
+		else
+		{
+			_vSoldier[i]->setDirection(false);
+		}
+	}
 }
 
 // 에너미와 픽셀충돌
@@ -467,16 +490,14 @@ void enemyManager::bossDirChange()
 void enemyManager::PBulletHitBoss()
 {
 	RECT rc;
-	for (int i = 0; i < _playerManager->getPBullet()->getVPlayerBullet().size();)
+	for (int i = 0; i < _playerManager->getPBullet()->getVPlayerBullet().size(); ++i)
 	{
-		if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[i].rc, &_boss->getTerrorKopter().rcBody))
+		if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[i].rc, &_boss->getRcBoss()))
 		{			
-			_playerManager->getPBullet()->removeBullet(i);
-		}
-		else
-		{
-			++i;
-		}
+			if (!_playerManager->getPBullet()->getVPlayerBullet()[i].isActived) continue;
+			_playerManager->getPBullet()->getVPlayerBullet()[i].isActived = false;
+			_boss->setHP(_boss->getHP() - 1);
+		}		
 	}
 }
 
@@ -571,10 +592,37 @@ void enemyManager::collideWithPGrenade()
 	}
 }
 
+
+// 할아버지 총알과 에너미 충돌
 void enemyManager::collideWithGBullet()
 {
-	//for (int i = 0 ; i < _playerManager->getGBullet()->getVPlayergBullet)
-	//_playerManager->getGBullet().
+	RECT rc;
+	for (int i = 0; i < _playerManager->getGBullet()->getVPlayergBullet().size(); ++i)
+	{
+		for (int j = 0; j < _vSoldier.size(); ++j)
+		{
+			if (IntersectRect(&rc, &_playerManager->getGBullet()->getVPlayergBullet()[i].rc, &_vSoldier[j]->getRcEnemy()))
+			{
+				if (!_playerManager->getGBullet()->getVPlayergBullet()[i].isActived) continue;
+				_playerManager->getGBullet()->getVPlayergBullet()[i].isActived = false;
+			}
+		}	
+	}
+}
+
+// 할아버지 총알  vs 보스
+void enemyManager::collideBossWithGBullet()
+{
+	RECT rc;
+	for (int i = 0; i < _playerManager->getGBullet()->getVPlayergBullet().size(); ++i)
+	{
+		if (IntersectRect(&rc, &_playerManager->getGBullet()->getVPlayergBullet()[i].rc, &_boss->getRcBoss()))
+		{
+			if (!_playerManager->getGBullet()->getVPlayergBullet()[i].isActived) continue;
+			_playerManager->getGBullet()->getVPlayergBullet()[i].isActived = false;
+			_boss->setHP(_boss->getHP() - 1);
+		}
+	}
 }
 
 // 에너미 총알과 픽셀 충돌
@@ -648,7 +696,7 @@ void enemyManager::collideBrovilwithPBullet()
 			{
 				_brovil->deadMove();
 			}
-
+			
 			//if (this->isEffect(2))
 			//{
 			//	EFFECTMANAGER->bloodSplash(_brovil->getX() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameWidth()/2, _brovil->getY() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameHeight()/2,

@@ -40,6 +40,7 @@ void loadingScene::Lee_Ji_Woong_addImage()
 	_loading->loadFrameImage("테러콥터 프로펠러", "enemyImage/bossImage/propeller.bmp", 800, 104, 4, 2);
 	_loading->loadFrameImage("테러콥터 총알 효과", "enemyBullet/boss_bullet_effect.bmp", 128, 56, 4, 2);
 	_loading->loadFrameImage("테러콥터 로켓", "enemyBullet/boss_rocket.bmp", 304, 96, 4, 2);	
+		
 }
 
 void loadingScene::Lee_Ji_Woong_addSound()

@@ -5,6 +5,7 @@
 #include "brovil.h"
 #include "dog.h"
 #include "boss.h"
+#include "progressBar.h"
 
 enum enemyType
 {
@@ -42,14 +43,14 @@ private:
 	bossRocket* _bossRocket;	// 보스로켓 클래스
 	boss* _boss;				// 보스 클래스
 	brovil* _brovil;			// 브로빌 클래스
+	progressBar* _hpBar;		// 체력바 클래스
 
 	int _effectCount;
 	int _count;
 	int _choice;
 	bool _isClear;				// 스테이지 클리어했냐(브로빌 죽음)
 	bool _isEffect;
-
-
+	
 public:
 	void setPlayerManager(playerManager* playerManager) { _playerManager = playerManager; }
 	void setMapData(mapData* mapData) { _mapData = mapData; }
@@ -77,6 +78,9 @@ public:
 	// 죽은 적 푸쉬백
 	void saveEnemy(enemyType enemy, deadType deadType, bool isLeft);
 	
+	// 에너미 방향 바꾸기
+	void changeDirection();
+
 	// 에너미 시야 vs 플레이어 충돌
 	void collideWithSight();
 	// 에너미 vs 픽셀
@@ -87,6 +91,8 @@ public:
 	void collideWithPGrenade();		
 	// 에너미 vs 할아버지 총알
 	void collideWithGBullet();
+	// 보스 vs 할아버지 총알
+	void collideBossWithGBullet();
 	
 	// 에너미 시체 vs 픽셀 충돌
 	void collideWithCorpse();
@@ -100,6 +106,7 @@ public:
 	void collideWithBossBullet();
 	void collideWithBossRocket();
 	void bossDirChange();
+	//void bossHPbar();
 	// 보스 vs 플레이어 총알
 	void PBulletHitBoss();
 		
@@ -115,10 +122,7 @@ public:
 	
 	// 스테이지 클리어 조건
 	bool isClear();
-	
-	// 에너미 제거
-	void removeEnemy(int num);
-	
+		
 	// 솔져 클래스 초기화셋팅
 	void setSoldier(int x, int y);
 	void setBrovil(int x, int y);

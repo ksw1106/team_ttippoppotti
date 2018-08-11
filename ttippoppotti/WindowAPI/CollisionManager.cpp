@@ -10,7 +10,7 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 	case DIRECT_LEFT: //left
 		for (int i = rc.left + _speed; i >= rc.left; i--)
 		{
-			COLORREF color = GetPixel(IMAGEMANAGER->findImage("ladder_pixel")->getMemDC(), i, y);
+			COLORREF color = GetPixel(ladderPixel->getMemDC(), i, y);
 			int r = GetRValue(color);
 			int g = GetGValue(color);
 			int b = GetBValue(color);
@@ -31,7 +31,7 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 				return BLUE;
 			}
 			
-			color = GetPixel(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), i, y);
+			color = GetPixel(objectPixel->getMemDC(), i, y);
 			r = GetRValue(color);
 			g = GetGValue(color);
 			b = GetBValue(color);
@@ -50,7 +50,7 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 	case DIRECT_TOP: //top
 		for (int i = rc.top + _speed; i >= rc.top; i--)
 		{
-			COLORREF color = GetPixel(IMAGEMANAGER->findImage("ladder_pixel")->getMemDC(), x, i);
+			COLORREF color = GetPixel(ladderPixel->getMemDC(), x, i);
 			int r = GetRValue(color);
 			int g = GetGValue(color);
 			int b = GetBValue(color);
@@ -70,7 +70,7 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 				return BLUE;
 			}
 
-			color = GetPixel(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), x, i);
+			color = GetPixel(objectPixel->getMemDC(), x, i);
 			r = GetRValue(color);
 			g = GetGValue(color);
 			b = GetBValue(color);
@@ -89,7 +89,7 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 	case DIRECT_RIGHT: //right
 		for (int i = rc.right - _speed; i <= rc.right; i++)
 		{
-			COLORREF color = GetPixel(IMAGEMANAGER->findImage("ladder_pixel")->getMemDC(), i, y);
+			COLORREF color = GetPixel(ladderPixel->getMemDC(), i, y);
 			int r = GetRValue(color);
 			int g = GetGValue(color);
 			int b = GetBValue(color);
@@ -109,7 +109,7 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 				return BLUE;
 			}
 
-			color = GetPixel(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), i, y);
+			color = GetPixel(objectPixel->getMemDC(), i, y);
 			r = GetRValue(color);
 			g = GetGValue(color);
 			b = GetBValue(color);
@@ -128,7 +128,7 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 	case DIRECT_BOTTOM: //bottom
 		for (int i = rc.bottom - (_speed + _gravity); i <= rc.bottom; i++)
 		{
-			COLORREF color = GetPixel(IMAGEMANAGER->findImage("ladder_pixel")->getMemDC(), x, i);
+			COLORREF color = GetPixel(ladderPixel->getMemDC(), x, i);
 			int r = GetRValue(color);
 			int g = GetGValue(color);
 			int b = GetBValue(color);
@@ -148,7 +148,7 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 				return BLUE;
 			}
 
-			color = GetPixel(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), x, i);
+			color = GetPixel(objectPixel->getMemDC(), x, i);
 			r = GetRValue(color);
 			g = GetGValue(color);
 			b = GetBValue(color);
@@ -168,7 +168,6 @@ int CollisionManager::pixelCollision(RECT rc, float& x, float& y, float speed, f
 
 	return FALSE;
 }
-
 
 HRESULT CollisionManager::init()
 {
