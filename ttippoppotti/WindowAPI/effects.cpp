@@ -416,6 +416,10 @@ void effects::boomMissileTrail()
 	}
 }
 
+void effects::boomMissilePuff()
+{
+}
+
 void effects::activateMissilePuff(float x, float y, bool isLeft)
 {
 	_isRunning = true;
@@ -440,7 +444,7 @@ void effects::activateMissilePuff(float x, float y, bool isLeft)
 		if (isLeft)
 			_vParticle[i].angle = PI + PI_4;
 		else
-			_vParticle[i].angle = - PI_4;
+			_vParticle[i].angle = -PI_4;
 		_vParticle[i].speed = 4.0f * (i + 1) + RND->getFloat(2.0f);
 		_vParticle[i].fireX = x;
 		_vParticle[i].fireY = y;
@@ -460,6 +464,7 @@ void effects::activateMissilePuff(float x, float y, bool isLeft)
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 		else
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+	}
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
@@ -476,14 +481,6 @@ void effects::activateMissilePuff(float x, float y, bool isLeft)
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 		else
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
-	}
-}
-
-void effects::boomMissilePuff()
-{
-	if (_isMissilePuff)
-	{
-		
 	}
 }
 
