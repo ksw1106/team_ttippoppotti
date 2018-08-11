@@ -81,16 +81,18 @@ void enemy::release(void)
 
 void enemy::update(void)
 {			
-	++_fireCount;
-	if (_fireCount > 1000) _fireCount = 0;
-
-	// 밑에 없으면 떨어짐
-	this->fall();	
 	// 에너미 움직임 변화
 	this->changeStatus();
+	// 밑에 없으면 떨어짐
+	this->fall();
+	// 에이아이 움직임 랜덤조절
+	this->controlAI();
 	// 프레임 애니메이션
 	this->frameAnimate();
 	
+	++_fireCount;
+	if (_fireCount > 1000) _fireCount = 0;
+		
 	if (_isUncovered)
 	{
 		if (_enemyStatus != ENEMY_DOUBT && _enemyStatus != ENEMY_FIRE)
@@ -123,11 +125,10 @@ void enemy::update(void)
 			_corpse[i].rcCorpse = RectMake(_corpse[i].x, _corpse[i].y, _corpse[i].corpseImage->getWidth(), _corpse[i].corpseImage->getHeight());
 		}
 	}
-
-	this->controlAI();
-
-	if (_isLeft) _angle = PI;
-	else _angle = 0.f;
+	
+	//if (_isLeft) _angle = PI;
+	//else _angle = 0.f;
+		
 }
 
 void enemy::render(void)

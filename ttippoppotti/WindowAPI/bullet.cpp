@@ -12,23 +12,38 @@ HRESULT eBullet::init(int bulletMax, float range)
 	_range = range;
 	_bulletCount = 0;
 
+	for (int i = 0; i < _bulletMax; ++i)
+	{
+		tagBullet ebullet;
+		ZeroMemory(&ebullet, sizeof(tagBullet));
+		ebullet.bulletImage = new image;
+		ebullet.bulletImage->init("enemyBullet/enemy_bullet.bmp", 320, 40, 5, 1);
+		
+		_vEBullet.push_back(ebullet);
+	}
+
 	return S_OK;
 }
 
 void eBullet::release(void)
 {
+	for (int i = 0; i < BOSS_BULLET_MAX; ++i)
+	{
+		_vEBullet[i].bulletImage->release();
+		SAFE_DELETE(_vEBullet[i].bulletImage);
+	}
 }
 
 void eBullet::update(void)
 {
-	move();
-	animation();
+	move();	
 }
 
 void eBullet::render(void)
 {
 	for (int i = 0; i < _vEBullet.size(); ++i)
 	{
+		if (!_vEBullet[i].isActived) continue;
 		_vEBullet[i].bulletImage->frameRender(getMemDC(), _vEBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
 			_vEBullet[i].rc.top - CAMERAMANAGER->getCamera().top,
 			_vEBullet[i].bulletImage->getFrameX(), _vEBullet[i].bulletImage->getFrameY());
@@ -37,36 +52,32 @@ void eBullet::render(void)
 
 void eBullet::fire(int x, int y, int fireSpeed, bool isLeft)
 {
-	++_bulletCount;
-	//총알 벡터에 담는것을 제한하자
-	if (_bulletMax < _vEBullet.size() + 1) return;
-
+	++_bulletCount;	
 	if (_bulletCount % fireSpeed != 0) return;
-
-	tagBullet ebullet;
-	ZeroMemory(&ebullet, sizeof(tagBullet));
-	ebullet.bulletImage = new image;
-	ebullet.bulletImage->init("enemyBullet/enemy_bullet.bmp", 320, 40, 5, 1);
-	ebullet.speed = 20.0f;
-	ebullet.isLeft = isLeft;
-	ebullet.x = ebullet.fireX = x;
-	ebullet.y = ebullet.fireY = y;
-	ebullet.rc = RectMakeCenter(ebullet.x, ebullet.y,
-		ebullet.bulletImage->getFrameWidth(),
-		ebullet.bulletImage->getFrameHeight());
-
-	//벡터에 담기
-	_vEBullet.push_back(ebullet);
+	
+	for (int i = 0; i < _vEBullet.size(); ++i)
+	{
+		if (_vEBullet[i].isActived) continue;
+		_vEBullet[i].isActived = true;
+		_vEBullet[i].speed = 20.0f;
+		_vEBullet[i].isLeft = isLeft;
+		_vEBullet[i].x = _vEBullet[i].fireX = x;
+		_vEBullet[i].y = _vEBullet[i].fireY = y;
+		_vEBullet[i].rc = RectMakeCenter(_vEBullet[i].x, _vEBullet[i].y,
+			_vEBullet[i].bulletImage->getFrameWidth(),
+			_vEBullet[i].bulletImage->getFrameHeight());
+	}		
 }
 
 void eBullet::move()
 {
-	for (int i = 0; i < _vEBullet.size();)
+	for (int i = 0; i < _vEBullet.size(); ++i)
 	{
+		if (!_vEBullet[i].isActived) continue;
+
 		if (_vEBullet[i].isLeft)
 			_vEBullet[i].x -= _vEBullet[i].speed;
-
-		if (!_vEBullet[i].isLeft)
+		else
 			_vEBullet[i].x += _vEBullet[i].speed;
 
 		_vEBullet[i].rc = RectMakeCenter(_vEBullet[i].x, _vEBullet[i].y,
@@ -76,37 +87,24 @@ void eBullet::move()
 		float distance = getDistance(_vEBullet[i].x, _vEBullet[i].y, _vEBullet[i].fireX, _vEBullet[i].fireY);
 		if (distance > _range)
 		{
-			_vEBullet[i].bulletImage->release();
-			SAFE_DELETE(_vEBullet[i].bulletImage);
-			_vEBullet.erase(_vEBullet.begin() + i);
+			_vEBullet[i].isActived = false;
 		}
-		else
-		{
-			++i;
-		}
+		this->animation(i);
 	}
 }
 
-void eBullet::animation()
+void eBullet::animation(int i)
 {
-	for (int i = 0; i < _vEBullet.size(); ++i)
+	_vEBullet[i].bulletImage->setFrameY(0);
+	_vEBullet[i].frameCount++;
+	if (_vEBullet[i].frameCount % 3 == 0)
 	{
-		_vEBullet[i].bulletImage->setFrameY(0);
-		_vEBullet[i].frameCount++;
-		if (_vEBullet[i].frameCount % 3 == 0)
-		{
-			_vEBullet[i].frameIndex++;
-			if (_vEBullet[i].frameIndex > 4) _vEBullet[i].frameIndex = 0;
-		}
-		_vEBullet[i].bulletImage->setFrameX(_vEBullet[i].frameIndex);
-
-		if (_vEBullet[i].frameCount > 1000) _vEBullet[i].frameCount = 0;
+		_vEBullet[i].frameIndex++;
+		if (_vEBullet[i].frameIndex > 4) _vEBullet[i].frameIndex = 0;
 	}
-}
+	_vEBullet[i].bulletImage->setFrameX(_vEBullet[i].frameIndex);
 
-void eBullet::removeBullet(int index)
-{
-	_vEBullet.erase(_vEBullet.begin() + index);
+	if (_vEBullet[i].frameCount > 1000) _vEBullet[i].frameCount = 0;
 }
 
 //=========================================================================================================
@@ -151,12 +149,9 @@ void bossBullet::render(void)
 {
 	for (int i = 0; i < BOSS_BULLET_MAX; ++i)
 	{
-		if (_bossBullet[i].fire)
-		{
-			_bossBullet[i].bulletImage->render(getMemDC(), _bossBullet[i].rc.left - CAMERAMANAGER->getCamera().left, _bossBullet[i].rc.top - CAMERAMANAGER->getCamera().top);
-		}
+		if (!_bossBullet[i].isActived) continue;
 
-		if (!_bossBullet[i].fire) continue;
+		_bossBullet[i].bulletImage->render(getMemDC(), _bossBullet[i].rc.left - CAMERAMANAGER->getCamera().left, _bossBullet[i].rc.top - CAMERAMANAGER->getCamera().top);
 
 		if (KEYMANAGER->isToggleKey(VK_F11))
 		{
@@ -172,14 +167,14 @@ void bossBullet::fire(int x, int y, bool isLeft)
 
 	for (int i = 0; i < BOSS_BULLET_MAX; ++i)
 	{
-		if (_bossBullet[i].fire) continue;
+		if (_bossBullet[i].isActived) continue;
 		
-		_bossBullet[i].fire = true;
+		_bossBullet[i].isActived = true;
 		_bossBullet[i].x = _bossBullet[i].fireX = x;
 		_bossBullet[i].y = _bossBullet[i].fireY = y;
 		_bossBullet[i].rc = RectMake(_bossBullet[i].x, _bossBullet[i].y, _bossBullet[i].bulletImage->getWidth(), _bossBullet[i].bulletImage->getHeight());
 
-		if (isLeft == true)
+		if (isLeft)
 		{
 			_bossBullet[i].angle = PI + RND->getFromFloatTo(-0.05f, 0.05f);
 		}
@@ -187,6 +182,7 @@ void bossBullet::fire(int x, int y, bool isLeft)
 		{
 			_bossBullet[i].angle = 0.f + RND->getFromFloatTo(-0.05f, +0.05f);
 		}
+
 		break;
 	}
 }
@@ -195,7 +191,7 @@ void bossBullet::move()
 {
 	for (int i = 0; i < BOSS_BULLET_MAX; ++i)
 	{
-		if (!_bossBullet[i].fire) continue;
+		if (!_bossBullet[i].isActived) continue;
 
 		_bossBullet[i].x += cosf(_bossBullet[i].angle) * _bossBullet[i].speed;
 		_bossBullet[i].y += -sinf(_bossBullet[i].angle) * _bossBullet[i].speed;
@@ -204,7 +200,7 @@ void bossBullet::move()
 		float distance = getDistance(_bossBullet[i].fireX, _bossBullet[i].fireY, _bossBullet[i].x, _bossBullet[i].y);
 		if (distance > _range)
 		{
-			_bossBullet[i].fire = false;
+			_bossBullet[i].isActived = false;
 		}
 	}
 }
@@ -230,14 +226,13 @@ HRESULT bossRocket::init(float range)
 }
 
 void bossRocket::release(void)
-{
+{	
 }
 
 void bossRocket::update(void)
 {
 	this->move();
-	this->animation();
-
+	
 	_interval++;
 	if (_interval > 1000) _interval = 0;
 }
@@ -246,11 +241,9 @@ void bossRocket::render(void)
 {
 	for (int i = 0; i < BOSS_ROCKET_MAX; ++i)
 	{
-		if (_bossRocket[i].fire)
-		{
-			_bossRocket[i].bulletImage->frameRender(getMemDC(), _bossRocket[i].rc.left - CAMERAMANAGER->getCamera().left, _bossRocket[i].rc.top - CAMERAMANAGER->getCamera().top,
-				_bossRocket[i].bulletImage->getFrameX(), _bossRocket[i].bulletImage->getFrameY());
-		}
+		if (!_bossRocket[i].isActived) continue;
+		_bossRocket[i].bulletImage->frameRender(getMemDC(), _bossRocket[i].rc.left - CAMERAMANAGER->getCamera().left, _bossRocket[i].rc.top - CAMERAMANAGER->getCamera().top,
+			_bossRocket[i].bulletImage->getFrameX(), _bossRocket[i].bulletImage->getFrameY());		
 	}
 }
 
@@ -260,9 +253,15 @@ void bossRocket::fire(int x, int y, int fireSpeed, bool isLeft)
 
 	for (int i = 0; i < BOSS_ROCKET_MAX; ++i)
 	{
-		if (_bossRocket[i].fire) continue;
+		if (_bossRocket[i].isActived) continue;
 
+		_bossRocket[i].x = _bossRocket[i].fireX = x;
+		_bossRocket[i].y = _bossRocket[i].fireY = y;
+		_bossRocket[i].gravity = 0.f;
+		_bossRocket[i].rc = RectMake(_bossRocket[i].x, _bossRocket[i].y, _bossRocket[i].bulletImage->getFrameWidth(), _bossRocket[i].bulletImage->getFrameHeight());
+		_bossRocket[i].isActived = true;
 		_bossRocket[i].isLeft = isLeft;
+		
 		if (isLeft)
 		{
 			_bossRocket[i].angle = PI;
@@ -271,11 +270,6 @@ void bossRocket::fire(int x, int y, int fireSpeed, bool isLeft)
 		{
 			_bossRocket[i].angle = 0.f;
 		}
-		_bossRocket[i].x = _bossRocket[i].fireX = x;
-		_bossRocket[i].y = _bossRocket[i].fireY = y;
-		_bossRocket[i].gravity = 0.f;
-		_bossRocket[i].rc = RectMake(_bossRocket[i].x, _bossRocket[i].y, _bossRocket[i].bulletImage->getFrameWidth(), _bossRocket[i].bulletImage->getFrameHeight());
-		_bossRocket[i].fire = true;
 		
 		break;
 	}
@@ -285,7 +279,7 @@ void bossRocket::move()
 {
 	for (int i = 0; i < BOSS_ROCKET_MAX; ++i)
 	{
-		if (!_bossRocket[i].fire) continue;
+		if (!_bossRocket[i].isActived) continue;
 
 		_bossRocket[i].x += cosf(_bossRocket[i].angle) * _bossRocket[i].speed;
 		_bossRocket[i].y += -sinf(_bossRocket[i].angle) * _bossRocket[i].speed + _bossRocket[i].gravity;
@@ -298,18 +292,17 @@ void bossRocket::move()
 		}
 		if (distance > 1500.f)
 		{
-			_bossRocket[i].fire = false;
+			_bossRocket[i].isActived = false;
 		}
+		
+		this->animation(i);
 	}
 }
 
 
-void bossRocket::animation()
+void bossRocket::animation(int i)
 {
-	for (int i = 0; i < BOSS_ROCKET_MAX; ++i)
-	{		
-		FRAMEMANAGER->frameChange(_bossRocket[i].bulletImage, _bossRocket[i].frameCount, _bossRocket[i].frameIndex, _bossRocket[i].frameSpeed, _bossRocket[i].isLeft);
-	}
+	FRAMEMANAGER->frameChange(_bossRocket[i].bulletImage, _bossRocket[i].frameCount, _bossRocket[i].frameIndex, _bossRocket[i].frameSpeed, _bossRocket[i].isLeft);
 }
 
 
@@ -548,7 +541,12 @@ HRESULT gBullet::init(float range)
 }
 
 void gBullet::release(void)
-{
+{	
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		_vBullet[i].bulletImage->release();
+		SAFE_DELETE(_vBullet[i].bulletImage);
+	}
 }
 
 void gBullet::update(void)

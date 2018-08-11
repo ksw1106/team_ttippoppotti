@@ -62,6 +62,7 @@ protected:
 	image* _image;
 	float _x, _y;
 	float _destX, _destY;
+	float _oldX, _oldY;
 	float _speed;
 	float _angle;
 	float _gravity;
@@ -85,6 +86,7 @@ public:
 	float getAngle() { return _angle; }
 	bool* getTargetIsActived() { return _targetIsActived; }
 	bool getIsActived() { return _isActived; }
+	bool getIsStart() { return _isStart; }
 	bool getIsFrameImage() { return _isFrameImage; }
 	image* getImage() { return _image; }
 	RECT getRect()
@@ -112,6 +114,7 @@ public:
 	void setGravity(float gravity) { _gravity = gravity; }
 	void setTargetIsActived(bool* targetIsActived) { _targetIsActived = targetIsActived; }
 	void setIsActived(bool isActived) { _isActived = isActived; }
+	void setIsStart(bool isStart) { _isStart = isStart; }
 	void setType(OBJECT_TYPE type) { _type = type; }
 	virtual void init() = 0;
 	virtual void update();
