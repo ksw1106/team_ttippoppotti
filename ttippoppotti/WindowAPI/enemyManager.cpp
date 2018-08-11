@@ -5,6 +5,8 @@
 
 HRESULT enemyManager::init(int stageNum)
 {
+	_stageNum = stageNum;
+
 	// 플레이어매니저 클래스 가져오기
 	this->setPlayerManager(_playerManager);
 	// 맵데이터 가져오기
@@ -48,6 +50,7 @@ HRESULT enemyManager::init(int stageNum)
 
 void enemyManager::release(void)
 {
+	//릴리즈도 스테이지 따라서 해야합니다.
 	_eBullet->release();
 	SAFE_DELETE(_eBullet);
 	_boss->release();
@@ -64,13 +67,20 @@ void enemyManager::release(void)
 
 void enemyManager::update(void)
 {
-	_boss->update();
+	if (_stageNum == 1)
+	{
+
+	}
+	else if (_stageNum == 2)
+	{
+		_boss->update();
+		_bossBullet->update();
+		_bossRocket->update();
+		_hpBar->update();
+		_hpBar->setGauge(_boss->getHP(), 1000);
+	}
 	_eBullet->update();
-	_bossBullet->update();
-	_bossRocket->update();
 	_brovil->update();
-	_hpBar->update();
-	_hpBar->setGauge(_boss->getHP(), 1000);
 	
 	this->changeDirection();
 	
@@ -110,20 +120,24 @@ void enemyManager::update(void)
 	// 플레이어 총알과 브로빌 충돌
 	this->collideBrovilwithPBullet();
 	
+	if (_stageNum == 2)
+	{
 	// 보스 총알, 로켓 vs 램브로 충돌
-	this->collideWithBossBullet();
-	this->collideWithBossRocket();
-	this->bossDirChange();
-	this->PBulletHitBoss();
+		this->collideWithBossBullet();
+		this->collideWithBossRocket();
+		this->bossDirChange();
+		this->PBulletHitBoss();
+		// 할아버지 총알 vs 보스
+		this->collideBossWithGBullet();
+	
+		// 보스 총알, 로켓 발사
+		this->bossBulletFire();
+		this->bossRocketFire();
+
+	}
 
 	// 할아버지 총알 vs 에너미 충돌
 	this->collideWithGBullet();
-	// 할아버지 총알 vs 보스
-	this->collideBossWithGBullet();
-	
-	// 보스 총알, 로켓 발사
-	this->bossBulletFire();
-	this->bossRocketFire();
 }
 
 void enemyManager::render(void)
@@ -134,15 +148,22 @@ void enemyManager::render(void)
 	}
 	
 	_eBullet->render();
-	_brovil->render();
-	_boss->render();
-	_bossBullet->render();
-	_bossRocket->render();
+	if (_stageNum == 1)
+	{
+		_brovil->render();
+	}
 	
+	if (_stageNum == 2)
+	{
+		_boss->render();
+		_bossBullet->render();
+		_bossRocket->render();
 	if (_boss->getIsAlive())
 	{
 		_hpBar->render();
 	}
+	}
+	
 
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
