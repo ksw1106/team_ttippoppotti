@@ -268,90 +268,90 @@ void objectManager::update()
 	for (int i = 0; i < _vObject.size(); i++)
 	{
 		if (OBJECT_DESTROY == _vObject[i]->getState()) continue;
-		if (_vObject[i]->getType() == WOODENBOX || _vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED || _vObject[i]->getType() == PRISONER || _vObject[i]->getType() == AMERICAN_FLAG)
-		{
-			switch (_vObject[i]->getState())
-			{
-			case OBJECT_IDLE:
-				if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getRcRambro(), &_vObject[i]->getRect()) && _vObject[i]->getType() != AMERICAN_FLAG)
-				{
-					int width = _playerManager->getPlayer()->getRcRambro().right - _playerManager->getPlayer()->getRcRambro().left;
-					int height = _playerManager->getPlayer()->getRcRambro().bottom - _playerManager->getPlayer()->getRcRambro().top;
+		//if (_vObject[i]->getType() == WOODENBOX || _vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED || _vObject[i]->getType() == PRISONER || _vObject[i]->getType() == AMERICAN_FLAG)
+		//{
+		//	switch (_vObject[i]->getState())
+		//	{
+		//	case OBJECT_IDLE:
+		//		if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getRcRambro(), &_vObject[i]->getRect()) && _vObject[i]->getType() != AMERICAN_FLAG)
+		//		{
+		//			int width = _playerManager->getPlayer()->getRcRambro().right - _playerManager->getPlayer()->getRcRambro().left;
+		//			int height = _playerManager->getPlayer()->getRcRambro().bottom - _playerManager->getPlayer()->getRcRambro().top;
 
-					if (_playerManager->getPlayer()->getRcRambro().left + width / 2 < tempRc.left)
-						_playerManager->getPlayer()->setX(_playerManager->getPlayer()->getX() - (tempRc.right - tempRc.left));
-					else if (_playerManager->getPlayer()->getRcRambro().left + width / 2 > tempRc.right)
-						_playerManager->getPlayer()->setX(_playerManager->getPlayer()->getX() + (tempRc.right - tempRc.left));
+		//			if (_playerManager->getPlayer()->getRcRambro().left + width / 2 < tempRc.left)
+		//				_playerManager->getPlayer()->setX(_playerManager->getPlayer()->getX() - (tempRc.right - tempRc.left));
+		//			else if (_playerManager->getPlayer()->getRcRambro().left + width / 2 > tempRc.right)
+		//				_playerManager->getPlayer()->setX(_playerManager->getPlayer()->getX() + (tempRc.right - tempRc.left));
 
-					if (_playerManager->getPlayer()->getRcRambro().top + height / 2 < tempRc.top)
-						_playerManager->getPlayer()->setY(_playerManager->getPlayer()->getY() - (tempRc.bottom - tempRc.top));
-					else if (_playerManager->getPlayer()->getRcRambro().top + height / 2 > tempRc.bottom)
-						_playerManager->getPlayer()->setY(_playerManager->getPlayer()->getY() + (tempRc.bottom - tempRc.top));
-				}
-				for (int j = 0; j < _playerManager->getPBullet()->getVPlayerBullet().size(); j++)
-				{
-					if (!_playerManager->getPBullet()->getVPlayerBullet()[j].isActived) continue;
-					//ÃÑ¾Ë°ú ¹Ú½º/µå·³Åë/°¨¿ÁÀÌ ºÎµúÇûÀ» ¶§
-					if (IntersectRect(&tempRc2, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vObject[i]->getRect()))
-					{
-						if (_vObject[i]->getType() == WOODENBOX)
-						{
-							EFFECTMANAGER->woodDebris(_vObject[i]->getRect().left, _vObject[i]->getRect().top, _playerManager->getPlayer()->getIsLeft());
-							_vObject[i]->setState(OBJECT_DESTROY);
-						}
-						else if (_vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED)
-						{
-							for (int k = 0; k < _mapData->getObject().size(); k++)
-							{
-								POINT pt;
-								pt.x = (_vObject[i]->getRect().left + (_vObject[i]->getRect().right - _vObject[i]->getRect().left) / 2);
-								pt.y = (_vObject[i]->getRect().top + (_vObject[i]->getRect().bottom - _vObject[i]->getRect().top) / 2) + 68;
+		//			if (_playerManager->getPlayer()->getRcRambro().top + height / 2 < tempRc.top)
+		//				_playerManager->getPlayer()->setY(_playerManager->getPlayer()->getY() - (tempRc.bottom - tempRc.top));
+		//			else if (_playerManager->getPlayer()->getRcRambro().top + height / 2 > tempRc.bottom)
+		//				_playerManager->getPlayer()->setY(_playerManager->getPlayer()->getY() + (tempRc.bottom - tempRc.top));
+		//		}
+		//		for (int j = 0; j < _playerManager->getPBullet()->getVPlayerBullet().size(); j++)
+		//		{
+		//			if (!_playerManager->getPBullet()->getVPlayerBullet()[j].isActived) continue;
+		//			//ÃÑ¾Ë°ú ¹Ú½º/µå·³Åë/°¨¿ÁÀÌ ºÎµúÇûÀ» ¶§
+		//			if (IntersectRect(&tempRc2, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vObject[i]->getRect()))
+		//			{
+		//				if (_vObject[i]->getType() == WOODENBOX)
+		//				{
+		//					EFFECTMANAGER->woodDebris(_vObject[i]->getRect().left, _vObject[i]->getRect().top, _playerManager->getPlayer()->getIsLeft());
+		//					_vObject[i]->setState(OBJECT_DESTROY);
+		//				}
+		//				else if (_vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED)
+		//				{
+		//					for (int k = 0; k < _mapData->getObject().size(); k++)
+		//					{
+		//						POINT pt;
+		//						pt.x = (_vObject[i]->getRect().left + (_vObject[i]->getRect().right - _vObject[i]->getRect().left) / 2);
+		//						pt.y = (_vObject[i]->getRect().top + (_vObject[i]->getRect().bottom - _vObject[i]->getRect().top) / 2) + 68;
 
-								if (PtInRect(&_mapData->getObject()[k]._rc, pt))
-								{
-									_mapData->deleteMapIndexByIndex(k, 5, 5);
-									break;
-								}
-							}
-							EFFECTMANAGER->explosion(_vObject[i]->getRect().left, _vObject[i]->getRect().top);
-							CAMERAMANAGER->CameraShake();
-							_vObject[i]->setState(OBJECT_DESTROY);
-						}
-						else if (_vObject[i]->getType() == PRISONER)
-						{
-							EFFECTMANAGER->woodDebris(_vObject[i]->getRect().left, _vObject[i]->getRect().top, _playerManager->getPlayer()->getIsLeft());
-							_vObject[i]->setState(OBJECT_MOVE);
-						}
-						_playerManager->getPBullet()->getVPlayerBullet()[j].isActived = false;
-					}
-				}
-				if (IntersectRect(&tempRc3, &_playerManager->getPlayer()->getRcRambro(), &_vObject[i]->getActivationRect()))
-				{
-					if (_vObject[i]->getType() == PRISONER)
-						_vObject[i]->setIsActived(true);
-					if (_vObject[i]->getType() == AMERICAN_FLAG)
-						_vObject[i]->setState(OBJECT_MOVE);
-				}
-				break;
-			case OBJECT_MOVE:
-				if (_vObject[i]->getType() == PRISONER)
-				{
-					if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getRcRambro(), &_vObject[i]->getRect()))
-					{
-						_vObject[i]->setState(OBJECT_DESTROY);
-					}
-					else
-					{
-						_vObject[i]->setGravity(_vObject[i]->getGravity() + 0.55f);
-						_vObject[i]->setY(_vObject[i]->getY() + (-sinf(_vObject[i]->getAngle()) * _vObject[i]->getSpeed() + _vObject[i]->getGravity()));
-						this->collisionProcess();
-					}
-				}
-				break;
-			case OBJECT_DESTROY:
-				break;
-			}
-		}
+		//						if (PtInRect(&_mapData->getObject()[k]._rc, pt))
+		//						{
+		//							_mapData->deleteMapIndexByIndex(k, 5, 5);
+		//							break;
+		//						}
+		//					}
+		//					EFFECTMANAGER->explosion(_vObject[i]->getRect().left, _vObject[i]->getRect().top);
+		//					CAMERAMANAGER->CameraShake();
+		//					_vObject[i]->setState(OBJECT_DESTROY);
+		//				}
+		//				else if (_vObject[i]->getType() == PRISONER)
+		//				{
+		//					EFFECTMANAGER->woodDebris(_vObject[i]->getRect().left, _vObject[i]->getRect().top, _playerManager->getPlayer()->getIsLeft());
+		//					_vObject[i]->setState(OBJECT_MOVE);
+		//				}
+		//				_playerManager->getPBullet()->getVPlayerBullet()[j].isActived = false;
+		//			}
+		//		}
+		//		if (IntersectRect(&tempRc3, &_playerManager->getPlayer()->getRcRambro(), &_vObject[i]->getActivationRect()))
+		//		{
+		//			if (_vObject[i]->getType() == PRISONER)
+		//				_vObject[i]->setIsActived(true);
+		//			if (_vObject[i]->getType() == AMERICAN_FLAG)
+		//				_vObject[i]->setState(OBJECT_MOVE);
+		//		}
+		//		break;
+		//	case OBJECT_MOVE:
+		//		if (_vObject[i]->getType() == PRISONER)
+		//		{
+		//			if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getRcRambro(), &_vObject[i]->getRect()))
+		//			{
+		//				_vObject[i]->setState(OBJECT_DESTROY);
+		//			}
+		//			else
+		//			{
+		//				_vObject[i]->setGravity(_vObject[i]->getGravity() + 0.55f);
+		//				_vObject[i]->setY(_vObject[i]->getY() + (-sinf(_vObject[i]->getAngle()) * _vObject[i]->getSpeed() + _vObject[i]->getGravity()));
+		//				this->collisionProcess();
+		//			}
+		//		}
+		//		break;
+		//	case OBJECT_DESTROY:
+		//		break;
+		//	}
+		//}
 		_vObject[i]->update();
 	}
 
