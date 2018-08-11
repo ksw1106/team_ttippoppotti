@@ -43,6 +43,7 @@ void testScene_kmy::update(void)
 	if (KEYMANAGER->isOnceKeyDown('U'))
 	{
 		EFFECTMANAGER->RambroBloodFountain(1000, 2100);
+		//EFFECTMANAGER.
 	}
 }
 
