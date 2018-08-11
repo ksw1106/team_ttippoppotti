@@ -32,6 +32,9 @@ HRESULT enemyManager::init(void)
 	_brovil = new brovil;
 	_brovil->init(3200, 1000);
 
+	_hpBar = new progressBar;
+	_hpBar->init("enemyImage/bossImage/boss_hpbar_red","enemyImage/bossImage/boss_hpbar_black",277, 57, 270, 50, 1062, 17, 1076, 30);
+	
 	_effectCount = _count = 0;
 	_isClear = false;
 
@@ -50,6 +53,8 @@ void enemyManager::release(void)
 	SAFE_DELETE(_bossRocket);
 	_brovil->release();
 	SAFE_DELETE(_brovil);
+	_hpBar->release();
+	SAFE_DELETE(_hpBar);
 }
 
 void enemyManager::update(void)
@@ -59,7 +64,9 @@ void enemyManager::update(void)
 	_bossBullet->update();
 	_bossRocket->update();
 	_brovil->update();
-
+	_hpBar->update();
+	_hpBar->setGauge(_boss->getHP(), 100);
+	
 	this->changeDirection();
 	
 	for (int i = 0; i < _vSoldier.size(); ++i)
@@ -75,7 +82,6 @@ void enemyManager::update(void)
 		}
 	}
 	
-
 		
 	// 에너미 픽셀(지형) 충돌
 	this->collideWithPixel();
@@ -107,6 +113,7 @@ void enemyManager::update(void)
 
 	// 할아버지 총알 vs 에너미 충돌
 	this->collideWithGBullet();
+	this->collideBossWithGBullet();
 	
 	// 보스 총알, 로켓 발사
 	this->bossBulletFire();
@@ -125,6 +132,11 @@ void enemyManager::render(void)
 	_boss->render();
 	_bossBullet->render();
 	_bossRocket->render();
+	
+	if (_boss->getIsAlive())
+	{
+		_hpBar->render();
+	}
 
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
@@ -477,16 +489,13 @@ void enemyManager::bossDirChange()
 void enemyManager::PBulletHitBoss()
 {
 	RECT rc;
-	for (int i = 0; i < _playerManager->getPBullet()->getVPlayerBullet().size();)
+	for (int i = 0; i < _playerManager->getPBullet()->getVPlayerBullet().size(); ++i)
 	{
 		if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[i].rc, &_boss->getTerrorKopter().rcBody))
 		{			
-			_playerManager->getPBullet()->removeBullet(i);
-		}
-		else
-		{
-			++i;
-		}
+			if (!_playerManager->getPBullet()->getVPlayerBullet()[i].isActived) continue;
+			_playerManager->getPBullet()->getVPlayerBullet()[i].isActived = false;
+		}		
 	}
 }
 
@@ -596,6 +605,21 @@ void enemyManager::collideWithGBullet()
 				_playerManager->getGBullet()->getVPlayergBullet()[i].isActived = false;
 			}
 		}	
+	}
+}
+
+// 할아버지 총알  vs 보스
+void enemyManager::collideBossWithGBullet()
+{
+	RECT rc;
+	for (int i = 0; i < _playerManager->getGBullet()->getVPlayergBullet().size(); ++i)
+	{
+		if (IntersectRect(&rc, &_playerManager->getGBullet()->getVPlayergBullet()[i].rc, &_boss->getRcBoss()))
+		{
+			if (!_playerManager->getGBullet()->getVPlayergBullet()[i].isActived) continue;
+			_playerManager->getGBullet()->getVPlayergBullet()[i].isActived = false;
+			_boss->setHP(_boss->getHP() - 1);
+		}
 	}
 }
 

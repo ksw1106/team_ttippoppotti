@@ -1,16 +1,21 @@
 #include "stdafx.h"
 #include "progressBar.h"
 
-HRESULT progressBar::init(const char * frontImageKey, const char * backImageKey, int x, int y, int width, int height)
+HRESULT progressBar::init(const char* frontImageKey, const char* backImageKey, int frontX, int frontY, int backX, int backY, int frontWidth, int frontHeight, int backWidth, int backHeight)
 {
 	//체력바 위치 초기화
-	_x = x;
-	_y = y;
+	_frontX = frontX;
+	_frontY = frontY;
+	_backX = backX;
+	_backY = backY;
 	//체력바 가로, 세로길이 초기화
-	_width = width;
-	_height = height;
+	_frontWidth = frontWidth;
+	_frontHeight = frontHeight;
+	_backWidth = backWidth;
+	_backHeight = backHeight;
 	//체력바 렉트 위치 및 크기 초기화
-	_rcProgress = RectMake(x, y, width, height);
+	_rcProgressBack = RectMake(backX, backY, backWidth, backHeight);
+	_rcProgressFront = RectMake(frontX, frontY, frontWidth, frontHeight);
 
 	//키값으로 이미지이름(~.bmp)으로 바로 초기화
 	char frontImage[128];
@@ -24,8 +29,8 @@ HRESULT progressBar::init(const char * frontImageKey, const char * backImageKey,
 	sprintf(backImage, "%s.bmp", backImageKey);
 
 	//체력바 이미지 초기화
-	_progressBarFront = IMAGEMANAGER->addImage(frontImageKey, frontImage, x, y, width, height, true, RGB(255, 0, 255));
-	_progressBarBack = IMAGEMANAGER->addImage(backImageKey, backImage, x, y, width, height, true, RGB(255, 0, 255));
+	_progressBarFront = IMAGEMANAGER->addImage(frontImageKey, frontImage, frontX, frontY, frontWidth, frontHeight, true, RGB(255, 0, 255));
+	_progressBarBack = IMAGEMANAGER->addImage(backImageKey, backImage, backX, backY, backWidth, backHeight, true, RGB(255, 0, 255));
 
 	return S_OK;
 }
@@ -36,19 +41,22 @@ void progressBar::release(void)
 
 void progressBar::update(void)
 {
-	_rcProgress = RectMake(_x, _y, _progressBarBack->getWidth(), _progressBarBack->getHeight());
+	//
+	_rcProgressFront = RectMake(_frontX, _frontY, _progressBarFront->getWidth(), _progressBarFront->getHeight());
+	_rcProgressBack = RectMake(_backX, _backY, _progressBarBack->getWidth(), _progressBarBack->getHeight());
+
 }
 
 void progressBar::render(void)
 {
 	//렌더링 되는 순서에 의해서 렌더가 되니까 피통부터 렌더 시킨다
-	_progressBarBack->render(getMemDC(), _rcProgress.left, _y);
+	_progressBarBack->render(getMemDC(), _rcProgressBack.left, _backY);
 	//앞에 보여지는 체력바 이미지
-	_progressBarFront->render(getMemDC(), _rcProgress.left, _y,
-		0, 0, _width, _progressBarFront->getHeight());
+	_progressBarFront->render(getMemDC(), _rcProgressFront.left, _frontY,
+		0, 0, _frontWidth, _progressBarFront->getHeight());
 }
 
 void progressBar::setGauge(float currentHp, float maxHp)
 {
-	_width = (currentHp / maxHp) * _progressBarBack->getWidth();
+	_frontWidth = (currentHp / maxHp) * _progressBarFront->getWidth();
 }
