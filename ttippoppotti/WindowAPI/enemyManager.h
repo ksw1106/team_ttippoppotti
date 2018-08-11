@@ -48,6 +48,7 @@ private:
 	int _effectCount;
 	int _count;
 	int _choice;
+	int _stageNum;
 	bool _isClear;				// 스테이지 클리어했냐(브로빌 죽음)
 	bool _isEffect;
 	
