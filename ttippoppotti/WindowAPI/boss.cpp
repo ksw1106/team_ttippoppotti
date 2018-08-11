@@ -24,6 +24,7 @@ HRESULT boss::init(float x, float y)
 	_terrorKopter.isAttack = false;
 	_terrorKopter.isTurning = false;
 	_terrorKopter.isAlive = true;
+	_terrorKopter.hp = 100;
 
 	_terrorKopter.img.bodyIndex = _terrorKopter.img.gunIndex = _terrorKopter.img.propellerIndex = _terrorKopter.img.rotorIndex = 0;
 	_terrorKopter.img.frameCount = 1;
@@ -44,7 +45,6 @@ HRESULT boss::init(float x, float y)
 
 void boss::release(void)
 {
-
 }
 
 void boss::update(void)
@@ -53,7 +53,18 @@ void boss::update(void)
 	{
 		this->terrorKopterMove();
 	}	
+	else
+	{
+		this->bossDie();
+	}
+
 	this->frameAnimate();
+
+	if (_terrorKopter.hp < 0)
+	{
+		_terrorKopter.hp = 0;
+		_terrorKopter.isAlive = false;
+	}
 
 	// ¸öÅë ·ºÆ®
 	_terrorKopter.rcBody = RectMake(_terrorKopter.x + _terrorKopter.img.bodyImage[_bodyStatus]->getFrameWidth() / 4, _terrorKopter.y + 40,
@@ -173,18 +184,7 @@ void boss::terrorKopterMove()
 
 			break;
 		}
-		case LEFT_DEAD:
-		{
-			_terrorKopter.isLeft = true;
-			this->bossDie();
-			break;
-		}
-		case RIGHT_DEAD:
-		{
-			_terrorKopter.isLeft = false;
-			this->bossDie();
-			break;
-		}
+		
 		
 	default:
 		break;
@@ -283,8 +283,8 @@ void boss::bombAttack(float x, float y, float angle)
 
 void boss::bossDie()
 {
-	_terrorKopter.isAlive = false;
 	_bodyStatus = B_DEATH;
+	_terrorKopter.y += 15.f;
 }
 
 bool boss::radarIn(float x, float y, float distance)

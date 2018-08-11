@@ -10,6 +10,12 @@ class stage2Scene : public gameNode
 	enemyManager* _enemyManager;
 	mapData* _mapData;
 
+	image* _backGround;
+	image* _backGroundObject;
+	image* _backGoundRock;
+	image* _backGroundPixel;
+	image* _ladderPixel;
+
 	RECT _rcCamera;
 	bool _camDebug;
 public:

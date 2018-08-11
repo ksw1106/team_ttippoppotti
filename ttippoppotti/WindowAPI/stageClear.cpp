@@ -293,8 +293,6 @@ void stageClear::render(void)
 		
 		sprintf(ch, "%.2f", resultTimeFloat);
 
-		TextOut(getMemDC(), 700, 300, ch, strlen(ch));
-
 		str = ch[2];
 		IMAGEMANAGER->findImage(str)->render(getMemDC(), 1394, 609);
 

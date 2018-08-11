@@ -24,7 +24,7 @@ private:
 	stageClear* _stageClear;
 
 	RECT _rcCamera;
-	world _backGround[7];
+	world _backGround[3];
 
 	bool _camDebug;
 

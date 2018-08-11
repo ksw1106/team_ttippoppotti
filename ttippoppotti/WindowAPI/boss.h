@@ -96,6 +96,10 @@ public:
 	void setIsLeft(bool isLeft) { _terrorKopter.isLeft = isLeft; }
 	bool getIsMoving() { return _terrorKopter.isMove;}
 	void setIsMoving(bool isMove) { _terrorKopter.isMove = isMove; }
+	int getHP() { return _terrorKopter.hp; }
+	void setHP(int hp) { _terrorKopter.hp = hp; }
+	bool getIsAlive() { return _terrorKopter.isAlive; }
+	void setIsAlive(bool isAlive) { _terrorKopter.isAlive = isAlive; }
 
 	// 보스 움직임 바뀜
 	void terrorKopterMove();

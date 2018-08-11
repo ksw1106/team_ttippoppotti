@@ -14,6 +14,8 @@ void loadingScene::Kim_Sang_Won_addImage()
 	_loading->loadImage("backGround_object", "background_object.bmp", 5755, 2878, true, RGB(255, 0, 255));
 	_loading->loadImage("stage2_background_object", "stage2_background_object.bmp", 5582, 2694, true, RGB(255, 0, 255));
 	_loading->loadImage("stage2_background_rock", "stage2_background_rock.bmp", 5582, 2694, true, RGB(255, 0, 255));
+	_loading->loadImage("stage2_background_pixel", "stage2_background_pixel.bmp", 5582, 2694, true, RGB(255, 0, 255));
+	_loading->loadImage("stage2_ladder_pixel", "stage2_ladder_pixel.bmp", 5582, 2694, true, RGB(255, 0, 255));
 	_loading->loadImage("ladder", "objectImage/ladder.bmp", 25, 237, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("helicopter", "objectImage/helicopter.bmp", 1625, 419, 5, 1);
 	_loading->loadFrameImage("saveFlag", "objectImage/saveFlag.bmp", 3234, 88, 33, 1);

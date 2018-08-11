@@ -3,16 +3,16 @@
 
 void mapData::deleteMap(int index)
 {
-	SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_BRUSH));
-	SetDCBrushColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
-	SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_PEN));
-	SetDCPenColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
-	RectangleMake(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), _vObject[index]._rc.left, _vObject[index]._rc.top, _vObject[index]._width, _vObject[index]._height);
-	SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_BRUSH));
-	SetDCBrushColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
-	SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_PEN));
-	SetDCPenColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
-	RectangleMake(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), _vObject[index]._rc.left, _vObject[index]._rc.top, _vObject[index]._width, _vObject[index]._height);
+	SelectObject(_backGround->getMemDC(), GetStockObject(DC_BRUSH));
+	SetDCBrushColor(_backGround->getMemDC(), RGB(255, 0, 255));
+	SelectObject(_backGround->getMemDC(), GetStockObject(DC_PEN));
+	SetDCPenColor(_backGround->getMemDC(), RGB(255, 0, 255));
+	RectangleMake(_backGround->getMemDC(), _vObject[index]._rc.left, _vObject[index]._rc.top, _vObject[index]._width, _vObject[index]._height);
+	SelectObject(_pixel->getMemDC(), GetStockObject(DC_BRUSH));
+	SetDCBrushColor(_pixel->getMemDC(), RGB(255, 0, 255));
+	SelectObject(_pixel->getMemDC(), GetStockObject(DC_PEN));
+	SetDCPenColor(_pixel->getMemDC(), RGB(255, 0, 255));
+	RectangleMake(_pixel->getMemDC(), _vObject[index]._rc.left, _vObject[index]._rc.top, _vObject[index]._width, _vObject[index]._height);
 
 	_vObject[index]._isActived = false;
 }
@@ -30,15 +30,15 @@ void mapData::deleteMapIndexByIndex(int num, int index, int index2)
 	pt.x = rc.left + (rc.right - rc.left) / 2;
 	pt.y = rc.top + (rc.bottom - rc.top) / 2;
 
-	SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_BRUSH));
-	SetDCBrushColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
-	SelectObject(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), GetStockObject(DC_PEN));
-	SetDCPenColor(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), RGB(255, 0, 255));
+	SelectObject(_backGround->getMemDC(), GetStockObject(DC_BRUSH));
+	SetDCBrushColor(_backGround->getMemDC(), RGB(255, 0, 255));
+	SelectObject(_backGround->getMemDC(), GetStockObject(DC_PEN));
+	SetDCPenColor(_backGround->getMemDC(), RGB(255, 0, 255));
 	
-	SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_BRUSH));
-	SetDCBrushColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
-	SelectObject(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), GetStockObject(DC_PEN));
-	SetDCPenColor(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), RGB(255, 0, 255));
+	SelectObject(_pixel->getMemDC(), GetStockObject(DC_BRUSH));
+	SetDCBrushColor(_pixel->getMemDC(), RGB(255, 0, 255));
+	SelectObject(_pixel->getMemDC(), GetStockObject(DC_PEN));
+	SetDCPenColor(_pixel->getMemDC(), RGB(255, 0, 255));
 
 	for (int i = iIndex; i < iIndex2; i++)
 	{
@@ -53,8 +53,8 @@ void mapData::deleteMapIndexByIndex(int num, int index, int index2)
 
 				if (PtInRect(&_vObject[k]._rc, tempPt))
 				{
-					RectangleMake(IMAGEMANAGER->findImage("backGround_object")->getMemDC(), _vObject[k]._rc.left, _vObject[k]._rc.top, _vObject[k]._width, _vObject[k]._height);
-					RectangleMake(IMAGEMANAGER->findImage("backGround_pixel")->getMemDC(), _vObject[k]._rc.left, _vObject[k]._rc.top, _vObject[k]._width, _vObject[k]._height);
+					RectangleMake(_backGround->getMemDC(), _vObject[k]._rc.left, _vObject[k]._rc.top, _vObject[k]._width, _vObject[k]._height);
+					RectangleMake(_pixel->getMemDC(), _vObject[k]._rc.left, _vObject[k]._rc.top, _vObject[k]._width, _vObject[k]._height);
 					_vObject[k]._isActived = false;
 					break;
 				}

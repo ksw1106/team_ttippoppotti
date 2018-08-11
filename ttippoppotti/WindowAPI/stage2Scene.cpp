@@ -12,7 +12,16 @@ HRESULT stage2Scene::init(void)
 	_enemyManager->init();
 	_mapData = new mapData;
 	_mapData->init(2);
+	_mapData->setObjectPixel("stage2_background_object");
+	_mapData->setBackGroundMap("stage2_background_pixel");
 
+	_backGround = IMAGEMANAGER->findImage("backGround");
+	_backGroundObject = IMAGEMANAGER->findImage("stage2_background_object");
+	_backGoundRock = IMAGEMANAGER->findImage("stage2_background_rock");
+	_backGroundPixel = IMAGEMANAGER->findImage("stage2_background_pixel");
+	_ladderPixel = IMAGEMANAGER->findImage("stage2_ladder_pixel");
+
+	COLLISIONMANAGER->setPixelMap(IMAGEMANAGER->findImage("stage2_background_object"), IMAGEMANAGER->findImage("stage2_ladder_pixel"));
 	EFFECTMANAGER->init();
 
 	_camDebug = false;
@@ -40,17 +49,7 @@ void stage2Scene::update(void)
 
 			if (PtInRect(&_mapData->getObject()[i]._rc, ptTemp))
 			{
-
-				mapObject obj = _mapData->getObject()[i];
-
-				SelectObject(IMAGEMANAGER->findImage("stage2_background_object")->getMemDC(), GetStockObject(DC_BRUSH));
-				SetDCBrushColor(IMAGEMANAGER->findImage("stage2_background_object")->getMemDC(), RGB(255, 0, 255));
-				SelectObject(IMAGEMANAGER->findImage("stage2_background_object")->getMemDC(), GetStockObject(DC_PEN));
-				SetDCPenColor(IMAGEMANAGER->findImage("stage2_background_object")->getMemDC(), RGB(255, 0, 255));
-				RectangleMake(IMAGEMANAGER->findImage("stage2_background_object")->getMemDC(), obj._rc.left, obj._rc.top, obj._width, obj._height);
-
-				obj._isActived = false;
-				_mapData->setObject(obj, i);
+				_mapData->deleteMap(i);
 				break; //юс╫ц
 			}
 		}
@@ -92,17 +91,17 @@ void stage2Scene::update(void)
 		{
 			_rcCamera.left = 0;
 		}
-		else if (_rcCamera.right >= 5755)
+		else if (_rcCamera.right >= 5582)
 		{
-			_rcCamera.left = 5755 - WINSIZEX;
+			_rcCamera.left = 5582 - WINSIZEX;
 		}
 		if (_rcCamera.top <= 0)
 		{
 			_rcCamera.top = 0;
 		}
-		else if (_rcCamera.bottom >= 2878)
+		else if (_rcCamera.bottom >= 2694)
 		{
-			_rcCamera.top = 2878 - WINSIZEY;
+			_rcCamera.top = 2694 - WINSIZEY;
 		}
 		_rcCamera = RectMake(_rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	}
@@ -117,10 +116,16 @@ void stage2Scene::update(void)
 
 void stage2Scene::render(void)
 {
-	IMAGEMANAGER->findImage("backGround")->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
-	IMAGEMANAGER->findImage("stage2_background_rock")->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
-	IMAGEMANAGER->findImage("stage2_background_object")->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
+	_backGround->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
+	_backGoundRock->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
+	_backGroundObject->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 
+	if (KEYMANAGER->isToggleKey('8'))
+	{
+		_backGroundPixel->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
+		_ladderPixel->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
+	}
+	
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
 		char str[64];
