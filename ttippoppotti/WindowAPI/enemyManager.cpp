@@ -33,7 +33,8 @@ HRESULT enemyManager::init(void)
 	_brovil->init(3200, 1000);
 
 	_hpBar = new progressBar;
-	_hpBar->init("enemyImage/bossImage/boss_hpbar_red","enemyImage/bossImage/boss_hpbar_black",277, 57, 270, 50, 1062, 17, 1076, 30);
+	_hpBar->init("enemyImage/bossImage/boss_hpbar_red","enemyImage/bossImage/boss_hpbar_white","enemyImage/bossImage/boss_hpbar_black",
+		WINSIZEX/2 - 1062/2, 57, WINSIZEX/2 - 1062/2, 57, WINSIZEX/2 - 1076/2, 50, 1062, 17, 1062, 17, 1076, 30);
 	
 	_effectCount = _count = 0;
 	_isClear = false;
@@ -491,10 +492,11 @@ void enemyManager::PBulletHitBoss()
 	RECT rc;
 	for (int i = 0; i < _playerManager->getPBullet()->getVPlayerBullet().size(); ++i)
 	{
-		if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[i].rc, &_boss->getTerrorKopter().rcBody))
+		if (IntersectRect(&rc, &_playerManager->getPBullet()->getVPlayerBullet()[i].rc, &_boss->getRcBoss()))
 		{			
 			if (!_playerManager->getPBullet()->getVPlayerBullet()[i].isActived) continue;
 			_playerManager->getPBullet()->getVPlayerBullet()[i].isActived = false;
+			_boss->setHP(_boss->getHP() - 1);
 		}		
 	}
 }
@@ -694,7 +696,7 @@ void enemyManager::collideBrovilwithPBullet()
 			{
 				_brovil->deadMove();
 			}
-
+			
 			//if (this->isEffect(2))
 			//{
 			//	EFFECTMANAGER->bloodSplash(_brovil->getX() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameWidth()/2, _brovil->getY() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameHeight()/2,
