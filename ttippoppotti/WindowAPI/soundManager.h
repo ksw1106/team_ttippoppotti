@@ -39,8 +39,9 @@ public:
 	//사운드 일시정지
 	void pause(string keyName);
 	//사운드 다시재생
-	void resume(string keyName);
-
+	void resume(string keyName, float volume = 1.0f);
+	//사운드 볼륨조절
+	void volumeSetting(string keyName, float volume);
 	//플레이 중이냐?
 	bool isPlaySound(string keyName);
 	//일시정지 중이냐?

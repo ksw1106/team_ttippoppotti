@@ -53,23 +53,6 @@ HRESULT stageScene::init(void)
 	_backGround[1]._image = IMAGEMANAGER->findImage("backGround_rock");
 	_backGround[2]._image = IMAGEMANAGER->findImage("backGround_object");
 
-	_helicopter = IMAGEMANAGER->findImage("helicopter");
-	
-	_saveFlag = IMAGEMANAGER->findImage("saveFlag");
-
-	_flag = IMAGEMANAGER->findImage("flag");
-
-	_flagCount = _flagIndex = 0;
-	_flagSpeed = 5;
-
-	_flagX = 3326.f;
-	_flagY = 870.f;
-	_isLeft = _isDown = false;
-	_count = _index = _fcount = _findex = _speed = _hcount = _hindex = 0;
-	_fspeed = 1;
-	_hspeed = 5;
-	_x = 3400.f;
-	_y = 500.f;
 	_camDebug = false;
 	_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
 	CAMERAMANAGER->setCamera(_rcCamera);
@@ -131,8 +114,6 @@ void stageScene::update(void)
 		break;
 	}
 	
-	
-	
 	_playerManager->update();
 	_enemyManager->update();
 	OBJECTMANAGER->update();
@@ -144,7 +125,7 @@ void stageScene::update(void)
 	{
 		_isClear = true;
 		_stageClear->setClearTime(TIMEMANAGER->getWorldTime());
-		SOUNDMANAGER->stop("stage1");
+		SOUNDMANAGER->stop("1stage");
 		SOUNDMANAGER->play("clear");
 	}
 
@@ -170,35 +151,12 @@ void stageScene::update(void)
 			_rcCamera.top -= 10;
 			_rcCamera.bottom -= 10;
 		}
-
 		if (KEYMANAGER->isStayKeyDown('S'))
 		{
 			_rcCamera.top += 10;
 			_rcCamera.bottom += 10;
 		}
 	}
-
-	if (_isDown)
-	{
-		_y += 0.5f;
-		if (_y >= 500.f)
-		{
-			_isDown = false;
-		}
-	}
-	else if (!_isDown)
-	{
-		_y -= 0.5f;
-		if (_y <= 495.f)
-		{
-			_isDown = true;
-		}
-	}
-
-	FRAMEMANAGER->frameChange(_helicopter, _count, _index, _speed, _isLeft);
-	FRAMEMANAGER->frameChange(_saveFlag, _fcount, _findex, _fspeed, _isLeft);
-	//FRAMEMANAGER->frameChange(_humanDead, _hcount, _hindex, _hspeed, _isLeft);
-	FRAMEMANAGER->frameChange(_flag, _flagCount, _flagIndex, _flagSpeed, _isLeft);
 
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 	{
@@ -212,7 +170,6 @@ void stageScene::update(void)
 
 			if (PtInRect(&_mapData->getObject()[i]._rc, ptTemp))
 			{
-				
 				_mapData->deleteMap(i);
 				break; //юс╫ц
 			}
@@ -246,8 +203,6 @@ void stageScene::update(void)
 	{
 		CAMERAMANAGER->CameraShake();
 	}
-
-	OBJECTMANAGER->update();
 
 	if (_isClear)
 	{
@@ -294,9 +249,6 @@ void stageScene::render(void)
 				(_mapData->getObject()[i]._rc.top + (_mapData->getObject()[i]._rc.bottom - _mapData->getObject()[i]._rc.top) / 2) - CAMERAMANAGER->getCamera().top, str, strlen(str));
 		}
 	}
-	char str[64];
-	sprintf(str, "%d", _camDebug);
-	TextOut(getMemDC(), 200, 200, str, strlen(str));
 
 	_playerManager->render();
 	_enemyManager->render();

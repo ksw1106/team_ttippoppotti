@@ -6,12 +6,19 @@ class enemyManager;
 struct enemyList
 {
 	image* image[2];
+	float x, y;
+	float oldX, oldY;
+	float angle;
+	float speed;
+	float gravity;
+	int waitTime;
 	int count;
 	int index;
-	int speed;
-	bool isFrameImage[2];
+	int animationspeed;
 	bool isDead;
 	bool isLeft;
+	bool isCount;
+	bool isSound;
 };
 
 class stageClear : public gameNode
@@ -41,8 +48,6 @@ public:
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }
 
 	void setClearTime(float clearTime) { _claerTime = clearTime; }
-
-	void printNumber(HDC hdc);
 
 	HRESULT init(void);
 	void release(void);
