@@ -77,6 +77,9 @@ public:
 	// 죽은 적 푸쉬백
 	void saveEnemy(enemyType enemy, deadType deadType, bool isLeft);
 	
+	// 에너미 방향 바꾸기
+	void changeDirection();
+
 	// 에너미 시야 vs 플레이어 충돌
 	void collideWithSight();
 	// 에너미 vs 픽셀

@@ -541,7 +541,12 @@ HRESULT gBullet::init(float range)
 }
 
 void gBullet::release(void)
-{
+{	
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		_vBullet[i].bulletImage->release();
+		SAFE_DELETE(_vBullet[i].bulletImage);
+	}
 }
 
 void gBullet::update(void)
