@@ -60,31 +60,21 @@ void enemyManager::update(void)
 	_bossRocket->update();
 	_brovil->update();
 
+	this->changeDirection();
+	
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{		
-		_vSoldier[i]->update();		
-				
-		if (_vSoldier[i]->getIsFire() && _vSoldier[i]->getIsAlive())
-		{
-			this->enemyFire(i);
-		}				
+		_vSoldier[i]->update();			
 	}
-
+	
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
-		if (!_vSoldier[i]->getIsUncovered()) continue;
-
-		// 플레이어 방향에 맞춰 적방향 바꿈 (발견상태일때)
-		if ((180 / 3.14f * getAngle(_vSoldier[i]->getX(), _vSoldier[i]->getY(), _playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY())) >= 91.f
-			&& (180 / 3.14f * getAngle(_vSoldier[i]->getX(), _vSoldier[i]->getY(), _playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY()) <= 270.f))
+		if (_vSoldier[i]->getIsAlive())
 		{
-			_vSoldier[i]->setDirection(true);			
-		}
-		else
-		{
-			_vSoldier[i]->setDirection(false);
+			this->enemyFire(i);
 		}
 	}
+	
 
 		
 	// 에너미 픽셀(지형) 충돌
@@ -114,8 +104,6 @@ void enemyManager::update(void)
 	this->collideWithBossRocket();
 	this->bossDirChange();
 	this->PBulletHitBoss();
-	
-	
 	
 	// 보스 총알, 로켓 발사
 	this->bossBulletFire();
@@ -224,6 +212,25 @@ void enemyManager::saveEnemy(enemyType enemy, deadType deadType, bool isLeft)
 	_deadEnemy._deadType = deadType;
 	_deadEnemy.isLeft = isLeft;
 	_vDeadEnemyInfo.push_back(_deadEnemy);
+}
+
+void enemyManager::changeDirection()
+{
+	for (int i = 0; i < _vSoldier.size(); ++i)
+	{
+		if (!_vSoldier[i]->getIsUncovered()) continue;
+
+		// 플레이어 방향에 맞춰 적방향 바꿈 (발견상태일때)
+		if ((180 / 3.14f * getAngle(_vSoldier[i]->getX(), _vSoldier[i]->getY(), _playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY())) >= 91.f
+			&& (180 / 3.14f * getAngle(_vSoldier[i]->getX(), _vSoldier[i]->getY(), _playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY()) <= 270.f))
+		{
+			_vSoldier[i]->setDirection(true);
+		}
+		else
+		{
+			_vSoldier[i]->setDirection(false);
+		}
+	}
 }
 
 // 에너미와 픽셀충돌
