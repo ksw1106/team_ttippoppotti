@@ -53,9 +53,8 @@ public:
 	void fire(int x, int y, int fireSpeed, bool isLeft);
 	//총알무브
 	void move();
-	//총알제거
-	void removeBullet(int index);
-	void animation();
+	//애니메이션
+	void animation(int i);
 
 	//총알벡터 가져오기
 	vector<tagBullet> getVEnemybullet() { return _vEBullet; }
@@ -121,7 +120,7 @@ public:
 	//총알무브
 	void move();
 	//총알애니메이션	
-	void animation();
+	void animation(int i);
 
 	tagBullet* getBossRocket() { return _bossRocket; }
 	

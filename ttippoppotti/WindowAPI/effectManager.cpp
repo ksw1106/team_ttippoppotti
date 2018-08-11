@@ -81,11 +81,6 @@ void effectManager::update(void)
 		explosionStart(_x, _y);
 		_count++;
 	}
-	else if (_isBigBang)
-	{
-		bigBangStart(_x, _y);
-		_count++;
-	}
 	else if (_isGrenadePuff)
 	{
 		grenadePuffStart(_x, _y);
@@ -142,6 +137,7 @@ void effectManager::bloodSplash(float x, float y, bool isLeft)
 	this->playParabola("bloodSplash6", x, y, isLeft);
 	this->playParabola("bloodSplash7", x, y, isLeft);
 	this->playParabola("bloodSplash8", x, y, isLeft);
+	//this->playFountain("bloodSplash1", x, y);
 }
 
 void effectManager::bloodFountain(float x, float y)
@@ -229,19 +225,7 @@ void effectManager::saveBubble(float x, float y)
 void effectManager::bigBang(float x, float y)
 {
 	this->playBigBang("bigBang", x, y);
-	//_isBigBang = true;
-	//_x = x;
-	//_y = y;
-}
-
-void effectManager::bigBangStart(float x, float y)
-{
-	this->playBigBang("bigBang", x, y);
-	if (_count > 40)
-	{
-		_isBigBang = false;
-		_count = 0;
-	}
+	this->playBallExplosion("ballFlame2", x, y);
 }
 
 void effectManager::explosionStart(float x, float y)

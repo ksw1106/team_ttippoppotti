@@ -80,35 +80,35 @@ void stageScene::update(void)
 	case 0:
 		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount]))
 		{
-			SOUNDMANAGER->play(soundName[soundCount]);
+			SOUNDMANAGER->play(soundName[soundCount], 0.5f);
 			soundCount++;
 		}
 		break;
 	case 1:
 		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount-1]))
 		{
-			SOUNDMANAGER->play(soundName[soundCount]);
+			SOUNDMANAGER->play(soundName[soundCount], 0.5f);
 			soundCount++;
 		}
 		break;
 	case 2:
 		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount - 1]))
 		{
-			SOUNDMANAGER->play(soundName[soundCount]);
+			SOUNDMANAGER->play(soundName[soundCount], 0.5f);
 			soundCount++;
 		}
 		break;
 	case 3:
 		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount - 1]))
 		{
-			SOUNDMANAGER->play(soundName[soundCount]);
+			SOUNDMANAGER->play(soundName[soundCount], 0.5f);
 			soundCount++;
 		}
 		break;
 	case 4:
 		if (SOUNDMANAGER->isPlaySound(soundName[soundCount - 1]))
 		{
-			SOUNDMANAGER->play("1stage");
+			SOUNDMANAGER->play("1stage", 0.5f);
 			soundCount++;
 		}
 		break;
@@ -126,7 +126,7 @@ void stageScene::update(void)
 		_isClear = true;
 		_stageClear->setClearTime(TIMEMANAGER->getWorldTime());
 		SOUNDMANAGER->stop("1stage");
-		SOUNDMANAGER->play("clear");
+		SOUNDMANAGER->play("clear", 0.8f);
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F9))
