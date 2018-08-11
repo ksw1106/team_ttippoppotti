@@ -435,16 +435,22 @@ HRESULT pGrenade::init(float range)
 	{
 		tagBullet pGrenade;
 		ZeroMemory(&pGrenade, sizeof(tagBullet));
-		//pGrenade.bulletImage = new image;
-		//pGrenade.bulletImage->init("player_ramBro/rambro_grenade.bmp", 288, 72, 8, 2, true, RGB(255, 0, 255));
-		//pGrenade.grenadeImage = new image;
-		//pGrenade.grenadeImage->init("player_ramBro/rambro_grenade_bomb.bmp", 28, 35, true, RGB(255, 0, 255));
 		pGrenade.bulletImage = IMAGEMANAGER->findImage("rambro_grenade_frame");
 		pGrenade.grenadeImage = IMAGEMANAGER->findImage("rambro_grenade_bomb");
+		//pGrenade.missileImageLeft = IMAGEMANAGER->findImage("rambro_grenade_blue");
 		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
 		_vBullet.push_back(pGrenade);
 	}
-	
+	for (int i = 0; i < 30; i++)
+	{
+		tagBullet pGrenade;
+		ZeroMemory(&pGrenade, sizeof(tagBullet));
+		pGrenade.missileImageLeft = IMAGEMANAGER->findImage("rambro_grenade_blue");
+		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
+		_vBulletTrail.push_back(pGrenade);
+	}
+	_trailcount = 0;
+
 	return S_OK;
 }
 
@@ -486,6 +492,8 @@ void pGrenade::render(void)
 	{
 		if (_vBullet[i].isActived == true)
 		{
+			_vBulletTrail[i].missileImageLeft->frameRender(getMemDC(), _vBulletTrail[i].rc.left - CAMERAMANAGER->getCamera().left,
+				_vBulletTrail[i].rc.top - CAMERAMANAGER->getCamera().top);
 			_vBullet[i].bulletImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
 				_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top);
 			if (_vBullet[i].count > 50)
@@ -509,6 +517,7 @@ void pGrenade::fire(int x, int y, int fireSpeed, bool isLeft)
 		_vBullet[i].gravity = 0.0f;
 		_vBullet[i].bulletImage = IMAGEMANAGER->findImage("rambro_grenade_frame");
 		_vBullet[i].grenadeImage = IMAGEMANAGER->findImage("rambro_grenade_bomb");
+		
 		_vBullet[i].count = 0;		
 		_vBullet[i].x = _vBullet[i].fireX = x;
 		_vBullet[i].y = _vBullet[i].fireY = y;
@@ -523,8 +532,45 @@ void pGrenade::fire(int x, int y, int fireSpeed, bool isLeft)
 		{
 			_vBullet[i].angle = 35.f * PI / 180;
 		}
+		//_vBullet[i].count++;
+		//if (_vBullet[i].count > 3)
+		//{
+		//	_vBullet[i].missileImageLeft = IMAGEMANAGER->findImage("rambro_grenade_blue");
+		//}
 
 		break;
+	}
+	for (int i = 0; i < _vBulletTrail.size(); i++)
+	{
+		if (_vBulletTrail[i].isActived)continue;
+		_vBulletTrail[i].isActived = true;
+		_vBulletTrail[i].speed = fireSpeed;
+		_vBulletTrail[i].isLeft = isLeft;
+		_vBulletTrail[i].gravity = 0.0f;
+		_vBulletTrail[i].count = 0;
+		if (!_vBulletTrail[i].isLeft)
+		{
+			x = x - 10;
+			y = y - 10;
+		}
+		else
+		{
+
+		}
+		_vBulletTrail[i].x = _vBulletTrail[i].fireX = x;
+		_vBulletTrail[i].y = _vBulletTrail[i].fireY = y;
+		_vBulletTrail[i].rc = RectMake(_vBulletTrail[i].x, _vBulletTrail[i].y,
+			_vBulletTrail[i].missileImageLeft->getFrameWidth(),
+			_vBulletTrail[i].missileImageLeft->getFrameHeight());
+		if (_vBulletTrail[i].isLeft)
+		{
+			_vBulletTrail[i].angle = 145.f * PI / 180;
+		}
+		else
+		{
+			_vBulletTrail[i].angle = 35.f * PI / 180;
+		}
+		//break;
 	}
 }
 
@@ -543,6 +589,34 @@ void pGrenade::move()
 				_vBullet[i].bulletImage->getFrameHeight());
 
 			_vBullet[i].count++;
+		}
+	}
+
+	_trailcount++;
+	for (int i = 0; i < _vBulletTrail.size(); ++i)
+	{ 
+		if (_vBulletTrail[i].isActived)
+		{
+			_vBulletTrail[i].count++;
+			//if (_vBulletTrail[i].count > 2)
+			{
+				_vBulletTrail[i].gravity += 0.90f;
+				//if (i > 0)
+				//{
+				//	_vBulletTrail[i].x = _vBulletTrail[i - 1].x + cosf(_vBulletTrail[i].angle) * (_vBulletTrail[i].speed * i);
+				//	_vBulletTrail[i].y = _vBulletTrail[i - 1].y - sinf(_vBulletTrail[i].angle) * (_vBulletTrail[i].speed * i) + _vBulletTrail[i].gravity;
+				//}
+				//else
+				{
+					_vBulletTrail[i].x += cosf(_vBulletTrail[i].angle) * _vBulletTrail[i].speed;
+					_vBulletTrail[i].y += -sinf(_vBulletTrail[i].angle) * _vBulletTrail[i].speed + _vBulletTrail[i].gravity;
+				}
+
+				_vBulletTrail[i].rc = RectMake(_vBulletTrail[i].x, _vBulletTrail[i].y,
+					_vBulletTrail[i].missileImageLeft->getFrameWidth(),
+					_vBulletTrail[i].missileImageLeft->getFrameHeight());
+			}
+
 		}
 	}
 }
@@ -736,7 +810,7 @@ void gMissile::move()
 		{
 			_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 			_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
-		
+
 			_vBullet[i].rc = RectMake(_vBullet[i].x, _vBullet[i].y,
 				_vBullet[i].missileImageRight->getFrameWidth(),
 				_vBullet[i].missileImageRight->getFrameHeight());

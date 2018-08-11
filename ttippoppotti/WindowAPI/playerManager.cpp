@@ -23,9 +23,9 @@ HRESULT playerManager::init(int num)
 		_pGrenade = new pGrenade;
 		_pGrenade->init(500.f);
 		_gBullet = new gBullet;
-		_gBullet->init(300.f);
+		_gBullet->init(400.f);
 		_gMissile = new gMissile;
-		_gMissile->init(1500.f);
+		_gMissile->init(2000.f);
 		_xMissile = new xMissile;
 		_xMissile->init(2000.f);
 
@@ -43,6 +43,7 @@ HRESULT playerManager::init(int num)
 
 		_fireCount = 0;
 		_grenadeCount = 0;
+		_missileCount = 0;
 
 		_knifeCollision = false;
 		_isLadder = false;
@@ -51,6 +52,8 @@ HRESULT playerManager::init(int num)
 		_isGrenade = false;
 		_xMissileCollision = false;
 		_xMissileColl = false;
+		_isMissile = false;
+		_missile = false;
 
 		_rc8 = RectMake(500.f, 2100.f, 60, 60);
 		//_rcMissileRight = RectMake(100.f, 1000.f, 100, 10);
@@ -190,7 +193,6 @@ void playerManager::update(void)
 				{
 					_gBullet->fire(_player->getX(), _player->getY() + 38, 20, _player->getIsLeft());
 				}
-				EFFECTMANAGER->cartridge(_player->getX(), _player->getY(), _player->getIsLeft());			// ÃÑ¾Ë ÅºÇÇ
 			}
 		}
 	}
@@ -211,7 +213,7 @@ void playerManager::update(void)
 		_knifeCollision = false;
 	}
 
-	if (KEYMANAGER->isStayKeyDown('C'))						// Ä®»§
+	if (KEYMANAGER->isOnceKeyDown('C'))						// Ä®»§
 	{
 		if (KNIFE != _player->getState())
 		{
@@ -284,7 +286,22 @@ void playerManager::update(void)
 
 	if (KEYMANAGER->isOnceKeyDown('X'))							// ¼ö·ùÅº
 	{
-		if (_player->getIsLeft())								// ¿À¸¥ÂÊ
+		if (FIRE != _player->getState())
+		{
+			if (!_player->getIsLeft())
+			{
+				_player->setState(FIRE);
+				_player->setIndex(0);
+				_player->setCount(0);
+			}
+			else
+			{
+				_player->setState(FIRE);
+				_player->setIndex(_player->getImage(_player->getState())->getMaxFrameX());
+				_player->setCount(0);
+			}
+		}
+		if (!_player->getIsLeft())								// ¿À¸¥ÂÊ
 		{
 			_pGrenade->fire(_player->getX() + 60, _player->getY() + 38, 20, _player->getIsLeft());
 			_isGrenade = true;
@@ -295,21 +312,30 @@ void playerManager::update(void)
 			_isGrenade = true;
 		}
 	}
+	if (!_player->getIsLeft())
+	{
+		if (FIRE == _player->getState() && (_player->getIndex() >= _player->getImage(_player->getState())->getMaxFrameX()))
+		{
+			_player->setState(IDLE);
+		}
+	}
+	else
+	{
+		if (FIRE == _player->getState() && (_player->getIndex() <= 0))
+		{
+			_player->setState(IDLE);
+		}
+	}
+
 	if (_isGrenade)
 	{
 		_grenadeCount++;
 	}
-	if (KEYMANAGER->isStayKeyDown('X'))
+	if (_isMissile)
 	{
-		if (_player->getIsLeft())
-		{
-			_player->setState(FIRE);
-		}
-		else if (!_player->getIsLeft())
-		{
-			_player->setState(FIRE);
-		}
+		_missileCount++;
 	}
+	
 	_pGrenade->update();										// ¼ö·ùÅº ¾÷µ¥ÀÌÆ® ( ¹«ºê )
 	_gMissile->update();
 	_xMissile->update();
@@ -319,15 +345,18 @@ void playerManager::update(void)
 	{
 		if (!_isLadder)
 		{
-			_player->setState(JUMP);
-			_player->setGravity(0.0f);
-			_player->setJumpSpeed(20.f);
-			_player->setIsJump(true);
-			hit_left = false;
-			hit_right = false;
+			if (_player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD)
+			{
+				_player->setState(JUMP);
+				_player->setGravity(0.0f);
+				_player->setJumpSpeed(20.f);
+				_player->setIsJump(true);
+				hit_left = false;
+				hit_right = false;
+			}
 			if (_player->getState() == HANG_FRONT_HOLD || _player->getState() == HANG_BACK_HOLD)
 			{
-				_player->setJumpSpeed(5.f);
+				_player->setJumpSpeed(15.f);
 				//_isLadder = false;
 			}
 		}
@@ -351,7 +380,7 @@ void playerManager::update(void)
 		}
 	}
 
-	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT) || KEYMANAGER->isOnceKeyUp('X') || KEYMANAGER->isOnceKeyUp(VK_UP))
+	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT))
 	{
 		_player->setState(IDLE);
 	}
@@ -880,14 +909,14 @@ void playerManager::update(void)
 			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_TOP) == GREEN)
 		{
 			_pGrenade->getVPlayerGrenade()[i].angle = PI2 - _pGrenade->getVPlayerGrenade()[i].angle;
-			_pGrenade->getVPlayerGrenade()[i].speed *= 0.5f;
+			_pGrenade->getVPlayerGrenade()[i].speed *= 0.7f;
 		}
 		if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc,			// ¿À¸¥ÂÊ º®
 			_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y,
 			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_RIGHT) == GREEN)
 		{
 			_pGrenade->getVPlayerGrenade()[i].angle = PI - _pGrenade->getVPlayerGrenade()[i].angle;
-			_pGrenade->getVPlayerGrenade()[i].speed *= 0.5f;
+			_pGrenade->getVPlayerGrenade()[i].speed *= 0.7f;
 
 		}
 		else if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc,		// ¿ÞÂÊ º®
@@ -895,7 +924,7 @@ void playerManager::update(void)
 			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_LEFT) == GREEN)
 		{
 			_pGrenade->getVPlayerGrenade()[i].angle = PI - _pGrenade->getVPlayerGrenade()[i].angle;
-			_pGrenade->getVPlayerGrenade()[i].speed *= 0.5f;
+			_pGrenade->getVPlayerGrenade()[i].speed *= 0.7f;
 		}
 
 		if (_pGrenade->getVPlayerGrenade()[i].count < 90) continue;
@@ -909,6 +938,8 @@ void playerManager::update(void)
 				{
 					_mapData->deleteMapIndexByIndex(j, 2, 2);
 					_pGrenade->getVPlayerGrenade()[i].isActived = false;
+					EFFECTMANAGER->grenadeExplosion(_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y);
+					CAMERAMANAGER->CameraShake();
 				}
 				if (_rambroGrenade)
 				{
@@ -917,7 +948,7 @@ void playerManager::update(void)
 					{
 						if (_grenadeCount >= 80)
 						{
-							if (_player->getIsLeft())
+							if (!_player->getIsLeft())
 							{
 								_xMissile->fire(_player->getSkyRightX() + 50, _player->getSkyRightY() + 10, 10, _player->getIsLeft());
 							}
@@ -925,27 +956,8 @@ void playerManager::update(void)
 							{
 								_xMissile->fire(_player->getSkyLeftX() + 50, _player->getSkyLeftY() + 10, 10, _player->getIsLeft());
 							}
-							if (_grenadeCount >= 200)
-							{
-								for (int k = 0; k < _xMissile->getVPlayerxMissile().size(); k++)
-								{
-									_xMissile->getVPlayerxMissile()[k].isActived = false;
-									for (int l = 0; l < _gMissile->getVPlayergMissile().size(); l++)
-									{
-										if (!_player->getIsLeft())
-										{
-											_gMissile->fire(_player->getSkyRightX() + 50, _player->getSkyRightY() + 10, 10, _player->getIsLeft());
-										}
-										else
-										{
-											_gMissile->fire(_player->getSkyLeftX() + 50, _player->getSkyLeftY() + 10, 10, _player->getIsLeft());
-										}
-									}
-								}
-							}
-							
+							_isMissile = true;
 						}
-						
 					}
 				}
 				break;
@@ -954,7 +966,95 @@ void playerManager::update(void)
 			//	_pGrenade->getVPlayerGrenade()[i].isActived = false;
 		}
 	}
-
+	if (_missileCount >= 270)
+	{
+		for (int i = 0; i < _xMissile->getVPlayerxMissile().size(); i++)
+		{
+			_xMissile->getVPlayerxMissile()[i].isActived = false;
+		}
+		for (int i = 0; i < _gMissile->getVPlayergMissile().size(); i++)
+		{
+			if (!_player->getIsLeft())
+			{
+				_gMissile->fire(_player->getSkyRightX() + 50, _player->getSkyRightY() + 10, 20, _player->getIsLeft());
+			}
+			else
+			{
+				_gMissile->fire(_player->getSkyLeftX() + 50, _player->getSkyLeftY() + 10, 20, _player->getIsLeft());
+			}
+		}
+		_missileCount = 0;
+		_isMissile = false;
+		_missile = true;
+	}
+	if (_missile)
+	{
+		int missileCount = 0;
+		for (int i = 0; i < _gMissile->getVPlayergMissile().size(); i++)
+		{
+			if (COLLISIONMANAGER->pixelCollision(_gMissile->getVPlayergMissile()[i].rc, _gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y, _gMissile->getVPlayergMissile()[i].speed, _gMissile->getVPlayergMissile()[i].gravity, 3) == GREEN)				// ¾Æ·¡ÂÊ º®
+			{
+				for (int j = 0; j < _mapData->getObject().size(); j++)
+				{
+					if (IntersectRect(&temp, &_mapData->getObject()[j]._rc, &_gMissile->getVPlayergMissile()[i].rc))
+					{
+						_gMissile->getVPlayergMissile()[i].isActived = false;
+						_mapData->deleteMapIndexByIndex(j, 2, 2);
+						CAMERAMANAGER->CameraShake();
+						missileCount++;
+						break;
+					}
+				}
+			}
+			else if (COLLISIONMANAGER->pixelCollision(_gMissile->getVPlayergMissile()[i].rc, _gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y, _gMissile->getVPlayergMissile()[i].speed, _gMissile->getVPlayergMissile()[i].gravity, 1) == GREEN)			// À§ÂÊ º®
+			{
+				for (int j = 0; j < _mapData->getObject().size(); j++)
+				{
+					if (IntersectRect(&temp, &_mapData->getObject()[j]._rc, &_gMissile->getVPlayergMissile()[i].rc))
+					{
+						_gMissile->getVPlayergMissile()[i].isActived = false;
+						_mapData->deleteMapIndexByIndex(j, 2, 2);
+						CAMERAMANAGER->CameraShake();
+						missileCount++;
+						break;
+					}
+				}
+			}
+			if (COLLISIONMANAGER->pixelCollision(_gMissile->getVPlayergMissile()[i].rc, _gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y, _gMissile->getVPlayergMissile()[i].speed, _gMissile->getVPlayergMissile()[i].gravity, 2) == GREEN)				// ¿À¸¥ÂÊ º®	
+			{
+				for (int j = 0; j < _mapData->getObject().size(); j++)
+				{
+					if (IntersectRect(&temp, &_mapData->getObject()[j]._rc, &_gMissile->getVPlayergMissile()[i].rc))
+					{
+						_gMissile->getVPlayergMissile()[i].isActived = false;
+						_mapData->deleteMapIndexByIndex(j, 2, 2);
+						CAMERAMANAGER->CameraShake();
+						missileCount++;
+						break;
+					}
+				}
+			}
+			else if (COLLISIONMANAGER->pixelCollision(_gMissile->getVPlayergMissile()[i].rc, _gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y, _gMissile->getVPlayergMissile()[i].speed, _gMissile->getVPlayergMissile()[i].gravity, 0) == GREEN)			// ¿ÞÂÊ º®	
+			{
+				for (int j = 0; j < _mapData->getObject().size(); j++)
+				{
+					if (IntersectRect(&temp, &_mapData->getObject()[j]._rc, &_gMissile->getVPlayergMissile()[i].rc))
+					{
+						_gMissile->getVPlayergMissile()[i].isActived = false;
+						_mapData->deleteMapIndexByIndex(j, 2, 2);
+						CAMERAMANAGER->CameraShake();
+						missileCount++;
+						break;
+					}
+				}
+			}
+		}
+		if (missileCount == 5)
+		{
+			_missile = false;
+		}
+	}
+	
 	
 
 	//if (_knifeCollision)			// Ä®»§ 
@@ -1161,7 +1261,7 @@ void playerManager::render(void)
 	}
 	
 	char str[64];
-	sprintf_s(str, "%d", _grenadeCount);
+	sprintf_s(str, "%d", _missileCount);
 	TextOut(getMemDC(), 100, 100, str, strlen(str));
 	if (KEYMANAGER->isToggleKey(VK_F8))
 	{
@@ -1179,7 +1279,7 @@ void playerManager::render(void)
 		}
 	}
 	RectangleMake(getMemDC(), 500.f - CAMERAMANAGER->getCamera().left, 2100.f - CAMERAMANAGER->getCamera().top, 60, 60);
-	RectangleMake(getMemDC(), _player->getSkyRightX() - CAMERAMANAGER->getCamera().left, _player->getSkyRightY() - CAMERAMANAGER->getCamera().top, _player->getSkyLeftW(), _player->getSkyLeftH());
+	RectangleMake(getMemDC(), _player->getSkyRightX() -50- CAMERAMANAGER->getCamera().left, _player->getSkyRightY() - CAMERAMANAGER->getCamera().top, _player->getSkyLeftW(), _player->getSkyLeftH());
 	RectangleMake(getMemDC(), _player->getSkyLeftX() - CAMERAMANAGER->getCamera().left, _player->getSkyLeftY() - CAMERAMANAGER->getCamera().top, _player->getSkyLeftW(), _player->getSkyLeftH());
 	
 }

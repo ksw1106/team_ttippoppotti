@@ -38,6 +38,10 @@ private:
 
 	bool _rambroChange;
 
+	int _missileCount;
+	bool _isMissile;
+	bool _missile;
+
 	RECT _rc8;
 
 	RECT _rcMissileRight;
