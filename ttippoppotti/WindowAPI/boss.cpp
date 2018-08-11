@@ -257,8 +257,7 @@ void boss::frameAnimate()
 	// ±â°üÃÑ
 	FRAMEMANAGER->frameChange(_terrorKopter.img.gunImage[_gunStatus], _terrorKopter.img.frameCount, _terrorKopter.img.gunIndex, _terrorKopter.img.frameSpeed, _terrorKopter.isLeft);
 	// ÃÑ¾ËÈ¿°ú
-	FRAMEMANAGER->frameChange(_terrorKopter.img.bulletFireImage, _bulletEffectCount, _bulletEffectIndex, _bulletEffectSpeed, _terrorKopter.isLeft);
-	
+	FRAMEMANAGER->frameChange(_terrorKopter.img.bulletFireImage, _bulletEffectCount, _bulletEffectIndex, _bulletEffectSpeed, _terrorKopter.isLeft);	
 }
 
 void boss::verticalMove(float x, float y, float angle)

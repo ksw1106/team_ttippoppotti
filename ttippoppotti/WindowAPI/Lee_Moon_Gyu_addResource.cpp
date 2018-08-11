@@ -4,12 +4,12 @@
 void loadingScene::Lee_Moon_Gyu_addImage()
 {
 	// rambro
-	_loading->loadFrameImage("broforce_idle", "player_ramBro/broforce_idle.bmp", 60, 152, 1, 2, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("broforce_run (1)", "player_ramBro/broforce_run (1).bmp", 512, 152, 8, 2, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("broforce_jump", "player_ramBro/broforce_jump.bmp", 177, 152, 3, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("rambro_idle", "player_ramBro/rambro_idle.bmp", 130, 210, 1, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("rambro_run", "player_ramBro/rambro_run.bmp", 1040, 210, 8, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("rambro_jump", "player_ramBro/rambro_jump.bmp", 390, 210, 3, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("broforce_hang_frontHold", "player_ramBro/broforce_hang_frontHold.bmp", 72, 152, 1, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("broforce_hang_backHold", "player_ramBro/broforce_hang_backHold.bmp", 72, 152, 1, 2, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("broforce_knife", "player_ramBro/broforce_knife.bmp", 449, 152, 5, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("rambro_knife", "player_ramBro/rambro_knife.bmp", 650, 210, 5, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("broforce_die", "player_ramBro/broforce_die.bmp", 76, 72, 1, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("broforce_ladder", "player_ramBro/broforce_ladder.bmp", 912, 152, 12, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("broforce_fire", "player_ramBro/broforce_fire.bmp", 608, 152, 8, 2, true, RGB(255, 0, 255));

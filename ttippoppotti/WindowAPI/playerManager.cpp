@@ -70,8 +70,8 @@ void playerManager::release(void)
 void playerManager::update(void)
 {
 	_player->update();
-	_player->setOldX(_player->getX());
-	_player->setOldY(_player->getY());
+	//_player->setOldX(_player->getX());
+	//_player->setOldY(_player->getY());
 	_player->setRcRambro(_player->getRcRambro());
 	_player->setrcSkyRight(_player->getrcSkyRight());					// 오른쪽 하늘에 총알집
 	_player->setrcSkyLeft(_player->getrcSkyLeft());						// 왼쪽 하늘에 총알집
