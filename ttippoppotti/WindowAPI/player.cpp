@@ -88,7 +88,7 @@ void player::update(void)
 {
 	_rcRambro = RectMake(_x, _y, _width, _height);
 
-	_rcFlashRight = RectMake(_x + 50, _y, 30, 30);
+	_rcFlashRight = RectMake(_x + 96, _y+30, 30, 30);
 	_rcFlashLeft = RectMake(_x - 68, _y, 30, 30);
 
 	_rcSkyRight = RectMake(_skyRightX, _skyRightY, _skyRightW, _skyRightH);
@@ -116,13 +116,13 @@ void player::render(void)
 
 	if (_isFlash)
 	{
-		if (_isLeft == false)
+		if (!_isLeft)
 		{
-			_flash->frameRender(getMemDC(), _x + 50 - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+			_flash->frameRender(getMemDC(), _x + 72 - CAMERAMANAGER->getCamera().left, _y + 26 - CAMERAMANAGER->getCamera().top);
 		}	
-		if (_isLeft == true)
+		else
 		{
-			_flash->frameRender(getMemDC(), _x - 68 - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+			_flash->frameRender(getMemDC(), _x - 38 - CAMERAMANAGER->getCamera().left, _y + 26 - CAMERAMANAGER->getCamera().top);
 		}
 	}
 	

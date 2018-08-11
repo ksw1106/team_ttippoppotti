@@ -61,7 +61,7 @@ public:
 	gMissile* getGMissile() { return _gMissile; }
 	xMissile* getXMissile() { return _xMissile; }
 
-	HRESULT init(void);
+	HRESULT init(int num);
 	void release(void);
 	void update(void);
 	void render(void);

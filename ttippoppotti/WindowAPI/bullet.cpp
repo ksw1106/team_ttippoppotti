@@ -440,7 +440,7 @@ HRESULT pGrenade::init(float range)
 		//pGrenade.grenadeImage = new image;
 		//pGrenade.grenadeImage->init("player_ramBro/rambro_grenade_bomb.bmp", 28, 35, true, RGB(255, 0, 255));
 		pGrenade.bulletImage = IMAGEMANAGER->findImage("rambro_grenade_frame");
-		pGrenade.grenadeImage = IMAGEMANAGER->findImage("rambro_grenade_frame");
+		pGrenade.grenadeImage = IMAGEMANAGER->findImage("rambro_grenade_bomb");
 		// 벡터에 총알담기
 		_vBullet.push_back(pGrenade);
 	}
@@ -472,7 +472,7 @@ void pGrenade::update(void)
 				}
 				//_vBullet[i].grenadeImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
 				//	_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top);
-				EFFECTMANAGER->grenadePuff(_vBullet[i].rc.left + 73, _vBullet[i].rc.top + 73);
+				EFFECTMANAGER->grenadePuff(_vBullet[i].rc.left+18 , _vBullet[i].rc.top+18 );
 			}
 			FRAMEMANAGER->frameChange(_vBullet[i].bulletImage, _count, _index, _animationSpeed, false);
 		}
@@ -507,6 +507,8 @@ void pGrenade::fire(int x, int y, int fireSpeed, bool isLeft)
 		_vBullet[i].speed = fireSpeed;
 		_vBullet[i].isLeft = isLeft;
 		_vBullet[i].gravity = 0.0f;
+		_vBullet[i].bulletImage = IMAGEMANAGER->findImage("rambro_grenade_frame");
+		_vBullet[i].grenadeImage = IMAGEMANAGER->findImage("rambro_grenade_bomb");
 		_vBullet[i].count = 0;		
 		_vBullet[i].x = _vBullet[i].fireX = x;
 		_vBullet[i].y = _vBullet[i].fireY = y;
@@ -839,17 +841,17 @@ void xMissile::move()
 			_vBullet[i].missileImageRight->getFrameWidth(),
 			_vBullet[i].missileImageRight->getFrameHeight());
 
-		if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc, _vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 3) == GREEN)			// 아래쪽 벽
+		if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc, _vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 3) == GREEN)				// 아래쪽 벽
 		{
 			_vBullet[i].isCollision = true;
 			_vBullet[i].speed = 0.0f;
 		}
-		else if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc, _vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 1) == GREEN)			// 위쪽 벽
+		else if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc, _vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 1) == GREEN)		// 위쪽 벽
 		{
 			_vBullet[i].isCollision = true;
 			_vBullet[i].speed = 0.0f;
 		}
-		if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc,_vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 2) == GREEN)			// 오른쪽 벽	
+		if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc,_vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 2) == GREEN)				// 오른쪽 벽	
 		{
 			_vBullet[i].isCollision = true;
 			_vBullet[i].speed = 0.0f;
