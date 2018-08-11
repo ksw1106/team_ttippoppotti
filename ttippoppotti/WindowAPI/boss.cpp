@@ -24,7 +24,7 @@ HRESULT boss::init(float x, float y)
 	_terrorKopter.isAttack = false;
 	_terrorKopter.isTurning = false;
 	_terrorKopter.isAlive = true;
-	_terrorKopter.hp = 100;
+	_terrorKopter.hp = 1000;
 
 	_terrorKopter.img.bodyIndex = _terrorKopter.img.gunIndex = _terrorKopter.img.propellerIndex = _terrorKopter.img.rotorIndex = 0;
 	_terrorKopter.img.frameCount = 1;
@@ -60,7 +60,7 @@ void boss::update(void)
 
 	this->frameAnimate();
 
-	if (_terrorKopter.hp < 0)
+	if (_terrorKopter.hp <= 0)
 	{
 		_terrorKopter.hp = 0;
 		_terrorKopter.isAlive = false;

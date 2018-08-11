@@ -60,8 +60,8 @@ void progressBar::update(void)
 	_rcProgressBack = RectMake(_backX, _backY, _progressBarBack->getWidth(), _progressBarBack->getHeight());
 
 	if (_middleWidth > _frontWidth)
-	{		
-		_middleWidth = ((_rcProgressMiddle.right - _rcProgressMiddle.left) / _progressBarMiddle->getWidth()) * _progressBarMiddle->getWidth();
+	{	
+		_middleWidth -= 1;
 	}
 	//_middleWidth = _rcProgressMiddle.right - _rcProgressMiddle.left;
 }
@@ -80,6 +80,5 @@ void progressBar::render(void)
 
 void progressBar::setGauge(float currentHp, float maxHp)
 {
-	_frontWidth = (currentHp / maxHp) * _progressBarFront->getWidth();
-	
+	_frontWidth = (currentHp / maxHp) * _progressBarFront->getWidth();	
 }

@@ -97,7 +97,7 @@ public:
 	//πÃªÁ¿œ
 	void activateMissileTrail(float x, float y, bool isLeft);
 	void boomMissileTrail();
-	void activateMmissilePuff(float x, float y);
+	void activateMissilePuff(float x, float y, bool isLeft);
 	void boomMissilePuff();
 
 	void boomStaticAnim();

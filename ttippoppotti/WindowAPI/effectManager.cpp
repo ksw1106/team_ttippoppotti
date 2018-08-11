@@ -259,6 +259,11 @@ void effectManager::grenadePuff(float x, float y)
 	_y = y;// -110 / 2;
 }
 
+void effectManager::grenadeExplosion(float x, float y)
+{
+	this->playBallExplosion("ballFlame1", x, y);
+}
+
 void effectManager::grenadePuffStart(float x, float y)
 {
 	if (_count < 15)
@@ -555,6 +560,42 @@ void effectManager::playBigBang(string effectName, float x, float y)
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
 			mIter->second[i]->activateBigBang(x, y);
+			return;
+		}
+	}
+}
+
+void effectManager::playMissileTrail(string effectName, float x, float y, bool isLeft)
+{
+	miEffect mIter;
+
+	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
+	{
+		if (!(mIter->first == effectName)) continue;
+
+		//이펙트키와 일치하면 이펙트 실행
+		for (int i = 0; i < mIter->second.size(); i++)
+		{
+			if (mIter->second[i]->getIsRunning()) continue;
+			mIter->second[i]->activateMissileTrail(x, y, isLeft);
+			return;
+		}
+	}
+}
+
+void effectManager::playMissilePuff(string effectName, float x, float y, bool isLeft)
+{
+	miEffect mIter;
+
+	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
+	{
+		if (!(mIter->first == effectName)) continue;
+
+		//이펙트키와 일치하면 이펙트 실행
+		for (int i = 0; i < mIter->second.size(); i++)
+		{
+			if (mIter->second[i]->getIsRunning()) continue;
+			mIter->second[i]->activateMissilePuff(x, y, isLeft);
 			return;
 		}
 	}

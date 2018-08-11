@@ -3,59 +3,67 @@
 #include "enemyManager.h"
 #include "mapData.h"
 
-HRESULT playerManager::init(void)
+HRESULT playerManager::init(int num)
 {
-	//_player = new player;
-	_playerChange[0] = new player;
-	_playerChange[0]->init(0);
-	_playerChange[1] = new player;
-	_playerChange[1]->init(1);
+	if (num == 1)
+	{
+		//_player = new player;
+		_playerChange[0] = new player;
+		_playerChange[0]->init(0);
+		_playerChange[1] = new player;
+		_playerChange[1]->init(1);
+
+		_rambroChange = false;
+
+		_player = _playerChange[_rambroChange];
+		_player->setRcRambro(_player->getRcRambro());
+
+		_pBullet = new pBullet;
+		_pBullet->init(700.f);
+		_pGrenade = new pGrenade;
+		_pGrenade->init(500.f);
+		_gBullet = new gBullet;
+		_gBullet->init(300.f);
+		_gMissile = new gMissile;
+		_gMissile->init(1500.f);
+		_xMissile = new xMissile;
+		_xMissile->init(2000.f);
+
+		_p1Bubble = IMAGEMANAGER->findImage("p1Bubble");
+		_p1Bubble->setX(_player->getX() + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
+		_p1Bubble->setY(_player->getY() - 100);
+
+		_rcKnifeRight = RectMake(_player->getX() + 60, _player->getY() + 30, 30, 30);
+		_rcKnifeLeft = RectMake(_player->getX() - 20, _player->getY() + 30, 30, 30);
+
+		hit_left = hit_right = hit_top = hit_bottom = false;
+
+		_index = _count = 0;
+		_animationSpeed = 5;
+
+		_fireCount = 0;
+		_grenadeCount = 0;
+
+		_knifeCollision = false;
+		_isLadder = false;
+		_rambroFire = false;
+		_rambroGrenade = false;
+		_isGrenade = false;
+		_xMissileCollision = false;
+		_xMissileColl = false;
+
+		_rc8 = RectMake(500.f, 2100.f, 60, 60);
+		//_rcMissileRight = RectMake(100.f, 1000.f, 100, 10);
+		//_rcMissileLeft = RectMake(1500.f, 1000.f, 100, 10);
+
+		_player->setrcSkyRight(_player->getrcSkyRight());
+		_player->setrcSkyLeft(_player->getrcSkyLeft());
+	}
+	else if (num == 2)
+	{
+
+	}
 	
-	_rambroChange = false;
-
-	_player = _playerChange[_rambroChange];
-	_player->setRcRambro(_player->getRcRambro());
-
-	_pBullet = new pBullet;
-	_pBullet->init(700.f);
-	_pGrenade = new pGrenade;
-	_pGrenade->init(500.f);
-	_gBullet = new gBullet;
-	_gBullet->init(300.f);
-	_gMissile = new gMissile;
-	_gMissile->init(1500.f);
-	_xMissile = new xMissile;
-	_xMissile->init(2000.f);
-
-	_p1Bubble = IMAGEMANAGER->findImage("p1Bubble");
-	_p1Bubble->setX(_player->getX() + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
-	_p1Bubble->setY(_player->getY() - 100);
-
-	_rcKnifeRight = RectMake(_player->getX() + 60, _player->getY() + 30, 30, 30);
-	_rcKnifeLeft = RectMake(_player->getX() - 20, _player->getY() + 30, 30, 30);
-
-	hit_left = hit_right = hit_top = hit_bottom = false;
-	
-	_index = _count = 0;
-	_animationSpeed = 5;
-
-	_fireCount = 0;
-	_grenadeCount = 0;
-
-	_knifeCollision = false;
-	_isLadder = false;
-	_rambroFire = false;
-	_rambroGrenade = false;
-	_isGrenade = false;
-	_xMissileCollision = false;
-	_xMissileColl = false;
-	
-	_rc8 = RectMake(500.f, 2100.f, 60, 60);
-	//_rcMissileRight = RectMake(100.f, 1000.f, 100, 10);
-	//_rcMissileLeft = RectMake(1500.f, 1000.f, 100, 10);
-
-	_player->setrcSkyRight(_player->getrcSkyRight());
-	_player->setrcSkyLeft(_player->getrcSkyLeft());
 
 	return S_OK;
 }
@@ -78,8 +86,8 @@ void playerManager::update(void)
 	_player->setrcFlashRight(_player->getrcFlashRight());				// ÃÑ±¸ ¿À¸¥ÂÊ ÇÃ·¡½¬ ·ºÆ®
 	_player->setrcFlashLeft(_player->getrcFlashLeft());					// ÃÑ±¸ ¿ÞÂÊ ÇÃ·¡½¬ ·ºÆ®
 
-	float knifeRightX = _player->getX() + 60;
-	float knifeRightY = _player->getY() + 30;
+	float knifeRightX = _player->getX() + 90;
+	float knifeRightY = _player->getY() + 58;
 	float knifeLeftX = _player->getX() - 20;
 	float knifeLeftY = _player->getY() + 30;
 
@@ -371,7 +379,7 @@ void playerManager::update(void)
 	float tempX = _player->getX();
 	float tempY = _player->getY();
 
-	rcPlayer = RectMake(tempX, tempY, 100, 110);
+	rcPlayer = RectMake(tempX, tempY, 90, 110);
 
 	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_TOP, _isLadder))			// À§ÂÊ º®
 	{
@@ -895,7 +903,7 @@ void playerManager::update(void)
 			_pGrenade->getVPlayerGrenade()[i].speed *= 0.5f;
 		}
 
-		if (_pGrenade->getVPlayerGrenade()[i].count < 100) continue;
+		if (_pGrenade->getVPlayerGrenade()[i].count < 90) continue;
 
 		for (int j = 0; j < _mapData->getObject().size(); j++)								// ¼ö·ùÅº Ä«¿îÆ® 70º¸´Ù Å¬¶§ ¸Ê Áö¿öÁÖ±â
 		{
@@ -922,23 +930,33 @@ void playerManager::update(void)
 							{
 								_xMissile->fire(_player->getSkyLeftX() + 50, _player->getSkyLeftY() + 10, 10, _player->getIsLeft());
 							}
+							if (_grenadeCount >= 200)
+							{
+								for (int k = 0; k < _xMissile->getVPlayerxMissile().size(); k++)
+								{
+									_xMissile->getVPlayerxMissile()[k].isActived = false;
+									for (int l = 0; l < _gMissile->getVPlayergMissile().size(); l++)
+									{
+										if (_player->getIsLeft() == false)
+										{
+											_gMissile->fire(_player->getSkyRightX() + 50, _player->getSkyRightY() + 10, 10, _player->getIsLeft());
+										}
+										if (_player->getIsLeft() == true)
+										{
+											_gMissile->fire(_player->getSkyLeftX() + 50, _player->getSkyLeftY() + 10, 10, _player->getIsLeft());
+										}
+									}
+								}
+							}
 							
-							//if (_player->getIsLeft() == false)
-							//{
-							//	_gMissile->fire(_player->getSkyRightX() + 50, _player->getSkyRightY() + 10, 10, _player->getIsLeft());
-							//}
-							//if (_player->getIsLeft() == true)
-							//{
-							//	_gMissile->fire(_player->getSkyLeftX() + 50, _player->getSkyLeftY() + 10, 10, _player->getIsLeft());
-							//})
 						}
 						
 					}
 				}
 				break;
 			}
-			if(j >= _mapData->getObject().size()-1)
-				_pGrenade->getVPlayerGrenade()[i].isActived = false;
+			//if(j >= _mapData->getObject().size()-1)
+			//	_pGrenade->getVPlayerGrenade()[i].isActived = false;
 		}
 	}
 
@@ -958,7 +976,7 @@ void playerManager::update(void)
 			}
 		}
 	}
-	else if (COLLISIONMANAGER->pixelCollision(_rcKnifeLeft, knifeLeftX, knifeLeftY, _player->getSpeed(), _player->getGravity(), PLAYER_LEFT) == GREEN)		// Ä®»§ ¿ÞÂÊ º® »Ç°³±â
+	else if (COLLISIONMANAGER->pixelCollision(_rcKnifeLeft, knifeLeftX, knifeLeftY, _player->getSpeed(), _player->getGravity(), PLAYER_LEFT) == GREEN)			// Ä®»§ ¿ÞÂÊ º® »Ç°³±â
 	{
 		for (int i = 0; i < _mapData->getObject().size(); i++)
 		{
@@ -1152,17 +1170,17 @@ void playerManager::render(void)
 	TextOut(getMemDC(), 100, 100, str, strlen(str));
 	if (KEYMANAGER->isToggleKey(VK_F8))
 	{
-		RectangleMake(getMemDC(), _player->getX() + 25 - CAMERAMANAGER->getCamera().left, _player->getY() + 25 - CAMERAMANAGER->getCamera().top, _player->getWidth() + 10, _player->getHeight() + 5);
+		RectangleMake(getMemDC(), _player->getX() + 20 - CAMERAMANAGER->getCamera().left, _player->getY() + 25 - CAMERAMANAGER->getCamera().top, _player->getWidth() + 10, _player->getHeight() + 5);
 	}
 	if (_knifeCollision)
 	{
 		if (!_player->getIsLeft())
 		{
-			RectangleMake(getMemDC(), _player->getX() + 60 - CAMERAMANAGER->getCamera().left, _player->getY() + 30 - CAMERAMANAGER->getCamera().top, 30, 30);
+			RectangleMake(getMemDC(), _player->getX() + 90 - CAMERAMANAGER->getCamera().left, _player->getY() + 58 - CAMERAMANAGER->getCamera().top, 30, 30);
 		}
-		if (_player->getIsLeft())
+		else
 		{
-			RectangleMake(getMemDC(), _player->getX() - 20 - CAMERAMANAGER->getCamera().left, _player->getY() + 30 - CAMERAMANAGER->getCamera().top, 30, 30);
+			RectangleMake(getMemDC(), _player->getX()+10 - CAMERAMANAGER->getCamera().left, _player->getY() + 58 - CAMERAMANAGER->getCamera().top, 30, 30);
 		}
 	}
 	RectangleMake(getMemDC(), 500.f - CAMERAMANAGER->getCamera().left, 2100.f - CAMERAMANAGER->getCamera().top, 60, 60);

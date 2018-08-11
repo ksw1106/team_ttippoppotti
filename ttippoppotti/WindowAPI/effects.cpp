@@ -416,15 +416,74 @@ void effects::boomMissileTrail()
 	}
 }
 
-void effects::activateMmissilePuff(float x, float y)
+void effects::activateMissilePuff(float x, float y, bool isLeft)
 {
+	_isRunning = true;
+	_isMissilePuff = true;
+
+	_animationSpeed = 5;
+	_vParticle.clear();
+	tagParticle particle;
+	ZeroMemory(&particle, sizeof(tagParticle));
+	for (int i = 8; i > 0; i--)
+	//for (int i = 1; i <= 8; i++)
+	{
+			particle.particleImg = IMAGEMANAGER->findImage(("explosionFlame" + to_string(i)));
+			_vParticle.push_back(particle);
+	}
+
+	for (int i = 0; i < _vParticle.size(); i++)
+	{
+		_vParticle[i].fire = true;
+		_vParticle[i].alpha = 0;
+		_vParticle[i].count = 0;
+		if (isLeft)
+			_vParticle[i].angle = PI + PI_4;
+		else
+			_vParticle[i].angle = - PI_4;
+		_vParticle[i].speed = 4.0f * (i + 1) + RND->getFloat(2.0f);
+		_vParticle[i].fireX = x;
+		_vParticle[i].fireY = y;
+		_vParticle[i].speed = 8.0f;
+		if (i > 0)
+		{
+			_vParticle[i].x = _vParticle[i - 1].x - cosf(_vParticle[i].angle) * _vParticle[i].speed;
+			_vParticle[i].y = _vParticle[i - 1].y + sinf(_vParticle[i].angle) * _vParticle[i].speed;
+		}
+		else
+		{
+			_vParticle[i].x = x - cosf(_vParticle[i].angle); // * WINSIZEY;
+			_vParticle[i].y = y + sinf(_vParticle[i].angle); // * WINSIZEY;
+		}
+
+		if (_isFrameImg)
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+		else
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+	for (int i = 0; i < _particleMax; i++)
+	{
+		_vParticle[i].fire = true;
+		if (isLeft)
+			_vParticle[i].angle = PI + PI_4;
+		else
+			_vParticle[i].angle = -PI_4;
+		_vParticle[i].fireX = x;
+		_vParticle[i].fireY = y;
+		_vParticle[i].speed = 8.0f;
+		_vParticle[i].x = _vParticle[i].fireX - cosf(_vParticle[i].angle) * WINSIZEY;
+		_vParticle[i].y = _vParticle[i].fireY + sinf(_vParticle[i].angle) * WINSIZEY;
+		if (_isFrameImg)
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+		else
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+	}
 }
 
 void effects::boomMissilePuff()
 {
 	if (_isMissilePuff)
 	{
-
+		
 	}
 }
 
@@ -515,7 +574,7 @@ void effects::boomParabola()
 					_animationSpeed++;
 				}
 			}
-			if (_vParticle[i].count == 500 || _vParticle[i].y - CAMERAMANAGER->getCamera().top >= WINSIZEY || _vParticle[i].speed < 2.0f)
+			if (_vParticle[i].count == 500 || _vParticle[i].y - CAMERAMANAGER->getCamera().top >= WINSIZEY || _vParticle[i].speed < 1.0f)
 			{
 				_vParticle[i].fire = false;
 				_isRunning = false;
@@ -643,19 +702,19 @@ void effects::collisionProcess()
 	{
 		for (int i = 0; i < _vParticle.size(); ++i)
 		{
-			//if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 3) == GREEN) //아래
-			//{
-			//	_vParticle[i].gravity = 0;
-			//	_vParticle[i].angle = PI2 - _vParticle[i].angle;
-			//	_vParticle[i].y -= _vParticle[i].rc.bottom - _vParticle[i].rc.top;
-			//	_vParticle[i].speed *= 0.7;
-			//}
-			if (_vParticle[i].y >= _vParticle[i].oldY)
+			if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 3) == GREEN) //아래
 			{
 				_vParticle[i].gravity = 0;
+				_vParticle[i].angle = PI2 - _vParticle[i].angle;
 				_vParticle[i].y -= _vParticle[i].rc.bottom - _vParticle[i].rc.top;
 				_vParticle[i].speed *= 0.7;
 			}
+			//if (_vParticle[i].y >= _vParticle[i].oldY)
+			//{
+			//	_vParticle[i].gravity = 0;
+			//	_vParticle[i].y -= _vParticle[i].rc.bottom - _vParticle[i].rc.top;
+			//	_vParticle[i].speed *= 0.7;
+			//}
 	
 			if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 1) == GREEN) //위
 			{
