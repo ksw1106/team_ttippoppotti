@@ -42,7 +42,7 @@ HRESULT stageScene::init(void)
 	_playerManager->setEnemyManager(_enemyManager);
 	_enemyManager->setPlayerManager(_playerManager);
 
-	COLLISIONMANAGER->setPixelMap(1);
+	COLLISIONMANAGER->setPixelMap(IMAGEMANAGER->findImage("backGround_pixel"), IMAGEMANAGER->findImage("ladder_pixel"));
 
 	for (int i = 0; i < 3; i++)
 	{

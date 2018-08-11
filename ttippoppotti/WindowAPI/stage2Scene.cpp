@@ -21,8 +21,7 @@ HRESULT stage2Scene::init(void)
 	_backGroundPixel = IMAGEMANAGER->findImage("stage2_background_pixel");
 	_ladderPixel = IMAGEMANAGER->findImage("stage2_ladder_pixel");
 
-	COLLISIONMANAGER->setPixelMap(2);
-
+	COLLISIONMANAGER->setPixelMap(IMAGEMANAGER->findImage("stage2_background_object"), IMAGEMANAGER->findImage("stage2_ladder_pixel"));
 	EFFECTMANAGER->init();
 
 	_camDebug = false;
