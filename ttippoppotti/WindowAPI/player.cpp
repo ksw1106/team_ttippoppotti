@@ -11,12 +11,12 @@ HRESULT player::init(int num)
 		_ramBro[RUN] = IMAGEMANAGER->findImage("rambro_run");
 		//_ramBro[FAST_RUN] = IMAGEMANAGER->addFrameImage("broforce_run (2)", "broforce_run (2).bmp", 448, 128, 8, 2, true, RGB(255, 0, 255));
 		_ramBro[JUMP] = IMAGEMANAGER->findImage("rambro_jump");
-		_ramBro[HANG_FRONT_HOLD] = IMAGEMANAGER->findImage("broforce_hang_frontHold");
-		_ramBro[HANG_BACK_HOLD] = IMAGEMANAGER->findImage("broforce_hang_backHold");
+		_ramBro[HANG_FRONT_HOLD] = IMAGEMANAGER->findImage("rambro_hang_frontHold");
+		_ramBro[HANG_BACK_HOLD] = IMAGEMANAGER->findImage("rambro_hang_backHold");
 		_ramBro[KNIFE] = IMAGEMANAGER->findImage("rambro_knife");
-		_ramBro[DIE] = IMAGEMANAGER->findImage("broforce_die");
-		_ramBro[LADDER] = IMAGEMANAGER->findImage("broforce_ladder");
-		_ramBro[FIRE] = IMAGEMANAGER->findImage("broforce_fire");
+		_ramBro[DIE] = IMAGEMANAGER->findImage("rambro_die");
+		_ramBro[LADDER] = IMAGEMANAGER->findImage("rambro_ladder");
+		_ramBro[FIRE] = IMAGEMANAGER->findImage("rambro_fire");
 		//_ramBro[ROLL] = IMAGEMANAGER->addFrameImage("broforce_roll", "broforce_roll.bmp", 936, 136, 13, 2, true, RGB(255, 0, 255));
 	}
 	else
@@ -35,8 +35,7 @@ HRESULT player::init(int num)
 		//_chuck[ROLL] = IMAGEMANAGER->findImage("chuck_roll");
 	}
 	
-
-	_flash = IMAGEMANAGER->findImage("broforce_flash");
+	_flash = IMAGEMANAGER->findImage("rambro_flash");
 
 	_state = IDLE;
 	_x = 100.f;
