@@ -30,8 +30,14 @@ public:
 	void cartridge(float x, float y, bool isLeft);
 	//피
 	void bloodSplash(float x, float y, bool isLeft);
+	//피
+	void bloodBlotch(float x, float y);
 	//피 분수
 	void bloodFountain(float x, float y);
+	//피 분수
+	void RambroBloodFountain(float x, float y);
+	//피 분수
+	void chuckBloodFountain(float x, float y);
 	//낙석
 	void rockFall(float x, float y, bool isLeft);
 	//나무파편
@@ -44,6 +50,8 @@ public:
 	void bulletPuff(float x, float y);
 	//수류탄 이펙트
 	void grenadePuff(float x, float y);
+	//수류탄 이펙트
+	void grenadeExplosion(float x, float y);
 	//수류탄 이펙트 초기화
 	void grenadePuffStart(float x, float y);
 	//칼 이펙트
@@ -63,6 +71,7 @@ public:
 	void addEffect(string effectName, const char* imageName, int buffer, int count = 1, bool isFrameImg = false);
 	//이펙트 플레이
 	void playParabola(string effectName, float x, float y, bool isLeft);
+	void playBlotch(string effectName, float x, float y);
 	void playFountain(string effectName, float x, float y);
 	void playExplosion(string effectName, float x, float y);
 	void playBallExplosion(string effectName, float x, float y);
@@ -73,6 +82,8 @@ public:
 	void playFlyingFlies(string effectName, float x, float y);
 	void playAshes(string effectName, float x, float y);
 	void playBigBang(string effectName, float x, float y);
+	void playMissileTrail(string effectName, float x, float y, bool isLeft);
+	void playMissilePuff(string effectName, float x, float y, bool isLeft);
 	effectManager() {}
 	~effectManager() {}
 };

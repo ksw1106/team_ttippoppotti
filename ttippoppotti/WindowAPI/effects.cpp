@@ -14,6 +14,7 @@ HRESULT effects::init(const char * imageName, int particleMax, bool isFrameImg)
 	_count = _index = 0;
 	_animationSpeed = 2;
 	_explosionCount = _bigBangCount = 0;
+	_isLeft = false;
 	_alpha = 0;
 
 	_isParabola = false;
@@ -24,12 +25,15 @@ HRESULT effects::init(const char * imageName, int particleMax, bool isFrameImg)
 	_isAshes = false;
 	_isAlphaImg = false;
 	_isBigBang = false;
+	_isMissileTrail = false;
+	_isMissilePuff = false;
 
 	for (int i = 0; i < _particleMax; i++)
 	{
 		tagParticle particle;
 		ZeroMemory(&particle, sizeof(tagParticle));
 		particle.particleImg = IMAGEMANAGER->findImage(_imageName);
+		particle.isFrameImg = isFrameImg;
 	
 		_vParticle.push_back(particle);
 	}
@@ -48,8 +52,9 @@ void effects::update(void)
 		this->boomExplosion();
 		this->boomStaticAnim();
 		this->boomParabola();
-		this->boomFountain();
 		this->boomBigBang();
+		this->boomMissileTrail();
+		this->boomMissilePuff();
 		this->boomFlyingFlies();
 		this->boomAshes();
 		this->collisionProcess();
@@ -71,7 +76,7 @@ void effects::render(void)
 		{
 			if (!_vParticle[i].fire) continue;
 
-			if (_isFrameImg)
+			if (_vParticle[i].isFrameImg)
 				_vParticle[_vParticle.size() - 1 - i].particleImg->frameRender(getMemDC(), _vParticle[i].rc.left - CAMERAMANAGER->getCamera().left, _vParticle[i].rc.top - CAMERAMANAGER->getCamera().top);
 			else
 			{
@@ -99,6 +104,7 @@ void effects::activateCartridge(float x, float y, bool isLeft)
 			_vParticle[i].angle = PI - PI / 3;
 		_vParticle[i].gravity = 0.0f;
 		_vParticle[i].speed = RND->getFromFloatTo(10.f, 13.0f);
+		_vParticle[i].index = RND->getInt(3);
 		_vParticle[i].count = 0;
 		if (_isFrameImg)
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
@@ -327,10 +333,10 @@ void effects::boomBigBang()
 					//str = "smoke" + to_string(RND->getFromIntTo(1, 2));
 					//_imageName = str.c_str();
 					_vParticle[i].particleImg = IMAGEMANAGER->findImage(_imageName);
-					if (!_isFrameImg)
+					if (!_vParticle[i].isFrameImg)
 					{
 						_vParticle[i].index = 0;
-						_isFrameImg = true;
+						_vParticle[i].isFrameImg = true;
 					}
 					else
 					{
@@ -362,6 +368,125 @@ void effects::boomBigBang()
 	}
 }
 
+void effects::activateMissileTrail(float x, float y, bool isLeft)
+{
+	_isRunning = true;
+	_isMissileTrail = true;
+
+	for (int i = 0; i < _particleMax; i++)
+	{
+		_vParticle[i].fire = true;
+		if (isLeft)
+			_vParticle[i].angle = PI + PI_4;
+		else
+			_vParticle[i].angle = - PI_4;
+		_vParticle[i].fireX = x;
+		_vParticle[i].fireY = y;
+		_vParticle[i].speed = 8.0f;
+		_vParticle[i].x = _vParticle[i].fireX - cosf(_vParticle[i].angle) * WINSIZEY;
+		_vParticle[i].y = _vParticle[i].fireY + sinf(_vParticle[i].angle) * WINSIZEY;
+		if (_isFrameImg)
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+		else
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+	}
+}
+
+void effects::boomMissileTrail()
+{
+	if (_isMissileTrail)
+	{
+		for (int i = 0; i < _vParticle.size(); i++)
+		{
+			if (!_vParticle[i].fire) continue;
+			if (_vParticle[i].x < _vParticle[i].fireX)
+				_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
+			else
+				_vParticle[i].x = _vParticle[i].fireX;
+			if (_vParticle[i].y < _vParticle[i].fireY)
+				_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed;
+			else
+				_vParticle[i].y = _vParticle[i].fireY;
+
+			if (_isFrameImg)
+				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+			else
+				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+		}
+	}
+}
+
+void effects::activateMissilePuff(float x, float y, bool isLeft)
+{
+	_isRunning = true;
+	_isMissilePuff = true;
+
+	_animationSpeed = 5;
+	_vParticle.clear();
+	tagParticle particle;
+	ZeroMemory(&particle, sizeof(tagParticle));
+	for (int i = 8; i > 0; i--)
+	//for (int i = 1; i <= 8; i++)
+	{
+			particle.particleImg = IMAGEMANAGER->findImage(("explosionFlame" + to_string(i)));
+			_vParticle.push_back(particle);
+	}
+
+	for (int i = 0; i < _vParticle.size(); i++)
+	{
+		_vParticle[i].fire = true;
+		_vParticle[i].alpha = 0;
+		_vParticle[i].count = 0;
+		if (isLeft)
+			_vParticle[i].angle = PI + PI_4;
+		else
+			_vParticle[i].angle = - PI_4;
+		_vParticle[i].speed = 4.0f * (i + 1) + RND->getFloat(2.0f);
+		_vParticle[i].fireX = x;
+		_vParticle[i].fireY = y;
+		_vParticle[i].speed = 8.0f;
+		if (i > 0)
+		{
+			_vParticle[i].x = _vParticle[i - 1].x - cosf(_vParticle[i].angle) * _vParticle[i].speed;
+			_vParticle[i].y = _vParticle[i - 1].y + sinf(_vParticle[i].angle) * _vParticle[i].speed;
+		}
+		else
+		{
+			_vParticle[i].x = x - cosf(_vParticle[i].angle); // * WINSIZEY;
+			_vParticle[i].y = y + sinf(_vParticle[i].angle); // * WINSIZEY;
+		}
+
+		if (_isFrameImg)
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+		else
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+	for (int i = 0; i < _particleMax; i++)
+	{
+		_vParticle[i].fire = true;
+		if (isLeft)
+			_vParticle[i].angle = PI + PI_4;
+		else
+			_vParticle[i].angle = -PI_4;
+		_vParticle[i].fireX = x;
+		_vParticle[i].fireY = y;
+		_vParticle[i].speed = 8.0f;
+		_vParticle[i].x = _vParticle[i].fireX - cosf(_vParticle[i].angle) * WINSIZEY;
+		_vParticle[i].y = _vParticle[i].fireY + sinf(_vParticle[i].angle) * WINSIZEY;
+		if (_isFrameImg)
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+		else
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+	}
+}
+
+void effects::boomMissilePuff()
+{
+	if (_isMissilePuff)
+	{
+		
+	}
+}
+
 void effects::boomStaticAnim()
 {
 	if (_isStaticAnim)
@@ -384,10 +509,12 @@ void effects::activateBallExplosion(float x, float y)
 {
 	_isRunning = true;
 	_isStaticAnim = true;
-	_animationSpeed = 0;
+	_count = 0;
+	_animationSpeed = 5;
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
+		_vParticle[i].index = 0;
 		_vParticle[i].x = x;
 		_vParticle[i].y = y - _vParticle[i].particleImg->getFrameHeight() / 5;// * (i + 1);
 		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y,
@@ -410,7 +537,9 @@ void effects::activateParabola(float x, float y, bool isLeft)
 		_vParticle[i].gravity = 0.0f;
 		_vParticle[i].x = x + 32;
 		_vParticle[i].y = y + 32;
+		_vParticle[i].oldY = _vParticle[i].y;
 		_vParticle[i].speed = RND->getFromFloatTo(5.0f, 20.0f);
+		_vParticle[i].index = RND->getInt(3);
 		_animationSpeed = 0;
 		_vParticle[i].count = 0;
 		if (_isFrameImg)
@@ -445,7 +574,7 @@ void effects::boomParabola()
 					_animationSpeed++;
 				}
 			}
-			if (_vParticle[i].count == 500 || _vParticle[i].y - CAMERAMANAGER->getCamera().top >= WINSIZEY || _vParticle[i].speed < 2.0f)
+			if (_vParticle[i].count == 500 || _vParticle[i].y - CAMERAMANAGER->getCamera().top >= WINSIZEY || _vParticle[i].speed < 1.0f)
 			{
 				_vParticle[i].fire = false;
 				_isRunning = false;
@@ -458,15 +587,16 @@ void effects::boomParabola()
 void effects::activateFountain(float x, float y)
 {
 	_isRunning = true;
-	_isFountain = true;
+	_isParabola = true;
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
-		_vParticle[i].angle = PI_2 + RND->getFromFloatTo(0.1f, 1.0f) - 0.5f;
+		_vParticle[i].angle = PI_2 + RND->getFromFloatTo(0.1f, 0.3f) - 0.3f;
 		_vParticle[i].gravity = 0.0f;
 		_vParticle[i].x = x + 32;
 		_vParticle[i].y = y + 32;
 		_vParticle[i].speed = RND->getFromFloatTo(10.0f, 25.0f);
+		_vParticle[i].index = RND->getInt(3);
 		_animationSpeed = 5;
 		_vParticle[i].count = 0;
 		if (_isFrameImg)
@@ -476,43 +606,14 @@ void effects::activateFountain(float x, float y)
 	}
 }
 
-void effects::boomFountain()
+void effects::activateBlotch(float x, float y)
 {
-	if (_isFountain)
-	{
-		for (int i = 0; i < _vParticle.size(); ++i)
-		{
-			if (!_vParticle[i].fire) continue;
-			
-			if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 0) == GREEN ||//¿Þ
-				COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 1) == GREEN ||//À§
-				COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 2) == GREEN ||//¿À
-				COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 3) == GREEN)//¶¥
-			{
-				_vParticle[i].gravity = 0;
-				_vParticle[i].speed = 0;
-				_imageName = "blood_still1";
-				_vParticle[i].particleImg = IMAGEMANAGER->findImage(_imageName);
-			}
-			else
-			{
-				_vParticle[i].gravity += 0.45f;
-				_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
-				_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
-			}
-			if (_isFrameImg)
-				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
-			else
-				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
 
-			if (_vParticle[i].y - CAMERAMANAGER->getCamera().top >= WINSIZEY)
-			{
-				_vParticle[i].fire = false;
-				_isRunning = false;
-				_isParabola = false;
-			}
-		}
-	}
+}
+
+void effects::boomBlotch()
+{
+
 }
 
 void effects::activateFlyingFlies(float x, float y)
@@ -608,21 +709,26 @@ void effects::collisionProcess()
 				_vParticle[i].y -= _vParticle[i].rc.bottom - _vParticle[i].rc.top;
 				_vParticle[i].speed *= 0.7;
 			}
-			else if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 1) == GREEN) //À§
+			//if (_vParticle[i].y >= _vParticle[i].oldY)
+			//{
+			//	_vParticle[i].gravity = 0;
+			//	_vParticle[i].y -= _vParticle[i].rc.bottom - _vParticle[i].rc.top;
+			//	_vParticle[i].speed *= 0.7;
+			//}
+	
+			if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 1) == GREEN) //À§
 			{
 				_vParticle[i].angle = PI2 - _vParticle[i].angle;
 				_vParticle[i].y += _vParticle[i].rc.bottom - _vParticle[i].rc.top;
 				_vParticle[i].speed *= 0.7;
 			}
 			if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 2) == GREEN) //¿À
-			//if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, 1, _vParticle[i].gravity, 2) == GREEN) //¿À
 			{
 				_vParticle[i].angle = PI - _vParticle[i].angle;
 				_vParticle[i].x -= _vParticle[i].rc.right - _vParticle[i].rc.left;
 				_vParticle[i].speed *= 0.7;
 			}
 			else if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 0) == GREEN) //¿Þ
-			//else if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, 1, _vParticle[i].gravity, 0) == GREEN) //¿Þ
 			{
 				_vParticle[i].angle = PI - _vParticle[i].angle;
 				_vParticle[i].x += _vParticle[i].rc.right - _vParticle[i].rc.left;
@@ -652,5 +758,5 @@ void effects::frameChange()
 {
 	image* img = IMAGEMANAGER->findImage(_imageName);
 	for (int i = 0; i < _vParticle.size(); ++i)
-		FRAMEMANAGER->frameChange(img, _count, _vParticle[i].index, _animationSpeed, false);
+		FRAMEMANAGER->frameChange(img, _count, _vParticle[i].index, _animationSpeed, _isLeft);
 }
