@@ -111,16 +111,17 @@ HRESULT objectManager::init(int num)
 			_vObject.push_back(object);
 		}
 
-		//_helicopterPos[0].x = 3101, _helicopterPos[0].y = 519;
-		//for (int i = 0; i < 1; i++)
-		//{
-		//	type = HELICOPTER;
-		//
-		//	objectA* object = _factory->createObject(type);
-		//	object->setPosition(_helicopterPos[i].x, _helicopterPos[i].y);
-		//
-		//	_vObject.push_back(object);
-		//}
+		_helicopterPos[0].x = 3101, _helicopterPos[0].y = 519;
+		for (int i = 0; i < 1; i++)
+		{
+			type = HELICOPTER;
+		
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_helicopterPos[i].x, _helicopterPos[i].y);
+			object->init();
+
+			_vObject.push_back(object);
+		}
 
 		_amFlagPos[0].x = 1853, _amFlagPos[0].y = 1225;
 		_amFlagPos[1].x = 2923, _amFlagPos[1].y = 2037;
@@ -222,58 +223,18 @@ void objectManager::update()
 {
 	//오브젝트 벡터 돌리면서 업데이트 시켜주면 된다
 	RECT tempRc, tempRc2, tempRc3;
-	
-	//if (!_mapData->getObject()[406]._isActived)
-	//{
-	//	EFFECTMANAGER->woodDebris(_vObject[12]->getX(), _vObject[12]->getY());
-	//}
-	//if (!_mapData->getObject()[407]._isActived)
-	//{
-	//	EFFECTMANAGER->woodDebris(_vObject[13]->getX(), _vObject[13]->getY());
-	//	EFFECTMANAGER->explosion(_vObject[27]->getX(), _vObject[27]->getY());
-	//}
-	//if (!_mapData->getObject()[433]._isActived)
-	//{
-	//	EFFECTMANAGER->woodDebris(_vObject[14]->getX(), _vObject[14]->getY());
-	//	EFFECTMANAGER->explosion(_vObject[26]->getX(), _vObject[26]->getY());
-	//}
-	//if (!_mapData->getObject()[445]._isActived)
-	//{
-	//	EFFECTMANAGER->woodDebris(_vObject[18]->getX(), _vObject[18]->getY());
-	//}
-	//if (!_mapData->getObject()[446]._isActived)
-	//{
-	//	EFFECTMANAGER->woodDebris(_vObject[19]->getX(), _vObject[19]->getY());
-	//}
-	//if (!_mapData->getObject()[455]._isActived)
-	//{
-	//	EFFECTMANAGER->woodDebris(_vObject[15]->getX(), _vObject[15]->getY());
-	//}
-	//if (!_mapData->getObject()[467]._isActived)
-	//{
-	//	EFFECTMANAGER->woodDebris(_vObject[24]->getX(), _vObject[24]->getY());
-	//	EFFECTMANAGER->woodDebris(_vObject[25]->getX(), _vObject[25]->getY());
-	//}
-	//if (!_mapData->getObject()[468]._isActived)
-	//{
-	//	EFFECTMANAGER->woodDebris(_vObject[22]->getX(), _vObject[22]->getY());
-	//	EFFECTMANAGER->woodDebris(_vObject[23]->getX(), _vObject[23]->getY());
-	//}
-	//if (!_mapData->getObject()[469]._isActived)
-	//{
-	//	EFFECTMANAGER->woodDebris(_vObject[20]->getX(), _vObject[20]->getY());
-	//	EFFECTMANAGER->woodDebris(_vObject[21]->getX(), _vObject[21]->getY());
-	//}
+	float x, y;
 
 	for (int i = 0; i < _vObject.size(); i++)
 	{
 		if (OBJECT_DESTROY == _vObject[i]->getState()) continue;
-		if (_vObject[i]->getType() == WOODENBOX || _vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED || _vObject[i]->getType() == PRISONER || _vObject[i]->getType() == AMERICAN_FLAG)
+		if (_vObject[i]->getType() == WOODENBOX || _vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED || 
+			_vObject[i]->getType() == PRISONER || _vObject[i]->getType() == AMERICAN_FLAG || _vObject[i]->getType() == HELICOPTER)
 		{
 			switch (_vObject[i]->getState())
 			{
 			case OBJECT_IDLE:
-				if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getRcRambro(), &_vObject[i]->getRect()) && _vObject[i]->getType() != AMERICAN_FLAG)
+				if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getRcRambro(), &_vObject[i]->getRect()) && _vObject[i]->getType())
 				{
 					int width = _playerManager->getPlayer()->getRcRambro().right - _playerManager->getPlayer()->getRcRambro().left;
 					int height = _playerManager->getPlayer()->getRcRambro().bottom - _playerManager->getPlayer()->getRcRambro().top;
@@ -322,6 +283,7 @@ void objectManager::update()
 							EFFECTMANAGER->woodDebris(_vObject[i]->getRect().left, _vObject[i]->getRect().top, _playerManager->getPlayer()->getIsLeft());
 							_vObject[i]->setState(OBJECT_MOVE);
 						}
+						EFFECTMANAGER->bulletPuff(tempRc2.left, tempRc2.top);
 						_playerManager->getPBullet()->getVPlayerBullet()[j].isActived = false;
 					}
 				}
@@ -329,7 +291,7 @@ void objectManager::update()
 				{
 					if (_vObject[i]->getType() == PRISONER)
 						_vObject[i]->setIsActived(true);
-					if (_vObject[i]->getType() == AMERICAN_FLAG)
+					if (_vObject[i]->getType() == AMERICAN_FLAG)// || _vObject[i]->getType() == HELICOPTER)
 						_vObject[i]->setState(OBJECT_MOVE);
 				}
 				break;
@@ -347,6 +309,13 @@ void objectManager::update()
 						this->collisionProcess();
 					}
 				}
+				//if (_vObject[i]->getType() == HELICOPTER)
+				//{
+				//	x = _vObject[i]->getActivationRect().right - (_vObject[i]->getActivationRect().right - _playerManager->getPlayer()->getRcRambro().left);
+				//	y = _vObject[i]->getActivationRect().bottom - (_vObject[i]->getActivationRect().bottom - _playerManager->getPlayer()->getRcRambro().top);
+				//	_playerManager->getPlayer()->setX(x);
+				//	_playerManager->getPlayer()->setY(y);
+				//}
 				break;
 			case OBJECT_DESTROY:
 				break;
@@ -354,7 +323,6 @@ void objectManager::update()
 		}
 		_vObject[i]->update();
 	}
-
 }
 
 void objectManager::render(HDC hdc)
@@ -365,25 +333,13 @@ void objectManager::render(HDC hdc)
 	{
 		if (OBJECT_DESTROY == _vObject[i]->getState()) continue;
 		_vObject[i]->render(hdc);
-		if (KEYMANAGER->isToggleKey('3'))
+		if (KEYMANAGER->isToggleKey('2'))
 		{
-			char str[32];
+			char str[64];
 			sprintf_s(str, "%d", i);
-			TextOut(hdc, _vObject[i]->getX() + 10 - CAMERAMANAGER->getCamera().left, _vObject[i]->getY() + 10 - CAMERAMANAGER->getCamera().top, str, strlen(str));
+			TextOut(hdc, _vObject[i]->getX() + 5 - CAMERAMANAGER->getCamera().left, _vObject[i]->getY() - 10 - CAMERAMANAGER->getCamera().top, str, strlen(str));
 		}
 	}
-	if (KEYMANAGER->isToggleKey('2'))
-	{
-		Rectangle(hdc, _playerManager->getPlayer()->getRcRambro().left - CAMERAMANAGER->getCamera().left,
-			_playerManager->getPlayer()->getRcRambro().top - CAMERAMANAGER->getCamera().top,
-			_playerManager->getPlayer()->getRcRambro().right - CAMERAMANAGER->getCamera().left,
-			_playerManager->getPlayer()->getRcRambro().bottom - CAMERAMANAGER->getCamera().top);
-	}
-
-	char str[32];
-	sprintf_s(str, "%d", _vObject[0]->getTargetIsActived());
-	TextOut(hdc, 100, 700, str, strlen(str));
-
 }
 
 void objectManager::collisionProcess()

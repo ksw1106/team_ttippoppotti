@@ -81,7 +81,6 @@ void effects::render(void)
 					_vParticle[i].particleImg->render(getMemDC(), _vParticle[i].rc.left - CAMERAMANAGER->getCamera().left, _vParticle[i].rc.top - CAMERAMANAGER->getCamera().top);
 			}
 		}
-
 	}
 }
 
@@ -324,9 +323,9 @@ void effects::boomBigBang()
 				if (_vParticle[i].count > 1500)
 				{
 					string str;
-					//_imageName = "smoke1";
-					str = "smoke" + to_string(RND->getFromIntTo(1, 2));
-					_imageName = str.c_str();
+					_imageName = "smoke1";
+					//str = "smoke" + to_string(RND->getFromIntTo(1, 2));
+					//_imageName = str.c_str();
 					_vParticle[i].particleImg = IMAGEMANAGER->findImage(_imageName);
 					if (!_isFrameImg)
 					{
@@ -385,7 +384,7 @@ void effects::activateBallExplosion(float x, float y)
 {
 	_isRunning = true;
 	_isStaticAnim = true;
-
+	_animationSpeed = 0;
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
@@ -446,7 +445,7 @@ void effects::boomParabola()
 					_animationSpeed++;
 				}
 			}
-			if (_vParticle[i].count == 500 || _vParticle[i].y - CAMERAMANAGER->getCamera().top >= WINSIZEY || _vParticle[i].speed < 1.5f)
+			if (_vParticle[i].count == 500 || _vParticle[i].y - CAMERAMANAGER->getCamera().top >= WINSIZEY || _vParticle[i].speed < 2.0f)
 			{
 				_vParticle[i].fire = false;
 				_isRunning = false;
@@ -526,7 +525,7 @@ void effects::activateFlyingFlies(float x, float y)
 		_vParticle[i].angle = RND->getFloat(PI2);
 		_vParticle[i].x = x + RND->getFromFloatTo(5.0f, 10.0f) - 10.0f;
 		_vParticle[i].y = y + RND->getFromFloatTo(2.0f, 10.0f) - 10.0f;
-		_vParticle[i].speed = RND->getFromFloatTo(1.0f, 2.0f);
+		_vParticle[i].speed = RND->getFromFloatTo(0.5f, 1.5f);
 		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
 	}
 }
@@ -539,8 +538,8 @@ void effects::boomFlyingFlies()
 		{
 			if (!_vParticle[i].fire) continue;
 
-			_vParticle[i].x += cosf(_vParticle[i].angle + RND->getFloat(2.0f)) * _vParticle[i].speed;
-			_vParticle[i].y += -sinf(_vParticle[i].angle + RND->getFloat(2.0f)) * _vParticle[i].speed;
+			_vParticle[i].x += cosf(_vParticle[i].angle + RND->getFloat(2.5f)) * _vParticle[i].speed;
+			_vParticle[i].y += -sinf(_vParticle[i].angle + RND->getFloat(2.5f)) * _vParticle[i].speed;
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
 			_vParticle[i].count++;
 			if (_vParticle[i].count % 5 == 0)
@@ -607,27 +606,27 @@ void effects::collisionProcess()
 				_vParticle[i].gravity = 0;
 				_vParticle[i].angle = PI2 - _vParticle[i].angle;
 				_vParticle[i].y -= _vParticle[i].rc.bottom - _vParticle[i].rc.top;
-				_vParticle[i].speed *= 0.9;
+				_vParticle[i].speed *= 0.7;
 			}
 			else if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 1) == GREEN) //À§
 			{
 				_vParticle[i].angle = PI2 - _vParticle[i].angle;
 				_vParticle[i].y += _vParticle[i].rc.bottom - _vParticle[i].rc.top;
-				_vParticle[i].speed *= 0.9;
+				_vParticle[i].speed *= 0.7;
 			}
 			if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 2) == GREEN) //¿À
 			//if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, 1, _vParticle[i].gravity, 2) == GREEN) //¿À
 			{
 				_vParticle[i].angle = PI - _vParticle[i].angle;
 				_vParticle[i].x -= _vParticle[i].rc.right - _vParticle[i].rc.left;
-				_vParticle[i].speed *= 0.9;
+				_vParticle[i].speed *= 0.7;
 			}
 			else if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 0) == GREEN) //¿Þ
 			//else if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, 1, _vParticle[i].gravity, 0) == GREEN) //¿Þ
 			{
 				_vParticle[i].angle = PI - _vParticle[i].angle;
 				_vParticle[i].x += _vParticle[i].rc.right - _vParticle[i].rc.left;
-				_vParticle[i].speed *= 0.9;
+				_vParticle[i].speed *= 0.7;
 			}
 		}
 	}
