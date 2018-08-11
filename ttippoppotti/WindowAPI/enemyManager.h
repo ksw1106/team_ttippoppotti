@@ -85,6 +85,8 @@ public:
 	void collideWithPBullet();	
 	// 에너미 vs 플레이어 수류탄
 	void collideWithPGrenade();		
+	// 에너미 vs 할아버지 총알
+	void collideWithGBullet();
 	
 	// 에너미 시체 vs 픽셀 충돌
 	void collideWithCorpse();
