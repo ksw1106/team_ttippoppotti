@@ -3,41 +3,45 @@
 #include "playerManager.h"
 #include "mapData.h"
 
-HRESULT enemyManager::init(void)
+HRESULT enemyManager::init(int stageNum)
 {
 	// 플레이어매니저 클래스 가져오기
 	this->setPlayerManager(_playerManager);
 	// 맵데이터 가져오기
 	this->setMapData(_mapData);	
-
-	//에너미 클래스 객체 생성 및 초기화
-	this->setSoldier(3800, 1000);
-	this->setSoldier(3300, 1200);
-	this->setSoldier(3600, 1400);
-	this->setSoldier(3200, 1600);
-	//this->setBrovil(3700, 1000, 5);
 		
-	_boss = new boss;
-	_boss->init(4000.f, 800.f);
-	
 	_eBullet = new eBullet;
 	_eBullet->init(1, 800.f);
-
-	_bossBullet = new bossBullet;
-	_bossBullet->init();
-
-	_bossRocket = new bossRocket;
-	_bossRocket->init(50.f);
-
-	_brovil = new brovil;
-	_brovil->init(3200, 1000);
-
-	_hpBar = new progressBar;
-	_hpBar->init("enemyImage/bossImage/boss_hpbar_red","enemyImage/bossImage/boss_hpbar_white","enemyImage/bossImage/boss_hpbar_black",
-		WINSIZEX/2 - 1062/2, 57, WINSIZEX/2 - 1062/2, 57, WINSIZEX/2 - 1076/2, 50, 1062, 17, 1062, 17, 1076, 30);
-	
+		
 	_effectCount = _count = 0;
 	_isClear = false;
+
+	if (stageNum == 1)
+	{
+		//에너미 클래스 객체 생성 및 초기화
+		this->setSoldier(3800, 1000);
+		this->setSoldier(3300, 1200);
+		this->setSoldier(3600, 1400);
+		this->setSoldier(3200, 1600);
+		//this->setBrovil(3700, 1000, 5);
+
+		_brovil = new brovil;
+		_brovil->init(3200, 1000);
+	}
+	else if (stageNum == 2)
+	{
+		
+		_boss = new boss;
+		_boss->init(4000.f, 800.f);
+		_bossBullet = new bossBullet;
+		_bossBullet->init();
+		_bossRocket = new bossRocket;
+		_bossRocket->init(50.f);
+		_hpBar = new progressBar;
+		_hpBar->init("enemyImage/bossImage/boss_hpbar_red", "enemyImage/bossImage/boss_hpbar_white", "enemyImage/bossImage/boss_hpbar_black",
+			WINSIZEX / 2 - 1062 / 2, 57, WINSIZEX / 2 - 1062 / 2, 57, WINSIZEX / 2 - 1076 / 2, 50, 1062, 17, 1062, 17, 1076, 30);
+	}
+
 
 	return S_OK;
 }
@@ -66,7 +70,7 @@ void enemyManager::update(void)
 	_bossRocket->update();
 	_brovil->update();
 	_hpBar->update();
-	_hpBar->setGauge(_boss->getHP(), 100);
+	_hpBar->setGauge(_boss->getHP(), 1000);
 	
 	this->changeDirection();
 	
@@ -106,7 +110,7 @@ void enemyManager::update(void)
 	// 플레이어 총알과 브로빌 충돌
 	this->collideBrovilwithPBullet();
 	
-	// 보스 총알, 로켓과 플레이어 충돌
+	// 보스 총알, 로켓 vs 램브로 충돌
 	this->collideWithBossBullet();
 	this->collideWithBossRocket();
 	this->bossDirChange();
@@ -114,6 +118,7 @@ void enemyManager::update(void)
 
 	// 할아버지 총알 vs 에너미 충돌
 	this->collideWithGBullet();
+	// 할아버지 총알 vs 보스
 	this->collideBossWithGBullet();
 	
 	// 보스 총알, 로켓 발사
@@ -496,7 +501,7 @@ void enemyManager::PBulletHitBoss()
 		{			
 			if (!_playerManager->getPBullet()->getVPlayerBullet()[i].isActived) continue;
 			_playerManager->getPBullet()->getVPlayerBullet()[i].isActived = false;
-			_boss->setHP(_boss->getHP() - 1);
+			_boss->setHP(_boss->getHP() - 10);
 		}		
 	}
 }
@@ -605,12 +610,13 @@ void enemyManager::collideWithGBullet()
 			{
 				if (!_playerManager->getGBullet()->getVPlayergBullet()[i].isActived) continue;
 				_playerManager->getGBullet()->getVPlayergBullet()[i].isActived = false;
+				
 			}
 		}	
 	}
 }
 
-// 할아버지 총알  vs 보스
+// 할아버지 총알 vs 보스
 void enemyManager::collideBossWithGBullet()
 {
 	RECT rc;
@@ -620,7 +626,7 @@ void enemyManager::collideBossWithGBullet()
 		{
 			if (!_playerManager->getGBullet()->getVPlayergBullet()[i].isActived) continue;
 			_playerManager->getGBullet()->getVPlayergBullet()[i].isActived = false;
-			_boss->setHP(_boss->getHP() - 1);
+			_boss->setHP(_boss->getHP() - 10);
 		}
 	}
 }

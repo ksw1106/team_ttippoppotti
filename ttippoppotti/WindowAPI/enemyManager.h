@@ -67,7 +67,7 @@ public:
 	vector<deadEnemy> getVDeadEnemyInfo() {	return _vDeadEnemyInfo;	}
 	void addVDeadEnemyInfo(deadEnemy dEnemy) { _vDeadEnemyInfo.push_back(dEnemy); }
 		
-	HRESULT init(void);
+	HRESULT init(int stageNum);
 	void release(void);
 	void update(void);
 	void render(void);

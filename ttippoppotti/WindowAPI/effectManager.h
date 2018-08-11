@@ -50,6 +50,8 @@ public:
 	void bulletPuff(float x, float y);
 	//¼ö·ùÅº ÀÌÆåÆ®
 	void grenadePuff(float x, float y);
+	//¼ö·ùÅº ÀÌÆåÆ®
+	void grenadeExplosion(float x, float y);
 	//¼ö·ùÅº ÀÌÆåÆ® ÃÊ±âÈ­
 	void grenadePuffStart(float x, float y);
 	//Ä® ÀÌÆåÆ®
@@ -80,6 +82,8 @@ public:
 	void playFlyingFlies(string effectName, float x, float y);
 	void playAshes(string effectName, float x, float y);
 	void playBigBang(string effectName, float x, float y);
+	void playMissileTrail(string effectName, float x, float y, bool isLeft);
+	void playMissilePuff(string effectName, float x, float y, bool isLeft);
 	effectManager() {}
 	~effectManager() {}
 };

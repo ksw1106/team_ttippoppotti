@@ -146,7 +146,7 @@ void enemy::render(void)
 		{
 			for (int i = 0; i < BODY_PART; ++i)
 			{
-				_corpse[i].corpseImage->rotateRender(getMemDC(), _corpse[i].x - CAMERAMANAGER->getCamera().left, _corpse[i].y - CAMERAMANAGER->getCamera().top, _corpse[i].angle);
+				_corpse[i].corpseImage->render(getMemDC(), _corpse[i].x - CAMERAMANAGER->getCamera().left, _corpse[i].y - CAMERAMANAGER->getCamera().top);
 			}
 		}
 
