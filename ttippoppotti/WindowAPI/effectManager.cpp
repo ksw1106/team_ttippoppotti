@@ -14,11 +14,11 @@ HRESULT effectManager::init(void)
 	addEffect("bloodSplash7", "blood_still7", 20, 5);
 	addEffect("bloodSplash8", "blood_still8", 20, 5);
 
-	addEffect("rock1", "rock_big1", 10, 10);
-	addEffect("rock2", "rock_big2", 10, 10);
-	addEffect("rock3", "rock_sml1", 10, 10);
-	addEffect("rock4", "rock_sml2", 10, 10);
-	addEffect("rock5", "rock_sml3", 10, 10);
+	addEffect("rock1", "rock_big1", 10, 5);
+	addEffect("rock2", "rock_big2", 10, 5);
+	addEffect("rock3", "rock_sml1", 10, 5);
+	addEffect("rock4", "rock_sml2", 10, 5);
+	addEffect("rock5", "rock_sml3", 10, 5);
 
 	addEffect("flame1", "explosionFlame1", 20, 5);
 	addEffect("flame2", "explosionFlame2", 20, 5);
@@ -59,8 +59,15 @@ HRESULT effectManager::init(void)
 	addEffect("orangeSparks", "orangePixelDot", 20, 20);
 	addEffect("lightOrangeSparks", "lightOrangePixelDot", 20, 20);
 	addEffect("yellowSparks", "yellowPixelDot", 20, 20);
+	addEffect("lightBrownSparks", "lightBrownPixelDot", 20, 20);
+	addEffect("brownSparks", "brownPixelDot", 20, 20);
+	addEffect("darkBrownSparks", "darkBrownPixelDot", 20, 20);
 
 	addEffect("bigBang", "explosionFlame8", 10, 10);
+
+	addEffect("missileTrail1", "missileTrail_white", 3, 1, true);
+	addEffect("missileTrail2", "missileTrail_blue", 3, 1, true);
+	addEffect("missileTrail3", "missileTrail_red", 3, 1, true);
 
 	_count = 0;
 	_isExplosion = _isGrenadePuff = _isBigBang = false;
@@ -191,6 +198,15 @@ void effectManager::RambroBloodFountain(float x, float y)
 	this->playFountain("rambro_uppperBody", x, y);
 }
 
+void effectManager::missileTrail(float x, float y, bool isLeft)
+{
+	this->playMissileTrail("missileTrail1", x, y, isLeft);
+}
+
+void effectManager::missilePuff(float x, float y, bool isLeft)
+{
+}
+
 void effectManager::chuckBloodFountain(float x, float y)
 {
 	this->playFountain("bloodSplash1", x, y);
@@ -229,12 +245,14 @@ void effectManager::rockFall(float x, float y, bool isLeft)
 	this->playParabola("rock3", x, y, isLeft);
 	this->playParabola("rock4", x, y, isLeft);
 	this->playParabola("rock5", x, y, isLeft);
+	this->playParabola("darkBrownSparks", x, y, isLeft);
 }
 
 void effectManager::woodDebris(float x, float y, bool isLeft)
 {
 	this->playParabola("woodDebris1b", x, y, isLeft);
 	this->playParabola("woodDebris2b", x, y, isLeft);
+	this->playParabola("lightBrownSparks", x, y, isLeft);
 }
 
 void effectManager::yellowSparks(float x, float y, bool isLeft)
@@ -259,9 +277,13 @@ void effectManager::grenadePuff(float x, float y)
 	_y = y;// -110 / 2;
 }
 
-void effectManager::grenadeExplosion(float x, float y)
+void effectManager::rambroGrenadeExplosion(float x, float y)
 {
-	this->playBallExplosion("ballFlame1", x, y);
+	this->playFountain("orangeSparks", x, y);
+	this->playFountain("lightOrangeSparks", x, y);
+	this->playFountain("yellowSparks", x, y);
+	this->playBallExplosion("ballFlame1", x + RND->getFloat(20.f), y + RND->getFloat(20.f));
+	this->playBallExplosion("ballFlame2", x - RND->getFloat(5.f), y - RND->getFloat(5.f));
 }
 
 void effectManager::grenadePuffStart(float x, float y)
@@ -295,7 +317,12 @@ void effectManager::saveBubble(float x, float y)
 void effectManager::bigBang(float x, float y)
 {
 	this->playBigBang("bigBang", x, y);
-	this->playBallExplosion("ballFlame2", x, y);
+	this->playBallExplosion("ballFlame1", x + RND->getFloat(30.f), y + RND->getFloat(30.f));
+	this->playBallExplosion("ballFlame2", x - RND->getFloat(20.f), y - RND->getFloat(10.f));
+	//this->playBallExplosion("ballFlame3", x - RND->getFloat(30.f), y + RND->getFloat(50.f));
+	this->playFountain("orangeSparks", x, y);
+	this->playFountain("lightOrangeSparks", x, y);
+	this->playFountain("yellowSparks", x, y);
 }
 
 void effectManager::explosionStart(float x, float y)
@@ -326,6 +353,9 @@ void effectManager::explosionStart(float x, float y)
 	//this->playBallExplosion("ballFlame1", x, y);
 	this->playBallExplosion("ballFlame2", x, y);
 	//this->playBallExplosion("ballFlame3", x, y);
+	this->playFountain("orangeSparks", x, y);
+	this->playFountain("lightOrangeSparks", x, y);
+	this->playFountain("yellowSparks", x, y);
 }
 
 void effectManager::explosion(float x, float y)
