@@ -7,9 +7,9 @@ HRESULT stage2Scene::init(void)
 	CAMERAMANAGER->setCamera(_rcCamera);
 
 	_playerManager = new playerManager;
-	_playerManager->init();
+	_playerManager->init(2);
 	_enemyManager = new enemyManager;
-	_enemyManager->init();
+	_enemyManager->init(2);
 	_mapData = new mapData;
 	_mapData->init(2);
 	_mapData->setObjectPixel("stage2_background_object");

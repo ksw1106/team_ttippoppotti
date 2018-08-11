@@ -15,10 +15,10 @@ HRESULT stageScene::init(void)
 	soundCount = 0;
 
 	_playerManager = new playerManager;
-	_playerManager->init();
+	_playerManager->init(1);
 
 	_enemyManager = new enemyManager;
-	_enemyManager->init();
+	_enemyManager->init(1);
 
 	_mapData = new mapData;
 	_mapData->init(1);
