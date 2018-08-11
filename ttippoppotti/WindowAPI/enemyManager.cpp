@@ -104,6 +104,9 @@ void enemyManager::update(void)
 	this->collideWithBossRocket();
 	this->bossDirChange();
 	this->PBulletHitBoss();
+
+	// 할아버지 총알 vs 에너미 충돌
+	this->collideWithGBullet();
 	
 	// 보스 총알, 로켓 발사
 	this->bossBulletFire();
@@ -578,10 +581,22 @@ void enemyManager::collideWithPGrenade()
 	}
 }
 
+
+// 할아버지 총알과 에너미 충돌
 void enemyManager::collideWithGBullet()
 {
-	//for (int i = 0 ; i < _playerManager->getGBullet()->getVPlayergBullet)
-	//_playerManager->getGBullet().
+	RECT rc;
+	for (int i = 0; i < _playerManager->getGBullet()->getVPlayergBullet().size(); ++i)
+	{
+		for (int j = 0; j < _vSoldier.size(); ++j)
+		{
+			if (IntersectRect(&rc, &_playerManager->getGBullet()->getVPlayergBullet()[i].rc, &_vSoldier[j]->getRcEnemy()))
+			{
+				if (!_playerManager->getGBullet()->getVPlayergBullet()[i].isActived) continue;
+				_playerManager->getGBullet()->getVPlayergBullet()[i].isActived = false;
+			}
+		}	
+	}
 }
 
 // 에너미 총알과 픽셀 충돌
