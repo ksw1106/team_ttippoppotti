@@ -8,8 +8,25 @@
 
 class CollisionManager : public singletonBase<CollisionManager>
 {
+	string objectPixel;
+	string ladderPixel;
+
 public:
 	int pixelCollision(RECT rc, float& x, float& y, float speed, float gravity, int dir, bool isLadder = false);
+
+	void setPixelMap(int num)
+	{
+		if (1 == num)
+		{
+			objectPixel = "backGround_pixel";
+			ladderPixel = "ladder_pixel";
+		}
+		else if (2 == num)
+		{
+			objectPixel = "stage2_background_pixel";
+			ladderPixel = "stage2_ladder_pixel";
+		}
+	}
 
 	HRESULT init();
 	void release();

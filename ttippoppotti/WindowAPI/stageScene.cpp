@@ -23,6 +23,9 @@ HRESULT stageScene::init(void)
 	_mapData = new mapData;
 	_mapData->init(1);
 
+	_mapData->setObjectPixel("backGround_object");
+	_mapData->setBackGroundMap("backGround_pixel");
+
 	_test = new testScene_kmy;
 	_test->init();
 
@@ -39,7 +42,9 @@ HRESULT stageScene::init(void)
 	_playerManager->setEnemyManager(_enemyManager);
 	_enemyManager->setPlayerManager(_playerManager);
 
-	for (int i = 0; i < 7; i++)
+	COLLISIONMANAGER->setPixelMap(1);
+
+	for (int i = 0; i < 3; i++)
 	{
 		ZeroMemory(&_backGround[i], sizeof(world));
 		_backGround[i]._rc = RectMake(0, 2878 - WINSIZEY, 5755, WINSIZEY);
