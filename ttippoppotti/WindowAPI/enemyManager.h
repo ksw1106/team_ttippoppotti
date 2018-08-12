@@ -76,11 +76,11 @@ public:
 	void enemyFire(int num);	
 	void bossBulletFire();
 	void bossRocketFire();
+
 	// 죽은 적 푸쉬백
 	void saveEnemy(enemyType enemy, deadType deadType, bool isLeft);
 	
-
-	// 브로빌
+	
 	// 브로빌 vs 플레이어 총알 충돌
 	void collideBrovilwithPBullet();
 	// 브로빌 vs 플레이어 수류탄 충돌
@@ -89,6 +89,8 @@ public:
 	void collideBrovilWithPixel();	
 	// 브로빌 시체 vs 지형 충돌
 	void collideBrovilCorpseWithPixel();
+	// 브로빌 vs 할아버지 총알
+	void collideBrovilWithGBullet();
 
 	// 에너미 방향 바꾸기
 	void changeDirection();
@@ -98,6 +100,7 @@ public:
 	void collideWithPixel();
 	// 에너미 vs 플레이어 총알
 	void collideWithPBullet();	
+	
 	// 에너미 vs 플레이어 수류탄
 	void collideWithPGrenade();		
 	// 에너미 vs 할아버지 총알

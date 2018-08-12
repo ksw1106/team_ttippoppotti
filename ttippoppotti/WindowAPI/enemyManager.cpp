@@ -78,7 +78,7 @@ void enemyManager::release(void)
 		_hpBar->release();
 		SAFE_DELETE(_hpBar);
 	}
-	
+		
 	_eBullet->release();
 	SAFE_DELETE(_eBullet);
 	
@@ -144,6 +144,8 @@ void enemyManager::update(void)
 	this->collideBulletWithPixel();
 	// 할아버지 총알 vs 에너미 충돌
 	this->collideWithGBullet();
+	// 할아비 총알 vs 브로빌 충돌
+	this->collideBrovilWithGBullet();
 	
 	if (_stageNum == 1)
 	{
@@ -357,6 +359,7 @@ void enemyManager::soldierDieWithBullet(int i)
 			_vSoldier[i]->getDirection());
 	}
 
+	if (_vSoldier[i]->getHP() == 10)
 	// 죽은 적 벡터에 담기
 	this->saveEnemy(SOLDIER, BULLET, _vSoldier[i]->getDirection());
 }
@@ -377,11 +380,12 @@ void enemyManager::soldierDieWithGrenade(int i)
 		_vSoldier[i]->setBodyStatus(ENEMY_FLY_AWAY);
 	}
 
+	
 	if (_vSoldier[i]->getBodyStatus() == ENEMY_DEAD)
 	{
 		_vSoldier[i]->deadMove();
 	}
-
+	
 	// 피터지는 효과
 	if (_isEffect)
 	{
@@ -389,7 +393,8 @@ void enemyManager::soldierDieWithGrenade(int i)
 			_vSoldier[i]->getY() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameHeight() / 2,
 			_vSoldier[i]->getDirection());
 	}
-
+	
+	if (_vSoldier[i]->getHP() == 10)
 	this->saveEnemy(SOLDIER, GRENADE, _vSoldier[i]->getDirection());
 }
 
@@ -420,6 +425,7 @@ void enemyManager::brovilDieWithBullet()
 	//	EFFECTMANAGER->bloodSplash(_brovil->getX() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameWidth()/2, _brovil->getY() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameHeight()/2,
 	//		_brovil->getDirection());
 	//}
+	if (_brovil->getHP() == 10)
 	// 죽은 적 벡터에 담기
 	this->saveEnemy(BROVIL, BULLET, _brovil->getDirection());
 	_isClear = true;
@@ -449,6 +455,7 @@ void enemyManager::brovilDieWithGrenade()
 	//	EFFECTMANAGER->bloodSplash(_brovil->getX() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameWidth()/2, _brovil->getY() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameHeight()/2,
 	//		_brovil->getDirection());
 	//}
+	if (_brovil->getHP() == 0)
 	// 죽은 적 벡터에 담기
 	this->saveEnemy(BROVIL, GRENADE, _brovil->getDirection());
 	_isClear = true;
@@ -941,6 +948,8 @@ void enemyManager::collideWithPBullet()
 			{	
 				if (_vSoldier[i]->getIsApart()) continue;
 				_vSoldier[i]->setDirection(_playerManager->getPBullet()->getVPlayerBullet()[j].isLeft);
+				_vSoldier[i]->setDirection(_playerManager->getPBullet()->getVPlayerBullet()[j].isLeft);
+
 				soldierDieWithBullet(i);
 				
 				break;
@@ -987,7 +996,8 @@ void enemyManager::collideWithGBullet()
 			{
 				if (!_playerManager->getGBullet()->getVPlayergBullet()[i].isActived) continue;
 				_playerManager->getGBullet()->getVPlayergBullet()[i].isActived = false;
-				
+				_vSoldier[j]->setDirection(_playerManager->getGBullet()->getVPlayergBullet()[i].isLeft);
+
 				soldierDieWithBullet(j);
 			}
 		}	
@@ -1199,6 +1209,21 @@ void enemyManager::collideBrovilCorpseWithPixel()
 	}	
 }
 
+void enemyManager::collideBrovilWithGBullet()
+{
+	RECT rc;
+	for (int i = 0; i < _playerManager->getGBullet()->getVPlayergBullet().size(); ++i)
+	{
+		if (IntersectRect(&rc, &_playerManager->getGBullet()->getVPlayergBullet()[i].rc, &_brovil->getRcBrovil()))
+		{
+			if (_brovil->getIsApart()) continue;
+			_brovil->setDirection(_playerManager->getGBullet()->getVPlayergBullet()[i].isLeft);
+			
+			this->brovilDieWithBullet();
+		}
+	}
+}
+
 
 // 개의 시야에 플레이어가 보임!
 void enemyManager::collideDogSightWithPlayer()
@@ -1373,8 +1398,11 @@ void enemyManager::DogDieWithBullet(int i)
 		_vDog[i]->deadMove();
 	}
 		
-	this->saveEnemy(DOG, BULLET, _vDog[i]->getIsLeft());
-	_isClear = true;
+	if (_vDog[i]->getHP() == 10)
+	{
+		this->saveEnemy(DOG, BULLET, _vDog[i]->getIsLeft());
+	}
+	
 }
 
 void enemyManager::collideDogCorpseWithPixel()
