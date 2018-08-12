@@ -184,6 +184,14 @@ void stage2Scene::update(void)
 
 	if (_isClear)
 	{
+		if (!_isOnce)
+		{
+			_isOnce = true;
+			_stageClear->setClearTime(TIMEMANAGER->getWorldTime());
+			SOUNDMANAGER->stop("1stage");
+			SOUNDMANAGER->play("clear", 0.8f);
+		}
+		
 		_stageClear->update();
 	}
 

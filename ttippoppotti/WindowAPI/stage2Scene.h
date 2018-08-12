@@ -25,6 +25,7 @@ class stage2Scene : public gameNode
 	RECT _rcCamera;
 	bool _camDebug;
 	bool _isClear, _isOver;
+	bool _isOnce = false;
 public:
 	HRESULT init(void);
 	void release(void);

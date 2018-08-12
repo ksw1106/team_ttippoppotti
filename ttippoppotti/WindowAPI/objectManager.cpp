@@ -512,7 +512,8 @@ void objectManager::update()
 					{
 						_isGameClear = true;
 					}
-					if (_isGameClear && _isDead)
+					//if (_isGameClear && _isDead)
+					if (_isDead)
 						_vObject[i]->setIsStart(true);
 				}
 				if (_vObject[i]->getType() == PRISONER) // ||_vObject[i]->getType() == WOODENBOX)

@@ -34,7 +34,7 @@ private:
 	world _backGround[3];
 
 	bool _camDebug;
-
+	bool _isOnce = false;
 	bool _isClear;
 	bool _isOver;
 public:

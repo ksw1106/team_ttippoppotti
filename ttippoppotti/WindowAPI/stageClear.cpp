@@ -74,7 +74,7 @@ void stageClear::update(void)
 	if (!_isAddEnemy)
 	{
 		//테스트용 적 벡터 만들기(나중에 지워야함)
-		/*for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			deadEnemy dEnemy;
 			ZeroMemory(&dEnemy, sizeof(deadEnemy));
@@ -82,10 +82,10 @@ void stageClear::update(void)
 			dEnemy.isLeft = RND->getFromIntTo(0, 1);
 			dEnemy._enemyType = SOLDIER;
 
-			_enemyManager->addVDeadEnemyInfo(dEnemy);
-		}*/
+			_temp.push_back(dEnemy);
+		}
 
-		for (int i = 0; i < _enemyManager->getVDeadEnemyInfo().size(); i++)
+		for (int i = 0; i < _temp.size(); i++)
 		{
 			enemyList eList;
 			ZeroMemory(&eList, sizeof(enemyList));
@@ -94,7 +94,7 @@ void stageClear::update(void)
 			eList.oldX = eList.x;
 			eList.oldY = eList.y+15;
 
-			switch (_enemyManager->getVDeadEnemyInfo()[i]._deadType)
+			switch (_temp[i]._deadType)
 			{
 			case SOLDIER:
 				eList.image[0] = new image;
@@ -108,7 +108,7 @@ void stageClear::update(void)
 				break;
 			}
 
-			switch (_enemyManager->getVDeadEnemyInfo()[i].isLeft)
+			switch (_temp[i].isLeft)
 			{
 			case TRUE:
 				eList.isLeft = true;

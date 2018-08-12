@@ -2,6 +2,7 @@
 #include "gameNode.h"
 
 class enemyManager;
+class deadEnemy;
 
 struct enemyList
 {
@@ -35,6 +36,7 @@ class stageClear : public gameNode
 	image* _timeBoard;
 	image* _enemyBoard;
 
+	vector<deadEnemy> _temp;
 	float _claerTime, _calculateTime;
 	int _clearCount, _inputCount;
 	int _imageIndex;

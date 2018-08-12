@@ -195,14 +195,20 @@ void stageScene::update(void)
 	}
 	if (OBJECTMANAGER->getVObject()[30]->getisArrived() && !_isClear)
 	{
-		_stageClear->setClearTime(TIMEMANAGER->getWorldTime());
-		SOUNDMANAGER->stop("1stage");
-		SOUNDMANAGER->play("clear", 0.8f);
+		
 		_isClear = true;
 	}
 
 	if (_isClear)
 	{
+		if (!_isOnce)
+		{
+			_isOnce = true;
+			_stageClear->setClearTime(TIMEMANAGER->getWorldTime());
+			SOUNDMANAGER->stop("1stage");
+			SOUNDMANAGER->play("clear", 0.8f);
+		}
+		
 		
 		_stageClear->update();
 	}
