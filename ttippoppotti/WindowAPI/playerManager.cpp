@@ -63,7 +63,7 @@ HRESULT playerManager::init(int num)
 	_missile = false;
 	_isGameover = false;
 
-	//_rc8 = RectMake(500.f, 2100.f, 60, 60);
+	_rc8 = RectMake(500.f, 2100.f, 60, 60);
 	//_rcMissileRight = RectMake(100.f, 1000.f, 100, 10);
 	//_rcMissileLeft = RectMake(1500.f, 1000.f, 100, 10);
 
@@ -1250,7 +1250,7 @@ void playerManager::update(void)
 						_mapData->deleteMapIndexByIndex(j, 2, 2);
 						CAMERAMANAGER->CameraShake();
 						EFFECTMANAGER->rockFall(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y, _gMissile->getVPlayergMissile()[i].isLeft);
-						//EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
+						EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
 						missileCount++;
 						break;
 					}
@@ -1266,7 +1266,7 @@ void playerManager::update(void)
 						_mapData->deleteMapIndexByIndex(j, 2, 2);
 						CAMERAMANAGER->CameraShake();
 						EFFECTMANAGER->rockFall(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y, _gMissile->getVPlayergMissile()[i].isLeft);
-						//EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
+						EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
 						missileCount++;
 						break;
 					}
@@ -1282,7 +1282,7 @@ void playerManager::update(void)
 						_mapData->deleteMapIndexByIndex(j, 2, 2);
 						CAMERAMANAGER->CameraShake();
 						EFFECTMANAGER->rockFall(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y, _gMissile->getVPlayergMissile()[i].isLeft);
-						//EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
+						EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
 						missileCount++;
 						break;
 					}
@@ -1298,7 +1298,7 @@ void playerManager::update(void)
 						_mapData->deleteMapIndexByIndex(j, 2, 2);
 						CAMERAMANAGER->CameraShake();
 						EFFECTMANAGER->rockFall(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y, _gMissile->getVPlayergMissile()[i].isLeft);
-						//EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
+						EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
 						missileCount++;
 						break;
 					}
@@ -1338,14 +1338,14 @@ void playerManager::update(void)
 		}
 	}
 
-	//if (IntersectRect(&temp, &_rc8, &_player->getRcRambro()))
-	//{
-	//	_rambroChange = true;
-	//	_playerChange[1]->init(1);
-	//	_player = _playerChange[_rambroChange];
-	//	_rambroFire = true;
-	//	_rambroGrenade = true;
-	//}
+	if (IntersectRect(&temp, &_rc8, &_player->getRcRambro()))
+	{
+		_rambroChange = true;
+		_playerChange[1]->init(1,100.f,1900.f);
+		_player = _playerChange[_rambroChange];
+		_rambroFire = true;
+		_rambroGrenade = true;
+	}
 	_player->setX(tempX);
 	_player->setY(tempY);
 
