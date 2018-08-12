@@ -358,7 +358,7 @@ void enemyManager::soldierDieWithBullet(int i)
 			_vSoldier[i]->getDirection());
 	}
 
-	if (_vSoldier[i]->getHP() == 10)
+	if (_vSoldier[i]->getHP() == 9)
 	// Á×Àº Àû º¤ÅÍ¿¡ ´ã±â
 	this->saveEnemy(SOLDIER, BULLET, _vSoldier[i]->getDirection());
 }
@@ -393,7 +393,7 @@ void enemyManager::soldierDieWithGrenade(int i)
 			_vSoldier[i]->getDirection());
 	}
 	
-	if (_vSoldier[i]->getHP() == 10)
+	if (_vSoldier[i]->getHP() == 9)
 	this->saveEnemy(SOLDIER, GRENADE, _vSoldier[i]->getDirection());
 }
 
@@ -424,7 +424,7 @@ void enemyManager::brovilDieWithBullet()
 	//	EFFECTMANAGER->bloodSplash(_brovil->getX() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameWidth()/2, _brovil->getY() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameHeight()/2,
 	//		_brovil->getDirection());
 	//}
-	if (_brovil->getHP() == 10)
+	if (_brovil->getHP() == 9)
 	// Á×Àº Àû º¤ÅÍ¿¡ ´ã±â
 	this->saveEnemy(BROVIL, BULLET, _brovil->getDirection());
 	_isClear = true;
@@ -454,7 +454,7 @@ void enemyManager::brovilDieWithGrenade()
 	//	EFFECTMANAGER->bloodSplash(_brovil->getX() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameWidth()/2, _brovil->getY() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameHeight()/2,
 	//		_brovil->getDirection());
 	//}
-	if (_brovil->getHP() == 0)
+	if (_brovil->getHP() == 9)
 	// Á×Àº Àû º¤ÅÍ¿¡ ´ã±â
 	this->saveEnemy(BROVIL, GRENADE, _brovil->getDirection());
 	_isClear = true;
@@ -1439,7 +1439,7 @@ void enemyManager::DogDieWithBullet(int i)
 		_vDog[i]->deadMove();
 	}
 		
-	if (_vDog[i]->getHP() == 10)
+	if (_vDog[i]->getHP() == 9)
 	{
 		this->saveEnemy(DOG, BULLET, _vDog[i]->getIsLeft());
 	}
