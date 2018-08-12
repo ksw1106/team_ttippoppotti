@@ -693,7 +693,7 @@ void effects::activateFountain(float x, float y)
 		_vParticle[i].gravity = 0.0f;
 		_vParticle[i].x = x + 32;
 		_vParticle[i].y = y + 32;
-		_vParticle[i].speed = RND->getFromFloatTo(15.0f, 30.0f);
+		_vParticle[i].speed = RND->getFromFloatTo(10.0f, 25.0f);
 		_vParticle[i].index = RND->getInt(3);
 		_animationSpeed = 5;
 		_vParticle[i].count = 0;
@@ -715,7 +715,7 @@ void effects::activateFountainNoCollision(float x, float y)
 		_vParticle[i].gravity = 0.0f;
 		_vParticle[i].x = x + 32;
 		_vParticle[i].y = y + 32;
-		_vParticle[i].speed = RND->getFromFloatTo(10.0f, 20.0f);
+		_vParticle[i].speed = RND->getFromFloatTo(5.0f, 20.0f);
 		_vParticle[i].index = RND->getInt(3);
 		_animationSpeed = 5;
 		_vParticle[i].count = 0;

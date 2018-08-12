@@ -31,6 +31,7 @@ void eBullet::release(void)
 		_vEBullet[i].bulletImage->release();
 		SAFE_DELETE(_vEBullet[i].bulletImage);
 	}
+	_vEBullet.clear();
 }
 
 void eBullet::update(void)
@@ -387,7 +388,12 @@ HRESULT pBullet::init(float range)
 };
 void pBullet::release(void)
 {
-
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		_vBullet[i].bulletImage->release();
+		SAFE_DELETE(_vBullet[i].bulletImage);
+	}
+	_vBullet.clear();
 };
 void pBullet::update(void)
 {
@@ -496,7 +502,14 @@ HRESULT pGrenade::init(float range)
 
 void pGrenade::release(void)
 {
-
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		_vBullet[i].bulletImage->release();
+		SAFE_DELETE(_vBullet[i].bulletImage);
+		_vBullet[i].grenadeImage->release();
+		SAFE_DELETE(_vBullet[i].grenadeImage);
+	}
+	_vBullet.clear();
 }
 
 void pGrenade::update(void)
@@ -686,6 +699,7 @@ void gBullet::release(void)
 		_vBullet[i].bulletImage->release();
 		SAFE_DELETE(_vBullet[i].bulletImage);
 	}
+	_vBullet.clear();
 }
 
 void gBullet::update(void)
@@ -776,6 +790,14 @@ HRESULT gMissile::init(float range)
 
 void gMissile::release(void)
 {
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		_vBullet[i].missileImageLeft->release();
+		SAFE_DELETE(_vBullet[i].missileImageLeft);
+		_vBullet[i].missileImageRight->release();
+		SAFE_DELETE(_vBullet[i].missileImageRight);
+	}
+	_vBullet.clear();
 }
 
 void gMissile::update(void)
@@ -885,6 +907,12 @@ HRESULT xMissile::init(float range)
 
 void xMissile::release(void)
 {
+	for (int i = 0; i < _vBullet.size(); ++i)
+	{
+		_vBullet[i].missileImageRight->release();
+		SAFE_DELETE(_vBullet[i].missileImageRight);
+	}
+	_vBullet.clear();
 }
 
 void xMissile::update(void)

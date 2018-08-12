@@ -8,23 +8,12 @@ void objectA::update()
 	{
 		if (_state == OBJECT_IDLE)
 		{
-			if (_type == 7)
+			if (_type == WOODENBOX)
 				EFFECTMANAGER->woodDebris(_x, _y, RND->getInt(2));
-			else if (_type == 8 || _type == 9)
+			else if (_type == SKULL_DRUMRED || _type == SKULL_DRUMRED)
 			{
-				for (int k = 0; k < _mapData->getObject().size(); k++)
-				{
-					POINT pt;
-					pt.x = (_rc.left + (_rc.right - _rc.left) / 2);
-					pt.y = (_rc.top + (_rc.bottom - _rc.top) / 2) + 68;
-
-					if (PtInRect(&_mapData->getObject()[k]._rc, pt))
-					{
-						_mapData->deleteMapIndexByIndex(k, 5, 5);
-						break;
-					}
-				}
-				EFFECTMANAGER->explosion(_x, _y);
+				_mapData->deleteMapIndexByIndex(_targetMap, 3, 3);
+				EFFECTMANAGER->bigBang(_x, _y);
 				CAMERAMANAGER->CameraShake();
 			}
 		}
@@ -212,7 +201,9 @@ void skullDrumGray::move()
 void prisoner::init()
 {
 	_image = IMAGEMANAGER->findImage("prisoner_inJail");
-	_prisonerFreedImage = IMAGEMANAGER->findImage("prisoner_freed");
+	//_prisonerFreedImage = IMAGEMANAGER->findImage("prisoner_freed");
+	_prisonerFreedImage = IMAGEMANAGER->findImage("hobro");
+	_prisonerFreedFrameImage = IMAGEMANAGER->findImage("hobro_freed");
 	_speed = 8.0f;
 	_gravity = 0.0f;
 	_angle = PI + PI_2;
@@ -251,12 +242,23 @@ void prisoner::idle()
 
 void prisoner::move()
 {
+	int index = 0;
+
 	_image = _prisonerFreedImage;
 	_animationSpeed = 2;
+	_activationRc = RectMake(_x + _image->getWidth() / 3 - 5, _y + _image->getHeight() / 2, _image->getWidth() / 3 + 5, _image->getHeight() / 2);
 	if (_isActived)
 	{
 		for (int i = 0; i < _vElement.size(); i++)
 			FRAMEMANAGER->frameChange(_vElement[i].elementImg, _count, _index, _animationSpeed, _isLeft);
+	}
+	else
+	{
+		_image = _prisonerFreedFrameImage;
+		_isFrameImage = true;
+		FRAMEMANAGER->frameChange(_image, _count, _index, _animationSpeed, _isLeft);
+		if (_image->getFrameX() == _image->getMaxFrameX())
+			_state = OBJECT_DESTROY;
 	}
 }
 

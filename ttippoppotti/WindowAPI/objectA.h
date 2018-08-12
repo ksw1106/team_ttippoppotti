@@ -73,6 +73,7 @@ protected:
 	bool _isFrameImage;
 	int _count, _index;
 	int _animationSpeed;
+	int _targetMap;
 	
 public:
 	vector<tagElement> getVElement() { return _vElement; }
@@ -117,6 +118,8 @@ public:
 	void setIsActived(bool isActived) { _isActived = isActived; }
 	void setIsStart(bool isStart) { _isStart = isStart; }
 	void setType(OBJECT_TYPE type) { _type = type; }
+	void setIndex(int index) { _index = index; }
+	void setTargetMap(int targetMap) { _targetMap = targetMap; }
 	virtual void init() = 0;
 	virtual void update();
 	virtual void render(HDC hdc);
@@ -195,6 +198,7 @@ class prisoner : public objectA
 {
 private:
 	image * _prisonerFreedImage;
+	image * _prisonerFreedFrameImage;
 private:
 	void init();
 	void idle();
@@ -202,6 +206,7 @@ private:
 
 public:
 	image * getPrisonerFreedImage() { return _prisonerFreedImage; }
+	image * getPrisonerFreedFrameImage() { return _prisonerFreedFrameImage; }
 };
 
 class woodenBox : public objectA

@@ -20,7 +20,6 @@ HRESULT enemyManager::init(int stageNum)
 
 	if (stageNum == 1)
 	{
-		this->setDog(500, 1500, 1);
 		//에너미 클래스 객체 생성 및 초기화
 		this->setSoldier(3800, 1000);
 		this->setSoldier(3300, 1200);
@@ -30,8 +29,23 @@ HRESULT enemyManager::init(int stageNum)
 
 		_brovil = new brovil;
 		_brovil->init(3200, 1000);
+	}
+	else if (stageNum == 2)
+	{
+		this->setSoldier(1816,1567);
+		this->setSoldier(1926,1297);
+		this->setSoldier(1956,1017);
+		this->setSoldier(2096, 817);
+		this->setSoldier(2896,1917);
+		this->setSoldier(2886,1497);
+		this->setSoldier(2995,1906);
+		this->setSoldier(3830, 683);
+		this->setDog(1536, 1647, 1);
+		this->setDog(2768, 1308, 1);
+		this->setDog(3738, 1175, 0);
+
 		_boss = new boss;
-		_boss->init(4000.f, 800.f);
+		_boss->init(3270.f, 600.f);
 		_bossBullet = new bossBullet;
 		_bossBullet->init();
 		_bossRocket = new bossRocket;
@@ -39,16 +53,6 @@ HRESULT enemyManager::init(int stageNum)
 		_hpBar = new progressBar;
 		_hpBar->init("enemyImage/bossImage/boss_hpbar_red", "enemyImage/bossImage/boss_hpbar_white", "enemyImage/bossImage/boss_hpbar_black",
 			WINSIZEX / 2 - 1062 / 2, 57, WINSIZEX / 2 - 1062 / 2, 57, WINSIZEX / 2 - 1076 / 2, 50, 1062, 17, 1062, 17, 1076, 30);
-	}
-	else if (stageNum == 2)
-	{
-		//this->setSoldier();
-		//this->setSoldier();
-		//this->setSoldier();
-		//this->setSoldier();
-		//this->setSoldier();
-		//this->setSoldier();
-		//this->setSoldier();
 
 	}
 
@@ -57,11 +61,14 @@ HRESULT enemyManager::init(int stageNum)
 
 void enemyManager::release(void)
 {
-	//릴리즈도 스테이지 따라서 해야합니다.
 	if (_stageNum == 1)
 	{
 		_brovil->release();
 		SAFE_DELETE(_brovil);
+		
+	}
+	else if (_stageNum == 2)
+	{
 		_boss->release();
 		SAFE_DELETE(_boss);
 		_bossBullet->release();
@@ -70,14 +77,12 @@ void enemyManager::release(void)
 		SAFE_DELETE(_bossRocket);
 		_hpBar->release();
 		SAFE_DELETE(_hpBar);
+		_vDog.clear();
+	}
 		
-	}
-	else if (_stageNum == 2)
-	{
-	}
-	
 	_eBullet->release();
 	SAFE_DELETE(_eBullet);
+	_vSoldier.clear();
 	
 }
 
@@ -86,6 +91,14 @@ void enemyManager::update(void)
 	if (_stageNum == 1)
 	{
 		_brovil->update();
+		// 브로빌 픽셀 충돌
+		this->collideBrovilWithPixel();
+		// 브로빌 시체 픽셀 충돌
+		this->collideBrovilCorpseWithPixel();
+
+	}
+	else if (_stageNum == 2)
+	{
 		for (int i = 0; i < _vDog.size(); ++i)
 		{
 			_vDog[i]->update();
@@ -95,10 +108,6 @@ void enemyManager::update(void)
 		_bossRocket->update();
 		_hpBar->update();
 		_hpBar->setGauge(_boss->getHP(), 1000);
-
-	}
-	else if (_stageNum == 2)
-	{
 	}
 
 	_eBullet->update();
@@ -122,12 +131,8 @@ void enemyManager::update(void)
 		
 	// 에너미 픽셀(지형) 충돌
 	this->collideWithPixel();
-	// 브로빌 픽셀 충돌
-	this->collideBrovilWithPixel();
 	// 에너미 시체 픽셀 충돌
 	this->collideWithCorpse();
-	// 브로빌 시체 픽셀 충돌
-	this->collideBrovilCorpseWithPixel();
 	
 	// 에너미 시야와 플레이어 충돌
 	this->collideWithSight();
@@ -141,18 +146,21 @@ void enemyManager::update(void)
 	this->collideBulletWithPixel();
 	// 할아버지 총알 vs 에너미 충돌
 	this->collideWithGBullet();
+	// 할아비 총알 vs 브로빌 충돌
+	this->collideBrovilWithGBullet();
 	
 	if (_stageNum == 1)
 	{
 		// 플레이어 총알과 브로빌 충돌
 		this->collideBrovilwithPBullet();
-		// 도그와 픽셀충돌ㄷ
-		this->collideDogSightWithPlayer();
-		this->collideDogWithPlayer();
-		this->collideDogWithPixel();
-		this->collideDogWithPBullet();
-		this->collideDogCorpseWithPixel();
-
+			
+	}
+	else if (_stageNum == 2)
+	{
+		// 보스 총알, 로켓 발사
+		this->bossBulletFire();
+		this->bossRocketFire();
+		
 		// 보스 총알, 로켓 vs 램브로 충돌
 		this->collideWithBossBullet();
 		this->collideWithBossRocket();
@@ -160,16 +168,18 @@ void enemyManager::update(void)
 		this->PBulletHitBoss();
 		// 보스 로켓 vs 지형충돌
 		this->collideBossRocketWithPixel();
+		
 		// 할아버지 총알 vs 보스
 		this->collideBossWithGBullet();
 		this->collideBossWithGGrenade();
-	
-		// 보스 총알, 로켓 발사
-		this->bossBulletFire();
-		this->bossRocketFire();
-	}
-	else if (_stageNum == 2)
-	{
+		
+		// 도그와 픽셀충돌
+		this->collideDogSightWithPlayer();
+		this->collideDogWithPlayer();
+		this->collideDogWithPixel();
+		this->collideDogWithPBullet();
+		this->collideDogWithGBullet();
+		this->collideDogCorpseWithPixel();
 	}
 
 }
@@ -185,6 +195,10 @@ void enemyManager::render(void)
 	if (_stageNum == 1)
 	{
 		_brovil->render();
+	}
+	
+	if (_stageNum == 2)
+	{
 		for (int i = 0; i < _vDog.size(); ++i)
 		{
 			_vDog[i]->render();
@@ -198,12 +212,7 @@ void enemyManager::render(void)
 			if (_boss->radarIn(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), 1500.f))
 				_hpBar->render();
 		}
-	}
-	
-	if (_stageNum == 2)
-	{
-	}
-		
+	}		
 
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{
@@ -352,6 +361,7 @@ void enemyManager::soldierDieWithBullet(int i)
 			_vSoldier[i]->getDirection());
 	}
 
+	if (_vSoldier[i]->getHP() == 10)
 	// 죽은 적 벡터에 담기
 	this->saveEnemy(SOLDIER, BULLET, _vSoldier[i]->getDirection());
 }
@@ -372,11 +382,12 @@ void enemyManager::soldierDieWithGrenade(int i)
 		_vSoldier[i]->setBodyStatus(ENEMY_FLY_AWAY);
 	}
 
+	
 	if (_vSoldier[i]->getBodyStatus() == ENEMY_DEAD)
 	{
 		_vSoldier[i]->deadMove();
 	}
-
+	
 	// 피터지는 효과
 	if (_isEffect)
 	{
@@ -384,7 +395,8 @@ void enemyManager::soldierDieWithGrenade(int i)
 			_vSoldier[i]->getY() + _vSoldier[i]->getEnemyBodyImage(_vSoldier[i]->getBodyStatus())->getFrameHeight() / 2,
 			_vSoldier[i]->getDirection());
 	}
-
+	
+	if (_vSoldier[i]->getHP() == 10)
 	this->saveEnemy(SOLDIER, GRENADE, _vSoldier[i]->getDirection());
 }
 
@@ -415,6 +427,7 @@ void enemyManager::brovilDieWithBullet()
 	//	EFFECTMANAGER->bloodSplash(_brovil->getX() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameWidth()/2, _brovil->getY() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameHeight()/2,
 	//		_brovil->getDirection());
 	//}
+	if (_brovil->getHP() == 10)
 	// 죽은 적 벡터에 담기
 	this->saveEnemy(BROVIL, BULLET, _brovil->getDirection());
 	_isClear = true;
@@ -444,6 +457,7 @@ void enemyManager::brovilDieWithGrenade()
 	//	EFFECTMANAGER->bloodSplash(_brovil->getX() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameWidth()/2, _brovil->getY() + _brovil->getBrovilImage(_brovil->getBrovilStatus())->getFrameHeight()/2,
 	//		_brovil->getDirection());
 	//}
+	if (_brovil->getHP() == 0)
 	// 죽은 적 벡터에 담기
 	this->saveEnemy(BROVIL, GRENADE, _brovil->getDirection());
 	_isClear = true;
@@ -454,63 +468,182 @@ void enemyManager::collideWithPixel()
 {
 	// 지형과 충돌(픽셀충돌)
 	RECT rc;
-	for (int i = 0; i < _vSoldier.size(); ++i)
+	for (int j = 0; j < _vSoldier.size(); ++j)
 	{
 		float x, y;
-		x = _vSoldier[i]->getX();
-		y = _vSoldier[i]->getY();
+		x = _vSoldier[j]->getX();
+		y = _vSoldier[j]->getY();
 		
 		// 바닥과 충돌
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_BOTTOM))
+		if (COLLISIONMANAGER->pixelCollision(_vSoldier[j]->getRcEnemy(), x, y, _vSoldier[j]->getSpeed(), _vSoldier[j]->getGravity(), ENEMY_BOTTOM))
 		{
-			if (_vSoldier[i]->getBodyStatus() == ENEMY_FLY_AWAY)
-			_vSoldier[i]->setEnemyAngle(2* PI - _vSoldier[i]->getEnemyAngle());
+			if (_vSoldier[j]->getBodyStatus() == ENEMY_FLY_AWAY)
+			_vSoldier[j]->setEnemyAngle(2* PI - _vSoldier[j]->getEnemyAngle());
 
-			_vSoldier[i]->setIsOn(true);			
+			_vSoldier[j]->setIsOn(true);			
 		}
 		else
 		{
-			_vSoldier[i]->setIsOn(false);
+			_vSoldier[j]->setIsOn(false);
 		}
 
 		// 윗 천장과 충돌
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_TOP))
+		if (COLLISIONMANAGER->pixelCollision(_vSoldier[j]->getRcEnemy(), x, y, _vSoldier[j]->getSpeed(), _vSoldier[j]->getGravity(), ENEMY_TOP))
 		{
-			_vSoldier[i]->setEnemyAngle(2 * PI - _vSoldier[i]->getEnemyAngle());	
+			_vSoldier[j]->setEnemyAngle(2 * PI - _vSoldier[j]->getEnemyAngle());
 			
 		}
 		else
 		{
-			_vSoldier[i]->setY(y);
+			_vSoldier[j]->setY(y);
+		}
+		
+		// 적 왼쪽 벽과 충돌
+		if (COLLISIONMANAGER->pixelCollision(_vSoldier[j]->getRcEnemy(), x, y, _vSoldier[j]->getSpeed(), _vSoldier[j]->getGravity(), ENEMY_LEFT))
+		{
+			_vSoldier[j]->setEnemyAngle(PI - _vSoldier[j]->getEnemyAngle());
+			if (_vSoldier[j]->getIsAlive())
+			{
+				_vSoldier[j]->setDirection(0);
+			}
+		}	
+		else
+		{
+			_vSoldier[j]->setX(x);
+		}
+		
+		// 적 오른쪽 벽과 충돌
+		if (COLLISIONMANAGER->pixelCollision(_vSoldier[j]->getRcEnemy(), x, y, _vSoldier[j]->getSpeed(), _vSoldier[j]->getGravity(), ENEMY_RIGHT))
+		{
+			_vSoldier[j]->setEnemyAngle(PI - _vSoldier[j]->getEnemyAngle());
+			if (_vSoldier[j]->getIsAlive())
+			{
+				_vSoldier[j]->setDirection(1);
+			}
+		}	
+		else
+		{
+			_vSoldier[j]->setX(x);
+		}		
+		
+		//플레이어와 오브젝트 충돌
+		//for (int k = 0; k < OBJECTMANAGER->getVObject().size(); k++)
+		//{
+		//	if (OBJECT_DESTROY == OBJECTMANAGER->getVObject()[k]->getState()) continue;
+		//	if (OBJECTMANAGER->getVObject()[k]->getType() == WOODENBOX || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED ||
+		//		OBJECTMANAGER->getVObject()[k]->getType() == PRISONER || OBJECTMANAGER->getVObject()[k]->getType() == AMERICAN_FLAG || OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
+		//	{
+		//		switch (OBJECTMANAGER->getVObject()[k]->getState())
+		//		{
+		//		case OBJECT_IDLE:
+		//			//오브젝트와 플레이어가 충돌했을 때 (수류탄과의 충돌도 똑같이 해줘야 한다! +앵글 바꾸는것 더해줄것)
+		//			if (IntersectRect(&rc, &_vSoldier[j]->getRcEnemy(), &OBJECTMANAGER->getVObject()[k]->getRect()) &&
+		//				OBJECTMANAGER->getVObject()[k]->getType() != AMERICAN_FLAG && OBJECTMANAGER->getVObject()[k]->getType() != HELICOPTER)
+		//			{
+		//				int width = _vSoldier[j]->getRcEnemy().right - _vSoldier[j]->getRcEnemy().left;
+		//				int height = _vSoldier[j]->getRcEnemy().bottom - _vSoldier[j]->getRcEnemy().top;
+		//
+		//				if (_vSoldier[j]->getRcEnemy().left + width / 2 < rc.left)
+		//					_vSoldier[j]->setX(_vSoldier[j]->getX() - (rc.right - rc.left)); //왼 쪽에서 부딪혔을 때
+		//				else if (_vSoldier[j]->getRcEnemy().left + width / 2 > rc.right)
+		//					_vSoldier[j]->setX(_vSoldier[j]->getX() + (rc.right - rc.left)); //오른쪽
+		//
+		//				if (_vSoldier[j]->getRcEnemy().top + height / 2 < rc.top)
+		//					_vSoldier[j]->setY(_vSoldier[j]->getY() - (rc.bottom - rc.top)); //위에서 눌러찍었을 때
+		//				else if (_vSoldier[j]->getRcEnemy().top + height / 2 > rc.bottom)
+		//					_vSoldier[j]->setY(_vSoldier[j]->getY() + (rc.bottom - rc.top));
+		//			}
+		//			if (IntersectRect(&rc, &_vSoldier[j]->getRcEnemy(), &OBJECTMANAGER->getVObject()[k]->getActivationRect()))
+		//			{
+		//				if (OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
+		//					OBJECTMANAGER->getVObject()[k]->setIsActived(true);
+		//				if (OBJECTMANAGER->getVObject()[k]->getType() == AMERICAN_FLAG || OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
+		//					OBJECTMANAGER->getVObject()[k]->setState(OBJECT_MOVE);
+		//			}
+		//			break;
+		//		//case OBJECT_MOVE:
+		//		//	if (OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
+		//		//	{
+		//		//		if (IntersectRect(&rc, &_vSoldier[j]->getRcEnemy(), &OBJECTMANAGER->getVObject()[k]->getRect()))
+		//		//		{
+		//		//			//할아버지 등장 시점 
+		//		//			OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
+		//		//		}
+		//		//		else
+		//		//		{
+		//		//			//OBJECTMANAGER->getVObject()[k]->setGravity(OBJECTMANAGER->getVObject()[k]->getGravity() + 0.55f);
+		//		//			//OBJECTMANAGER->getVObject()[k]->setY(OBJECTMANAGER->getVObject()[k]->getY() + (-sinf(OBJECTMANAGER->getVObject()[k]->getAngle()) * OBJECTMANAGER->getVObject()[k]->getSpeed() + _vObject[i]->getGravity()));
+		//		//			//OBJECTMANAGER->collisionProcess();
+		//		//		}
+		//		//	}
+		//		//	//if (OBJECTMANAGER->getVObject()[k]->getType() == AMERICAN_FLAG)
+		//		//	//{
+		//		//	//	//부활 좌표 저장 시점
+		//		//	//}
+		//		//	//if (OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
+		//		//	//{
+		//		//	//	//헬리콥터 사다리에 매달림
+		//		//	//}
+		//		//	break;
+		//		}
+		//	}
+		//}
+
+		// rambro bullet 
+		for (int i = 0; i < _eBullet->getVEnemybullet().size(); i++)  // 총알이랑 벽이랑 충돌하면 벽 지워주기
+		{
+			if (!_eBullet->getVEnemybullet()[i].isActived)continue;
+			for (int k = 0; k < OBJECTMANAGER->getVObject().size(); k++)
+			{
+				if (OBJECT_DESTROY == OBJECTMANAGER->getVObject()[k]->getState()) continue;
+				if (OBJECTMANAGER->getVObject()[k]->getType() == WOODENBOX || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY ||
+					OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED || OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
+				{
+					switch (OBJECTMANAGER->getVObject()[k]->getState())
+					{
+					case OBJECT_IDLE:
+						//총알과 박스/드럼통/감옥이 부딪혔을 때 (수류탄에도 똑같이 적용해 줄 것!)
+						if (IntersectRect(&rc, &_eBullet->getVEnemybullet()[i].rc, &OBJECTMANAGER->getVObject()[k]->getRect()))
+						{
+							if (OBJECTMANAGER->getVObject()[k]->getType() == WOODENBOX)
+							{
+								EFFECTMANAGER->woodDebris(OBJECTMANAGER->getVObject()[i]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top, _vSoldier[j]->getDirection());
+								OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
+							}
+							else if (OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED)
+							{
+								//for (int k = 0; k < _mapData->getObject().size(); k++)
+								//{
+								//	POINT pt;
+								//	pt.x = (OBJECTMANAGER->getVObject()[k]->getRect().left + (OBJECTMANAGER->getVObject()[k]->getRect().right - OBJECTMANAGER->getVObject()[k]->getRect().left) / 2);
+								//	pt.y = (OBJECTMANAGER->getVObject()[k]->getRect().top + (OBJECTMANAGER->getVObject()[k]->getRect().bottom - OBJECTMANAGER->getVObject()[k]->getRect().top) / 2) + 68;
+								//
+								//	if (PtInRect(&_mapData->getObject()[k]._rc, pt))
+								//	{
+								//		_mapData->deleteMapIndexByIndex(k, 5, 5);
+								//		break;
+								//	}
+								//}
+								EFFECTMANAGER->explosion(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top);
+								CAMERAMANAGER->CameraShake();
+								OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
+							}
+							else if (OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
+							{
+								EFFECTMANAGER->woodDebris(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top, _vSoldier[j]->getDirection());
+								OBJECTMANAGER->getVObject()[k]->setState(OBJECT_MOVE);
+							}
+							EFFECTMANAGER->bulletPuff(_eBullet->getVEnemybullet()[i].x, _eBullet->getVEnemybullet()[i].y);
+							_eBullet->getVEnemybullet()[i].isActived = false;
+						}
+						break;
+					case OBJECT_MOVE:
+						break;
+					}
+				}
+			}
 		}
 
-		// 적 왼쪽 벽과 충돌
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_LEFT))
-		{
-			_vSoldier[i]->setEnemyAngle(PI - _vSoldier[i]->getEnemyAngle());
-			if (_vSoldier[i]->getIsAlive())
-			{
-				_vSoldier[i]->setDirection(0);		
-			}
-		}	
-		else
-		{
-			_vSoldier[i]->setX(x);
-		}
-	
-		// 적 오른쪽 벽과 충돌
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_RIGHT))
-		{
-			_vSoldier[i]->setEnemyAngle(PI - _vSoldier[i]->getEnemyAngle());		
-			if (_vSoldier[i]->getIsAlive())
-			{
-				_vSoldier[i]->setDirection(1);			
-			}
-		}	
-		else
-		{
-			_vSoldier[i]->setX(x);
-		}		
 	}		
 }
 
@@ -699,81 +832,87 @@ void enemyManager::collideBossRocketWithPixel()
 // 보스 움직임 변화 (플레이어 위치에 따라)
 void enemyManager::bossDirChange()
 {	
-	if (!_boss->radarIn(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), 1000.f))
+	if (_playerManager->getPlayer()->getX() < 2300) return;
+
+	if (_boss->getTerrorKopter().x >= 2300 && _boss->getTerrorKopter().x < 3300)
 	{
-		// 플레이어가 보스보다 왼쪽이면 상태 바꿔줌
-		if (_playerManager->getPlayer()->getX() + 30 < _boss->getTerrorKopter().x + _boss->getTerrorKopter().img.bodyImage[_boss->getBodyStatus()]->getFrameWidth() / 2)
+		if (!_boss->radarIn(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), 1000.f))
 		{
-			_boss->setStatus(LEFT_MOVE);
-		}
-		else if (_playerManager->getPlayer()->getX() + 30 > _boss->getTerrorKopter().x + _boss->getTerrorKopter().img.bodyImage[_boss->getBodyStatus()]->getFrameWidth() / 2)
-		{
-			_boss->setStatus(RIGHT_MOVE);
-		}
-	}
-	else
-	{
-		++_count;
-		if (_boss->getStatus() != (LEFT_FIRE_ROCKET && RIGHT_FIRE_ROCKET))
-		{
-			if (_count > 200)
+			// 플레이어가 보스보다 왼쪽이면 상태 바꿔줌
+			if (_playerManager->getPlayer()->getX() + 30 < _boss->getTerrorKopter().x + _boss->getTerrorKopter().img.bodyImage[_boss->getBodyStatus()]->getFrameWidth() / 2)
 			{
-				_count = 0;
-				_choice = RND->getFromIntTo(0, 3);
+				_boss->setStatus(LEFT_MOVE);
+			}
+			else if (_playerManager->getPlayer()->getX() + 30 > _boss->getTerrorKopter().x + _boss->getTerrorKopter().img.bodyImage[_boss->getBodyStatus()]->getFrameWidth() / 2)
+			{
+				_boss->setStatus(RIGHT_MOVE);
 			}
 		}
-		else if (_boss->getStatus() == (LEFT_FIRE_ROCKET || RIGHT_FIRE_ROCKET))
+		else
 		{
-			if (_count > 100)
+			++_count;
+			if (_boss->getStatus() != (LEFT_FIRE_ROCKET && RIGHT_FIRE_ROCKET))
 			{
-				_count = 0;
-				if (_choice == 3 || _choice == 2)
+				if (_count > 200)
 				{
-					_choice = RND->getFromIntTo(0, 1);
-				}
-				else
-				{
+					_count = 0;
 					_choice = RND->getFromIntTo(0, 3);
 				}
 			}
-		}
+			else if (_boss->getStatus() == (LEFT_FIRE_ROCKET || RIGHT_FIRE_ROCKET))
+			{
+				if (_count > 100)
+				{
+					_count = 0;
+					if (_choice == 3 || _choice == 2)
+					{
+						_choice = RND->getFromIntTo(0, 1);
+					}
+					else
+					{
+						_choice = RND->getFromIntTo(0, 3);
+					}
+				}
+			}
 
-		switch (_choice)
-		{
-		case 0:
-		{
-			_boss->setStatus(LEFT_FIRE_BULLET);
-			break;
-		}
-		case 1:
-		{
-			_boss->setStatus(RIGHT_FIRE_BULLET);
-			break;
-		}
-		case 2:
-		{
-			_boss->setStatus(LEFT_FIRE_ROCKET);
-			break;
-		}
-		case 3:
-		{
-			_boss->setStatus(RIGHT_FIRE_ROCKET);
-			break;
-		}
+			switch (_choice)
+			{
+			case 0:
+			{
+				_boss->setStatus(LEFT_FIRE_BULLET);
+				break;
+			}
+			case 1:
+			{
+				_boss->setStatus(RIGHT_FIRE_BULLET);
+				break;
+			}
+			case 2:
+			{
+				_boss->setStatus(LEFT_FIRE_ROCKET);
+				break;
+			}
+			case 3:
+			{
+				_boss->setStatus(RIGHT_FIRE_ROCKET);
+				break;
+			}
 
-		default:
-			break;
-		}
+			default:
+				break;
+			}
 
-		if (_boss->getStatus() == LEFT_FIRE_BULLET || _boss->getStatus() == RIGHT_FIRE_BULLET)
-		{
-			_boss->verticalMove(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), _boss->getTerrorKopter().angle);
+			if (_boss->getStatus() == LEFT_FIRE_BULLET || _boss->getStatus() == RIGHT_FIRE_BULLET)
+			{
+				_boss->verticalMove(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), _boss->getTerrorKopter().angle);
+			}
+			else if (_boss->getStatus() == LEFT_FIRE_ROCKET || _boss->getStatus() == RIGHT_FIRE_ROCKET)
+			{
+				_boss->bombAttack(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), _boss->getTerrorKopter().angle);
+			}
 		}
-		else if (_boss->getStatus() == LEFT_FIRE_ROCKET || _boss->getStatus() == RIGHT_FIRE_ROCKET)
-		{
-			_boss->bombAttack(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), _boss->getTerrorKopter().angle);
-		}
-	}	
+	}
+	
 }
 
 // 보스가 플레이어 총알에 맞음
@@ -811,6 +950,8 @@ void enemyManager::collideWithPBullet()
 			{	
 				if (_vSoldier[i]->getIsApart()) continue;
 				_vSoldier[i]->setDirection(_playerManager->getPBullet()->getVPlayerBullet()[j].isLeft);
+				_vSoldier[i]->setDirection(_playerManager->getPBullet()->getVPlayerBullet()[j].isLeft);
+
 				soldierDieWithBullet(i);
 				
 				break;
@@ -845,7 +986,6 @@ void enemyManager::collideWithPGrenade()
 	}
 }
 
-
 // 할아버지 총알과 에너미 충돌
 void enemyManager::collideWithGBullet()
 {
@@ -858,6 +998,8 @@ void enemyManager::collideWithGBullet()
 			{
 				if (!_playerManager->getGBullet()->getVPlayergBullet()[i].isActived) continue;
 				_playerManager->getGBullet()->getVPlayergBullet()[i].isActived = false;
+				_vSoldier[j]->setDirection(_playerManager->getGBullet()->getVPlayergBullet()[i].isLeft);
+
 				soldierDieWithBullet(j);
 			}
 		}	
@@ -1069,6 +1211,23 @@ void enemyManager::collideBrovilCorpseWithPixel()
 	}	
 }
 
+void enemyManager::collideBrovilWithGBullet()
+{
+	RECT rc;
+	for (int i = 0; i < _playerManager->getGBullet()->getVPlayergBullet().size(); ++i)
+	{
+		if (IntersectRect(&rc, &_playerManager->getGBullet()->getVPlayergBullet()[i].rc, &_brovil->getRcBrovil()))
+		{
+			if (_brovil->getIsApart()) continue;
+			_brovil->setDirection(_playerManager->getGBullet()->getVPlayergBullet()[i].isLeft);
+			
+			this->brovilDieWithBullet();
+		}
+	}
+}
+
+
+// 개의 시야에 플레이어가 보임!
 void enemyManager::collideDogSightWithPlayer()
 {
 	// 충돌처리(플레이어) vs 적 시야	
@@ -1106,6 +1265,7 @@ void enemyManager::collideDogWithPlayer()
 			{
 				_vDog[i]->setIsLeft(true);
 			}
+			//_playerManager
 		}
 		else
 		{
@@ -1198,6 +1358,29 @@ void enemyManager::collideDogWithPBullet()
 	}
 }
 
+// 할아버지 총알이랑 도그랑 충돌
+void enemyManager::collideDogWithGBullet()
+{
+	RECT rc;
+	for (int i = 0; i < _playerManager->getGBullet()->getVPlayergBullet().size(); ++i)
+	{
+		for (int j = 0; j < _vDog.size(); ++j)
+		{
+			if (IntersectRect(&rc, &_playerManager->getGBullet()->getVPlayergBullet()[i].rc, &_vDog[j]->getRC()))
+			{
+				if (_vDog[j]->getIsApart()) continue;
+
+				if (_vDog[j]->getIsLeft() != _playerManager->getPBullet()->getVPlayerBullet()[i].isLeft)
+				{
+					_vDog[j]->setIsLeft(_playerManager->getPBullet()->getVPlayerBullet()[i].isLeft);
+				}
+
+				DogDieWithBullet(j);
+			}
+		}
+	}
+}
+
 void enemyManager::DogDieWithBullet(int i)
 {
 	_vDog[i]->setHP(_vDog[i]->getHP() - 1);
@@ -1217,8 +1400,11 @@ void enemyManager::DogDieWithBullet(int i)
 		_vDog[i]->deadMove();
 	}
 		
-	this->saveEnemy(DOG, BULLET, _vDog[i]->getIsLeft());
-	_isClear = true;
+	if (_vDog[i]->getHP() == 10)
+	{
+		this->saveEnemy(DOG, BULLET, _vDog[i]->getIsLeft());
+	}
+	
 }
 
 void enemyManager::collideDogCorpseWithPixel()

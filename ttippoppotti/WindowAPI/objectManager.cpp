@@ -24,7 +24,7 @@ HRESULT objectManager::init(int num)
 		_fPos[3].x = _mapData->getObject()[137]._rc.left, _fPos[3].y = _mapData->getObject()[137]._rc.top;
 		_fPos[4].x = _mapData->getObject()[457]._rc.left, _fPos[4].y = _mapData->getObject()[457]._rc.top;
 		_fPos[5].x = _mapData->getObject()[462]._rc.left, _fPos[5].y = _mapData->getObject()[462]._rc.top;
-		_fPos[6].x = _mapData->getObject()[365]._rc.left, _fPos[6].y = _mapData->getObject()[365]._rc.top;
+		_fPos[6].x = _mapData->getObject()[465]._rc.left, _fPos[6].y = _mapData->getObject()[465]._rc.top;
 		_fPos[7].x = _mapData->getObject()[435]._rc.left, _fPos[7].y = _mapData->getObject()[435]._rc.top;
 		_fPos[8].x = _mapData->getObject()[444]._rc.left, _fPos[8].y = _mapData->getObject()[444]._rc.top;
 		_fPos[9].x = _mapData->getObject()[410]._rc.left, _fPos[9].y = _mapData->getObject()[410]._rc.top;
@@ -41,7 +41,6 @@ HRESULT objectManager::init(int num)
 			_vObject.push_back(object);
 		}
 
-		//_boxPos[0].x = 800, _boxPos[0].y = 2070;
 		_boxPos[0].x = 2873, _boxPos[0].y = 1220;
 		_boxPos[1].x = 2941, _boxPos[1].y = 1152;
 		_boxPos[2].x = 3009, _boxPos[2].y = 1354;
@@ -66,24 +65,25 @@ HRESULT objectManager::init(int num)
 			_vObject.push_back(object);
 		}
 
-		_drumRedPos[0].x = 3009, _drumRedPos[0].y = 1422;
+		_drumRedPos[0].x = 3009, _drumRedPos[0].y = 1422, drumRedTarget[0] = 433;
 		for (int i = 0; i < 1; i++)
 		{
 			type = SKULL_DRUMRED;
-
+			
 			objectA* object = _factory->createObject(type);
 			object->setPosition(_drumRedPos[i].x, _drumRedPos[i].y);
+			object->setTargetMap(drumRedTarget[i]);
 
 			_vObject.push_back(object);
 		}
-
-		_drumGrayPos[0].x = 2941, _drumGrayPos[0].y = 1220;
+		_drumGrayPos[0].x = 2941, _drumGrayPos[0].y = 1220, drumGrayTarget[0] = 407;
 		for (int i = 0; i < 1; i++)
 		{
 			type = SKULL_DRUMGRAY;
 
 			objectA* object = _factory->createObject(type);
 			object->setPosition(_drumGrayPos[i].x, _drumGrayPos[i].y);
+			object->setTargetMap(drumGrayTarget[i]);
 
 			_vObject.push_back(object);
 		}
@@ -125,10 +125,11 @@ HRESULT objectManager::init(int num)
 			_vObject.push_back(object);
 		}
 
+		_maxFlag = 3;
 		_amFlagPos[0].x = 1853, _amFlagPos[0].y = 1225;
 		_amFlagPos[1].x = 2923, _amFlagPos[1].y = 2037;
-		_amFlagPos[2].x = 3324, _amFlagPos[2].y = 902;
-		for (int i = 0; i < 3; i++)
+		_amFlagPos[2].x = 3324, _amFlagPos[2].y = 907;
+		for (int i = 0; i < _maxFlag; i++)
 		{
 			type = AMERICAN_FLAG;
 
@@ -198,6 +199,9 @@ HRESULT objectManager::init(int num)
 			_vObject[i]->setState(OBJECT_IDLE);
 			_vObject[i]->setMapData(_mapData);
 		}
+
+		_flagCount = 0;
+		_isGameClear = false;
 	}
 	else if(num == 2)
 	{
@@ -305,6 +309,7 @@ HRESULT objectManager::init(int num)
 
 			objectA* object = _factory->createObject(type);
 			object->setPosition(_drumRedPos[i].x, _drumRedPos[i].y);
+			object->setTargetMap(drumRedTarget[i]);
 
 			_vObject.push_back(object);
 		}
@@ -318,6 +323,44 @@ HRESULT objectManager::init(int num)
 
 			objectA* object = _factory->createObject(type);
 			object->setPosition(_drumGrayPos[i].x, _drumGrayPos[i].y);
+			object->setTargetMap(drumGrayTarget[i]);
+
+			_vObject.push_back(object);
+		}
+
+		_prisonerPos[0].x = _mapData->getObject()[210]._rc.left, _prisonerPos[0].y = _mapData->getObject()[210]._rc.top;
+		for (int i = 0; i < 1; i++)
+		{
+			type = PRISONER;
+
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_prisonerPos[i].x, _prisonerPos[i].y - object->getImage()->getHeight());
+			object->init();
+
+			_vObject.push_back(object);
+		}
+
+		_maxFlag = 2;
+		_amFlagPos[0].x = 409, _amFlagPos[0].y = 1008;
+		_amFlagPos[1].x = 2963, _amFlagPos[1].y = 1105;
+		for (int i = 0; i < _maxFlag; i++)
+		{
+			type = AMERICAN_FLAG;
+
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_amFlagPos[i].x, _amFlagPos[i].y);
+			object->init();
+
+			_vObject.push_back(object);
+		}
+
+		_amFlagPolePos[0].x = _mapData->getObject()[595]._rc.left, _amFlagPolePos[0].y = _mapData->getObject()[595]._rc.top;
+		for (int i = 0; i < 1; i++)
+		{
+			type = AMFLAG_POLE;
+
+			objectA* object = _factory->createObject(type);
+			object->setPosition(_amFlagPolePos[i].x, _amFlagPolePos[i].y - object->getImage()->getHeight());
 
 			_vObject.push_back(object);
 		}
@@ -404,9 +447,12 @@ HRESULT objectManager::init(int num)
 			_vObject[i]->setState(OBJECT_IDLE);
 			_vObject[i]->setMapData(_mapData);
 		}
+
+		_flagCount = 0;
+		_isGameClear = false;
 	}
 	
-
+	
 
 	//스테이지에 오브젝트 몇개인지 찾아서 포문돌리자
 	//오브젝트 수만큼 좌표 배열에 넣어두고 밑에 포문 돌려야함
@@ -419,6 +465,7 @@ HRESULT objectManager::init(int num)
 
 void objectManager::release()
 {
+	_vObject.clear();
 }
 
 void objectManager::update()
@@ -430,99 +477,41 @@ void objectManager::update()
 	for (int i = 0; i < _vObject.size(); i++)
 	{
 		if (OBJECT_DESTROY == _vObject[i]->getState()) continue;
-		//if (_vObject[i]->getType() == WOODENBOX || _vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED || 
-		//	_vObject[i]->getType() == PRISONER || _vObject[i]->getType() == AMERICAN_FLAG || _vObject[i]->getType() == HELICOPTER)
-		//{
-		//	switch (_vObject[i]->getState())
-		//	{
-		//	case OBJECT_IDLE:
-		//		if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getRcRambro(), &_vObject[i]->getRect()) && _vObject[i]->getType())
-		//		{
-		//			int width = _playerManager->getPlayer()->getRcRambro().right - _playerManager->getPlayer()->getRcRambro().left;
-		//			int height = _playerManager->getPlayer()->getRcRambro().bottom - _playerManager->getPlayer()->getRcRambro().top;
-		//
-		//			if (_playerManager->getPlayer()->getRcRambro().left + width / 2 < tempRc.left)
-		//				_playerManager->getPlayer()->setX(_playerManager->getPlayer()->getX() - (tempRc.right - tempRc.left));
-		//			else if (_playerManager->getPlayer()->getRcRambro().left + width / 2 > tempRc.right)
-		//				_playerManager->getPlayer()->setX(_playerManager->getPlayer()->getX() + (tempRc.right - tempRc.left));
-		//
-		//			if (_playerManager->getPlayer()->getRcRambro().top + height / 2 < tempRc.top)
-		//				_playerManager->getPlayer()->setY(_playerManager->getPlayer()->getY() - (tempRc.bottom - tempRc.top));
-		//			else if (_playerManager->getPlayer()->getRcRambro().top + height / 2 > tempRc.bottom)
-		//				_playerManager->getPlayer()->setY(_playerManager->getPlayer()->getY() + (tempRc.bottom - tempRc.top));
-		//		}
-		//		for (int j = 0; j < _playerManager->getPBullet()->getVPlayerBullet().size(); j++)
-		//		{
-		//			if (!_playerManager->getPBullet()->getVPlayerBullet()[j].isActived) continue;
-		//			//총알과 박스/드럼통/감옥이 부딪혔을 때
-		//			if (IntersectRect(&tempRc2, &_playerManager->getPBullet()->getVPlayerBullet()[j].rc, &_vObject[i]->getRect()))
-		//			{
-		//				if (_vObject[i]->getType() == WOODENBOX)
-		//				{
-		//					EFFECTMANAGER->woodDebris(_vObject[i]->getRect().left, _vObject[i]->getRect().top, _playerManager->getPlayer()->getIsLeft());
-		//					_vObject[i]->setState(OBJECT_DESTROY);
-		//				}
-		//				else if (_vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED)
-		//				{
-		//					for (int k = 0; k < _mapData->getObject().size(); k++)
-		//					{
-		//						POINT pt;
-		//						pt.x = (_vObject[i]->getRect().left + (_vObject[i]->getRect().right - _vObject[i]->getRect().left) / 2);
-		//						pt.y = (_vObject[i]->getRect().top + (_vObject[i]->getRect().bottom - _vObject[i]->getRect().top) / 2) + 68;
-		//
-		//						if (PtInRect(&_mapData->getObject()[k]._rc, pt))
-		//						{
-		//							_mapData->deleteMapIndexByIndex(k, 5, 5);
-		//							break;
-		//						}
-		//					}
-		//					EFFECTMANAGER->explosion(_vObject[i]->getRect().left, _vObject[i]->getRect().top);
-		//					CAMERAMANAGER->CameraShake();
-		//					_vObject[i]->setState(OBJECT_DESTROY);
-		//				}
-		//				else if (_vObject[i]->getType() == PRISONER)
-		//				{
-		//					EFFECTMANAGER->woodDebris(_vObject[i]->getRect().left, _vObject[i]->getRect().top, _playerManager->getPlayer()->getIsLeft());
-		//					_vObject[i]->setState(OBJECT_MOVE);
-		//				}
-		//				EFFECTMANAGER->bulletPuff(tempRc2.left, tempRc2.top);
-		//				_playerManager->getPBullet()->getVPlayerBullet()[j].isActived = false;
-		//			}
-		//		}
-		//		if (IntersectRect(&tempRc3, &_playerManager->getPlayer()->getRcRambro(), &_vObject[i]->getActivationRect()))
-		//		{
-		//			if (_vObject[i]->getType() == PRISONER)
-		//				_vObject[i]->setIsActived(true);
-		//			if (_vObject[i]->getType() == AMERICAN_FLAG)// || _vObject[i]->getType() == HELICOPTER)
-		//				_vObject[i]->setState(OBJECT_MOVE);
-		//		}
-		//		break;
-		//	case OBJECT_MOVE:
-		//		if (_vObject[i]->getType() == PRISONER)
-		//		{
-		//			if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getRcRambro(), &_vObject[i]->getRect()))
-		//			{
-		//				_vObject[i]->setState(OBJECT_DESTROY);
-		//			}
-		//			else
-		//			{
-		//				_vObject[i]->setGravity(_vObject[i]->getGravity() + 0.55f);
-		//				_vObject[i]->setY(_vObject[i]->getY() + (-sinf(_vObject[i]->getAngle()) * _vObject[i]->getSpeed() + _vObject[i]->getGravity()));
-		//				this->collisionProcess();
-		//			}
-		//		}
-		//		//if (_vObject[i]->getType() == HELICOPTER)
-		//		//{
-		//		//	x = _vObject[i]->getActivationRect().right - (_vObject[i]->getActivationRect().right - _pslayerManager->getPlayer()->getRcRambro().left);
-		//		//	y = _vObject[i]->getActivationRect().bottom - (_vObject[i]->getActivationRect().bottom - _playerManager->getPlayer()->getRcRambro().top);
-		//		//	_playerManager->getPlayer()->setX(x);
-		//		//	_playerManager->getPlayer()->setY(y);
-		//		//}
-		//		break;
-		//	case OBJECT_DESTROY:
-		//		break;
-		//	}
-		//}
+		if (_vObject[i]->getType() == WOODENBOX || _vObject[i]->getType() == SKULL_DRUMGRAY || _vObject[i]->getType() == SKULL_DRUMRED || 
+			_vObject[i]->getType() == PRISONER || _vObject[i]->getType() == AMERICAN_FLAG || _vObject[i]->getType() == HELICOPTER)
+		{
+			switch (_vObject[i]->getState())
+			{
+			case OBJECT_IDLE:
+				//if (IntersectRect(&tempRc, &_playerManager->getPlayer()->getRcRambro(), &_vObject[i]->getRect()) && _vObject[i]->getType())
+				//{
+				//	int width = _playerManager->getPlayer()->getRcRambro().right - _playerManager->getPlayer()->getRcRambro().left;
+				//	int height = _playerManager->getPlayer()->getRcRambro().bottom - _playerManager->getPlayer()->getRcRambro().top;
+				//
+				//	if (_playerManager->getPlayer()->getRcRambro().left + width / 2 < tempRc.left)
+				//		_playerManager->getPlayer()->setX(_playerManager->getPlayer()->getX() - (tempRc.right - tempRc.left));
+				//	else if (_playerManager->getPlayer()->getRcRambro().left + width / 2 > tempRc.right)
+				//		_playerManager->getPlayer()->setX(_playerManager->getPlayer()->getX() + (tempRc.right - tempRc.left));
+				//
+				//	if (_playerManager->getPlayer()->getRcRambro().top + height / 2 < tempRc.top)
+				//		_playerManager->getPlayer()->setY(_playerManager->getPlayer()->getY() - (tempRc.bottom - tempRc.top));
+				//	else if (_playerManager->getPlayer()->getRcRambro().top + height / 2 > tempRc.bottom)
+				//		_playerManager->getPlayer()->setY(_playerManager->getPlayer()->getY() + (tempRc.bottom - tempRc.top));
+				//}
+				if (_vObject[i]->getType() == HELICOPTER)
+				{
+					if (_flagCount >= _maxFlag)
+					{
+						_isGameClear = true;
+						_vObject[i]->setState(OBJECT_MOVE);
+					}
+				}
+			case OBJECT_MOVE:
+				break;
+			case OBJECT_DESTROY:
+				break;
+			}
+		}
 		_vObject[i]->update();
 	}
 }
@@ -537,6 +526,9 @@ void objectManager::render(HDC hdc)
 		_vObject[i]->render(hdc);
 		if (KEYMANAGER->isToggleKey('2'))
 		{
+			if (_vObject[i]->getType() == HELICOPTER)
+				Rectangle(hdc, _vObject[i]->getActivationRect().left - CAMERAMANAGER->getCamera().left, _vObject[i]->getActivationRect().top - CAMERAMANAGER->getCamera().top, _vObject[i]->getActivationRect().right - CAMERAMANAGER->getCamera().left, _vObject[i]->getActivationRect().bottom - CAMERAMANAGER->getCamera().top);
+			
 			char str[64];
 			sprintf_s(str, "%d", i);
 			TextOut(hdc, _vObject[i]->getX() + 5 - CAMERAMANAGER->getCamera().left, _vObject[i]->getY() - 10 - CAMERAMANAGER->getCamera().top, str, strlen(str));

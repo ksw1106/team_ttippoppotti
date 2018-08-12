@@ -28,8 +28,15 @@ class objectManager : public singletonBase<objectManager>
 	fPos _enemyFlagPos[2];
 	int drumRedTarget[6];
 	int drumGrayTarget[3];
+	int _flagCount;
+	int _maxFlag;
+	bool _isGameClear;
 public:
 	vector<objectA*> getVObject() { return _vObject; }
+	int getFlagCount() { return _flagCount; }
+	bool getGameClear() { return _isGameClear; }
+
+	void setFlagCount(int flagCount) { _flagCount = flagCount; }
 	void setMapData(mapData* mapData) { _mapData = mapData;	}
 	void setPlayerManager(playerManager* playerManager) { _playerManager = playerManager; }
 	void collisionProcess();
