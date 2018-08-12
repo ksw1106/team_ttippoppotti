@@ -146,11 +146,11 @@ void enemyManager::update(void)
 	this->collideBulletWithPixel();
 	// 할아버지 총알 vs 에너미 충돌
 	this->collideWithGBullet();
-	// 할아비 총알 vs 브로빌 충돌
-	this->collideBrovilWithGBullet();
 	
 	if (_stageNum == 1)
 	{
+		// 할아비 총알 vs 브로빌 충돌
+		this->collideBrovilWithGBullet();
 		// 플레이어 총알과 브로빌 충돌
 		this->collideBrovilwithPBullet();
 			
