@@ -21,8 +21,8 @@ public:
 
 	vector<mapObject>& getObject() { return _vObject; }
 	void setObject(mapObject obj, int index) { _vObject[index] = obj; }
-	void setObjectPixel(string objectPixel) { _backGround = IMAGEMANAGER->findImage(objectPixel); }
-	void setBackGroundMap(string backGroundMap) { _pixel = IMAGEMANAGER->findImage(backGroundMap); }
+	void setObjectPixel(image* objectPixel) { _backGround = objectPixel; }
+	void setBackGroundMap(image* backGroundMap) { _pixel = backGroundMap; }
 
 	void stage1_setting();
 	void stage2_setting();

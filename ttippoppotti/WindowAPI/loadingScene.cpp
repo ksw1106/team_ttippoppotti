@@ -30,7 +30,7 @@ void loadingScene::update(void)
 	if (_loading->loadingDone())
 	{
 		SCENEMANAGER->getCurrentScene()->release();
-		SCENEMANAGER->loadScene("½ºÅ×ÀÌÁö¾À");
+		SCENEMANAGER->loadScene("½ºÅ×ÀÌÁö2¾À");
 	}
 
 	//if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
