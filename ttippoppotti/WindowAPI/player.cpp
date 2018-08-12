@@ -18,6 +18,8 @@ HRESULT player::init(int num)
 		_ramBro[LADDER] = IMAGEMANAGER->findImage("rambro_ladder");
 		_ramBro[FIRE] = IMAGEMANAGER->findImage("rambro_fire");
 		//_ramBro[ROLL] = IMAGEMANAGER->addFrameImage("broforce_roll", "broforce_roll.bmp", 936, 136, 13, 2, true, RGB(255, 0, 255));
+		_rambroGun[RUN_GUN] = IMAGEMANAGER->findImage("rambro_runGun");
+		//_rambroGun[FIRE_GUN] = IMAGEMANAGER->findImage("rambro_fireGun");
 	}
 	else
 	{
@@ -33,11 +35,17 @@ HRESULT player::init(int num)
 		_ramBro[LADDER] = IMAGEMANAGER->findImage("chuck_ladder");
 		_ramBro[FIRE] = IMAGEMANAGER->findImage("chuck_fire");
 		//_chuck[ROLL] = IMAGEMANAGER->findImage("chuck_roll");
+		_rambroGun[RUN_GUN] = IMAGEMANAGER->findImage("chuck_runGun");
 	}
 	
 	_flash = IMAGEMANAGER->findImage("rambro_flash");
+	_rambroUi = IMAGEMANAGER->findImage("rambro_ui");
+	_rambroUiGrenade = IMAGEMANAGER->findImage("rambro_ui_grenade");
+	_rambroUiImage = IMAGEMANAGER->findImage("rambro_ui_image");
+	_rambroUiImageRun = IMAGEMANAGER->findImage("rambro_ui_image_run");
 
 	_state = IDLE;
+	_gun = RUN_GUN;
 	_x = 100.f;
 	_y = 1900.f;
 	_oldX = _x;
@@ -57,6 +65,9 @@ HRESULT player::init(int num)
 	_rambroChange = false;
 
 	_flashCount = _flashIndex = _flashSpeed = 0;
+	_uiCount = _uiIndex = _uiSpeed = 0;
+	_runCount = 100000;
+	_runIndex = _runSpeed = 0;
 
 	_rcRambro = RectMake(_x, _y, _width, _height);
 	_rcFlashRight = RectMake(_x + 50, _y, 30, 30);
@@ -97,9 +108,14 @@ void player::update(void)
 	_gravity += 0.98f;
 
 	FRAMEMANAGER->frameChange(_ramBro[_state], _count, _index, _animationSpeed, _isLeft);
-	
+	FRAMEMANAGER->frameChange(_rambroGun[_gun], _gunCount, _gunIndex, _gunSpeed, _isLeft);
 	
 	FRAMEMANAGER->frameChange(_flash, _flashCount, _flashIndex, _flashSpeed, _isLeft);				// ÃÑ±¸ ¾Õ¿¡ ¹ÝÂ¦ÀÌ
+
+	FRAMEMANAGER->frameChange(_rambroUi, _uiCount, _uiIndex, _uiSpeed, _isLeft);
+	FRAMEMANAGER->frameChange(_rambroUiGrenade, _uiCount, _uiIndex, _uiSpeed, _isLeft);
+	FRAMEMANAGER->frameChange(_rambroUiImage, _uiCount, _uiIndex, _uiSpeed, _isLeft);
+	FRAMEMANAGER->frameChange(_rambroUiImageRun, _runCount, _runIndex, _runSpeed, _isLeft);
 
 }
 
@@ -107,25 +123,58 @@ void player::render(void)
 {
 	if (_state == HANG_FRONT_HOLD)
 	{
-		_ramBro[_state + _isCollision]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+		_ramBro[_state + _isCollision]->frameRender(getMemDC(), _x-30 - CAMERAMANAGER->getCamera().left, _y-25 - CAMERAMANAGER->getCamera().top);
 	}
 	else
 	{
-		_ramBro[_state]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top);
+		_ramBro[_state]->frameRender(getMemDC(), _x-34 - CAMERAMANAGER->getCamera().left, _y-25 - CAMERAMANAGER->getCamera().top);
+	}
+	if (_state == RUN || _state==JUMP)
+	{
+		if (!_isLeft)
+		{
+			_rambroGun[_gun]->frameRender(getMemDC(), _x  - CAMERAMANAGER->getCamera().left, _y + 27 - CAMERAMANAGER->getCamera().top);
+		}
+		else
+		{
+			_rambroGun[_gun]->frameRender(getMemDC(), _x -13 - CAMERAMANAGER->getCamera().left, _y + 27 - CAMERAMANAGER->getCamera().top);
+		}
+	}
+	if (_state == IDLE)
+	{
+		if (!_isLeft)
+		{
+			_rambroGun[_gun]->frameRender(getMemDC(), _x  - CAMERAMANAGER->getCamera().left, _y + 30 - CAMERAMANAGER->getCamera().top);
+		}
+		else
+		{
+			_rambroGun[_gun]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y + 33 - CAMERAMANAGER->getCamera().top);
+		}
 	}
 
 	if (_isFlash)
 	{
 		if (!_isLeft)
 		{
-			_flash->frameRender(getMemDC(), _x + 72 - CAMERAMANAGER->getCamera().left, _y + 26 - CAMERAMANAGER->getCamera().top);
+			_flash->frameRender(getMemDC(), _x + 40 - CAMERAMANAGER->getCamera().left, _y + 3 - CAMERAMANAGER->getCamera().top);
 		}	
 		else
 		{
-			_flash->frameRender(getMemDC(), _x - 38 - CAMERAMANAGER->getCamera().left, _y + 26 - CAMERAMANAGER->getCamera().top);
+			_flash->frameRender(getMemDC(), _x - 60 - CAMERAMANAGER->getCamera().left, _y + 3 - CAMERAMANAGER->getCamera().top);
 		}
 	}
 	
+	_rambroUi->frameRender(getMemDC(), 0, 930);
+	_rambroUiGrenade->frameRender(getMemDC(), 130, 955);
+	
+	if (_state == RUN)
+	{
+		_rambroUiImageRun->frameRender(getMemDC(), 0, 882);
+	}
+	else
+	{
+		_rambroUiImage->frameRender(getMemDC(), 0, 882);
+	}
 
 	//RectangleMake(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y- CAMERAMANAGER->getCamera().top, 60, 70);
 }

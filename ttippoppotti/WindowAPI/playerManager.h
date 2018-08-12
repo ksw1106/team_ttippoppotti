@@ -50,6 +50,8 @@ private:
 	int _grenadeCount;
 	bool _isGrenade;
 
+	bool _isGameover;
+
 	bool _xMissileCollision;
 	bool _xMissileColl;
 
@@ -64,6 +66,8 @@ public:
 	gBullet* getGBullet() { return _gBullet; }
 	gMissile* getGMissile() { return _gMissile; }
 	xMissile* getXMissile() { return _xMissile; }
+
+	bool getIsGameover() { return _isGameover; }
 
 	HRESULT init(int num);
 	void release(void);
