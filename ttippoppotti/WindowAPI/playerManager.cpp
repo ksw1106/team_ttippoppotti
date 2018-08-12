@@ -1127,7 +1127,7 @@ void playerManager::update(void)
 			//	_pGrenade->getVPlayerGrenade()[i].isActived = false;
 		}
 	}
-	if (_missileCount >= 270)
+	if (_missileCount >= 200)
 	{
 		for (int i = 0; i < _xMissile->getVPlayerxMissile().size(); i++)
 		{
@@ -1245,14 +1245,14 @@ void playerManager::update(void)
 		}
 	}
 
-	//if (IntersectRect(&temp, &_rc8, &_player->getRcRambro()))
-	//{
-	//	_rambroChange = true;
-	//	_playerChange[1]->init(1);
-	//	_player = _playerChange[_rambroChange];
-	//	_rambroFire = true;
-	//	_rambroGrenade = true;
-	//}
+	if (IntersectRect(&temp, &_rc8, &_player->getRcRambro()))
+	{
+		_rambroChange = true;
+		_playerChange[1]->init(1);
+		_player = _playerChange[_rambroChange];
+		_rambroFire = true;
+		_rambroGrenade = true;
+	}
 	_player->setX(tempX);
 	_player->setY(tempY);
 

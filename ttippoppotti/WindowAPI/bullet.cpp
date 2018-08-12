@@ -1005,7 +1005,9 @@ void xMissile::move()
 		}
 		if (_vBullet[i].isCollision)
 		{
-			EFFECTMANAGER->missileTrail(_vBullet[i].x, _vBullet[i].y, _vBullet[i].isLeft);
+			EFFECTMANAGER->playMissileTrail("missileTrail" + to_string(i + 1), _vBullet[i].x, _vBullet[i].y, _vBullet[i].isLeft);
+			//EFFECTMANAGER->missileTrail(_vBullet[i].x, _vBullet[i].y, _vBullet[i].isLeft);
+			//EFFECTMANAGER->missilePuff(_vBullet[i].x, _vBullet[i].y, 20, _vBullet[i].isLeft);
 		}
 	}
 }

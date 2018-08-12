@@ -68,6 +68,8 @@ HRESULT effectManager::init(void)
 	addEffect("missileTrail1", "missileTrail_white", 3, 1, true);
 	addEffect("missileTrail2", "missileTrail_blue", 3, 1, true);
 	addEffect("missileTrail3", "missileTrail_red", 3, 1, true);
+	addEffect("missileTrail4", "missileTrail_white", 3, 1, true);
+	addEffect("missileTrail5", "missileTrail_blue", 3, 1, true);
 
 	_count = 0;
 	_isExplosion = _isGrenadePuff = _isBigBang = false;
