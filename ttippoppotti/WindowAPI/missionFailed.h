@@ -10,6 +10,7 @@ class missionFailed : public gameNode
 	int _x, _targetX;
 
 	int _count;
+	int _renderCount;
 public:
 	void setCurrentStage(int currentStage) { _currentStage = currentStage; }
 

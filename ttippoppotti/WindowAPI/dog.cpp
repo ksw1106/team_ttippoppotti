@@ -120,17 +120,21 @@ void dog::render(void)
 		}
 	}
 
-	// 플레이어 발견했을때, 느낌표 말풍선!
-	if (_isUncovered && _warnFrameIndex < _warnSign->getMaxFrameX())
+	if (_dog.isAlive)
 	{
-		_warnSign->frameRender(getMemDC(), _dog.x + 10 - CAMERAMANAGER->getCamera().left, _dog.y - 50 - CAMERAMANAGER->getCamera().top, _warnSign->getFrameX(), _warnSign->getFrameY());
-	}
+		// 플레이어 발견했을때, 느낌표 말풍선!
+		if (_isUncovered && _warnFrameIndex < _warnSign->getMaxFrameX())
+		{
+			_warnSign->frameRender(getMemDC(), _dog.x + 10 - CAMERAMANAGER->getCamera().left, _dog.y - 50 - CAMERAMANAGER->getCamera().top, _warnSign->getFrameX(), _warnSign->getFrameY());
+		}
 
-	// 적 (아군) 시체를 발견했을때 물음표 말풍선!
-	if (_isStrange && _doubtFrameIndex < _doubtSign->getMaxFrameX())
-	{
-		_doubtSign->frameRender(getMemDC(), _dog.x + 10 - CAMERAMANAGER->getCamera().left, _dog.y - 50 - CAMERAMANAGER->getCamera().top, _doubtSign->getFrameX(), _doubtSign->getFrameY());
+		// 적 (아군) 시체를 발견했을때 물음표 말풍선!
+		if (_isStrange && _doubtFrameIndex < _doubtSign->getMaxFrameX())
+		{
+			_doubtSign->frameRender(getMemDC(), _dog.x + 10 - CAMERAMANAGER->getCamera().left, _dog.y - 50 - CAMERAMANAGER->getCamera().top, _doubtSign->getFrameX(), _doubtSign->getFrameY());
+		}
 	}
+	
 }
 
 void dog::corpseInit()

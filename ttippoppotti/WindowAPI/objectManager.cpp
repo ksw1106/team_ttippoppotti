@@ -504,6 +504,10 @@ void objectManager::update()
 					{
 						_vObject[i]->setIsStart(true);
 					}
+					if (KEYMANAGER->isOnceKeyDown('N'))
+					{
+						_vObject[i]->setState(OBJECT_MOVE);
+					}
 					if (_flagCount >= _maxFlag)
 					{
 						_isGameClear = true;
@@ -511,17 +515,33 @@ void objectManager::update()
 					if (_isGameClear && _isDead)
 						_vObject[i]->setIsStart(true);
 				}
-				//if (_vObject[i]->getType() == WOODENBOX || _vObject[i]->getType() == PRISONER)
-				//{
-				//	_vObject[i]->setGravity(_vObject[i]->getGravity() + 0.55f);
-				//	_vObject[i]->setSpeed(8.0f);
-				//	_vObject[i]->setY(_vObject[i]->getY() - sinf(-PI_2) * _vObject[i]->getSpeed() + _vObject[i]->getGravity());
-				//	if (_vObject[i]->getType() == PRISONER)
-				//	{
-				//		;
-				//	}
-				//}
+				if (_vObject[i]->getType() == PRISONER) // ||_vObject[i]->getType() == WOODENBOX)
+				{
+					_vObject[i]->setOldY(_vObject[i]->getY());
+					_vObject[i]->setGravity(_vObject[i]->getGravity() + 0.55f);
+					_vObject[i]->setSpeed(8.0f);
+					_vObject[i]->setY(_vObject[i]->getY() - sinf(-PI_2) * _vObject[i]->getSpeed() + _vObject[i]->getGravity());
+					this->collisionProcess();
+					if (_vObject[i]->getType() == PRISONER)
+					{
+						if (_vObject[i]->getY() >= _vObject[i]->getOldY() + 5)
+						{
+							_vObject[i]->setGravity(0);
+							_vObject[i]->setState(OBJECT_MOVE);
+							_vObject[i]->setIsActived(true);
+							EFFECTMANAGER->woodDebris(_vObject[i]->getX(), _vObject[i]->getY(), true);
+						}
+					}
+				}
 			case OBJECT_MOVE:
+				if (_vObject[i]->getType() == PRISONER) // ||_vObject[i]->getType() == WOODENBOX)
+				{
+					_vObject[i]->setOldY(_vObject[i]->getY());
+					_vObject[i]->setGravity(_vObject[i]->getGravity() + 0.55f);
+					_vObject[i]->setSpeed(8.0f);
+					_vObject[i]->setY(_vObject[i]->getY() - sinf(-PI_2) * _vObject[i]->getSpeed() + _vObject[i]->getGravity());
+					this->collisionProcess();
+				}
 				break;
 			case OBJECT_DESTROY:
 				break;

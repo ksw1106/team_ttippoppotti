@@ -102,12 +102,12 @@ void timeManager::render(HDC hdc)
 	SetTextColor(hdc, RGB(0, 0, 255));
 
 	//FPS
-	sprintf(str, "FPS: %d", _frameRate);
-	TextOut(hdc, 0, 0, str, strlen(str));
-	//전체시간
-	sprintf(str, "WorldTime: %.2f", _worldTime);
-	TextOut(hdc, 0, 20, str, strlen(str));
-	//한프레임당 경과시간
-	sprintf(str, "ElapsedTime: %.4f", _timeElapsed);
-	TextOut(hdc, 0, 40, str, strlen(str));
+//	sprintf(str, "FPS: %d", _frameRate);
+//	TextOut(hdc, 0, 0, str, strlen(str));
+//	//전체시간
+//	sprintf(str, "WorldTime: %.2f", _worldTime);
+//	TextOut(hdc, 0, 20, str, strlen(str));
+//	//한프레임당 경과시간
+//	sprintf(str, "ElapsedTime: %.4f", _timeElapsed);
+//	TextOut(hdc, 0, 40, str, strlen(str));
 }

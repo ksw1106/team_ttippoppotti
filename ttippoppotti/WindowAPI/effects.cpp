@@ -102,8 +102,8 @@ void effects::activateCartridge(float x, float y, bool isLeft)
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
-		_vParticle[i].x = x + 130 / 2;
-		_vParticle[i].y = y + 105 / 2;
+		_vParticle[i].x = x + 130 / 4;
+		_vParticle[i].y = y + 105 / 4;
 		if (isLeft)
 			_vParticle[i].angle = PI / 3;
 		else //플레이어가 오른쪽을 바라보고 있을 때

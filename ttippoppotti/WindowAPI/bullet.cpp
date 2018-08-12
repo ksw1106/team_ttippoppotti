@@ -254,9 +254,9 @@ void bossRocket::render(void)
 		}
 	}
 
-	char str[32];
-	sprintf(str, "%d", _bossRocket[0].frameIndex2);
-	TextOut(getMemDC(), 100, 500, str, strlen(str));
+	//char str[32];
+	//sprintf(str, "%d", _bossRocket[0].frameIndex2);
+	//TextOut(getMemDC(), 100, 500, str, strlen(str));
 }
 
 void bossRocket::fire(int x, int y, int fireSpeed, bool isLeft)

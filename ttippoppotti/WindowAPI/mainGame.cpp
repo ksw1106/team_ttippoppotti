@@ -16,6 +16,7 @@ HRESULT mainGame::init(void)
 	SCENEMANAGER->addScene("½ºÅ×ÀÌÁö2¾À", new stage2Scene);
 	SCENEMANAGER->addScene("·Îµù¾À", new loadingScene);
 	SCENEMANAGER->addScene("Å¸ÀÌÆ²¾À", new titleScene);
+	SCENEMANAGER->addScene("¿£µù¾À", new endingScene);
 	/*ÇöÀç¾À ¼³Á¤*/
 	SCENEMANAGER->loadScene("·Îµù¾À");
 	

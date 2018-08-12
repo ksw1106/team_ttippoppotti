@@ -7,7 +7,7 @@ HRESULT missionFailed::init(void)
 	_blackWindow = new image;
 	_blackWindow->init(WINSIZEX, WINSIZEY);
 	
-	_count = 0;
+	_count = _renderCount = 0;
 	_alpha = 0;
 	_targetX = WINSIZEX / 2 - _missionFailed->getWidth() / 2;
 	_x = WINSIZEX;
@@ -32,17 +32,23 @@ void missionFailed::update(void)
 	{
 		_alpha = 255;
 	}
-
-	_count++;
-	if (_count >= 100)
+	_renderCount++;
+	if (_renderCount >= 50)
 	{
-		SCENEMANAGER->getCurrentScene()->release();
-		SCENEMANAGER->getCurrentScene()->init();
+		_count++;
+		if (_count >= 100)
+		{
+			SCENEMANAGER->getCurrentScene()->release();
+			SCENEMANAGER->getCurrentScene()->init();
+		}
 	}
 }
 
 void missionFailed::render(void)
 {
-	_blackWindow->alphaRender(getMemDC(), _alpha);
-	_missionFailed->render(getMemDC(), _x, WINSIZEY / 2 - _missionFailed->getHeight() / 2);
+	if (_renderCount >= 50)
+	{
+		_blackWindow->alphaRender(getMemDC(), _alpha);
+		_missionFailed->render(getMemDC(), _x, WINSIZEY / 2 - _missionFailed->getHeight() / 2);
+	}
 }

@@ -156,6 +156,7 @@
     <ClInclude Include="dog.h" />
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="effects.h" />
+    <ClInclude Include="endingScene.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyManager.h" />
     <ClInclude Include="frameManager.h" />
@@ -199,6 +200,7 @@
     <ClCompile Include="dog.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="effects.cpp" />
+    <ClCompile Include="endingScene.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyManager.cpp" />
     <ClCompile Include="frameManager.cpp" />
