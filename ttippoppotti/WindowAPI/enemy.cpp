@@ -64,7 +64,7 @@ HRESULT enemy::initSoldier(float x, float y)
 	_isApart = false;
 	_rcEnemy = RectMake(_x, _y, _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());
 
-	_rcMoveRange = RectMake(_x - 300, _y, 600 + _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());
+	_rcMoveRange = RectMake(_x - 150, _y, 300 + _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());
 	
 	return S_OK;
 }
@@ -84,14 +84,14 @@ void enemy::release(void)
 
 void enemy::update(void)
 {			
-	// 프레임 애니메이션
-	this->frameAnimate();
 	// 에너미 움직임 변화
 	this->changeStatus();
 	// 밑에 없으면 떨어짐
 	this->fall();
 	// 에이아이 움직임 랜덤조절
 	this->controlAI();
+	// 프레임 애니메이션
+	this->frameAnimate();
 	
 	++_fireCount;
 	if (_fireCount > 1000) _fireCount = 0;
@@ -224,14 +224,14 @@ void enemy::walk()
 		if (_rcMoveRange.left < _x)
 			_x -= _speed / 3;
 		else
-			_isLeft = 1;
+			_isLeft = false;
 	}
 	else
 	{
 		if (_rcMoveRange.right > _x + _enemyImage.bodyImage[_enemyStatus]->getFrameWidth())
 			_x += _speed / 3;
 		else
-			_isLeft = 0;
+			_isLeft = true;
 	}
 }
 
@@ -244,18 +244,17 @@ void enemy::controlAI()
 	else
 	{
 		++_count;
-		if (_count % 30 == 0)
+		if (_count % 15 == 0)
 		{
-			_phase = RND->getFromIntTo(0, 2);
-			_direction = RND->getFromIntTo(0,1);
-			if (_direction == 1)
-			{
-				_isLeft = true;
-			}
+			if (_phase != 4)
+				_phase = RND->getFromIntTo(0, 4);
 			else
-			{
-				_isLeft = false;
-			}
+				_phase = RND->getFromIntTo(0, 3);
+			
+			_direction = RND->getFromIntTo(0,1);
+			if (_direction == 0) _isLeft = true;
+			else _isLeft = false;
+
 		}
 		
 		switch (_phase)
@@ -272,15 +271,26 @@ void enemy::controlAI()
 			}
 			case 2:
 			{
+				_enemyStatus = ENEMY_IDLE;
+				break;
+			}
+			case 3:
+			{
+				_enemyStatus = ENEMY_IDLE;
+				break;
+			}
+			case 4:
+			{
 				_enemyStatus = ENEMY_WALK;
 				break;
 			}
+
 		default:
 			break;
 		}
 	}
 
-	if (_count >= 500) _count = 0;	
+	if (_count > 500) _count = 0;	
 }
 
 // 에너미 움직임 변화
@@ -542,7 +552,7 @@ void enemy::frameAnimate()
 		_enemyImage.speed = 3;
 		FRAMEMANAGER->frameChange(_enemyImage.bodyImage[ENEMY_FLY_AWAY], _enemyImage.count, _enemyImage.bodyImageIndex, _enemyImage.speed, _isLeft);
 	}
-	else
+	else // 걷거나 아이들상태일때
 	{
 		_enemyImage.speed = 8;
 		FRAMEMANAGER->frameChange(_enemyImage.bodyImage[_enemyStatus], _enemyImage.count, _enemyImage.bodyImageIndex, _enemyImage.speed, _isLeft);

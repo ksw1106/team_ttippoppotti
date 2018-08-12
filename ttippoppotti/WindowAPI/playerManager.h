@@ -50,6 +50,8 @@ private:
 	int _grenadeCount;
 	bool _isGrenade;
 
+	bool _isGameover;
+
 	bool _xMissileCollision;
 	bool _xMissileColl;
 
@@ -65,6 +67,8 @@ public:
 	gMissile* getGMissile() { return _gMissile; }
 	xMissile* getXMissile() { return _xMissile; }
 
+	bool getIsGameover() { return _isGameover; }
+
 	HRESULT init(int num);
 	void release(void);
 	void update(void);
@@ -74,6 +78,7 @@ public:
 	void rambroCollision();
 	void chuckCollision();
 	void p1Bubble();
+	void start();
 
 	playerManager();
 	~playerManager();
