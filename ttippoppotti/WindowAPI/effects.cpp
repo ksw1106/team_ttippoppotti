@@ -18,6 +18,7 @@ HRESULT effects::init(const char * imageName, int particleMax, bool isFrameImg)
 	_alpha = 0;
 
 	_isParabola = false;
+	_isParabolaNoCollision = false;
 	_isExplosion = false;
 	_isStaticAnim = false;
 	_isFlyingFlies = false;
@@ -33,10 +34,10 @@ HRESULT effects::init(const char * imageName, int particleMax, bool isFrameImg)
 		ZeroMemory(&particle, sizeof(tagParticle));
 		particle.particleImg = IMAGEMANAGER->findImage(_imageName);
 		particle.isFrameImg = isFrameImg;
-	
+
 		_vParticle.push_back(particle);
 	}
-	
+
 	return S_OK;
 }
 
@@ -51,6 +52,7 @@ void effects::update(void)
 		this->boomExplosion();
 		this->boomStaticAnim();
 		this->boomParabola();
+		this->boomParabolaNoCollision();
 		this->boomBigBang();
 		this->boomMissileTrail();
 		this->boomMissilePuff();
@@ -69,7 +71,7 @@ void effects::render(void)
 {
 	if (!_isRunning) return;
 	for (int i = 0; i < _vParticle.size(); ++i)
-	//for (int i = _vParticle.size() - 1; i >= 0; --i)
+		//for (int i = _vParticle.size() - 1; i >= 0; --i)
 	{
 		if (CAMERAMANAGER->CameraIn(_vParticle[i].rc))
 		{
@@ -77,14 +79,14 @@ void effects::render(void)
 
 			if (_vParticle[i].isFrameImg)
 			{
-				if (_isAlphaImg)
+				if (_vParticle[i].isAlphaImg)
 					_vParticle[_vParticle.size() - 1 - i].particleImg->alphaFrameRender(getMemDC(), _vParticle[i].rc.left - CAMERAMANAGER->getCamera().left, _vParticle[i].rc.top - CAMERAMANAGER->getCamera().top, _vParticle[_vParticle.size() - 1 - i].alpha);
 				else
 					_vParticle[_vParticle.size() - 1 - i].particleImg->frameRender(getMemDC(), _vParticle[i].rc.left - CAMERAMANAGER->getCamera().left, _vParticle[i].rc.top - CAMERAMANAGER->getCamera().top);
 			}
 			else
 			{
-				if (_isAlphaImg)
+				if (_vParticle[i].isAlphaImg)
 					_vParticle[i].particleImg->alphaRender(getMemDC(), _vParticle[i].rc.left - CAMERAMANAGER->getCamera().left, _vParticle[i].rc.top - CAMERAMANAGER->getCamera().top, _vParticle[_vParticle.size() - 1 - i].alpha);
 				else
 					_vParticle[i].particleImg->render(getMemDC(), _vParticle[i].rc.left - CAMERAMANAGER->getCamera().left, _vParticle[i].rc.top - CAMERAMANAGER->getCamera().top);
@@ -110,7 +112,7 @@ void effects::activateCartridge(float x, float y, bool isLeft)
 		_vParticle[i].speed = RND->getFromFloatTo(10.f, 13.0f);
 		_vParticle[i].index = RND->getInt(3);
 		_vParticle[i].count = 0;
-		if (_isFrameImg)
+		if (_vParticle[i].isFrameImg)
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 		else
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
@@ -121,7 +123,7 @@ void effects::activateExplosion(float x, float y)
 {
 	_isRunning = true;
 	_isExplosion = true;
-	
+
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
@@ -130,11 +132,10 @@ void effects::activateExplosion(float x, float y)
 		_vParticle[i].x = x;
 		_vParticle[i].y = y;
 		_vParticle[i].speed = 8.0f;
-		if (_isFrameImg)
+		if (_vParticle[i].isFrameImg)
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 		else
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
-
 	}
 }
 void effects::boomExplosion()
@@ -144,14 +145,14 @@ void effects::boomExplosion()
 		for (int i = 0; i < _vParticle.size(); ++i)
 		{
 			if (!_vParticle[i].fire) continue;
-			if (_isFrameImg)
+			if (_vParticle[i].isFrameImg)
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 			else
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
 			_vParticle[i].count++;
 			if (_vParticle[i].count >= 100)
 			{
- 				_vParticle[i].fire = false;
+				_vParticle[i].fire = false;
 				_isRunning = false;
 				_isParabola = false;
 				_vParticle[i].count = 0;
@@ -160,7 +161,7 @@ void effects::boomExplosion()
 			{
 				_vParticle[i].gravity += 0.07f;
 				_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
-				_vParticle[i].y += - sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
+				_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
 			}
 		}
 	}
@@ -214,7 +215,7 @@ void effects::activateEllipsePuff(float x, float y, bool isLeft)
 void effects::activateBigBang(float x, float y)
 {
 	_isRunning = true;
-	_isBigBang = true;	
+	_isBigBang = true;
 	_isAlphaImg = true;
 
 	_animationSpeed = 5;
@@ -224,7 +225,7 @@ void effects::activateBigBang(float x, float y)
 	tagParticle particle;
 	ZeroMemory(&particle, sizeof(tagParticle));
 	for (int i = 8; i > 0; i--)
-	//for (int i = 1; i <= 8; i++)
+		//for (int i = 1; i <= 8; i++)
 	{
 		for (int j = 0; j < particleMax; j++)
 		{
@@ -256,7 +257,7 @@ void effects::activateBigBang(float x, float y)
 	//		else
 	//			_vParticle[i + j].y = _vParticle[i + j].fireY - sinf(_vParticle[i + j].angle) * _vParticle[i + j].speed + gravity;
 	//
-	//		if (_isFrameImg)
+	//		if (_vParticle[i].isFrameImg)
 	//			_vParticle[i + j].rc = RectMakeCenter(_vParticle[i + j].x, _vParticle[i + j].y, _vParticle[i + j].particleImg->getFrameWidth(), _vParticle[i + j].particleImg->getFrameHeight());
 	//		else
 	//			_vParticle[i + j].rc = RectMakeCenter(_vParticle[i + j].x, _vParticle[i + j].y, _vParticle[i + j].particleImg->getWidth(), _vParticle[i + j].particleImg->getHeight());
@@ -270,7 +271,7 @@ void effects::activateBigBang(float x, float y)
 		for (int j = 0; i + j < _vParticle.size(); ++j)
 		{
 			if (j >= particleMax) break;
-	
+
 			_vParticle[i + j].fire = true;
 			_vParticle[i + j].alpha = 0;
 			_vParticle[i + j].count = 0;
@@ -284,15 +285,15 @@ void effects::activateBigBang(float x, float y)
 				_vParticle[i + j].y = _vParticle[i - 1].y - sinf(_vParticle[i + j].angle) * _vParticle[i + j].speed + gravity;
 			else
 				_vParticle[i + j].y = _vParticle[i + j].fireY - sinf(_vParticle[i + j].angle) * _vParticle[i + j].speed + gravity;
-	
-			if (_isFrameImg)
+
+			if (_vParticle[i].isFrameImg)
 				_vParticle[i + j].rc = RectMakeCenter(_vParticle[i + j].x, _vParticle[i + j].y, _vParticle[i + j].particleImg->getFrameWidth(), _vParticle[i + j].particleImg->getFrameHeight());
 			else
 				_vParticle[i + j].rc = RectMakeCenter(_vParticle[i + j].x, _vParticle[i + j].y, _vParticle[i + j].particleImg->getWidth(), _vParticle[i + j].particleImg->getHeight());
 		}
 		gravity += 0.85;
 	}
-	
+
 	//for (int i = 0; i < _vParticle.size(); i++)
 	//{
 	//	_vParticle[i].fire = true;
@@ -310,7 +311,7 @@ void effects::activateBigBang(float x, float y)
 	//	else
 	//		_vParticle[i].y = _vParticle[i].fireY - sinf(_vParticle[i].angle) * _vParticle[i].speed + gravity;
 	//
-	//	if (_isFrameImg)
+	//	if (_vParticle[i].isFrameImg)
 	//		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 	//	else
 	//		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
@@ -364,7 +365,7 @@ void effects::boomBigBang()
 				_vParticle[i].count = 0;
 				_explosionCount = 0;
 			}
-			if (_isFrameImg)
+			if (_vParticle[i].isFrameImg)
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 			else
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
@@ -385,14 +386,14 @@ void effects::activateMissileTrail(float x, float y, bool isLeft)
 		if (isLeft)
 			_vParticle[i].angle = PI + PI_4;
 		else
-			_vParticle[i].angle = - PI_4;
+			_vParticle[i].angle = -PI_4;
 		_vParticle[i].alpha = 255;
 		_vParticle[i].fireX = x - _vParticle[i].particleImg->getFrameWidth();
 		_vParticle[i].fireY = y - _vParticle[i].particleImg->getFrameHeight();
 		_vParticle[i].speed = 50.0f;
 		_vParticle[i].x = _vParticle[i].fireX - cosf(_vParticle[i].angle) * WINSIZEY;
 		_vParticle[i].y = _vParticle[i].fireY + sinf(_vParticle[i].angle) * WINSIZEY;
-		if (_isFrameImg)
+		if (_vParticle[i].isFrameImg)
 			_vParticle[i].rc = RectMake(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 		else
 			_vParticle[i].rc = RectMake(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
@@ -424,7 +425,7 @@ void effects::boomMissileTrail()
 				}
 			}
 
-			if (_isFrameImg)
+			if (_vParticle[i].isFrameImg)
 				_vParticle[i].rc = RectMake(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 			else
 				_vParticle[i].rc = RectMake(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
@@ -432,7 +433,8 @@ void effects::boomMissileTrail()
 	}
 }
 
-void effects::activateMissilePuff(float x, float y, bool isLeft)
+
+void effects::activateMissilePuff(float x, float y, int speed, bool isLeft)
 {
 	_isRunning = true;
 	_isMissilePuff = true;
@@ -442,26 +444,43 @@ void effects::activateMissilePuff(float x, float y, bool isLeft)
 	_vParticle.clear();
 	tagParticle particle;
 	ZeroMemory(&particle, sizeof(tagParticle));
-	for (int i = 8; i > 0; i--)
-	//for (int i = 1; i <= 8; i++)
+	for (int i = 8; i > 2; i--)
+		//for (int i = 1; i <= 8; i++)
 	{
-			particle.particleImg = IMAGEMANAGER->findImage(("explosionFlame" + to_string(i)));
-			_vParticle.push_back(particle);
+		particle.particleImg = IMAGEMANAGER->findImage(("explosionFlame" + to_string(i)));
+		_vParticle.push_back(particle);
+		particle.particleImg = IMAGEMANAGER->findImage(("explosionFlame" + to_string(i)));
+		_vParticle.push_back(particle);
+	}
+
+	for (int i = 3; i > 0; i--)
+	{
+		particle.isFrameImg = true;
+		particle.particleImg = IMAGEMANAGER->findImage(("smoke" + to_string(i)));
+		_vParticle.push_back(particle);
+		particle.particleImg = IMAGEMANAGER->findImage(("smoke" + to_string(i)));
+		_vParticle.push_back(particle);
 	}
 
 	for (int i = 0; i < _vParticle.size(); i++)
 	{
 		_vParticle[i].fire = true;
-		_vParticle[i].alpha = 0;
-		_vParticle[i].count = 0;
 		if (isLeft)
 			_vParticle[i].angle = PI + PI_4;
 		else
-			_vParticle[i].angle = -PI_4;
-		_vParticle[i].speed = 4.0f * (i + 1) + RND->getFloat(2.0f);
+			_vParticle[i].angle = - PI_4;
 		_vParticle[i].fireX = x;
 		_vParticle[i].fireY = y;
-		_vParticle[i].speed = 8.0f;
+		if (_vParticle[i].isFrameImg)
+		{
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+			_vParticle[i].speed = _vParticle[i].particleImg->getFrameWidth() / 2 + (i + 1) * 0.8;
+		}
+		else
+		{
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+			_vParticle[i].speed = _vParticle[i].particleImg->getWidth() / 2 + (i + 1) * 0.8;
+		}
 		if (i > 0)
 		{
 			_vParticle[i].x = _vParticle[i - 1].x - cosf(_vParticle[i].angle) * _vParticle[i].speed;
@@ -469,14 +488,11 @@ void effects::activateMissilePuff(float x, float y, bool isLeft)
 		}
 		else
 		{
-			_vParticle[i].x = x - cosf(_vParticle[i].angle) * _vParticle[i].speed;
-			_vParticle[i].y = y + sinf(_vParticle[i].angle) * _vParticle[i].speed;
+			_vParticle[i].x = x - cosf(_vParticle[i].angle) * WINSIZEY;
+			_vParticle[i].y = y + sinf(_vParticle[i].angle) * WINSIZEY;
 		}
+		_vParticle[i].speed = speed;
 
-		if (_isFrameImg)
-			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
-		else
-			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
 	}
 }
 
@@ -494,9 +510,13 @@ void effects::boomMissilePuff()
 			if (_vParticle[i].y < _vParticle[i].fireY)
 				_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed;
 			else
+			{
 				_vParticle[i].fire = false;
+				_isRunning = false;
+				_isMissilePuff = false;
+			}
 
-			if (_isFrameImg)
+			if (_vParticle[i].isFrameImg)
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 			else
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
@@ -560,8 +580,34 @@ void effects::activateParabola(float x, float y, bool isLeft)
 		_vParticle[i].index = RND->getInt(3);
 		_animationSpeed = 0;
 		_vParticle[i].count = 0;
-		if (_isFrameImg)
-			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(),	_vParticle[i].particleImg->getFrameHeight());
+		if (_vParticle[i].isFrameImg)
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+		else
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+	}
+}
+
+void effects::activateParabolaNoCollision(float x, float y, bool isLeft)
+{
+	_isRunning = true;
+	_isParabolaNoCollision = true;
+	for (int i = 0; i < _particleMax; i++)
+	{
+		_vParticle[i].fire = true;
+		if (isLeft) //플레이어 왼
+			_vParticle[i].angle = PI + RND->getFromFloatTo(0.1f, 1.5f) - 0.75f;
+		else //플레이어 오
+			_vParticle[i].angle = RND->getFromFloatTo(0.1f, 1.5f) - 0.75;
+		_vParticle[i].gravity = 0.0f;
+		_vParticle[i].x = x + 32;
+		_vParticle[i].y = y + 32;
+		_vParticle[i].oldY = _vParticle[i].y;
+		_vParticle[i].speed = RND->getFromFloatTo(5.0f, 20.0f);
+		_vParticle[i].index = RND->getInt(3);
+		_animationSpeed = 0;
+		_vParticle[i].count = 0;
+		if (_vParticle[i].isFrameImg)
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 		else
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
 	}
@@ -579,7 +625,7 @@ void effects::boomParabola()
 			_vParticle[i].gravity += 0.55f;
 			_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
 			_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
-			if (_isFrameImg)
+			if (_vParticle[i].isFrameImg)
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 			else
 				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
@@ -593,6 +639,40 @@ void effects::boomParabola()
 				}
 			}
 			if (_vParticle[i].count == 500 || _vParticle[i].speed < 1.0f)
+			{
+				_vParticle[i].fire = false;
+				_isRunning = false;
+				_isParabola = false;
+			}
+		}
+	}
+}
+
+void effects::boomParabolaNoCollision()
+{
+	if (_isParabolaNoCollision)
+	{
+		for (int i = 0; i < _vParticle.size(); ++i)
+		{
+			if (!_vParticle[i].fire) continue;
+
+			_vParticle[i].gravity += 0.55f;
+			_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
+			_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed + _vParticle[i].gravity;
+			if (_vParticle[i].isFrameImg)
+				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+			else
+				_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+
+			_vParticle[i].count++;
+			if (_vParticle[i].count % 2 == 0)
+			{
+				if (_animationSpeed < 10)
+				{
+					_animationSpeed++;
+				}
+			}
+			if (_vParticle[i].count == 500)
 			{
 				_vParticle[i].fire = false;
 				_isRunning = false;
@@ -617,7 +697,29 @@ void effects::activateFountain(float x, float y)
 		_vParticle[i].index = RND->getInt(3);
 		_animationSpeed = 5;
 		_vParticle[i].count = 0;
-		if (_isFrameImg)
+		if (_vParticle[i].isFrameImg)
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
+		else
+			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
+	}
+}
+
+void effects::activateFountainNoCollision(float x, float y)
+{
+	_isRunning = true;
+	_isParabolaNoCollision = true;
+	for (int i = 0; i < _particleMax; i++)
+	{
+		_vParticle[i].fire = true;
+		_vParticle[i].angle = PI_2 + RND->getFromFloatTo(0.1f, 1.0f) - 0.8f;
+		_vParticle[i].gravity = 0.0f;
+		_vParticle[i].x = x + 32;
+		_vParticle[i].y = y + 32;
+		_vParticle[i].speed = RND->getFromFloatTo(10.0f, 20.0f);
+		_vParticle[i].index = RND->getInt(3);
+		_animationSpeed = 5;
+		_vParticle[i].count = 0;
+		if (_vParticle[i].isFrameImg)
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getFrameWidth(), _vParticle[i].particleImg->getFrameHeight());
 		else
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
@@ -662,7 +764,7 @@ void effects::boomFlyingFlies()
 			_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
 			_vParticle[i].count++;
 			if (_vParticle[i].count % 5 == 0)
-				_vParticle[i].angle = (i < _vParticle.size() / 2)? _vParticle[i].angle + RND->getFloat(PI_4) : _vParticle[i].angle - RND->getFloat(PI_4);
+				_vParticle[i].angle = (i < _vParticle.size() / 2) ? _vParticle[i].angle + RND->getFloat(PI_4) : _vParticle[i].angle - RND->getFloat(PI_4);
 		}
 	}
 }
@@ -677,7 +779,7 @@ void effects::activateAshes(float x, float y)
 		_vParticle[i].fire = true;
 		_vParticle[i].angle = RND->getFloat(PI);
 		_vParticle[i].x = x + RND->getFloat(50.0f);
-		_vParticle[i].y = y ;
+		_vParticle[i].y = y;
 		_vParticle[i].speed = RND->getFromFloatTo(1.0f, 15.0f);
 		_vParticle[i].alpha = 255;
 		_vParticle[i].rc = RectMakeCenter(_vParticle[i].x, _vParticle[i].y, _vParticle[i].particleImg->getWidth(), _vParticle[i].particleImg->getHeight());
@@ -725,25 +827,25 @@ void effects::collisionProcess()
 				_vParticle[i].gravity = 0;
 				//_vParticle[i].angle = PI2 - _vParticle[i].angle;
 				_vParticle[i].y -= _vParticle[i].rc.bottom - _vParticle[i].rc.top;
-				_vParticle[i].speed *= 0.7;
+				_vParticle[i].speed *= 0.5;
 			}
 			if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 1) == GREEN) //위
 			{
 				_vParticle[i].angle = PI2 - _vParticle[i].angle;
 				_vParticle[i].y += _vParticle[i].rc.bottom - _vParticle[i].rc.top;
-				_vParticle[i].speed *= 0.7;
+				_vParticle[i].speed *= 0.5;
 			}
 			if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 2) == GREEN) //오
 			{
 				_vParticle[i].angle = PI - _vParticle[i].angle;
 				_vParticle[i].x -= _vParticle[i].rc.right - _vParticle[i].rc.left;
-				_vParticle[i].speed *= 0.7;
+				_vParticle[i].speed *= 0.5;
 			}
 			else if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 0) == GREEN) //왼
 			{
 				_vParticle[i].angle = PI - _vParticle[i].angle;
 				_vParticle[i].x += _vParticle[i].rc.right - _vParticle[i].rc.left;
-				_vParticle[i].speed *= 0.7;
+				_vParticle[i].speed *= 0.5;
 			}
 		}
 	}
@@ -751,7 +853,6 @@ void effects::collisionProcess()
 
 void effects::frameChange()
 {
-	image* img = IMAGEMANAGER->findImage(_imageName);
 	for (int i = 0; i < _vParticle.size(); ++i)
-		FRAMEMANAGER->frameChange(img, _count, _vParticle[i].index, _animationSpeed, _isLeft);
+		FRAMEMANAGER->frameChange(_vParticle[i].particleImg, _count, _vParticle[i].index, _animationSpeed, _isLeft);
 }

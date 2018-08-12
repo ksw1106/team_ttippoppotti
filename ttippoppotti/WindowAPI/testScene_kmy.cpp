@@ -48,7 +48,8 @@ void testScene_kmy::update(void)
 	}
 	if (KEYMANAGER->isOnceKeyDown('Y'))
 	{
-		EFFECTMANAGER->missileTrail(900, 2200, false);
+	//	EFFECTMANAGER->missileTrail(900, 2200, false);
+		EFFECTMANAGER->missilePuff(900, 2200, 100, false);
 	}
 }
 

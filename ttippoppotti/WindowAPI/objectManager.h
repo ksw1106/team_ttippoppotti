@@ -16,16 +16,18 @@ class objectManager : public singletonBase<objectManager>
 	vector<objectA*> _vObject;
 	objectFactory* _factory;
 	playerManager* _playerManager;
-	fPos _fPos[12];
+	fPos _fPos[23];
 	fPos _prisonerPos[2];
-	fPos _boxPos[14];
-	fPos _drumRedPos[1];
-	fPos _drumGrayPos[1];
+	fPos _boxPos[40];
+	fPos _drumRedPos[6];
+	fPos _drumGrayPos[3];
 	fPos _truckPos[1];
 	fPos _helicopterPos[1];
 	fPos _amFlagPos[3];
 	fPos _amFlagPolePos[2];
 	fPos _enemyFlagPos[2];
+	int drumRedTarget[6];
+	int drumGrayTarget[3];
 public:
 	vector<objectA*> getVObject() { return _vObject; }
 	void setMapData(mapData* mapData) { _mapData = mapData;	}
