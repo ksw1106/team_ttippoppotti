@@ -207,9 +207,9 @@ void effectManager::missileTrail(float x, float y, bool isLeft)
 	//this->playMissileTrail("missileTrail3", x, y, isLeft);
 }
 
-void effectManager::missilePuff(float x, float y, int speed, bool isLeft)
+void effectManager::missilePuff(float x, float y, bool isLeft)
 {
-	this->playMissilePuff("flame1", x, y, speed, isLeft);
+	this->playMissilePuff("flame1", x, y, isLeft);
 }
 
 void effectManager::chuckBloodFountain(float x, float y)
@@ -663,7 +663,7 @@ void effectManager::playMissileTrail(string effectName, float x, float y, bool i
 	}
 }
 
-void effectManager::playMissilePuff(string effectName, float x, float y, int speed, bool isLeft)
+void effectManager::playMissilePuff(string effectName, float x, float y, bool isLeft)
 {
 	miEffect mIter;
 
@@ -675,7 +675,7 @@ void effectManager::playMissilePuff(string effectName, float x, float y, int spe
 		for (int i = 0; i < mIter->second.size(); i++)
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
-			mIter->second[i]->activateMissilePuff(x, y, speed, isLeft);
+			mIter->second[i]->activateMissilePuff(x, y, isLeft);
 			return;
 		}
 	}

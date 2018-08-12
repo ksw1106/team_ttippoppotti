@@ -31,12 +31,13 @@ class objectManager : public singletonBase<objectManager>
 	int _flagCount;
 	int _maxFlag;
 	bool _isGameClear;
+	bool _isDead;
 public:
 	vector<objectA*> getVObject() { return _vObject; }
 	int getFlagCount() { return _flagCount; }
 	bool getGameClear() { return _isGameClear; }
 
-	void setFlagCount(int flagCount) { _flagCount = flagCount; }
+	void setIsDead(bool isDead) { _isDead = isDead; }
 	void setMapData(mapData* mapData) { _mapData = mapData;	}
 	void setPlayerManager(playerManager* playerManager) { _playerManager = playerManager; }
 	void collisionProcess();
