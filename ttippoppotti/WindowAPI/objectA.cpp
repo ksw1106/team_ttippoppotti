@@ -4,17 +4,21 @@
 
 void objectA::update()
 {
-	if (_type <= 9 && !*_targetIsActived)
+	if (_type <= SKULL_DRUMGRAY && !*_targetIsActived)
 	{
 		if (_state == OBJECT_IDLE)
 		{
 			if (_type == WOODENBOX)
+			{
 				EFFECTMANAGER->woodDebris(_x, _y, RND->getInt(2));
-			else if (_type == SKULL_DRUMRED || _type == SKULL_DRUMRED)
+				EFFECTMANAGER->rockFall(_x, _y, RND->getInt(2));
+			}
+			else if (_type == SKULL_DRUMRED || _type == SKULL_DRUMGRAY)
 			{
 				_mapData->deleteMapIndexByIndex(_targetMap, 3, 3);
 				EFFECTMANAGER->bigBang(_x, _y);
 				CAMERAMANAGER->CameraShake();
+				EFFECTMANAGER->rockFall(_x, _y, RND->getInt(2));
 			}
 		}
 		_state = OBJECT_DESTROY;
@@ -375,8 +379,8 @@ void helicopter::idle()
 			ZeroMemory(&element, sizeof(tagElement));
 			element.elementImg = IMAGEMANAGER->findImage("ladder");
 			element.isFrameImg = true;
-			element.x = _x - 169;
-			element.y = _y - 182;
+			element.x = _x + 169;
+			element.y = _y + 182;
 
 			_vElement.push_back(element);
 		}

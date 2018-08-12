@@ -81,6 +81,8 @@ public:
 	OBJECT_STATE getState() { return _state; }
 	float getX() { return _x; }
 	float getY() { return _y; }
+	float getOldX() { return _oldX; }
+	float getOldY() { return _oldY; }
 	float getDestX() { return _destX; }
 	float getDestY() { return _destY; }
 	float getGravity() { return _gravity; }
@@ -108,6 +110,8 @@ public:
 	void setMapData(mapData* mapData) { _mapData = mapData; }
 	void setX(float x) { _x = x; }
 	void setY(float y) { _y = y; }
+	void setOldX(float oldX) { _oldX = oldX; }
+	void setOldY(float oldY) { _oldY = oldY; }
 	void setState(OBJECT_STATE state) { _state = state; }
 	void setPosition(float x, float y) { _x = x, _y = y; }
 	void setDestPosition(float destX, float destY) { _destX = destX, _destY = destY; }
