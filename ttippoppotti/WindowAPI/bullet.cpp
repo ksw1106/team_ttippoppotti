@@ -883,6 +883,7 @@ void gMissile::move()
 			{
 				_vBullet[i].isActived = false;
 			}
+			//EFFECTMANAGER->missilePuff(_vBullet[i].x, _vBullet[i].y, _vBullet[i].isLeft);
 		}
 	}
 }

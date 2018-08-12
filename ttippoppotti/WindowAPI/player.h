@@ -50,6 +50,9 @@ private:
 	float _skyLeftX, _skyLeftY;
 	int _skyLeftW, _skyLeftH;
 
+	float skyRightX, skyRightY;
+	float skyLeftX, skyLeftY;
+
 	int _index;
 	int _count;
 	int _animationSpeed;
@@ -86,6 +89,9 @@ private:
 
 	RECT _rcSkyRight;
 	RECT _rcSkyLeft;
+
+	RECT _skyRight;
+	RECT _skyLeft;
 		
 public:
 	image * getImage(int num) { return _ramBro[num]; }
@@ -106,6 +112,11 @@ public:
 	void setrcSkyRight(RECT rcSkyRight) { _rcSkyRight = rcSkyRight; }
 	RECT getrcSkyLeft() { return _rcSkyLeft; }
 	void setrcSkyLeft(RECT rcSkyLeft) { _rcSkyLeft = rcSkyLeft; }
+	RECT getSkyRight() { return _skyRight; }
+	void setSkyRight(RECT skyRight) { _skyRight = skyRight; }
+	RECT getSkyLeft() { return _skyLeft;}
+	void setSkyLeft(RECT skyLeft) { _skyLeft = skyLeft; }
+	
 
 	float getX() { return _x; }
 	void setX(float x) { _x = x; }
