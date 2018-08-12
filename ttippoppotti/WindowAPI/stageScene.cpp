@@ -190,15 +190,20 @@ void stageScene::update(void)
 	_isOver = _playerManager->getIsGameover();
 	if (OBJECTMANAGER->getVObject()[30]->getState() == OBJECT_MOVE)
 	{
-		_rcCamera = RectMake(OBJECTMANAGER->getVObject()[30]->getX() - 80, OBJECTMANAGER->getVObject()[30]->getY() - 180, WINSIZEX, WINSIZEY);
+		_rcCamera = RectMake(OBJECTMANAGER->getVObject()[30]->getX() - 170, OBJECTMANAGER->getVObject()[30]->getY() - 290, WINSIZEX, WINSIZEY);
+		//CAMERAMANAGER->CameraShake();
 	}
-	if (OBJECTMANAGER->getVObject()[30]->getisArrived())
+	if (OBJECTMANAGER->getVObject()[30]->getisArrived() && !_isClear)
 	{
+		_stageClear->setClearTime(TIMEMANAGER->getWorldTime());
+		SOUNDMANAGER->stop("1stage");
+		SOUNDMANAGER->play("clear", 0.8f);
 		_isClear = true;
 	}
 
 	if (_isClear)
 	{
+		
 		_stageClear->update();
 	}
 

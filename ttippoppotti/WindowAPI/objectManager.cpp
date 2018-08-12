@@ -508,7 +508,7 @@ void objectManager::update()
 					{
 						_vObject[i]->setState(OBJECT_MOVE);
 					}
-					if (_flagCount >= _maxFlag)
+					if (_flagCount >= _maxFlag - 1)
 					{
 						_isGameClear = true;
 					}
@@ -541,6 +541,21 @@ void objectManager::update()
 					_vObject[i]->setSpeed(8.0f);
 					_vObject[i]->setY(_vObject[i]->getY() - sinf(-PI_2) * _vObject[i]->getSpeed() + _vObject[i]->getGravity());
 					this->collisionProcess();
+				}
+				if (_vObject[i]->getType() == HELICOPTER && _vObject[i]->getisArrived())
+				{
+					//float x = _mapData->getObject()[390]._rc.left, y = _mapData->getObject()[390]._rc.top;
+					//EFFECTMANAGER->explosion(x, y);
+					//x = _mapData->getObject()[394]._rc.left, y = _mapData->getObject()[394]._rc.top;
+					//EFFECTMANAGER->rambroGrenadeExplosion(_mapData->getObject()[396]._rc.left, _mapData->getObject()[396]._rc.top);
+					//EFFECTMANAGER->playFountainNoCollision("orangeSparks", x, y);
+					//EFFECTMANAGER->playFountainNoCollision("lightOrangeSparks", x, y);
+					//EFFECTMANAGER->playFountain("yellowSparks", x, y);
+					//EFFECTMANAGER->playFountainNoCollision("rock1", _mapData->getObject()[396]._rc.left, _mapData->getObject()[396]._rc.top);
+					//EFFECTMANAGER->playFountainNoCollision("rock2", _mapData->getObject()[397]._rc.left, _mapData->getObject()[397]._rc.top);
+					//EFFECTMANAGER->playFountainNoCollision("rock3", _mapData->getObject()[398]._rc.left, _mapData->getObject()[398]._rc.top);
+					//EFFECTMANAGER->playFountainNoCollision("rock4", _mapData->getObject()[399]._rc.left, _mapData->getObject()[399]._rc.top);
+					//EFFECTMANAGER->playFountainNoCollision("rock5", _mapData->getObject()[400]._rc.left, _mapData->getObject()[400]._rc.top);
 				}
 				break;
 			case OBJECT_DESTROY:

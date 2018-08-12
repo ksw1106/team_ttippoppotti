@@ -374,10 +374,10 @@ void helicopter::init()
 	_isLeft = false;
 	_destX = _x;
 	_destY = _y;
-	_oldX = _x + _image->getFrameWidth();
-	_oldY = _y - _image->getFrameWidth();
-	_x -= _image->getFrameWidth() * 0.2;
-	_y -= _image->getFrameWidth() * 0.2;
+	_oldX = _x + _image->getFrameWidth() * 0.7;
+	_oldY = _y - _image->getFrameWidth() * 0.7;
+	_x -= _image->getFrameWidth() * 2.5;
+	_y -= _image->getFrameWidth() * 2.5;
 	//_x -= cosf(PI_2 + PI_4) * _image->getFrameHeight() * 1.5;
 	//_y -= -sinf(PI_2 + PI_4) * _image->getFrameHeight() * 1.5;
 }
@@ -437,7 +437,11 @@ void helicopter::move()
 	else
 	{
 		_y = _oldY;
-		_isArrived = true;
+		if (!_isArrived)
+		{
+			CAMERAMANAGER->CameraShake();
+			_isArrived = true;
+		}
 	}
 	for (int i = 0; i < _vElement.size(); i++)
 	{
