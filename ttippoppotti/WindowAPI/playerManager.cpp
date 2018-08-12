@@ -337,23 +337,23 @@ void playerManager::update(void)
 	}
 	
 	_pGrenade->update();										// 수류탄 업데이트 ( 무브 )
-	_gMissile->update();
-	_xMissile->update();
+	_gMissile->update();										// chuck 핵간지 미사일 업데이트
+	_xMissile->update();										// chuck 미사일 떨어지기전에 x미샬
 	
 
 	if (KEYMANAGER->isOnceKeyDown(VK_UP) && !_player->getIsJump())
 	{
 		if (!_isLadder)
 		{
-			if (_player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD)
-			{
+			//if (_player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD)
+			//{
 				_player->setState(JUMP);
 				_player->setGravity(0.0f);
 				_player->setJumpSpeed(20.f);
 				_player->setIsJump(true);
 				hit_left = false;
 				hit_right = false;
-			}
+			//}
 			if (_player->getState() == HANG_FRONT_HOLD || _player->getState() == HANG_BACK_HOLD)
 			{
 				_player->setJumpSpeed(15.f);
@@ -398,8 +398,6 @@ void playerManager::update(void)
 	RECT rcTemp;
 	RECT rcPlayer;
 
-	//image* _img = _player->getImage(_player->getState());
-
 	float tempX = _player->getX();
 	float tempY = _player->getY();
 
@@ -432,6 +430,24 @@ void playerManager::update(void)
 		_isLadder = true;
 		break;
 	case BLUE:
+		if (_isLadder)
+		{
+
+		}
+		else
+		{
+			_player->setGravity(0.f);
+			_player->setJumpSpeed(0.f);
+			_player->setIsJump(false);
+			hit_left = false;
+			hit_right = false;
+			if (_player->getState() != JUMP && _player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD)
+			{
+				_player->setState(IDLE);
+			}
+
+			hit_top = true;
+		}
 		break;
 	default:
 		_isLadder = false;
@@ -470,6 +486,25 @@ void playerManager::update(void)
 		//_isLadder = true;
 		break;
 	case BLUE:
+		if (_isLadder)
+		{
+
+		}
+		else
+		{
+			_player->setGravity(0.f);
+			_player->setJumpSpeed(0.f);
+			_player->setIsJump(false);
+
+			if (_player->getState() != RUN && _player->getState() != KNIFE && _player->getState() != HANG_FRONT_HOLD)
+			{
+				hit_left = false;
+				hit_right = false;
+				_player->setState(IDLE);
+			}
+
+			hit_bottom = true;
+		}
 		break;
 	default:
 		_isLadder = false;
@@ -524,12 +559,42 @@ void playerManager::update(void)
 		//_isLadder = true;
 		break;
 	case BLUE:
+		if (_isLadder)
+		{
+
+		}
+		else
+		{
+			if ((_player->getOldY() - tempY) < 0)
+			{
+				_player->setIsJump(false);
+				_player->setGravity(0.f);
+				_player->setJumpSpeed(0.f);
+			}
+
+			_player->setIsLeft(false);
+
+			hit_right = true;
+			hit_left = false;
+
+			//_player->setIsCollision(!_player->getIsCollision());
+
+			//if (_player->getState() == JUMP)
+			//{
+			//	_player->setState(HANG_FRONT_HOLD);
+			//}
+
+			if (_player->getState() != HANG_FRONT_HOLD)
+			{
+				_player->setIsCollision(!_player->getIsCollision());
+			}
+		}
 		break;
 	default:
 		break;
 	}
 
-	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_LEFT, _isLadder))
+	switch (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), _player->getGravity(), PLAYER_LEFT, _isLadder))			// 왼쪽벽
 	{
 	case GREEN:
 		if (_isLadder)
@@ -568,6 +633,32 @@ void playerManager::update(void)
 
 		break;
 	case BLUE:
+		if (_isLadder)
+		{
+
+		}
+		else
+		{
+			if ((_player->getOldY() - tempY) < 0)
+			{
+				_player->setIsJump(false);
+				_player->setGravity(0.f);
+				_player->setJumpSpeed(0.f);
+			}
+			_player->setIsLeft(true);
+
+			hit_left = true;
+			hit_right = false;
+			//if (_player->getState() == JUMP)
+			//{
+			//	_player->setState(HANG_FRONT_HOLD);
+			//}
+
+			/*if (_player->getState() != HANG_FRONT_HOLD)
+			{
+			_player->setIsCollision(!_player->getIsCollision());
+			}*/
+		}
 		break;
 	default:
 		break;
@@ -909,14 +1000,14 @@ void playerManager::update(void)
 			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_TOP) == GREEN)
 		{
 			_pGrenade->getVPlayerGrenade()[i].angle = PI2 - _pGrenade->getVPlayerGrenade()[i].angle;
-			_pGrenade->getVPlayerGrenade()[i].speed *= 0.7f;
+			_pGrenade->getVPlayerGrenade()[i].speed *= 0.6f;
 		}
 		if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc,			// 오른쪽 벽
 			_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y,
 			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_RIGHT) == GREEN)
 		{
 			_pGrenade->getVPlayerGrenade()[i].angle = PI - _pGrenade->getVPlayerGrenade()[i].angle;
-			_pGrenade->getVPlayerGrenade()[i].speed *= 0.7f;
+			_pGrenade->getVPlayerGrenade()[i].speed *= 0.6f;
 
 		}
 		else if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc,		// 왼쪽 벽
@@ -924,7 +1015,7 @@ void playerManager::update(void)
 			_pGrenade->getVPlayerGrenade()[i].speed, _pGrenade->getVPlayerGrenade()[i].gravity, PLAYER_LEFT) == GREEN)
 		{
 			_pGrenade->getVPlayerGrenade()[i].angle = PI - _pGrenade->getVPlayerGrenade()[i].angle;
-			_pGrenade->getVPlayerGrenade()[i].speed *= 0.7f;
+			_pGrenade->getVPlayerGrenade()[i].speed *= 0.6f;
 		}
 
 		if (_pGrenade->getVPlayerGrenade()[i].count < 90) continue;
@@ -938,7 +1029,7 @@ void playerManager::update(void)
 				{
 					_mapData->deleteMapIndexByIndex(j, 2, 2);
 					_pGrenade->getVPlayerGrenade()[i].isActived = false;
-					EFFECTMANAGER->grenadeExplosion(_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y);
+					EFFECTMANAGER->rambroGrenadeExplosion(_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y);
 					CAMERAMANAGER->CameraShake();
 				}
 				if (_rambroGrenade)
@@ -1001,6 +1092,7 @@ void playerManager::update(void)
 						_gMissile->getVPlayergMissile()[i].isActived = false;
 						_mapData->deleteMapIndexByIndex(j, 2, 2);
 						CAMERAMANAGER->CameraShake();
+						//EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
 						missileCount++;
 						break;
 					}
@@ -1015,6 +1107,7 @@ void playerManager::update(void)
 						_gMissile->getVPlayergMissile()[i].isActived = false;
 						_mapData->deleteMapIndexByIndex(j, 2, 2);
 						CAMERAMANAGER->CameraShake();
+						//EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
 						missileCount++;
 						break;
 					}
@@ -1029,6 +1122,7 @@ void playerManager::update(void)
 						_gMissile->getVPlayergMissile()[i].isActived = false;
 						_mapData->deleteMapIndexByIndex(j, 2, 2);
 						CAMERAMANAGER->CameraShake();
+						//EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
 						missileCount++;
 						break;
 					}
@@ -1043,6 +1137,7 @@ void playerManager::update(void)
 						_gMissile->getVPlayergMissile()[i].isActived = false;
 						_mapData->deleteMapIndexByIndex(j, 2, 2);
 						CAMERAMANAGER->CameraShake();
+						//EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
 						missileCount++;
 						break;
 					}
@@ -1100,9 +1195,9 @@ void playerManager::update(void)
 		_player->setGravity(0.f);
 	}
 
-	this->collision();
+	this->rambroCollision();
 	this->rambroDie();
-	
+	this->chuckCollision();
 	
 	
 	//else if (COLLISIONMANAGER->pixelCollision(rcPlayer, tempX, tempY, _player->getSpeed(), 0, PLAYER_RIGHT))				// 오른쪽벽
@@ -1298,7 +1393,7 @@ void playerManager::rambroDie()
 	}	
 }
 
-void playerManager::collision()
+void playerManager::rambroCollision()
 {
 	for (int i = 0; i < _enemyManager->getVEnemy().size();++i)
 	{
@@ -1310,11 +1405,10 @@ void playerManager::collision()
 			if (IntersectRect(&rcTemp, &rcEnemy, &_pBullet->getVPlayerBullet()[j].rc))
 			{
 				if (_enemyManager->getVEnemy()[i]->getIsApart()) continue;
-				if (_pBullet->getVPlayerBullet()[j].isActived == true)
+				if (_pBullet->getVPlayerBullet()[j].isActived)
 				{
-
 					_pBullet->getVPlayerBullet()[j].isActived = false;
-					if (_pBullet->getVPlayerBullet()[j].isActived == false)
+					if (!_pBullet->getVPlayerBullet()[j].isActived)
 					{
 						EFFECTMANAGER->bulletPuff(_pBullet->getVPlayerBullet()[j].x, _pBullet->getVPlayerBullet()[j].y);
 					}
@@ -1322,6 +1416,28 @@ void playerManager::collision()
 				}
 			}
 		}	
+	}
+}
+
+void playerManager::chuckCollision()
+{
+	for (int i = 0; i < _enemyManager->getVEnemy().size(); i++)
+	{
+		for (int j = 0; j < _gBullet->getVPlayergBullet().size(); j++)
+		{
+			RECT rcTemp;
+			RECT rcEnemy = _enemyManager->getVEnemy()[i]->getRcEnemy();
+			if (!_gBullet->getVPlayergBullet()[j].isActived)continue;
+			if (IntersectRect(&rcTemp, &rcEnemy, &_gBullet->getVPlayergBullet()[j].rc))
+			{
+				if (_enemyManager->getVEnemy()[i]->getIsApart())continue;
+				if (_gBullet->getVPlayergBullet()[j].isActived)
+				{
+					_gBullet->getVPlayergBullet()[j].isActived = false;
+					break;
+				}
+			}
+		}
 	}
 }
 

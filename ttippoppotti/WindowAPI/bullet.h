@@ -186,7 +186,7 @@ class pGrenade : public gameNode
 {
 private:
 	vector<tagBullet> _vBullet;
-	vector<tagBullet> _vBulletTrail;
+	//vector<tagBullet> _vBulletTrail;
 
 private:
 	float _range;
@@ -207,7 +207,7 @@ public:
 	void move();
 
 	vector<tagBullet>& getVPlayerGrenade() { return _vBullet; }
-	vector<tagBullet>& getVPlayerGrenadeTrail() { return _vBulletTrail; }
+	//vector<tagBullet>& getVPlayerGrenadeTrail() { return _vBulletTrail; }
 
 	pGrenade() {}
 	~pGrenade() {}

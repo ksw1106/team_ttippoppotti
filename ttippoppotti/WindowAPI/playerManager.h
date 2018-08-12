@@ -71,7 +71,8 @@ public:
 	void render(void);
 
 	void rambroDie();
-	void collision();
+	void rambroCollision();
+	void chuckCollision();
 	void p1Bubble();
 
 	playerManager();

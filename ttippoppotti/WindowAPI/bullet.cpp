@@ -441,15 +441,15 @@ HRESULT pGrenade::init(float range)
 		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
 		_vBullet.push_back(pGrenade);
 	}
-	for (int i = 0; i < 30; i++)
-	{
-		tagBullet pGrenade;
-		ZeroMemory(&pGrenade, sizeof(tagBullet));
-		pGrenade.missileImageLeft = IMAGEMANAGER->findImage("rambro_grenade_blue");
-		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
-		_vBulletTrail.push_back(pGrenade);
-	}
-	_trailcount = 0;
+	//for (int i = 0; i < 30; i++)
+	//{
+	//	tagBullet pGrenade;
+	//	ZeroMemory(&pGrenade, sizeof(tagBullet));
+	//	pGrenade.missileImageLeft = IMAGEMANAGER->findImage("rambro_grenade_blue");
+	//	// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
+	//	_vBulletTrail.push_back(pGrenade);
+	//}
+	//_trailcount = 0;
 
 	return S_OK;
 }
@@ -492,8 +492,8 @@ void pGrenade::render(void)
 	{
 		if (_vBullet[i].isActived == true)
 		{
-			_vBulletTrail[i].missileImageLeft->frameRender(getMemDC(), _vBulletTrail[i].rc.left - CAMERAMANAGER->getCamera().left,
-				_vBulletTrail[i].rc.top - CAMERAMANAGER->getCamera().top);
+			//_vBulletTrail[i].missileImageLeft->frameRender(getMemDC(), _vBulletTrail[i].rc.left - CAMERAMANAGER->getCamera().left,
+			//	_vBulletTrail[i].rc.top - CAMERAMANAGER->getCamera().top);
 			_vBullet[i].bulletImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
 				_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top);
 			if (_vBullet[i].count > 50)
@@ -540,38 +540,38 @@ void pGrenade::fire(int x, int y, int fireSpeed, bool isLeft)
 
 		break;
 	}
-	for (int i = 0; i < _vBulletTrail.size(); i++)
-	{
-		if (_vBulletTrail[i].isActived)continue;
-		_vBulletTrail[i].isActived = true;
-		_vBulletTrail[i].speed = fireSpeed;
-		_vBulletTrail[i].isLeft = isLeft;
-		_vBulletTrail[i].gravity = 0.0f;
-		_vBulletTrail[i].count = 0;
-		if (!_vBulletTrail[i].isLeft)
-		{
-			x = x - 10;
-			y = y - 10;
-		}
-		else
-		{
-
-		}
-		_vBulletTrail[i].x = _vBulletTrail[i].fireX = x;
-		_vBulletTrail[i].y = _vBulletTrail[i].fireY = y;
-		_vBulletTrail[i].rc = RectMake(_vBulletTrail[i].x, _vBulletTrail[i].y,
-			_vBulletTrail[i].missileImageLeft->getFrameWidth(),
-			_vBulletTrail[i].missileImageLeft->getFrameHeight());
-		if (_vBulletTrail[i].isLeft)
-		{
-			_vBulletTrail[i].angle = 145.f * PI / 180;
-		}
-		else
-		{
-			_vBulletTrail[i].angle = 35.f * PI / 180;
-		}
-		//break;
-	}
+	//for (int i = 0; i < _vBulletTrail.size(); i++)
+	//{
+	//	if (_vBulletTrail[i].isActived)continue;
+	//	_vBulletTrail[i].isActived = true;
+	//	_vBulletTrail[i].speed = fireSpeed;
+	//	_vBulletTrail[i].isLeft = isLeft;
+	//	_vBulletTrail[i].gravity = 0.0f;
+	//	_vBulletTrail[i].count = 0;
+	//	if (!_vBulletTrail[i].isLeft)
+	//	{
+	//		x = x - 10;
+	//		y = y - 10;
+	//	}
+	//	else
+	//	{
+	//
+	//	}
+	//	_vBulletTrail[i].x = _vBulletTrail[i].fireX = x;
+	//	_vBulletTrail[i].y = _vBulletTrail[i].fireY = y;
+	//	_vBulletTrail[i].rc = RectMake(_vBulletTrail[i].x, _vBulletTrail[i].y,
+	//		_vBulletTrail[i].missileImageLeft->getFrameWidth(),
+	//		_vBulletTrail[i].missileImageLeft->getFrameHeight());
+	//	if (_vBulletTrail[i].isLeft)
+	//	{
+	//		_vBulletTrail[i].angle = 145.f * PI / 180;
+	//	}
+	//	else
+	//	{
+	//		_vBulletTrail[i].angle = 35.f * PI / 180;
+	//	}
+	//	//break;
+	//}
 }
 
 void pGrenade::move()
@@ -592,33 +592,33 @@ void pGrenade::move()
 		}
 	}
 
-	_trailcount++;
-	for (int i = 0; i < _vBulletTrail.size(); ++i)
-	{ 
-		if (_vBulletTrail[i].isActived)
-		{
-			_vBulletTrail[i].count++;
-			//if (_vBulletTrail[i].count > 2)
-			{
-				_vBulletTrail[i].gravity += 0.90f;
-				//if (i > 0)
-				//{
-				//	_vBulletTrail[i].x = _vBulletTrail[i - 1].x + cosf(_vBulletTrail[i].angle) * (_vBulletTrail[i].speed * i);
-				//	_vBulletTrail[i].y = _vBulletTrail[i - 1].y - sinf(_vBulletTrail[i].angle) * (_vBulletTrail[i].speed * i) + _vBulletTrail[i].gravity;
-				//}
-				//else
-				{
-					_vBulletTrail[i].x += cosf(_vBulletTrail[i].angle) * _vBulletTrail[i].speed;
-					_vBulletTrail[i].y += -sinf(_vBulletTrail[i].angle) * _vBulletTrail[i].speed + _vBulletTrail[i].gravity;
-				}
-
-				_vBulletTrail[i].rc = RectMake(_vBulletTrail[i].x, _vBulletTrail[i].y,
-					_vBulletTrail[i].missileImageLeft->getFrameWidth(),
-					_vBulletTrail[i].missileImageLeft->getFrameHeight());
-			}
-
-		}
-	}
+	//_trailcount++;
+	//for (int i = 0; i < _vBulletTrail.size(); ++i)
+	//{ 
+	//	if (_vBulletTrail[i].isActived)
+	//	{
+	//		_vBulletTrail[i].count++;
+	//		//if (_vBulletTrail[i].count > 2)
+	//		{
+	//			_vBulletTrail[i].gravity += 0.90f;
+	//			//if (i > 0)
+	//			//{
+	//			//	_vBulletTrail[i].x = _vBulletTrail[i - 1].x + cosf(_vBulletTrail[i].angle) * (_vBulletTrail[i].speed * i);
+	//			//	_vBulletTrail[i].y = _vBulletTrail[i - 1].y - sinf(_vBulletTrail[i].angle) * (_vBulletTrail[i].speed * i) + _vBulletTrail[i].gravity;
+	//			//}
+	//			//else
+	//			{
+	//				_vBulletTrail[i].x += cosf(_vBulletTrail[i].angle) * _vBulletTrail[i].speed;
+	//				_vBulletTrail[i].y += -sinf(_vBulletTrail[i].angle) * _vBulletTrail[i].speed + _vBulletTrail[i].gravity;
+	//			}
+	//
+	//			_vBulletTrail[i].rc = RectMake(_vBulletTrail[i].x, _vBulletTrail[i].y,
+	//				_vBulletTrail[i].missileImageLeft->getFrameWidth(),
+	//				_vBulletTrail[i].missileImageLeft->getFrameHeight());
+	//		}
+	//
+	//	}
+	//}
 }
 //=============================================================
 //	## Gbullet ## (ÇÒ¾Æ¹öÁö ÀÏ¹ÝÃÑ¾Ë)
@@ -910,7 +910,7 @@ void xMissile::move()
 
 		_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 		_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
-		
+
 		_vBullet[i].rc = RectMake(_vBullet[i].x, _vBullet[i].y,
 			_vBullet[i].missileImageRight->getFrameWidth(),
 			_vBullet[i].missileImageRight->getFrameHeight());
@@ -925,15 +925,19 @@ void xMissile::move()
 			_vBullet[i].isCollision = true;
 			_vBullet[i].speed = 0.0f;
 		}
-		if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc,_vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 2) == GREEN)				// ¿À¸¥ÂÊ º®	
+		if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc, _vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 2) == GREEN)				// ¿À¸¥ÂÊ º®	
 		{
 			_vBullet[i].isCollision = true;
 			_vBullet[i].speed = 0.0f;
 		}
-		else if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc,_vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 0) == GREEN)			// ¿ÞÂÊ º®	
+		else if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc, _vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 0) == GREEN)			// ¿ÞÂÊ º®	
 		{
 			_vBullet[i].isCollision = true;
 			_vBullet[i].speed = 0.0f;
+		}
+		if (_vBullet[i].isCollision)
+		{
+			EFFECTMANAGER->missileTrail(_vBullet[i].x, _vBullet[i].y, _vBullet[i].isLeft);
 		}
 	}
 }
