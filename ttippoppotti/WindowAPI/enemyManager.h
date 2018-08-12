@@ -51,6 +51,7 @@ private:
 	int _stageNum;
 	bool _isClear;				// 스테이지 클리어했냐(브로빌 죽음)
 	bool _isEffect;
+	bool _isDebut;
 	
 public:
 	void setPlayerManager(playerManager* playerManager) { _playerManager = playerManager; }
