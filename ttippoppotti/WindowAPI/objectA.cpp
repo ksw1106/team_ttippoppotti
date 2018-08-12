@@ -241,7 +241,11 @@ void prisoner::idle()
 	else
 		if (_isActived)
 			for (int i = 0; i < _vElement.size(); i++)
+			{
+				_vElement[i].x = _x - 14;
+				_vElement[i].y = _y - 65;
 				FRAMEMANAGER->frameChange(_vElement[i].elementImg, _count, _index, _animationSpeed, _isLeft);
+			}
 }
 
 void prisoner::move()
@@ -254,7 +258,11 @@ void prisoner::move()
 	if (_isActived)
 	{
 		for (int i = 0; i < _vElement.size(); i++)
+		{
+			_vElement[i].x = _x - 14;
+			_vElement[i].y = _y - 65;
 			FRAMEMANAGER->frameChange(_vElement[i].elementImg, _count, _index, _animationSpeed, _isLeft);
+		}
 	}
 	else
 	{
@@ -362,13 +370,16 @@ void helicopter::init()
 	_animationSpeed = 0;
 	_isStart = false;
 	_isFrameImage = true;
+	_isArrived = false;
 	_isLeft = false;
 	_destX = _x;
 	_destY = _y;
-	//_x -= _image->getFrameWidth() * 1.5;
-	//_y -= _image->getFrameHeight() * 1.5;
-	_x -= cosf(PI_2 + PI_4) * _image->getFrameHeight() * 1.5;
-	_y -= -sinf(PI_2 + PI_4) * _image->getFrameHeight() * 1.5;
+	_oldX = _x + _image->getFrameWidth();
+	_oldY = _y - _image->getFrameWidth();
+	_x -= _image->getFrameWidth() * 0.2;
+	_y -= _image->getFrameWidth() * 0.2;
+	//_x -= cosf(PI_2 + PI_4) * _image->getFrameHeight() * 1.5;
+	//_y -= -sinf(PI_2 + PI_4) * _image->getFrameHeight() * 1.5;
 }
 
 void helicopter::idle()
@@ -391,12 +402,14 @@ void helicopter::idle()
 		if (_destX <= _x)
 			_x = _destX;
 		else
-			_x += cosf(PI_2 + PI_4) * _image->getFrameWidth() * 1.5;
+			_x += 12.0f;
+			//_x += cosf(PI_2 + PI_4) * (_image->getFrameWidth() / 10);
 
 		if (_destY <= _y)
 			_y = _destY;
 		else
-			_y += -sinf(PI_2 + PI_4) * _image->getFrameWidth() * 1.5;
+			_y += 12.0f;
+			//_y += -sinf(PI_2 + PI_4) * (_image->getFrameWidth() / 10);
 		
 		for (int i = 0; i < _vElement.size(); i++)
 		{
@@ -409,15 +422,22 @@ void helicopter::idle()
 
 void helicopter::move()
 {
-	_destX = _x + _image->getFrameWidth();
-	if (_x < _destX)
+	if (_x < _oldX)
 	{
-		_x += 8.0f;
-		_y -= 0.5f;
+		_x += 12.0f;
 	}
 	else
 	{
-		_x = _destX;
+		_x = _oldX;
+	}
+	if (_y > _oldY)
+	{
+		_y -= 12.0f;
+	}
+	else
+	{
+		_y = _oldY;
+		_isArrived = true;
 	}
 	for (int i = 0; i < _vElement.size(); i++)
 	{
