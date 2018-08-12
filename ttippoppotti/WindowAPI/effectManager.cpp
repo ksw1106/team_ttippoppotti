@@ -165,11 +165,11 @@ void effectManager::bloodFountain(float x, float y)
 	this->playFountain("bloodSplash1", x, y);
 	this->playFountainNoCollision("bloodSplash2", x, y);
 	this->playFountain("bloodSplash3", x, y);
-	this->playFountainNoCollision("bloodSplash4", x, y);
+	this->playFountain("bloodSplash4", x, y);
 	this->playFountain("bloodSplash5", x, y);
 	this->playFountainNoCollision("bloodSplash6", x, y);
 	this->playFountain("bloodSplash7", x, y);
-	this->playFountainNoCollision("bloodSplash8", x, y);
+	this->playFountain("bloodSplash8", x, y);
 }
 
 void effectManager::RambroBloodFountain(float x, float y)
@@ -212,22 +212,22 @@ void effectManager::missilePuff(float x, float y, int speed, bool isLeft)
 
 void effectManager::chuckBloodFountain(float x, float y)
 {
-	this->playFountainNoCollision("bloodSplash1", x, y);
-	//this->playFountainNoCollision("bloodSplash2", x, y);
-	this->playFountainNoCollision("bloodSplash3", x, y);
-	//this->playFountainNoCollision("bloodSplash4", x, y);
-	this->playFountainNoCollision("bloodSplash5", x, y);
-	//this->playFountainNoCollision("bloodSplash6", x, y);
-	this->playFountainNoCollision("bloodSplash7", x, y);
-	//this->playFountainNoCollision("bloodSplash8", x, y);
-	//this->playFountain("bloodSplash1", x, y);
-	this->playFountain("bloodSplash2", x, y);
-	//this->playFountain("bloodSplash3", x, y);
-	this->playFountain("bloodSplash4", x, y);
-	//this->playFountain("bloodSplash5", x, y);
-	this->playFountain("bloodSplash6", x, y);
-	//this->playFountain("bloodSplash7", x, y);
-	this->playFountain("bloodSplash8", x, y);
+	//this->playFountainNoCollision("bloodSplash1", x, y);
+	this->playFountainNoCollision("bloodSplash2", x, y);
+	//this->playFountainNoCollision("bloodSplash3", x, y);
+	this->playFountainNoCollision("bloodSplash4", x, y);
+	//this->playFountainNoCollision("bloodSplash5", x, y);
+	this->playFountainNoCollision("bloodSplash6", x, y);
+	//this->playFountainNoCollision("bloodSplash7", x, y);
+	this->playFountainNoCollision("bloodSplash8", x, y);
+	this->playFountain("bloodSplash1", x, y);
+	//this->playFountain("bloodSplash2", x, y);
+	this->playFountain("bloodSplash3", x, y);
+	//this->playFountain("bloodSplash4", x, y);
+	this->playFountain("bloodSplash5", x, y);
+	//this->playFountain("bloodSplash6", x, y);
+	this->playFountain("bloodSplash7", x, y);
+	//this->playFountain("bloodSplash8", x, y);
 	this->playFountain("chuck_head", x, y);
 	this->playFountainNoCollision("chuck_arm", x, y);
 	this->playFountain("chuck_arm", x, y);

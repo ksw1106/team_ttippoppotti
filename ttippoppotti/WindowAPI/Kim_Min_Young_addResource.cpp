@@ -8,9 +8,6 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadImage("rock_sml1", "effectImage/rock_fragment_sml_01.bmp", 8, 8);
 	_loading->loadImage("rock_sml2", "effectImage/rock_fragment_sml_02.bmp", 9, 9);
 	_loading->loadImage("rock_sml3", "effectImage/rock_fragment_sml_03.bmp", 9, 9);
-	//_loading->loadImage("UI_rambroWalk", "effectImage/UI_rambro_walk_01.bmp", 262, 156, true, RGB(255, 0, 255));
-	//_loading->loadImage("UI_rambroGrenade", "effectImage/UI_rambro_grenade_01.bmp", 29, 38, true, RGB(255, 0, 255));
-	//_loading->loadImage("UI_statBox", "effectImage/UI_statBox_temp_01.bmp", 445, 114);
 	_loading->loadImage("blood_still1", "effectImage/blood_still_01.bmp", 4, 4);
 	_loading->loadImage("blood_still2", "effectImage/blood_still_02.bmp", 15, 20, true, RGB(255, 0, 255));
 	_loading->loadImage("blood_still3", "effectImage/blood_still_03.bmp", 15, 20, true, RGB(255, 0, 255));
@@ -82,6 +79,7 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadImage("bottle_gray", "objectImage/bottle_gray_01.bmp", 17, 39, true, RGB(255, 0, 255));
 	_loading->loadImage("bottle_brown", "objectImage/bottle_brown_01.bmp", 31, 44, true, RGB(255, 0, 255));
 	_loading->loadImage("saveFlag_pole", "objectImage/saveFlag_pole_01.bmp", 22, 203, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("hobro_freed", "objectImage/hobro_freed_01.bmp", 1536, 128, 12, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("human_dead", "objectImage/human_dead.bmp", 972, 115, 12, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("truck", "objectImage/truck_01.bmp", 388, 231, true, RGB(255, 0, 255));
 }
