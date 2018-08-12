@@ -27,6 +27,9 @@ private:
 	stageStart* _stageStart;
 	missionFailed* _missionFailed;
 
+	image* _backGroundPixel;
+	image* _ladderPixel;
+
 	RECT _rcCamera;
 	world _backGround[3];
 

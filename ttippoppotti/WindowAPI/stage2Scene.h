@@ -3,12 +3,18 @@
 #include "playerManager.h"
 #include "enemyManager.h"
 #include "mapData.h"
+#include "stageClear.h"
+#include "stageScene.h"
+#include "missionFailed.h"
 
 class stage2Scene : public gameNode
 {
 	playerManager * _playerManager;
 	enemyManager* _enemyManager;
 	mapData* _mapData;
+	stageClear* _stageClear;
+	stageStart* _stageStart;
+	missionFailed* _missionFailed;
 
 	image* _backGround;
 	image* _backGroundObject;
@@ -18,6 +24,7 @@ class stage2Scene : public gameNode
 
 	RECT _rcCamera;
 	bool _camDebug;
+	bool _isClear, _isOver;
 public:
 	HRESULT init(void);
 	void release(void);

@@ -30,6 +30,7 @@ class stageClear : public gameNode
 	image* enemyKind[3];
 
 	image* _clear[37];
+	image* _input[54];
 	image* _clearBlank;
 	image* _timeBoard;
 	image* _enemyBoard;
@@ -38,12 +39,12 @@ class stageClear : public gameNode
 	int _clearCount;
 	int _imageIndex;
 	int _enemyCount;
-	bool _isPrintImage, _isPrintEnemy, _isPrintTime, _isCalculateTime, _isShowEnemy;
+	bool _isPrintImage, _isPrintEnemy, _isPrintTime, _isCalculateTime, _isShowEnemy, _isPrintInput, _isPrintInputBoard;
 	bool _isAddEnemy;
 	POINT timePos[6];
 	float timeDiv[4];
 	RECT _rc[2];
-	float x, timeBoardX, enemyBoardX;
+	float x, timeBoardX, enemyBoardX, inputBoardX;
 public:
 	void setEnemyManager(enemyManager* enemyManager) { _enemyManager = enemyManager; }
 

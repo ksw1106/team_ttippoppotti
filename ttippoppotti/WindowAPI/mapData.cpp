@@ -961,8 +961,8 @@ void mapData::stage2_setting()
 			mapObject obj;
 			ZeroMemory(&obj, sizeof(mapObject));
 			obj._width = 68;
-			obj._height = 71;
-			obj._rc = RectMake(-36 + j * obj._width, 1505 + i * obj._height, obj._width, obj._height);
+			obj._height = 96;
+			obj._rc = RectMake(-36 + j * obj._width, 1480 + i * obj._height, obj._width, obj._height);
 			obj._isActived = true;
 			_vObject.push_back(obj);
 		}
@@ -1109,8 +1109,8 @@ void mapData::stage2_setting()
 			mapObject obj;
 			ZeroMemory(&obj, sizeof(mapObject));
 			obj._width = 67;
-			obj._height = 72;
-			obj._rc = RectMake(644 + j * obj._width, 1505 + i * obj._height, obj._width, obj._height);
+			obj._height = 97;
+			obj._rc = RectMake(644 + j * obj._width, 1480 + i * obj._height, obj._width, obj._height);
 			obj._isActived = true;
 			_vObject.push_back(obj);
 		}
@@ -1252,8 +1252,8 @@ void mapData::stage2_setting()
 			mapObject obj;
 			ZeroMemory(&obj, sizeof(mapObject));
 			obj._width = 67;
-			obj._height = 73;
-			obj._rc = RectMake(1658 + j * obj._width, 896 + i * obj._height, obj._width, obj._height);
+			obj._height = 98;
+			obj._rc = RectMake(1658 + j * obj._width, 871 + i * obj._height, obj._width, obj._height);
 			obj._isActived = true;
 			_vObject.push_back(obj);
 		}
@@ -1294,8 +1294,8 @@ void mapData::stage2_setting()
 			mapObject obj;
 			ZeroMemory(&obj, sizeof(mapObject));
 			obj._width = 70;
-			obj._height = 73;
-			obj._rc = RectMake(2265 + j * obj._width, 896 + i * obj._height, obj._width, obj._height);
+			obj._height = 98;
+			obj._rc = RectMake(2265 + j * obj._width, 871 + i * obj._height, obj._width, obj._height);
 			obj._isActived = true;
 			_vObject.push_back(obj);
 		}
@@ -2003,6 +2003,7 @@ HRESULT mapData::init(int stage)
 
 void mapData::release(void)
 {
+	_vObject.clear();
 }
 
 void mapData::update(void)

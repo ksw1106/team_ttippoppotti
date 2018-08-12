@@ -6,14 +6,35 @@ HRESULT stage2Scene::init(void)
 	_rcCamera = RectMake(0, 1694 - WINSIZEY, 5582, 1000+WINSIZEY);
 	CAMERAMANAGER->setCamera(_rcCamera);
 
+	_backGroundPixel = new image;
+	_backGroundPixel->init("stage2_background_pixel.bmp", 5582, 2694, true, RGB(255, 0, 255));
+	_ladderPixel = new image;
+	_ladderPixel->init("stage2_ladder_pixel.bmp", 5582, 2694, true, RGB(255, 0, 255));
+	_backGround = new image;
+	_backGround->init("background.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_backGoundRock = new image;
+	_backGoundRock->init("stage2_background_rock.bmp", 5582, 2694, true, RGB(255, 0, 255));
+	_backGroundObject = new image;
+	_backGroundObject->init("stage2_background_object.bmp", 5582, 2694, true, RGB(255, 0, 255));
+
 	_playerManager = new playerManager;
 	_playerManager->init(2);
 	_enemyManager = new enemyManager;
 	_enemyManager->init(2);
 	_mapData = new mapData;
 	_mapData->init(2);
-	_mapData->setObjectPixel("stage2_background_object");
-	_mapData->setBackGroundMap("stage2_background_pixel");
+	_mapData->setObjectPixel(_backGroundObject);
+	_mapData->setBackGroundMap(_backGroundPixel);
+
+	_stageClear = new stageClear;
+	_stageClear->init();
+	_stageClear->setEnemyManager(_enemyManager);
+
+	_stageStart = new stageStart;
+	_stageStart->init();
+
+	_missionFailed = new missionFailed;
+	_missionFailed->init();
 
 	EFFECTMANAGER->init();
 	_playerManager->setMapData(_mapData);
@@ -25,30 +46,47 @@ HRESULT stage2Scene::init(void)
 	OBJECTMANAGER->setPlayerManager(_playerManager);
 	OBJECTMANAGER->init(2);
 
-	_backGround = IMAGEMANAGER->findImage("backGround");
-	_backGroundObject = IMAGEMANAGER->findImage("stage2_background_object");
-	_backGoundRock = IMAGEMANAGER->findImage("stage2_background_rock");
-	_backGroundPixel = IMAGEMANAGER->findImage("stage2_background_pixel");
-	_ladderPixel = IMAGEMANAGER->findImage("stage2_ladder_pixel");
-
-	COLLISIONMANAGER->setPixelMap(IMAGEMANAGER->findImage("stage2_background_pixel"), IMAGEMANAGER->findImage("stage2_ladder_pixel"));
+	COLLISIONMANAGER->setPixelMap(_backGroundPixel, _ladderPixel);
 	EFFECTMANAGER->init();
 
 	_camDebug = false;
 	_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
 	CAMERAMANAGER->setCamera(_rcCamera);
 
+	_isClear = _isOver = false;
+
 	return S_OK;
 }
 
 void stage2Scene::release(void)
 {
+	//_playerManager->release();
+	//_enemyManager->release();
+	_mapData->release();
+	_stageClear->release();
+	_stageStart->release();
+	_missionFailed->release();
+	OBJECTMANAGER->release();
+
+	SAFE_DELETE(_backGroundPixel);
+	SAFE_DELETE(_ladderPixel);
+	SAFE_DELETE(_backGround);
+	SAFE_DELETE(_backGoundRock);
+	SAFE_DELETE(_backGroundObject);
+	SAFE_DELETE(_playerManager);
+	SAFE_DELETE(_enemyManager);
+	SAFE_DELETE(_mapData);
+	SAFE_DELETE(_stageClear);
+	SAFE_DELETE(_stageStart);
+	SAFE_DELETE(_missionFailed);
 }
 
 void stage2Scene::update(void)
 {
+	_stageStart->update();
+
 	//_playerManager->update();
-	_enemyManager->update();
+	//_enemyManager->update();
 	OBJECTMANAGER->update();
 
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
@@ -126,6 +164,29 @@ void stage2Scene::update(void)
 	{
 		CAMERAMANAGER->CameraShake();
 	}
+
+	if (KEYMANAGER->isOnceKeyDown('T'))
+	{
+		_isClear = true;
+		_stageClear->setClearTime(TIMEMANAGER->getWorldTime());
+		SOUNDMANAGER->stop("1stage");
+		SOUNDMANAGER->play("clear", 0.8f);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('R'))
+	{
+		_isOver = true;
+	}
+
+	if (_isClear)
+	{
+		_stageClear->update();
+	}
+
+	if (_isOver)
+	{
+		_missionFailed->update();
+	}
 }
 
 void stage2Scene::render(void)
@@ -134,10 +195,9 @@ void stage2Scene::render(void)
 	_backGoundRock->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 	_backGroundObject->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 
-
+	OBJECTMANAGER->render(getMemDC());
 	//_playerManager->render();
 	_enemyManager->render();
-	OBJECTMANAGER->render(getMemDC());
 
 	if (KEYMANAGER->isToggleKey('8'))
 	{
@@ -169,4 +229,16 @@ void stage2Scene::render(void)
 				(_mapData->getObject()[i]._rc.top + (_mapData->getObject()[i]._rc.bottom - _mapData->getObject()[i]._rc.top) / 2) - CAMERAMANAGER->getCamera().top, str, strlen(str));
 		}
 	}
+
+	if (_isClear)
+	{
+		_stageClear->render();
+	}
+
+	if (_isOver)
+	{
+		_missionFailed->render();
+	}
+
+	_stageStart->render();
 }
