@@ -57,6 +57,7 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadFrameImage("woodDebris2b", "effectImage/wood_debris_02b.bmp", 208, 26, 8, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("smoke1", "effectImage/smoke_01.bmp", 448, 32, 14, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("smoke2", "effectImage/smoke_02.bmp", 480, 32, 15, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("smoke3", "effectImage/smokeBomb_01.bmp", 640, 32, 20, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("whitePuff", "effectImage/whitePuffPop_01.bmp", 384, 64, 6, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("yellowPuff", "effectImage/bulletPuff_01.bmp", 528, 66, 8, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("redPuff", "effectImage/redPuffPop_01.bmp", 960, 110, 6, 1, true, RGB(255, 0, 255));

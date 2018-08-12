@@ -56,12 +56,12 @@ HRESULT effectManager::init(void)
 
 	addEffect("flies", "blackPixelDot", 10, 5);
 	addEffect("ashes", "blackPixelDot", 10, 180);
-	addEffect("orangeSparks", "orangePixelDot", 20, 20);
-	addEffect("lightOrangeSparks", "lightOrangePixelDot", 20, 20);
-	addEffect("yellowSparks", "yellowPixelDot", 20, 20);
-	addEffect("lightBrownSparks", "lightBrownPixelDot", 20, 20);
-	addEffect("brownSparks", "brownPixelDot", 20, 20);
-	addEffect("darkBrownSparks", "darkBrownPixelDot", 20, 20);
+	addEffect("orangeSparks", "orangePixelDot", 20, 10);
+	addEffect("lightOrangeSparks", "lightOrangePixelDot", 20, 10);
+	addEffect("yellowSparks", "yellowPixelDot", 20, 10);
+	addEffect("lightBrownSparks", "lightBrownPixelDot", 20, 15);
+	addEffect("brownSparks", "brownPixelDot", 20, 10);
+	addEffect("darkBrownSparks", "darkBrownPixelDot", 20, 10);
 
 	addEffect("bigBang", "explosionFlame8", 10, 10);
 
@@ -121,14 +121,14 @@ void effectManager::render(void)
 	/*
 	for (mIter; mIter != _mEffect.end(); ++mIter)
 	{
-		//for (int i = mIter->second.size() - 1; i >= 0 ; i--)
-		for (int i = 0; i < mIter->second.size(); i++)
-		{
-			mIter->second[i]->render();
-		}
+	//for (int i = mIter->second.size() - 1; i >= 0 ; i--)
+	for (int i = 0; i < mIter->second.size(); i++)
+	{
+	mIter->second[i]->render();
+	}
 	}
 	*/
-	
+
 	vector<vector<effects*>> temp;
 	for (mIter; mIter != _mEffect.end(); ++mIter)
 	{
@@ -146,13 +146,13 @@ void effectManager::render(void)
 void effectManager::bloodSplash(float x, float y, bool isLeft)
 {
 	this->playParabola("bloodSplash2", x, y, isLeft);
+	this->playParabolaNoCollision("bloodSplash2", x, y, isLeft);
 	this->playParabola("bloodSplash3", x, y, isLeft);
-	this->playParabola("bloodSplash4", x, y, isLeft);
+	this->playParabolaNoCollision("bloodSplash4", x, y, isLeft);
 	this->playParabola("bloodSplash5", x, y, isLeft);
-	this->playParabola("bloodSplash6", x, y, isLeft);
+	this->playParabolaNoCollision("bloodSplash6", x, y, isLeft);
 	this->playParabola("bloodSplash7", x, y, isLeft);
-	this->playParabola("bloodSplash8", x, y, isLeft);
-	this->playFountain("bloodSplash1", x, y);
+	this->playParabolaNoCollision("bloodSplash8", x, y, isLeft);
 }
 
 void effectManager::bloodBlotch(float x, float y)
@@ -163,74 +163,77 @@ void effectManager::bloodBlotch(float x, float y)
 void effectManager::bloodFountain(float x, float y)
 {
 	this->playFountain("bloodSplash1", x, y);
-	this->playFountain("bloodSplash2", x, y);
+	this->playFountainNoCollision("bloodSplash2", x, y);
 	this->playFountain("bloodSplash3", x, y);
-	this->playFountain("bloodSplash4", x, y);
+	this->playFountainNoCollision("bloodSplash4", x, y);
 	this->playFountain("bloodSplash5", x, y);
-	this->playFountain("bloodSplash6", x, y);
+	this->playFountainNoCollision("bloodSplash6", x, y);
 	this->playFountain("bloodSplash7", x, y);
-	this->playFountain("bloodSplash8", x, y);
+	this->playFountainNoCollision("bloodSplash8", x, y);
 }
 
 void effectManager::RambroBloodFountain(float x, float y)
 {
-	this->playFountain("bloodSplash1", x, y);
-	this->playFountain("bloodSplash1", x, y);
+	this->playFountainNoCollision("bloodSplash1", x, y);
+	//this->playFountainNoCollision("bloodSplash2", x, y);
+	this->playFountainNoCollision("bloodSplash3", x, y);
+	//this->playFountainNoCollision("bloodSplash4", x, y);
+	this->playFountainNoCollision("bloodSplash5", x, y);
+	//this->playFountainNoCollision("bloodSplash6", x, y);
+	this->playFountainNoCollision("bloodSplash7", x, y);
+	//this->playFountainNoCollision("bloodSplash8", x, y);
+	//this->playFountain("bloodSplash1", x, y);
 	this->playFountain("bloodSplash2", x, y);
-	this->playFountain("bloodSplash2", x, y);
-	this->playFountain("bloodSplash3", x, y);
-	this->playFountain("bloodSplash3", x, y);
+	//this->playFountain("bloodSplash3", x, y);
 	this->playFountain("bloodSplash4", x, y);
-	this->playFountain("bloodSplash4", x, y);
-	this->playFountain("bloodSplash5", x, y);
-	this->playFountain("bloodSplash5", x, y);
+	//this->playFountain("bloodSplash5", x, y);
 	this->playFountain("bloodSplash6", x, y);
-	this->playFountain("bloodSplash6", x, y);
-	this->playFountain("bloodSplash7", x, y);
-	this->playFountain("bloodSplash7", x, y);
-	this->playFountain("bloodSplash8", x, y);
+	//this->playFountain("bloodSplash7", x, y);
 	this->playFountain("bloodSplash8", x, y);
 	this->playFountain("rambro_head", x, y);
+	this->playFountainNoCollision("rambro_arm", x, y);
 	this->playFountain("rambro_arm", x, y);
-	this->playFountain("rambro_arm", x, y);
-	this->playFountain("rambro_leg", x, y);
+	this->playFountainNoCollision("rambro_leg", x, y);
 	this->playFountain("rambro_leg", x, y);
 	this->playFountain("rambro_uppperBody", x, y);
 }
 
 void effectManager::missileTrail(float x, float y, bool isLeft)
 {
-	this->playMissileTrail("missileTrail1", x, y, isLeft);
+	//this->playMissileTrail("missileTrail1", x, y, isLeft);
+	this->playMissileTrail("missileTrail2", x, y, isLeft);
+	//this->playMissileTrail("missileTrail3", x, y, isLeft);
 }
 
-void effectManager::missilePuff(float x, float y, bool isLeft)
+void effectManager::missilePuff(float x, float y, int speed, bool isLeft)
 {
+	this->playMissilePuff("flame1", x, y, speed, isLeft);
 }
 
 void effectManager::chuckBloodFountain(float x, float y)
 {
-	this->playFountain("bloodSplash1", x, y);
-	this->playFountain("bloodSplash1", x, y);
+	this->playFountainNoCollision("bloodSplash1", x, y);
+	//this->playFountainNoCollision("bloodSplash2", x, y);
+	this->playFountainNoCollision("bloodSplash3", x, y);
+	//this->playFountainNoCollision("bloodSplash4", x, y);
+	this->playFountainNoCollision("bloodSplash5", x, y);
+	//this->playFountainNoCollision("bloodSplash6", x, y);
+	this->playFountainNoCollision("bloodSplash7", x, y);
+	//this->playFountainNoCollision("bloodSplash8", x, y);
+	//this->playFountain("bloodSplash1", x, y);
 	this->playFountain("bloodSplash2", x, y);
-	this->playFountain("bloodSplash2", x, y);
-	this->playFountain("bloodSplash3", x, y);
-	this->playFountain("bloodSplash3", x, y);
+	//this->playFountain("bloodSplash3", x, y);
 	this->playFountain("bloodSplash4", x, y);
-	this->playFountain("bloodSplash4", x, y);
-	this->playFountain("bloodSplash5", x, y);
-	this->playFountain("bloodSplash5", x, y);
+	//this->playFountain("bloodSplash5", x, y);
 	this->playFountain("bloodSplash6", x, y);
-	this->playFountain("bloodSplash6", x, y);
-	this->playFountain("bloodSplash7", x, y);
-	this->playFountain("bloodSplash7", x, y);
-	this->playFountain("bloodSplash8", x, y);
+	//this->playFountain("bloodSplash7", x, y);
 	this->playFountain("bloodSplash8", x, y);
 	this->playFountain("chuck_head", x, y);
+	this->playFountainNoCollision("chuck_arm", x, y);
 	this->playFountain("chuck_arm", x, y);
-	this->playFountain("chuck_arm", x, y);
+	this->playFountainNoCollision("chuck_leg", x, y);
 	this->playFountain("chuck_leg", x, y);
-	this->playFountain("chuck_leg", x, y);
-	this->playFountain("chuck_upperBody", x, y);
+	this->playFountain("chuck_uppperBody", x, y);
 }
 
 void effectManager::cartridge(float x, float y, bool isLeft)
@@ -242,7 +245,7 @@ void effectManager::rockFall(float x, float y, bool isLeft)
 {
 	this->playParabola("rock1", x, y, isLeft);
 	this->playParabola("rock2", x, y, isLeft);
-	this->playParabola("rock3", x, y, isLeft);
+	this->playParabolaNoCollision("rock3", x, y, isLeft);
 	this->playParabola("rock4", x, y, isLeft);
 	this->playParabola("rock5", x, y, isLeft);
 	this->playParabola("darkBrownSparks", x, y, isLeft);
@@ -279,8 +282,8 @@ void effectManager::grenadePuff(float x, float y)
 
 void effectManager::rambroGrenadeExplosion(float x, float y)
 {
-	this->playFountain("orangeSparks", x, y);
-	this->playFountain("lightOrangeSparks", x, y);
+	this->playFountainNoCollision("orangeSparks", x, y);
+	this->playFountainNoCollision("lightOrangeSparks", x, y);
 	this->playFountain("yellowSparks", x, y);
 	this->playBallExplosion("ballFlame1", x + RND->getFloat(20.f), y + RND->getFloat(20.f));
 	this->playBallExplosion("ballFlame2", x - RND->getFloat(5.f), y - RND->getFloat(5.f));
@@ -320,19 +323,28 @@ void effectManager::bigBang(float x, float y)
 	this->playBallExplosion("ballFlame1", x + RND->getFloat(30.f), y + RND->getFloat(30.f));
 	this->playBallExplosion("ballFlame2", x - RND->getFloat(20.f), y - RND->getFloat(10.f));
 	//this->playBallExplosion("ballFlame3", x - RND->getFloat(30.f), y + RND->getFloat(50.f));
-	this->playFountain("orangeSparks", x, y);
-	this->playFountain("lightOrangeSparks", x, y);
+	this->playFountainNoCollision("orangeSparks", x, y);
+	this->playFountainNoCollision("lightOrangeSparks", x, y);
 	this->playFountain("yellowSparks", x, y);
 }
 
 void effectManager::explosionStart(float x, float y)
-{ 
+{
 	if (_count > 35)
 		this->playExplosion("flame8", x, y);
 	else if (_count > 30)
 		this->playExplosion("flame7", x, y);
 	else if (_count > 25)
+	{
+		//this->playBallExplosion("ballFlame1", x, y);
+		this->playBallExplosion("ballFlame2", x, y);
+		//this->playBallExplosion("ballFlame3", x, y);
+		this->playFountainNoCollision("orangeSparks", x, y);
+		this->playFountainNoCollision("lightOrangeSparks", x, y);
+		this->playFountain("yellowSparks", x, y);
+
 		this->playExplosion("flame6", x, y);
+	}
 	else if (_count > 20)
 		this->playExplosion("flame5", x, y);
 	else if (_count > 15)
@@ -397,6 +409,24 @@ void effectManager::playParabola(string effectName, float x, float y, bool isLef
 	}
 }
 
+void effectManager::playParabolaNoCollision(string effectName, float x, float y, bool isLeft)
+{
+	miEffect mIter;
+
+	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
+	{
+		if (!(mIter->first == effectName)) continue;
+
+		//이펙트키와 일치하면 이펙트 실행
+		for (int i = 0; i < mIter->second.size(); i++)
+		{
+			if (mIter->second[i]->getIsRunning()) continue;
+			mIter->second[i]->activateParabolaNoCollision(x, y, isLeft);
+			return;
+		}
+	}
+}
+
 void effectManager::playBlotch(string effectName, float x, float y)
 {
 	miEffect mIter;
@@ -428,6 +458,24 @@ void effectManager::playFountain(string effectName, float x, float y)
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
 			mIter->second[i]->activateFountain(x, y);
+			return;
+		}
+	}
+}
+
+void effectManager::playFountainNoCollision(string effectName, float x, float y)
+{
+	miEffect mIter;
+
+	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
+	{
+		if (!(mIter->first == effectName)) continue;
+
+		//이펙트키와 일치하면 이펙트 실행
+		for (int i = 0; i < mIter->second.size(); i++)
+		{
+			if (mIter->second[i]->getIsRunning()) continue;
+			mIter->second[i]->activateFountainNoCollision(x, y);
 			return;
 		}
 	}
@@ -474,7 +522,7 @@ void effectManager::playCartridge(string effectName, float x, float y, bool isLe
 	miEffect mIter;
 
 	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
- 	{
+	{
 		if (!(mIter->first == effectName)) continue;
 
 		//이펙트키와 일치하면 이펙트 실행
@@ -613,7 +661,7 @@ void effectManager::playMissileTrail(string effectName, float x, float y, bool i
 	}
 }
 
-void effectManager::playMissilePuff(string effectName, float x, float y, bool isLeft)
+void effectManager::playMissilePuff(string effectName, float x, float y, int speed, bool isLeft)
 {
 	miEffect mIter;
 
@@ -625,7 +673,7 @@ void effectManager::playMissilePuff(string effectName, float x, float y, bool is
 		for (int i = 0; i < mIter->second.size(); i++)
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
-			mIter->second[i]->activateMissilePuff(x, y, isLeft);
+			mIter->second[i]->activateMissilePuff(x, y, speed, isLeft);
 			return;
 		}
 	}
