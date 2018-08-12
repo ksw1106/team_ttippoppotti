@@ -764,7 +764,7 @@ void playerManager::update(void)
 						OBJECTMANAGER->getVObject()[k]->setIsActived(true);
 					if (OBJECTMANAGER->getVObject()[k]->getType() == AMERICAN_FLAG || OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
 					{
-						OBJECTMANAGER->getVObject()[k]->setFlagCount(OBJECTMANAGER->getVObject()[k]->getFlagCount() + 1);
+						OBJECTMANAGER->setFlagCount(OBJECTMANAGER->getFlagCount() + 1);
 						OBJECTMANAGER->getVObject()[k]->setState(OBJECT_MOVE);
 					}
 				}
@@ -781,7 +781,7 @@ void playerManager::update(void)
 						_rambroFire = true;
 						_rambroGrenade = true;
 						//OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);	
-						OBJECTMANAGER->getVObject()[k]->setIsActive(false);
+						OBJECTMANAGER->getVObject()[k]->setIsActived(false);
 						OBJECTMANAGER->getVObject()[k]->setIndex(0);
 					}
 					else
