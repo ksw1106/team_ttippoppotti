@@ -29,6 +29,7 @@ HRESULT stage2Scene::init(void)
 	_stageClear = new stageClear;
 	_stageClear->init();
 	_stageClear->setEnemyManager(_enemyManager);
+	_stageClear->setCurrentStage(2);
 
 	_stageStart = new stageStart;
 	_stageStart->init();
