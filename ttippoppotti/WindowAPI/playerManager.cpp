@@ -5,8 +5,7 @@
 
 HRESULT playerManager::init(int num)
 {
-	if (num == 1)
-	{
+
 		//_player = new player;
 		_playerChange[0] = new player;
 		_playerChange[0]->init(0);
@@ -62,7 +61,7 @@ HRESULT playerManager::init(int num)
 
 		_player->setrcSkyRight(_player->getrcSkyRight());
 		_player->setrcSkyLeft(_player->getrcSkyLeft());
-	}
+	
 
 	return S_OK;
 }

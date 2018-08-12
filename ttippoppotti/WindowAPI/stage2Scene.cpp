@@ -31,7 +31,7 @@ HRESULT stage2Scene::init(void)
 	_backGroundPixel = IMAGEMANAGER->findImage("stage2_background_pixel");
 	_ladderPixel = IMAGEMANAGER->findImage("stage2_ladder_pixel");
 
-	COLLISIONMANAGER->setPixelMap(IMAGEMANAGER->findImage("stage2_background_object"), IMAGEMANAGER->findImage("stage2_ladder_pixel"));
+	COLLISIONMANAGER->setPixelMap(IMAGEMANAGER->findImage("stage2_background_pixel"), IMAGEMANAGER->findImage("stage2_ladder_pixel"));
 	EFFECTMANAGER->init();
 
 	_camDebug = false;
@@ -48,7 +48,7 @@ void stage2Scene::release(void)
 void stage2Scene::update(void)
 {
 	//_playerManager->update();
-	//_enemyManager->update();
+	_enemyManager->update();
 	OBJECTMANAGER->update();
 
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
@@ -136,7 +136,7 @@ void stage2Scene::render(void)
 
 
 	//_playerManager->render();
-	//_enemyManager->render();
+	_enemyManager->render();
 	OBJECTMANAGER->render(getMemDC());
 
 	if (KEYMANAGER->isToggleKey('8'))
