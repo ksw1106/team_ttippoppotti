@@ -77,10 +77,12 @@ void enemyManager::release(void)
 		SAFE_DELETE(_bossRocket);
 		_hpBar->release();
 		SAFE_DELETE(_hpBar);
+		_vDog.clear();
 	}
 		
 	_eBullet->release();
 	SAFE_DELETE(_eBullet);
+	_vSoldier.clear();
 	
 }
 
