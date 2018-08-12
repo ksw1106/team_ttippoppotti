@@ -31,6 +31,7 @@ void eBullet::release(void)
 		_vEBullet[i].bulletImage->release();
 		SAFE_DELETE(_vEBullet[i].bulletImage);
 	}
+	_vEBullet.clear();
 }
 
 void eBullet::update(void)
