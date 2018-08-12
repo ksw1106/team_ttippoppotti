@@ -15,6 +15,16 @@ HRESULT stage2Scene::init(void)
 	_mapData->setObjectPixel("stage2_background_object");
 	_mapData->setBackGroundMap("stage2_background_pixel");
 
+	EFFECTMANAGER->init();
+	_playerManager->setMapData(_mapData);
+	_enemyManager->setMapData(_mapData);
+	_playerManager->setEnemyManager(_enemyManager);
+	_enemyManager->setPlayerManager(_playerManager);
+
+	OBJECTMANAGER->setMapData(_mapData);
+	OBJECTMANAGER->setPlayerManager(_playerManager);
+	OBJECTMANAGER->init(2);
+
 	_backGround = IMAGEMANAGER->findImage("backGround");
 	_backGroundObject = IMAGEMANAGER->findImage("stage2_background_object");
 	_backGoundRock = IMAGEMANAGER->findImage("stage2_background_rock");
@@ -37,6 +47,10 @@ void stage2Scene::release(void)
 
 void stage2Scene::update(void)
 {
+	//_playerManager->update();
+	//_enemyManager->update();
+	OBJECTMANAGER->update();
+
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 	{
 		POINT ptTemp;
@@ -119,6 +133,11 @@ void stage2Scene::render(void)
 	_backGround->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 	_backGoundRock->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 	_backGroundObject->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
+
+
+	//_playerManager->render();
+	//_enemyManager->render();
+	OBJECTMANAGER->render(getMemDC());
 
 	if (KEYMANAGER->isToggleKey('8'))
 	{
