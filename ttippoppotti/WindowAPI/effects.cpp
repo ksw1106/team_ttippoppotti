@@ -102,8 +102,8 @@ void effects::activateCartridge(float x, float y, bool isLeft)
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
-		_vParticle[i].x = x + 130 / 2;
-		_vParticle[i].y = y + 105 / 2;
+		_vParticle[i].x = x + 130 / 4;
+		_vParticle[i].y = y + 105 / 4;
 		if (isLeft)
 			_vParticle[i].angle = PI / 3;
 		else //플레이어가 오른쪽을 바라보고 있을 때
@@ -447,6 +447,7 @@ void effects::activateMissilePuff(float x, float y, bool isLeft)
 	for (int i = 8; i > 2; i--)
 		//for (int i = 1; i <= 8; i++)
 	{
+		particle.isAlphaImg = true;
 		particle.particleImg = IMAGEMANAGER->findImage(("explosionFlame" + to_string(i)));
 		_vParticle.push_back(particle);
 		particle.particleImg = IMAGEMANAGER->findImage(("explosionFlame" + to_string(i)));
@@ -455,6 +456,7 @@ void effects::activateMissilePuff(float x, float y, bool isLeft)
 
 	for (int i = 3; i > 0; i--)
 	{
+		particle.isAlphaImg = false;
 		particle.isFrameImg = true;
 		particle.particleImg = IMAGEMANAGER->findImage(("smoke" + to_string(i)));
 		_vParticle.push_back(particle);
@@ -465,6 +467,7 @@ void effects::activateMissilePuff(float x, float y, bool isLeft)
 	for (int i = 0; i < _vParticle.size(); i++)
 	{
 		_vParticle[i].fire = true;
+		_vParticle[i].count = 0;
 		if (isLeft)
 			_vParticle[i].angle = PI + PI_4;
 		else
@@ -502,19 +505,26 @@ void effects::boomMissilePuff()
 {
 	if (_isMissilePuff)
 	{
+		_bigBangCount++;
 		for (int i = 0; i < _vParticle.size(); i++)
 		{
 			if (!_vParticle[i].fire) continue;
-			if (_vParticle[i].x < _vParticle[i].fireX)
-				_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
+			_vParticle[i].count++;
+			//if (_vParticle[i].x < _vParticle[i].fireX)
+			//	_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
+			////else
+			//	//_vParticle[i].fire = false;
+			//if (_vParticle[i].y < _vParticle[i].fireY)
+			//	_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed;
 			//else
-				//_vParticle[i].fire = false;
-			if (_vParticle[i].y < _vParticle[i].fireY)
-				_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed;
-			//else
-			if (_vParticle[i].fire)
+			if (_vParticle[i].count > 50)
 			{
 				_vParticle[i].fire = false;
+			}
+			if (_bigBangCount > 100)
+			{
+				_isRunning = false;
+				_isMissilePuff = false;
 			}
 
 			if (_vParticle[i].isFrameImg)

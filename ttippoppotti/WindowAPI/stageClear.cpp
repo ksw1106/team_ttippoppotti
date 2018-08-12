@@ -20,7 +20,7 @@ HRESULT stageClear::init(void)
 		_input[i]->init(str.c_str(), 434, 80, true, RGB(255, 0, 255));
 	}
 
-	_clearCount = _imageIndex = 0;
+	_clearCount = _imageIndex = _inputCount = 0;
 
 	_clearBlank = new image;
 	_clearBlank->init("stageClear/areaClearBlank.bmp", 814, 222, true, RGB(255, 0, 255));
@@ -271,6 +271,28 @@ void stageClear::update(void)
 		}
 	}
 
+	if (_isPrintInput)
+	{
+		_inputCount++;
+		if (_inputCount >= 54)
+			_inputCount = 0;
+
+		if (KEYMANAGER->isOnceKeyDown('V'))
+		{
+			if (1 == _currentStage)
+			{
+				SOUNDMANAGER->stop("clear");
+				SCENEMANAGER->getCurrentScene()->release();
+				SCENEMANAGER->loadScene("½ºÅ×ÀÌÁö2¾À");
+			}
+			if (2 == _currentStage)
+			{
+				SOUNDMANAGER->stop("clear");
+				SCENEMANAGER->loadScene("¿£µù¾À");
+			}
+		}
+	}
+
 	_rc[0] = RectMake(x, 0, 2000, 170);
 	_rc[1] = RectMake(x, 898, 2000, 182);
 }
@@ -345,6 +367,16 @@ void stageClear::render(void)
 
 			_enemyList[i].image[_enemyList[i].isDead]->frameRender(getMemDC(), _enemyList[i].x, _enemyList[i].y);
 		}
+	}
+
+	if (_isPrintInputBoard)
+	{
+		_timeBoard->render(getMemDC(), inputBoardX, 740);
+	}
+
+	if (_isPrintInput)
+	{
+		_input[_inputCount]->render(getMemDC(), 995, 787);
 	}
 }
 

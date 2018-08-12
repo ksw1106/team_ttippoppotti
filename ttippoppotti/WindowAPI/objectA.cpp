@@ -241,7 +241,11 @@ void prisoner::idle()
 	else
 		if (_isActived)
 			for (int i = 0; i < _vElement.size(); i++)
+			{
+				_vElement[i].x = _x - 14;
+				_vElement[i].y = _y - 65;
 				FRAMEMANAGER->frameChange(_vElement[i].elementImg, _count, _index, _animationSpeed, _isLeft);
+			}
 }
 
 void prisoner::move()
@@ -254,7 +258,11 @@ void prisoner::move()
 	if (_isActived)
 	{
 		for (int i = 0; i < _vElement.size(); i++)
+		{
+			_vElement[i].x = _x - 14;
+			_vElement[i].y = _y - 65;
 			FRAMEMANAGER->frameChange(_vElement[i].elementImg, _count, _index, _animationSpeed, _isLeft);
+		}
 	}
 	else
 	{
@@ -365,8 +373,12 @@ void helicopter::init()
 	_isLeft = false;
 	_destX = _x;
 	_destY = _y;
-	_x -= _image->getFrameWidth() * 2;
-	_y -= _image->getFrameHeight() * 2;
+	_oldX = _x + _image->getFrameWidth();
+	_oldY = _y - _image->getFrameWidth();
+	_x -= _image->getFrameWidth() * 1.5;
+	_y -= _image->getFrameWidth() * 1.5;
+	//_x -= cosf(PI_2 + PI_4) * _image->getFrameHeight() * 1.5;
+	//_y -= -sinf(PI_2 + PI_4) * _image->getFrameHeight() * 1.5;
 }
 
 void helicopter::idle()
@@ -378,36 +390,59 @@ void helicopter::idle()
 			tagElement element;
 			ZeroMemory(&element, sizeof(tagElement));
 			element.elementImg = IMAGEMANAGER->findImage("ladder");
-			element.isFrameImg = true;
 			element.x = _x + 169;
 			element.y = _y + 182;
 
 			_vElement.push_back(element);
 		}
-		_isStart = true;
 	}
 	else
 	{
-
-		if (_destX >= _x)
+		if (_destX <= _x)
 			_x = _destX;
 		else
-			_x += 2.0f;
+			_x += 12.0f;
+			//_x += cosf(PI_2 + PI_4) * (_image->getFrameWidth() / 10);
 
-		if (_destY >= _y)
+		if (_destY <= _y)
 			_y = _destY;
 		else
-			_y += 2.0f;
+			_y += 12.0f;
+			//_y += -sinf(PI_2 + PI_4) * (_image->getFrameWidth() / 10);
 		
 		for (int i = 0; i < _vElement.size(); i++)
+		{
+			_vElement[i].x = _x + 169;
+			_vElement[i].y = _y + 182;
 			_activationRc = RectMake(_vElement[i].x, _vElement[i].y, _vElement[i].elementImg->getWidth(), _vElement[i].elementImg->getHeight());
+		}
 	}
 }
 
 void helicopter::move()
 {
+	if (_x < _oldX)
+	{
+		_x += 12.0f;
+	}
+	else
+	{
+		_x = _oldX;
+	}
+	if (_y > _oldY)
+	{
+		_y -= 12.0f;
+	}
+	else
+	{
+		_y = _oldY;
+	}
 	for (int i = 0; i < _vElement.size(); i++)
+	{
+		_vElement[i].x = _x + 169;
+		_vElement[i].y = _y + 182;
 		_activationRc = RectMake(_vElement[i].x, _vElement[i].y, _vElement[i].elementImg->getWidth(), _vElement[i].elementImg->getHeight());
+	}
 }
 
 void americanFlag::init()

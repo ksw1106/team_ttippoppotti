@@ -44,7 +44,7 @@ HRESULT stageScene::init(void)
 	_stageClear = new stageClear;
 	_stageClear->init();
 	_stageClear->setEnemyManager(_enemyManager);
-
+	_stageClear->setCurrentStage(1);
 	_stageStart = new stageStart;
 	_stageStart->init();
 
@@ -198,8 +198,8 @@ void stageScene::update(void)
 		_isOver = true;
 	}
 
-	//_isClear = _enemyManager->isClear();
-	//_isOver = _playerManager->getIsGameover();
+	OBJECTMANAGER->setIsDead(_enemyManager->isClear());
+	_isOver = _playerManager->getIsGameover();
 
 	if (_isClear)
 	{

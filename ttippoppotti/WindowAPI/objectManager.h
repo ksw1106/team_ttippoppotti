@@ -37,6 +37,7 @@ public:
 	int getFlagCount() { return _flagCount; }
 	bool getGameClear() { return _isGameClear; }
 
+	void setFlagCount(int flagCount) { _flagCount = flagCount; }
 	void setIsDead(bool isDead) { _isDead = isDead; }
 	void setMapData(mapData* mapData) { _mapData = mapData;	}
 	void setPlayerManager(playerManager* playerManager) { _playerManager = playerManager; }

@@ -5,6 +5,7 @@
 #include "stage2Scene.h"
 #include "loadingScene.h"
 #include "titleScene.h"
+#include "endingScene.h"
 
 class mainGame : public gameNode
 {
