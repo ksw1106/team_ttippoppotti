@@ -168,7 +168,7 @@ public:
 	bool getIsFlash() { return _isFlash; }
 	void setIsFlash(bool isFlash) { _isFlash = isFlash; }
 
-	HRESULT init(int num);
+	HRESULT init(int num, float x, float y);
 	void release(void);
 	void update(void);
 	void render(void);

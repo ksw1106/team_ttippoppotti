@@ -46,9 +46,13 @@ void testScene_kmy::update(void)
 
 		EFFECTMANAGER->rambroGrenadeExplosion(800, 1800);
 	}
+	float x = 0, y = 0;
 	if (KEYMANAGER->isOnceKeyDown('Y'))
 	{
-		float x = 900, y = 2000;
+		x = 900, y = 2000;
+	//	EFFECTMANAGER->missileTrail(900, 2200, false);
+		EFFECTMANAGER->missilePuff(x, y, false);
+	}
 		x++;
 		y++;x++;
 		y++;x++;
@@ -57,9 +61,6 @@ void testScene_kmy::update(void)
 		y++;x++;
 		y++;x++;
 		y++;
-	//	EFFECTMANAGER->missileTrail(900, 2200, false);
-		EFFECTMANAGER->missilePuff(x, y, false);
-	}
 }
 
 void testScene_kmy::render(void)

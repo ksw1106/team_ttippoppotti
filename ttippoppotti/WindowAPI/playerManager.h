@@ -37,7 +37,7 @@ private:
 	bool _isLadder;
 
 	bool _rambroChange;
-
+	int stageNum;
 	int _missileCount;
 	bool _isMissile;
 	bool _missile;

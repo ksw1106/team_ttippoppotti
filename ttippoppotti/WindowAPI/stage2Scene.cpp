@@ -86,8 +86,8 @@ void stage2Scene::update(void)
 {
 	_stageStart->update();
 
-	//_playerManager->update();
-	//_enemyManager->update();
+	_playerManager->update();
+	_enemyManager->update();
 	OBJECTMANAGER->update();
 
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
@@ -197,7 +197,7 @@ void stage2Scene::render(void)
 	_backGroundObject->render(getMemDC(), 0, 0, CAMERAMANAGER->getCamera().left, CAMERAMANAGER->getCamera().top, WINSIZEX, WINSIZEY);
 
 	OBJECTMANAGER->render(getMemDC());
-	//_playerManager->render();
+	_playerManager->render();
 	_enemyManager->render();
 
 	if (KEYMANAGER->isToggleKey('8'))

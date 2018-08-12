@@ -365,8 +365,10 @@ void helicopter::init()
 	_isLeft = false;
 	_destX = _x;
 	_destY = _y;
-	_x -= _image->getFrameWidth() * 2;
-	_y -= _image->getFrameHeight() * 2;
+	//_x -= _image->getFrameWidth() * 1.5;
+	//_y -= _image->getFrameHeight() * 1.5;
+	_x -= cosf(PI_2 + PI_4) * _image->getFrameHeight() * 1.5;
+	_y -= -sinf(PI_2 + PI_4) * _image->getFrameHeight() * 1.5;
 }
 
 void helicopter::idle()
@@ -378,36 +380,51 @@ void helicopter::idle()
 			tagElement element;
 			ZeroMemory(&element, sizeof(tagElement));
 			element.elementImg = IMAGEMANAGER->findImage("ladder");
-			element.isFrameImg = true;
 			element.x = _x + 169;
 			element.y = _y + 182;
 
 			_vElement.push_back(element);
 		}
-		_isStart = true;
 	}
 	else
 	{
-
-		if (_destX >= _x)
+		if (_destX <= _x)
 			_x = _destX;
 		else
-			_x += 2.0f;
+			_x += cosf(PI_2 + PI_4) * _image->getFrameWidth() * 1.5;
 
-		if (_destY >= _y)
+		if (_destY <= _y)
 			_y = _destY;
 		else
-			_y += 2.0f;
+			_y += -sinf(PI_2 + PI_4) * _image->getFrameWidth() * 1.5;
 		
 		for (int i = 0; i < _vElement.size(); i++)
+		{
+			_vElement[i].x = _x + 169;
+			_vElement[i].y = _y + 182;
 			_activationRc = RectMake(_vElement[i].x, _vElement[i].y, _vElement[i].elementImg->getWidth(), _vElement[i].elementImg->getHeight());
+		}
 	}
 }
 
 void helicopter::move()
 {
+	_destX = _x + _image->getFrameWidth();
+	if (_x < _destX)
+	{
+		_x += 8.0f;
+		_y -= 0.5f;
+	}
+	else
+	{
+		_x = _destX;
+	}
 	for (int i = 0; i < _vElement.size(); i++)
+	{
+		_vElement[i].x = _x + 169;
+		_vElement[i].y = _y + 182;
 		_activationRc = RectMake(_vElement[i].x, _vElement[i].y, _vElement[i].elementImg->getWidth(), _vElement[i].elementImg->getHeight());
+	}
 }
 
 void americanFlag::init()

@@ -2,9 +2,9 @@
 #include "player.h"
 #include "enemyManager.h"
 
-HRESULT player::init(int num)
+HRESULT player::init(int num, float x, float y)
 {
-	if (num == 0)
+	if (num ==0)
 	{
 		// rambro
 		_ramBro[IDLE] = IMAGEMANAGER->findImage("rambro_idle");
@@ -44,10 +44,12 @@ HRESULT player::init(int num)
 	_rambroUiImage = IMAGEMANAGER->findImage("rambro_ui_image");
 	_rambroUiImageRun = IMAGEMANAGER->findImage("rambro_ui_image_run");
 
+
+
 	_state = IDLE;
 	_gun = RUN_GUN;
-	_x = 100.f;
-	_y = 1900.f;
+	_x = x;
+	_y = y;
 	_oldX = _x;
 	_oldY = _y;
 	_width = 60;

@@ -5,64 +5,70 @@
 
 HRESULT playerManager::init(int num)
 {
-	//if (num == 0)
-	//{
-		_player = new player;
-		_playerChange[0] = new player;
-		_playerChange[0]->init(0);
-		_playerChange[1] = new player;
-		_playerChange[1]->init(1);
+	stageNum = num;
+	_player = new player;
+	_playerChange[0] = new player;
+	_playerChange[1] = new player;
+	if (num == 1)
+	{
+		_playerChange[0]->init(0, 100.f, 1900.f);
+		_playerChange[1]->init(1, 100.f, 1900.f);
+	}
+	else if (num == 2)
+	{
+		_playerChange[0]->init(0, 375.f, 1104.f);
+		_playerChange[1]->init(1, 375.f, 1104.f);
+	}
+	_rambroChange = false;
 
-		_rambroChange = false;
+	_player = _playerChange[_rambroChange];
+	_player->setRcRambro(_player->getRcRambro());
 
-		_player = _playerChange[_rambroChange];
-		_player->setRcRambro(_player->getRcRambro());
+	_pBullet = new pBullet;
+	_pBullet->init(700.f);
+	_pGrenade = new pGrenade;
+	_pGrenade->init(500.f);
+	_gBullet = new gBullet;
+	_gBullet->init(400.f);
+	_gMissile = new gMissile;
+	_gMissile->init(2000.f);
+	_xMissile = new xMissile;
+	_xMissile->init(2000.f);
 
-		_pBullet = new pBullet;
-		_pBullet->init(700.f);
-		_pGrenade = new pGrenade;
-		_pGrenade->init(500.f);
-		_gBullet = new gBullet;
-		_gBullet->init(400.f);
-		_gMissile = new gMissile;
-		_gMissile->init(2000.f);
-		_xMissile = new xMissile;
-		_xMissile->init(2000.f);
+	_p1Bubble = IMAGEMANAGER->findImage("p1Bubble");
+	_p1Bubble->setX(_player->getX() + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
+	_p1Bubble->setY(_player->getY() - 100);
 
-		_p1Bubble = IMAGEMANAGER->findImage("p1Bubble");
-		_p1Bubble->setX(_player->getX() + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
-		_p1Bubble->setY(_player->getY() - 100);
+	_rcKnifeRight = RectMake(_player->getX() + 60, _player->getY() + 30, 30, 30);
+	_rcKnifeLeft = RectMake(_player->getX() - 20, _player->getY() + 30, 30, 30);
 
-		_rcKnifeRight = RectMake(_player->getX() + 60, _player->getY() + 30, 30, 30);
-		_rcKnifeLeft = RectMake(_player->getX() - 20, _player->getY() + 30, 30, 30);
 
-		hit_left = hit_right = hit_top = hit_bottom = false;
+	hit_left = hit_right = hit_top = hit_bottom = false;
 
-		_index = _count = 0;
-		_animationSpeed = 5;
+	_index = _count = 0;
+	_animationSpeed = 5;
 
-		_fireCount = 0;
-		_grenadeCount = 0;
-		_missileCount = 0;
+	_fireCount = 0;
+	_grenadeCount = 0;
+	_missileCount = 0;
 
-		_knifeCollision = false;
-		_isLadder = false;
-		_rambroFire = false;
-		_rambroGrenade = false;
-		_isGrenade = false;
-		_xMissileCollision = false;
-		_xMissileColl = false;
-		_isMissile = false;
-		_missile = false;
-		_isGameover = false;
+	_knifeCollision = false;
+	_isLadder = false;
+	_rambroFire = false;
+	_rambroGrenade = false;
+	_isGrenade = false;
+	_xMissileCollision = false;
+	_xMissileColl = false;
+	_isMissile = false;
+	_missile = false;
+	_isGameover = false;
 
-		_rc8 = RectMake(500.f, 2100.f, 60, 60);
-		//_rcMissileRight = RectMake(100.f, 1000.f, 100, 10);
-		//_rcMissileLeft = RectMake(1500.f, 1000.f, 100, 10);
+	//_rc8 = RectMake(500.f, 2100.f, 60, 60);
+	//_rcMissileRight = RectMake(100.f, 1000.f, 100, 10);
+	//_rcMissileLeft = RectMake(1500.f, 1000.f, 100, 10);
 
-		_player->setrcSkyRight(_player->getrcSkyRight());
-		_player->setrcSkyLeft(_player->getrcSkyLeft());
-	//}
+	_player->setrcSkyRight(_player->getrcSkyRight());
+	_player->setrcSkyLeft(_player->getrcSkyLeft());
 	
 	
 
@@ -767,7 +773,7 @@ void playerManager::update(void)
 						OBJECTMANAGER->getVObject()[k]->setIsActived(true);
 					if (OBJECTMANAGER->getVObject()[k]->getType() == AMERICAN_FLAG || OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
 					{
-						OBJECTMANAGER->setFlagCount(OBJECTMANAGER->getFlagCount() + 1);
+						//OBJECTMANAGER->setFlagCount(OBJECTMANAGER->getFlagCount() + 1);
 						OBJECTMANAGER->getVObject()[k]->setState(OBJECT_MOVE);
 					}
 				}
@@ -779,7 +785,7 @@ void playerManager::update(void)
 					{
 						//할아버지 등장 시점 
 						_rambroChange = true;
-						_playerChange[1]->init(1);
+						_playerChange[1]->init(1,_player->getX(),_player->getY());
 						_player = _playerChange[_rambroChange];
 						_rambroFire = true;
 						_rambroGrenade = true;
@@ -1325,14 +1331,14 @@ void playerManager::update(void)
 		}
 	}
 
-	if (IntersectRect(&temp, &_rc8, &_player->getRcRambro()))
-	{
-		_rambroChange = true;
-		_playerChange[1]->init(1);
-		_player = _playerChange[_rambroChange];
-		_rambroFire = true;
-		_rambroGrenade = true;
-	}
+	//if (IntersectRect(&temp, &_rc8, &_player->getRcRambro()))
+	//{
+	//	_rambroChange = true;
+	//	_playerChange[1]->init(1);
+	//	_player = _playerChange[_rambroChange];
+	//	_rambroFire = true;
+	//	_rambroGrenade = true;
+	//}
 	_player->setX(tempX);
 	_player->setY(tempY);
 
