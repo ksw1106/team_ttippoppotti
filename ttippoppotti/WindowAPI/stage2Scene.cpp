@@ -179,6 +179,9 @@ void stage2Scene::update(void)
 		_isOver = true;
 	}
 
+	_isClear = _enemyManager->isClear();
+	_isOver = _playerManager->getIsGameover();
+
 	if (_isClear)
 	{
 		_stageClear->update();
