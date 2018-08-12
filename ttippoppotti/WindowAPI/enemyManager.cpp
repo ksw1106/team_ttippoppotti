@@ -30,6 +30,15 @@ HRESULT enemyManager::init(int stageNum)
 
 		_brovil = new brovil;
 		_brovil->init(3200, 1000);
+		_boss = new boss;
+		_boss->init(4000.f, 800.f);
+		_bossBullet = new bossBullet;
+		_bossBullet->init();
+		_bossRocket = new bossRocket;
+		_bossRocket->init(50.f);
+		_hpBar = new progressBar;
+		_hpBar->init("enemyImage/bossImage/boss_hpbar_red", "enemyImage/bossImage/boss_hpbar_white", "enemyImage/bossImage/boss_hpbar_black",
+			WINSIZEX / 2 - 1062 / 2, 57, WINSIZEX / 2 - 1062 / 2, 57, WINSIZEX / 2 - 1076 / 2, 50, 1062, 17, 1062, 17, 1076, 30);
 	}
 	else if (stageNum == 2)
 	{
@@ -41,15 +50,6 @@ HRESULT enemyManager::init(int stageNum)
 		//this->setSoldier();
 		//this->setSoldier();
 
-		_boss = new boss;
-		_boss->init(4000.f, 800.f);
-		_bossBullet = new bossBullet;
-		_bossBullet->init();
-		_bossRocket = new bossRocket;
-		_bossRocket->init(50.f);
-		_hpBar = new progressBar;
-		_hpBar->init("enemyImage/bossImage/boss_hpbar_red", "enemyImage/bossImage/boss_hpbar_white", "enemyImage/bossImage/boss_hpbar_black",
-			WINSIZEX / 2 - 1062 / 2, 57, WINSIZEX / 2 - 1062 / 2, 57, WINSIZEX / 2 - 1076 / 2, 50, 1062, 17, 1062, 17, 1076, 30);
 	}
 
 
@@ -63,10 +63,6 @@ void enemyManager::release(void)
 	{
 		_brovil->release();
 		SAFE_DELETE(_brovil);
-		
-	}
-	else if (_stageNum == 2)
-	{
 		_boss->release();
 		SAFE_DELETE(_boss);
 		_bossBullet->release();
@@ -75,6 +71,10 @@ void enemyManager::release(void)
 		SAFE_DELETE(_bossRocket);
 		_hpBar->release();
 		SAFE_DELETE(_hpBar);
+		
+	}
+	else if (_stageNum == 2)
+	{
 	}
 	
 	_eBullet->release();
@@ -91,19 +91,20 @@ void enemyManager::update(void)
 		{
 			_vDog[i]->update();
 		}
-
-	}
-	else if (_stageNum == 2)
-	{
 		_boss->update();
 		_bossBullet->update();
 		_bossRocket->update();
 		_hpBar->update();
 		_hpBar->setGauge(_boss->getHP(), 1000);
+
+	}
+	else if (_stageNum == 2)
+	{
 	}
 
 	_eBullet->update();
 	
+	// 솔져 방향바꿈
 	this->changeDirection();
 	
 	for (int i = 0; i < _vSoldier.size(); ++i)
@@ -151,9 +152,7 @@ void enemyManager::update(void)
 		this->collideDogWithPixel();
 		this->collideDogWithPBullet();
 		this->collideDogCorpseWithPixel();
-	}
-	else if (_stageNum == 2)
-	{
+
 		// 보스 총알, 로켓 vs 램브로 충돌
 		this->collideWithBossBullet();
 		this->collideWithBossRocket();
@@ -166,6 +165,9 @@ void enemyManager::update(void)
 		// 보스 총알, 로켓 발사
 		this->bossBulletFire();
 		this->bossRocketFire();
+	}
+	else if (_stageNum == 2)
+	{
 	}
 
 }
@@ -185,19 +187,19 @@ void enemyManager::render(void)
 		{
 			_vDog[i]->render();
 		}
+		_boss->render();
+		_bossBullet->render();
+		_bossRocket->render();
+		if (_boss->getIsAlive())
+		{
+			_hpBar->render();
+		}
 	}
 	
 	if (_stageNum == 2)
 	{
-		_boss->render();
-		_bossBullet->render();
-		_bossRocket->render();
-	if (_boss->getIsAlive())
-	{
-		_hpBar->render();
 	}
-	}
-	
+		
 
 	for (int i = 0; i < _vSoldier.size(); ++i)
 	{

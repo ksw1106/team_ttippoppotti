@@ -284,7 +284,7 @@ void boss::bombAttack(float x, float y, float angle)
 void boss::bossDie()
 {
 	_bodyStatus = B_DEATH;
-	_terrorKopter.y += 15.f;
+	_terrorKopter.y += 10.f;
 }
 
 bool boss::radarIn(float x, float y, float distance)

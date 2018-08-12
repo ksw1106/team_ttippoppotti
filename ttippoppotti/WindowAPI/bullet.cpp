@@ -214,8 +214,10 @@ HRESULT bossRocket::init(float range)
 	{
 		ZeroMemory(&_bossRocket[i], sizeof(tagBullet));
 		_bossRocket[i].bulletImage = IMAGEMANAGER->findImage("Å×·¯ÄßÅÍ ·ÎÄÏ");
+		_bossRocket[i].bulletFallImage = IMAGEMANAGER->findImage("Å×·¯ÄßÅÍ ·ÎÄÏ³«ÇÏ");
 		_bossRocket[i].speed = 4.f;
-		_bossRocket[i].frameSpeed = 5;
+		_bossRocket[i].frameSpeed = 3;
+		
 	}
 
 	_interval = 0;
@@ -241,9 +243,20 @@ void bossRocket::render(void)
 	for (int i = 0; i < BOSS_ROCKET_MAX; ++i)
 	{
 		if (!_bossRocket[i].isActived) continue;
-		_bossRocket[i].bulletImage->frameRender(getMemDC(), _bossRocket[i].rc.left - CAMERAMANAGER->getCamera().left, _bossRocket[i].rc.top - CAMERAMANAGER->getCamera().top,
-			_bossRocket[i].bulletImage->getFrameX(), _bossRocket[i].bulletImage->getFrameY());		
+		
+		if (_bossRocket[i].gravity <= 0.f)
+			_bossRocket[i].bulletImage->frameRender(getMemDC(), _bossRocket[i].x - CAMERAMANAGER->getCamera().left, _bossRocket[i].y - CAMERAMANAGER->getCamera().top,
+				_bossRocket[i].bulletImage->getFrameX(), _bossRocket[i].bulletImage->getFrameY());
+		else
+		{
+			_bossRocket[i].bulletFallImage->frameRender(getMemDC(), _bossRocket[i].x - CAMERAMANAGER->getCamera().left, _bossRocket[i].y - CAMERAMANAGER->getCamera().top,
+				_bossRocket[i].bulletFallImage->getFrameX(), _bossRocket[i].bulletFallImage->getFrameY());
+		}
 	}
+
+	char str[32];
+	sprintf(str, "%d", _bossRocket[0].frameIndex2);
+	TextOut(getMemDC(), 100, 500, str, strlen(str));
 }
 
 void bossRocket::fire(int x, int y, int fireSpeed, bool isLeft)
@@ -254,7 +267,7 @@ void bossRocket::fire(int x, int y, int fireSpeed, bool isLeft)
 	{
 		if (_bossRocket[i].isActived) continue;
 
-		_bossRocket[i].x = _bossRocket[i].fireX = x;
+		_bossRocket[i].x = _bossRocket[i].fireX = x + 50*i;
 		_bossRocket[i].y = _bossRocket[i].fireY = y;
 		_bossRocket[i].gravity = 0.f;
 		_bossRocket[i].rc = RectMake(_bossRocket[i].x, _bossRocket[i].y, _bossRocket[i].bulletImage->getFrameWidth(), _bossRocket[i].bulletImage->getFrameHeight());
@@ -264,10 +277,14 @@ void bossRocket::fire(int x, int y, int fireSpeed, bool isLeft)
 		if (isLeft)
 		{
 			_bossRocket[i].angle = PI;
+			_bossRocket[i].frameIndex2 = 8;
+			_bossRocket[i].frameCount = 0;
 		}
 		else
 		{
 			_bossRocket[i].angle = 0.f;
+			_bossRocket[i].frameIndex2 = 0;
+			_bossRocket[i].frameCount = 0;
 		}
 		
 		break;
@@ -288,7 +305,7 @@ void bossRocket::move()
 		if (distance > _range)
 		{
 			_bossRocket[i].gravity += 0.5f;
-			_bossRocket[i].bulletImage = IMAGEMANAGER->findImage("Å×·¯ÄßÅÍ ·ÎÄÏ³«ÇÏ");
+			
 		}
 		if (distance > 1500.f)
 		{
@@ -302,7 +319,27 @@ void bossRocket::move()
 
 void bossRocket::animation(int i)
 {
-	FRAMEMANAGER->frameChange(_bossRocket[i].bulletImage, _bossRocket[i].frameCount, _bossRocket[i].frameIndex, _bossRocket[i].frameSpeed, _bossRocket[i].isLeft);
+	if (_bossRocket[i].gravity <= 0.f)
+		FRAMEMANAGER->frameChange(_bossRocket[i].bulletImage, _bossRocket[i].frameCount, _bossRocket[i].frameIndex, _bossRocket[i].frameSpeed, _bossRocket[i].isLeft);
+	else if (_bossRocket[i].gravity > 0.f)
+	{
+		if (_bossRocket[i].isLeft)
+		{
+			if (_bossRocket[i].frameIndex2 <= 0)
+			{
+				_bossRocket[i].frameIndex2++;
+			}
+		}
+		else
+		{
+			if (_bossRocket[i].frameIndex2 >= 8)
+			{
+				_bossRocket[i].frameIndex2--;
+			}
+		}
+		FRAMEMANAGER->frameChange(_bossRocket[i].bulletFallImage, _bossRocket[i].frameCount, _bossRocket[i].frameIndex2, _bossRocket[i].frameSpeed, _bossRocket[i].isLeft);
+
+	}
 }
 
 // enemy bullet

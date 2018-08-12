@@ -39,7 +39,7 @@ void loadingScene::Lee_Ji_Woong_addImage()
 	_loading->loadFrameImage("테러콥터 기관총 회전", "enemyImage/bossImage/boss_gun_rotate.bmp", 1080, 100, 9, 2);	
 	_loading->loadFrameImage("테러콥터 프로펠러", "enemyImage/bossImage/propeller.bmp", 800, 104, 4, 2);
 	_loading->loadFrameImage("테러콥터 총알 효과", "enemyBullet/boss_bullet_effect.bmp", 128, 56, 4, 2);
-	_loading->loadFrameImage("테러콥터 로켓낙하", "enemyImage/bossImage/boss_rocket_fall.bmp", 640, 160, 8, 2);
+	_loading->loadFrameImage("테러콥터 로켓낙하", "enemyBullet/boss_rocket_fall.bmp", 720, 160, 9, 2);
 	_loading->loadFrameImage("테러콥터 로켓", "enemyBullet/boss_rocket.bmp", 304, 96, 4, 2);	
 		
 }
