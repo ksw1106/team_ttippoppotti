@@ -3,6 +3,7 @@
 #include "bullet.h"  //미사일클래스 사용하기 위해
 
 #define MAX_STATE 9
+#define MAX_GUN 1
 
 enum STATE
 {
@@ -12,14 +13,26 @@ enum STATE
 	FAST_RUN, ROLL
 };
 
+enum GUN
+{
+	RUN_GUN, FIRE_GUN
+};
+
 enum { PLAYER_LEFT, PLAYER_TOP, PLAYER_RIGHT, PLAYER_BOTTOM };
 
 class player : public gameNode
 {
 private:
 	image * _ramBro[MAX_STATE];
+	image * _rambroGun[MAX_GUN];
 	image * _flash;
+	image * _rambroUi;
+	image * _rambroUiGrenade;
+	image * _rambroUiImage;
+	image * _rambroUiImageRun;
+	
 	STATE _state;
+	GUN _gun;
 	RECT _rcRambro;
 	
 	float _x, _y;
@@ -45,6 +58,18 @@ private:
 	int _flashCount;
 	int _flashSpeed;
 
+	int _uiIndex;
+	int _uiCount;
+	int _uiSpeed;
+
+	int _runIndex;
+	int _runCount;
+	int _runSpeed;
+
+	int _gunIndex;
+	int _gunCount;
+	int _gunSpeed;
+
 	bool _isCollision;
 	bool _isActived;
 	bool _isLeft;
@@ -67,6 +92,8 @@ public:
 
 	STATE getState() { return _state; }
 	void setState(STATE state) { _state = state; }
+	GUN getGun() { return _gun; }
+	void setGun(GUN gun) { _gun = gun; }
 
 	RECT getRcRambro() { return _rcRambro; }
 	void setRcRambro(RECT rcRambro) { _rcRambro = rcRambro; }
