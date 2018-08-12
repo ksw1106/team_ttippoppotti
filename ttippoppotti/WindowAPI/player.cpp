@@ -75,13 +75,13 @@ HRESULT player::init(int num)
 
 	//_rcMissileLeft = RectMake(1500.f, 1000.f, 100, 10);
 	//_rcMissileRight = RectMake(100.f, 1000.f, 100, 10);
-	_skyRightX = 100.f;
-	_skyRightY = 1200.f;
+	_skyRightX = -100.f;
+	_skyRightY = 1400.f;
 	_skyRightW = 100;
 	_skyRightH = 10;
 
 	_skyLeftX = 1500.f;
-	_skyLeftY = 1200.f;
+	_skyLeftY = 1400.f;
 	_skyLeftW = 100;
 	_skyLeftH = 10;
 

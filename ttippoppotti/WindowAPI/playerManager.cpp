@@ -72,6 +72,9 @@ void playerManager::release(void)
 	SAFE_DELETE(_player);
 	_pBullet->release();
 	_pGrenade->release();
+	_gBullet->release();
+	_gMissile->release();
+	_xMissile->release();
 }
 
 void playerManager::update(void)
@@ -353,6 +356,7 @@ void playerManager::update(void)
 			_player->setIsJump(true);
 			hit_left = false;
 			hit_right = false;
+			
 			//}
 			if (_player->getState() == HANG_FRONT_HOLD || _player->getState() == HANG_BACK_HOLD)
 			{
@@ -761,15 +765,15 @@ void playerManager::update(void)
 						OBJECTMANAGER->getVObject()[k]->setIsActived(true);
 					if (OBJECTMANAGER->getVObject()[k]->getType() == AMERICAN_FLAG || OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
 					{
+						OBJECTMANAGER->getVObject()[k]->setFlagCount(OBJECTMANAGER->getVObject()[k]->getFlagCount() + 1);
 						OBJECTMANAGER->getVObject()[k]->setState(OBJECT_MOVE);
-						//OBJECTMANAGER->getVObject()[k]->setFlagCount(OBJECTMANAGER->getVObject()[k]->getFlagCount() + 1);
 					}
 				}
 				break;
 			case OBJECT_MOVE:
 				if (OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
 				{
-					if (IntersectRect(&temp, &_player->getRcRambro(), &OBJECTMANAGER->getVObject()[k]->getRect()))
+					if (IntersectRect(&temp, &_player->getRcRambro(), &OBJECTMANAGER->getVObject()[k]->getActivationRect()))
 					{
 						//할아버지 등장 시점 
 						_rambroChange = true;
@@ -777,7 +781,9 @@ void playerManager::update(void)
 						_player = _playerChange[_rambroChange];
 						_rambroFire = true;
 						_rambroGrenade = true;
-						OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);	
+						//OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);	
+						OBJECTMANAGER->getVObject()[k]->setIsActive(false);
+						OBJECTMANAGER->getVObject()[k]->setIndex(0);
 					}
 					else
 					{
@@ -928,6 +934,41 @@ void playerManager::update(void)
 	for (int i = 0; i < _gBullet->getVPlayergBullet().size(); i++)  // 총알이랑 벽이랑 충돌하면 벽 지워주기
 	{
 		if (!_gBullet->getVPlayergBullet()[i].isActived)continue;
+		for (int k = 0; k < OBJECTMANAGER->getVObject().size(); k++)
+		{
+			if (OBJECT_DESTROY == OBJECTMANAGER->getVObject()[k]->getState()) continue;
+			if (OBJECTMANAGER->getVObject()[k]->getType() == WOODENBOX || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY ||
+				OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED || OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
+			{
+				switch (OBJECTMANAGER->getVObject()[k]->getState())
+				{
+				case OBJECT_IDLE:
+					//총알과 박스/드럼통/감옥이 부딪혔을 때 (수류탄에도 똑같이 적용해 줄 것!)
+					if (IntersectRect(&temp, &_gBullet->getVPlayergBullet()[i].rc, &OBJECTMANAGER->getVObject()[k]->getRect()))
+					{
+						if (OBJECTMANAGER->getVObject()[k]->getType() == WOODENBOX)
+						{
+							EFFECTMANAGER->woodDebris(OBJECTMANAGER->getVObject()[i]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top, _player->getIsLeft());
+							OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
+						}
+						else if (OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED)
+						{
+							EFFECTMANAGER->explosion(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top);
+							CAMERAMANAGER->CameraShake();
+							OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
+						}
+						else if (OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
+						{
+							EFFECTMANAGER->woodDebris(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top, _player->getIsLeft());
+							OBJECTMANAGER->getVObject()[k]->setState(OBJECT_MOVE);
+						}
+						EFFECTMANAGER->bulletPuff(_gBullet->getVPlayergBullet()[i].x, _gBullet->getVPlayergBullet()[i].y);
+						_gBullet->getVPlayergBullet()[i].isActived = false;
+					}
+					break;
+				}
+			}
+		}
 		switch (COLLISIONMANAGER->pixelCollision(_gBullet->getVPlayergBullet()[i].rc,				// 왼쪽 벽에 충돌하면 벽 지워주기
 			_gBullet->getVPlayergBullet()[i].x, _gBullet->getVPlayergBullet()[i].y,
 			_gBullet->getVPlayergBullet()[i].speed, _gBullet->getVPlayergBullet()[i].gravity, PLAYER_LEFT))
@@ -1207,6 +1248,11 @@ void playerManager::update(void)
 
 	//if (IntersectRect(&temp, &_rc8, &_player->getRcRambro()))
 	//{
+	//	_rambroChange = true;
+	//	_playerChange[1]->init(1);
+	//	_player = _playerChange[_rambroChange];
+	//	_rambroFire = true;
+	//	_rambroGrenade = true;
 	//}
 	_player->setX(tempX);
 	_player->setY(tempY);
@@ -1396,7 +1442,7 @@ void playerManager::render(void)
 			RectangleMake(getMemDC(), _player->getX() - 30 - CAMERAMANAGER->getCamera().left, _player->getY() + 28 - CAMERAMANAGER->getCamera().top, 30, 30);
 		}
 	}
-	RectangleMake(getMemDC(), 20.f - CAMERAMANAGER->getCamera().left, 2100.f - CAMERAMANAGER->getCamera().top, 60, 60);
+	//RectangleMake(getMemDC(), 20.f - CAMERAMANAGER->getCamera().left, 2100.f - CAMERAMANAGER->getCamera().top, 60, 60);
 	RectangleMake(getMemDC(), _player->getSkyRightX() - CAMERAMANAGER->getCamera().left, _player->getSkyRightY() - CAMERAMANAGER->getCamera().top, _player->getSkyLeftW(), _player->getSkyLeftH());
 	RectangleMake(getMemDC(), _player->getSkyLeftX() - CAMERAMANAGER->getCamera().left, _player->getSkyLeftY() - CAMERAMANAGER->getCamera().top, _player->getSkyLeftW(), _player->getSkyLeftH());
 	
@@ -1475,7 +1521,7 @@ void playerManager::chuckCollision()
 
 void playerManager::p1Bubble()
 {
-	_p1Bubble->setX(_player->getX() + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
+	_p1Bubble->setX(_player->getX() - 35 + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
 	_p1Bubble->setY(_player->getY() - _p1Bubble->getFrameHeight() - 5);
 	if (_index >= _p1Bubble->getMaxFrameX())
 	{
@@ -1485,6 +1531,11 @@ void playerManager::p1Bubble()
 	{
 		FRAMEMANAGER->frameChange(_p1Bubble, _count, _index, _animationSpeed, false);
 	}
+}
+
+void playerManager::start()
+{
+	
 }
 
 playerManager::playerManager()

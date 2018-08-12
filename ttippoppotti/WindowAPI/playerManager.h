@@ -78,6 +78,7 @@ public:
 	void rambroCollision();
 	void chuckCollision();
 	void p1Bubble();
+	void start();
 
 	playerManager();
 	~playerManager();
