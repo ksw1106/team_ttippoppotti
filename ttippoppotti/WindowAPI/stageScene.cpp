@@ -185,7 +185,28 @@ void stageScene::update(void)
 		}
 		_rcCamera = RectMake( _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	}
-	
+
+	OBJECTMANAGER->setIsDead(_enemyManager->isClear());
+	_isOver = _playerManager->getIsGameover();
+	if (OBJECTMANAGER->getVObject()[30]->getState() == OBJECT_MOVE)
+	{
+		_rcCamera = RectMake(OBJECTMANAGER->getVObject()[30]->getX() - 80, OBJECTMANAGER->getVObject()[30]->getY() - 180, WINSIZEX, WINSIZEY);
+	}
+	if (OBJECTMANAGER->getVObject()[30]->getisArrived())
+	{
+		_isClear = true;
+	}
+
+	if (_isClear)
+	{
+		_stageClear->update();
+	}
+
+	if (_isOver)
+	{
+		_missionFailed->update();
+	}
+
 	CAMERAMANAGER->setCamera(_rcCamera);
 
 	if (KEYMANAGER->isOnceKeyDown('P'))
@@ -196,19 +217,6 @@ void stageScene::update(void)
 	if (KEYMANAGER->isOnceKeyDown('R'))
 	{
 		_isOver = true;
-	}
-
-	OBJECTMANAGER->setIsDead(_enemyManager->isClear());
-	_isOver = _playerManager->getIsGameover();
-
-	if (_isClear)
-	{
-		_stageClear->update();
-	}
-
-	if (_isOver)
-	{
-		_missionFailed->update();
 	}
 }
 

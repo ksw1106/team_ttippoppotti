@@ -71,6 +71,7 @@ protected:
 	bool* _targetIsActived;
 	bool _isLeft;
 	bool _isFrameImage;
+	bool _isArrived;
 	int _count, _index;
 	int _animationSpeed;
 	int _targetMap;
@@ -92,6 +93,7 @@ public:
 	bool getIsActived() { return _isActived; }
 	bool getIsStart() { return _isStart; }
 	bool getIsFrameImage() { return _isFrameImage; }
+	bool getisArrived() { return _isArrived; }
 	image* getImage() { return _image; }
 	RECT getRect()
 	{
