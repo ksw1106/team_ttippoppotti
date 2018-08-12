@@ -262,11 +262,11 @@ void boss::frameAnimate()
 
 void boss::verticalMove(float x, float y, float angle)
 {
-	if (_terrorKopter.y < y-100)
+	if (_terrorKopter.y < y-200)
 	{
 		_terrorKopter.y += _terrorKopter.speed;
 	}
-	else if (_terrorKopter.y > y+100)
+	else if (_terrorKopter.y > y+200)
 	{
 		_terrorKopter.y -= _terrorKopter.speed;
 	}

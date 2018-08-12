@@ -23,6 +23,7 @@ struct tagDog
 	image* dogImage[4];	
 	RECT rc;	
 	RECT rcSight;
+	RECT rcAttackRange;
 	int index;	
 	int count;
 	int fspeed;
@@ -38,6 +39,7 @@ struct tagDog
 	bool isOn;
 	bool isAttack;
 	bool isApart;
+	bool isNear;
 };
 
 class dog :	public gameNode
@@ -79,6 +81,7 @@ public:
 	
 	RECT getRC() { return _dog.rc; }
 	RECT getRCsight() { return _dog.rcSight; }
+	RECT getRCattackRange() { return _dog.rcAttackRange; }
 	float getGravity() { return _dog.gravity; }
 	int getHP() { return _dog.hp; }
 	void setHP(int hp) { _dog.hp = hp; }
@@ -94,6 +97,8 @@ public:
 	void setIsAttack(bool isAttack) { _dog.isAttack = isAttack; }
 	bool getIsUncovered() { return _isUncovered; }
 	void setIsUncovered(bool isUncovered) { _isUncovered = isUncovered; }
+	bool getIsNear() { return _dog.isNear; }
+	void setIsNear(bool isNear) { _dog.isNear = isNear; }
 
 	dogStatus getStatus() { return _dogStatus; }
 	void setStatus(dogStatus dogStat) { _dogStatus = dogStat; }
