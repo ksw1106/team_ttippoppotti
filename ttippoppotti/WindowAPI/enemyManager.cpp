@@ -95,6 +95,10 @@ void enemyManager::update(void)
 		_bossRocket->update();
 		_hpBar->update();
 		_hpBar->setGauge(_boss->getHP(), 1000);
+		// 브로빌 픽셀 충돌
+		this->collideBrovilWithPixel();
+		// 브로빌 시체 픽셀 충돌
+		this->collideBrovilCorpseWithPixel();
 
 	}
 	else if (_stageNum == 2)
@@ -122,12 +126,8 @@ void enemyManager::update(void)
 		
 	// 에너미 픽셀(지형) 충돌
 	this->collideWithPixel();
-	// 브로빌 픽셀 충돌
-	this->collideBrovilWithPixel();
 	// 에너미 시체 픽셀 충돌
 	this->collideWithCorpse();
-	// 브로빌 시체 픽셀 충돌
-	this->collideBrovilCorpseWithPixel();
 	
 	// 에너미 시야와 플레이어 충돌
 	this->collideWithSight();
@@ -151,7 +151,9 @@ void enemyManager::update(void)
 		this->collideDogWithPlayer();
 		this->collideDogWithPixel();
 		this->collideDogWithPBullet();
+		this->collideDogWithGBullet();
 		this->collideDogCorpseWithPixel();
+
 
 		// 보스 총알, 로켓 vs 램브로 충돌
 		this->collideWithBossBullet();
@@ -163,6 +165,7 @@ void enemyManager::update(void)
 		// 할아버지 총알 vs 보스
 		this->collideBossWithGBullet();
 		this->collideBossWithGGrenade();
+
 	
 		// 보스 총알, 로켓 발사
 		this->bossBulletFire();
@@ -473,44 +476,44 @@ void enemyManager::collideWithPixel()
 			_vSoldier[i]->setIsOn(false);
 		}
 
-		// 윗 천장과 충돌
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_TOP))
-		{
-			_vSoldier[i]->setEnemyAngle(2 * PI - _vSoldier[i]->getEnemyAngle());	
-			
-		}
-		else
-		{
-			_vSoldier[i]->setY(y);
-		}
-
-		// 적 왼쪽 벽과 충돌
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_LEFT))
-		{
-			_vSoldier[i]->setEnemyAngle(PI - _vSoldier[i]->getEnemyAngle());
-			if (_vSoldier[i]->getIsAlive())
-			{
-				_vSoldier[i]->setDirection(0);		
-			}
-		}	
-		else
-		{
-			_vSoldier[i]->setX(x);
-		}
-	
-		// 적 오른쪽 벽과 충돌
-		if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_RIGHT))
-		{
-			_vSoldier[i]->setEnemyAngle(PI - _vSoldier[i]->getEnemyAngle());		
-			if (_vSoldier[i]->getIsAlive())
-			{
-				_vSoldier[i]->setDirection(1);			
-			}
-		}	
-		else
-		{
-			_vSoldier[i]->setX(x);
-		}		
+		//// 윗 천장과 충돌
+		//if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_TOP))
+		//{
+		//	_vSoldier[i]->setEnemyAngle(2 * PI - _vSoldier[i]->getEnemyAngle());	
+		//	
+		//}
+		//else
+		//{
+		//	_vSoldier[i]->setY(y);
+		//}
+		//
+		//// 적 왼쪽 벽과 충돌
+		//if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_LEFT))
+		//{
+		//	_vSoldier[i]->setEnemyAngle(PI - _vSoldier[i]->getEnemyAngle());
+		//	if (_vSoldier[i]->getIsAlive())
+		//	{
+		//		_vSoldier[i]->setDirection(0);		
+		//	}
+		//}	
+		//else
+		//{
+		//	_vSoldier[i]->setX(x);
+		//}
+		//
+		//// 적 오른쪽 벽과 충돌
+		//if (COLLISIONMANAGER->pixelCollision(_vSoldier[i]->getRcEnemy(), x, y, _vSoldier[i]->getSpeed(), _vSoldier[i]->getGravity(), ENEMY_RIGHT))
+		//{
+		//	_vSoldier[i]->setEnemyAngle(PI - _vSoldier[i]->getEnemyAngle());		
+		//	if (_vSoldier[i]->getIsAlive())
+		//	{
+		//		_vSoldier[i]->setDirection(1);			
+		//	}
+		//}	
+		//else
+		//{
+		//	_vSoldier[i]->setX(x);
+		//}		
 	}		
 }
 
@@ -845,7 +848,6 @@ void enemyManager::collideWithPGrenade()
 	}
 }
 
-
 // 할아버지 총알과 에너미 충돌
 void enemyManager::collideWithGBullet()
 {
@@ -858,6 +860,7 @@ void enemyManager::collideWithGBullet()
 			{
 				if (!_playerManager->getGBullet()->getVPlayergBullet()[i].isActived) continue;
 				_playerManager->getGBullet()->getVPlayergBullet()[i].isActived = false;
+				
 				soldierDieWithBullet(j);
 			}
 		}	
@@ -1195,6 +1198,29 @@ void enemyManager::collideDogWithPBullet()
 				DogDieWithBullet(j);
 			}
 		}		
+	}
+}
+
+// 할아버지 총알이랑 도그랑 충돌
+void enemyManager::collideDogWithGBullet()
+{
+	RECT rc;
+	for (int i = 0; i < _playerManager->getGBullet()->getVPlayergBullet().size(); ++i)
+	{
+		for (int j = 0; j < _vDog.size(); ++j)
+		{
+			if (IntersectRect(&rc, &_playerManager->getGBullet()->getVPlayergBullet()[i].rc, &_vDog[j]->getRC()))
+			{
+				if (_vDog[j]->getIsApart()) continue;
+
+				if (_vDog[j]->getIsLeft() != _playerManager->getPBullet()->getVPlayerBullet()[i].isLeft)
+				{
+					_vDog[j]->setIsLeft(_playerManager->getPBullet()->getVPlayerBullet()[i].isLeft);
+				}
+
+				DogDieWithBullet(j);
+			}
+		}
 	}
 }
 

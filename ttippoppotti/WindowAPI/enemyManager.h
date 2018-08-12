@@ -124,6 +124,7 @@ public:
 	void collideDogWithPlayer();
 	void collideDogWithPixel();
 	void collideDogWithPBullet();
+	void collideDogWithGBullet();
 	void collideDogCorpseWithPixel();
 	
 	// Á×´ÂÇÔ¼ö
