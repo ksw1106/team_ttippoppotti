@@ -70,7 +70,8 @@ HRESULT playerManager::init(int num)
 	_player->setrcSkyRight(_player->getrcSkyRight());
 	_player->setrcSkyLeft(_player->getrcSkyLeft());
 	
-	
+	_player->setSkyRight(_player->getSkyRight());
+	_player->setSkyLeft(_player->getSkyLeft());
 
 	return S_OK;
 }
@@ -95,6 +96,8 @@ void playerManager::update(void)
 	_player->setrcSkyLeft(_player->getrcSkyLeft());						// ¿ÞÂÊ ÇÏ´Ã¿¡ ÃÑ¾ËÁý
 	_player->setrcFlashRight(_player->getrcFlashRight());				// ÃÑ±¸ ¿À¸¥ÂÊ ÇÃ·¡½¬ ·ºÆ®
 	_player->setrcFlashLeft(_player->getrcFlashLeft());					// ÃÑ±¸ ¿ÞÂÊ ÇÃ·¡½¬ ·ºÆ®
+	_player->setSkyRight(_player->getSkyRight());
+	_player->setSkyLeft(_player->getSkyLeft());
 
 	float knifeRightX = _player->getX() + 60;
 	float knifeRightY = _player->getY() + 28;
@@ -806,7 +809,11 @@ void playerManager::update(void)
 				}
 				if (OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
 				{
+					RECT rc = OBJECTMANAGER->getVObject()[k]->getActivationRect();
 					//Çï¸®ÄßÅÍ »ç´Ù¸®¿¡ ¸Å´Þ¸²
+					_isLadder = true;
+					_player->setX(rc.left + (rc.right - rc.left) / 2);
+					_player->setY(rc.top + (rc.bottom - rc.top) / 2);
 				}
 				break;
 			}
@@ -870,7 +877,7 @@ void playerManager::update(void)
 					if (_pBullet->getVPlayerBullet()[i].isActived == false)
 					{
 						EFFECTMANAGER->bulletPuff(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y);
-						//EFFECTMANAGER->yellowSparks(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y, _player->getIsLeft());
+						EFFECTMANAGER->yellowSparks(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y, _player->getIsLeft());
 					}
 					break;
 				}
@@ -1507,9 +1514,9 @@ void playerManager::render(void)
 		}
 	}
 	
-	char str[64];
-	sprintf_s(str, "%d", _missileCount);
-	TextOut(getMemDC(), 100, 100, str, strlen(str));
+	//char str[64];
+	//sprintf_s(str, "%d", _missileCount);
+	//TextOut(getMemDC(), 100, 100, str, strlen(str));
 	if (KEYMANAGER->isToggleKey(VK_F8))
 	{
 		//RECT rc = RectMake(_player->getX(), _player->getY(), 90, 110);
@@ -1528,9 +1535,10 @@ void playerManager::render(void)
 		}
 	}
 	//RectangleMake(getMemDC(), 20.f - CAMERAMANAGER->getCamera().left, 2100.f - CAMERAMANAGER->getCamera().top, 60, 60);
-	RectangleMake(getMemDC(), _player->getSkyRightX() - CAMERAMANAGER->getCamera().left, _player->getSkyRightY() - CAMERAMANAGER->getCamera().top, _player->getSkyLeftW(), _player->getSkyLeftH());
-	RectangleMake(getMemDC(), _player->getSkyLeftX() - CAMERAMANAGER->getCamera().left, _player->getSkyLeftY() - CAMERAMANAGER->getCamera().top, _player->getSkyLeftW(), _player->getSkyLeftH());
+	//RectangleMake(getMemDC(), _player->getSkyRightX() - CAMERAMANAGER->getCamera().left, _player->getSkyRightY() - CAMERAMANAGER->getCamera().top, _player->getSkyLeftW(), _player->getSkyLeftH());
+	//RectangleMake(getMemDC(), _player->getSkyLeftX() - CAMERAMANAGER->getCamera().left, _player->getSkyLeftY() - CAMERAMANAGER->getCamera().top, _player->getSkyLeftW(), _player->getSkyLeftH());
 	
+	//RectangleMake (getMemDC(),)
 }
 
 void playerManager::rambroDie()

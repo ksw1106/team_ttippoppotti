@@ -90,6 +90,16 @@ HRESULT player::init(int num, float x, float y)
 	_rcSkyRight = RectMake(_skyRightX, _skyRightY, _skyRightW, _skyRightH);
 	_rcSkyLeft = RectMake(_skyLeftX, _skyLeftY, _skyLeftW, _skyLeftH);
 
+
+	skyRightX = -100.f;
+	skyRightY = 600.f;
+
+	skyLeftX = 1500.f;
+	skyLeftY = 600.f;
+
+	_skyRight = RectMake(skyRightX, skyRightY, 100, 10);
+	_skyLeft = RectMake(skyLeftX, skyLeftY, 100, 10);
+
 	return S_OK;
 }
 
@@ -106,6 +116,9 @@ void player::update(void)
 
 	_rcSkyRight = RectMake(_skyRightX, _skyRightY, _skyRightW, _skyRightH);
 	_rcSkyLeft = RectMake(_skyLeftX, _skyLeftY, _skyLeftW, _skyLeftH);
+
+	_skyRight = RectMake(skyRightX, skyRightY, 100, 10);
+	_skyLeft = RectMake(skyLeftX, skyLeftY, 100, 10);
 
 	_gravity += 0.98f;
 

@@ -183,8 +183,7 @@ void boss::terrorKopterMove()
 			this->rocketFire();
 
 			break;
-		}
-		
+		}		
 		
 	default:
 		break;
