@@ -192,6 +192,7 @@ void enemyManager::render(void)
 	}
 	
 	_eBullet->render();
+	
 	if (_stageNum == 1)
 	{
 		_brovil->render();
@@ -1395,7 +1396,7 @@ void enemyManager::DogDieWithBullet(int i)
 		_vDog[i]->setStatus(D_KNOCK_BACK);
 	}
 
-	if (_brovil->getBrovilStatus() == D_DEAD)
+	if (_vDog[i]->getStatus() == D_DEAD)
 	{
 		_vDog[i]->deadMove();
 	}
