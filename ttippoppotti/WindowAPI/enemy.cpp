@@ -30,6 +30,7 @@ HRESULT enemy::initSoldier(float x, float y)
 	_warnSign->init("enemyImage/ExclamationMark.bmp", 1020, 60, 17, 1);
 	_warnFrameCount = 5;
 	_warnFrameIndex = 0;
+
 	_warnSign->setFrameY(0);
 
 	_doubtSign = new image;

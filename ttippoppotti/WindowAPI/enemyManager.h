@@ -9,7 +9,7 @@
 
 enum enemyType
 {
-	SOLDIER, BROVIL, TERROCOPTER,
+	SOLDIER, BROVIL, DOG, TERROCOPTER,
 };
 
 enum deadType
@@ -34,9 +34,9 @@ private:
 	mapData* _mapData;
 	enemyType _enemyType;
 
-private:
-	
+private:	
 	vector<enemy*> _vSoldier;	// 일반 적	
+	vector<dog*> _vDog;			// 도그
 		
 	eBullet* _eBullet;			// 총알 클래스
 	bossBullet* _bossBullet;	// 보스총알 클래스
@@ -44,7 +44,7 @@ private:
 	boss* _boss;				// 보스 클래스
 	brovil* _brovil;			// 브로빌 클래스
 	progressBar* _hpBar;		// 체력바 클래스
-
+	
 	int _effectCount;
 	int _count;
 	int _choice;
@@ -81,6 +81,12 @@ public:
 	
 	// 에너미 방향 바꾸기
 	void changeDirection();
+	
+	void soldierDieWithBullet(int i);
+	void soldierDieWithGrenade(int i);
+
+	void brovilDieWithBullet();
+	void brovilDieWithGrenade();
 
 	// 에너미 시야 vs 플레이어 충돌
 	void collideWithSight();
@@ -94,6 +100,7 @@ public:
 	void collideWithGBullet();
 	// 보스 vs 할아버지 총알
 	void collideBossWithGBullet();
+	void collideBossWithGGrenade();
 	
 	// 에너미 시체 vs 픽셀 충돌
 	void collideWithCorpse();
@@ -116,10 +123,17 @@ public:
 	// 브로빌 vs 플레이어 수류탄 충돌
 	void collideBrovilwithPGrenade();
 	// 브로빌 vs 지형충돌
-	void collideBrovilWithPixel();
-	
+	void collideBrovilWithPixel();	
 	// 브로빌 시체 vs 지형 충돌
 	void collideBrovilCorpseWithPixel();
+
+	// 도그 vs 지형픽셀충돌
+	void collideDogSightWithPlayer();
+	void collideDogWithPixel();
+	void collideDogWithPBullet();
+	void collideDogCorpseWithPixel();
+	void DogDieWithBullet(int i);
+
 	
 	// 스테이지 클리어 조건
 	bool isClear();
@@ -127,6 +141,7 @@ public:
 	// 솔져 클래스 초기화셋팅
 	void setSoldier(int x, int y);
 	void setBrovil(int x, int y);
+	void setDog(int x, int y, bool isLeft);
 
 	bool isEffect(int frame);
 		

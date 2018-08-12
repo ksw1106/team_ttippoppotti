@@ -288,6 +288,7 @@ void bossRocket::move()
 		if (distance > _range)
 		{
 			_bossRocket[i].gravity += 0.5f;
+			_bossRocket[i].bulletImage = IMAGEMANAGER->findImage("Å×·¯ÄßÅÍ ·ÎÄÏ³«ÇÏ");
 		}
 		if (distance > 1500.f)
 		{
