@@ -5,6 +5,8 @@
 #include "mapData.h"
 #include "testScene_kmy.h"
 #include "stageClear.h"
+#include "stageStart.h"
+#include "missionFailed.h"
 
 struct world
 {
@@ -22,16 +24,16 @@ private:
 	mapData* _mapData;
 	testScene_kmy* _test;
 	stageClear* _stageClear;
+	stageStart* _stageStart;
+	missionFailed* _missionFailed;
 
 	RECT _rcCamera;
 	world _backGround[3];
 
 	bool _camDebug;
 
-	const char* soundName[4];
-	int soundCount;
-
 	bool _isClear;
+	bool _isOver;
 public:
 	HRESULT init(void);
 	void release(void);

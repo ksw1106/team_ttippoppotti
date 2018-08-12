@@ -66,7 +66,7 @@ void stageClear::update(void)
 	if (!_isAddEnemy)
 	{
 		//테스트용 적 벡터 만들기(나중에 지워야함)
-		for (int i = 0; i < 4; i++)
+		/*for (int i = 0; i < 4; i++)
 		{
 			deadEnemy dEnemy;
 			ZeroMemory(&dEnemy, sizeof(deadEnemy));
@@ -75,7 +75,7 @@ void stageClear::update(void)
 			dEnemy._enemyType = SOLDIER;
 
 			_enemyManager->addVDeadEnemyInfo(dEnemy);
-		}
+		}*/
 
 		for (int i = 0; i < _enemyManager->getVDeadEnemyInfo().size(); i++)
 		{

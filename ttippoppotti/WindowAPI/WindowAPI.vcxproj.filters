@@ -173,6 +173,12 @@
     <ClInclude Include="stageClear.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="missionFailed.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="stageStart.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -299,6 +305,12 @@
       <Filter>MainGame\브로포스\enemy</Filter>
     </ClCompile>
     <ClCompile Include="stageClear.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="missionFailed.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="stageStart.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
