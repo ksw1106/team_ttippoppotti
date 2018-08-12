@@ -109,6 +109,7 @@ void enemyManager::update(void)
 		_bossRocket->update();
 		_hpBar->update();
 		_hpBar->setGauge(_boss->getHP(), 1000);
+		bossDie();
 	}
 
 	_eBullet->update();
