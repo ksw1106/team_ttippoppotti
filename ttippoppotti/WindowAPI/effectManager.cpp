@@ -256,7 +256,7 @@ void effectManager::rockFall(float x, float y, bool isLeft)
 void effectManager::woodDebris(float x, float y, bool isLeft)
 {
 	this->playParabola("woodDebris1b", x, y, isLeft);
-	this->playParabola("woodDebris2b", x, y, isLeft);
+	this->playParabola("woodDebris2b", x, y, RND->getInt(1));
 	this->playParabola("lightBrownSparks", x, y, isLeft);
 }
 
@@ -657,7 +657,7 @@ void effectManager::playMissileTrail(string effectName, float x, float y, bool i
 		for (int i = 0; i < mIter->second.size(); i++)
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
-			mIter->second[i]->activateMissileTrail(x, y, isLeft);
+			mIter->second[i]->activateMissileTrail(x + 8, y + 8, isLeft);
 			return;
 		}
 	}

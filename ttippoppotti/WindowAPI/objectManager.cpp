@@ -500,12 +500,16 @@ void objectManager::update()
 				//}
 				if (_vObject[i]->getType() == HELICOPTER)
 				{
+					if (KEYMANAGER->isOnceKeyDown('M'))
+					{
+						_vObject[i]->setIsStart(true);
+					}
 					if (_flagCount >= _maxFlag)
 					{
 						_isGameClear = true;
 					}
 					if (_isGameClear && _isDead)
-						_vObject[i]->setState(OBJECT_MOVE);
+						_vObject[i]->setIsStart(true);
 				}
 				//if (_vObject[i]->getType() == WOODENBOX || _vObject[i]->getType() == PRISONER)
 				//{
