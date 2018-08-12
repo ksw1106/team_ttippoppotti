@@ -128,7 +128,7 @@ HRESULT objectManager::init(int num)
 		_maxFlag = 3;
 		_amFlagPos[0].x = 1853, _amFlagPos[0].y = 1225;
 		_amFlagPos[1].x = 2923, _amFlagPos[1].y = 2037;
-		_amFlagPos[2].x = 3324, _amFlagPos[2].y = 902;
+		_amFlagPos[2].x = 3324, _amFlagPos[2].y = 907;
 		for (int i = 0; i < _maxFlag; i++)
 		{
 			type = AMERICAN_FLAG;
@@ -465,6 +465,7 @@ HRESULT objectManager::init(int num)
 
 void objectManager::release()
 {
+	_vObject.clear();
 }
 
 void objectManager::update()

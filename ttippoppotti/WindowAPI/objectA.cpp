@@ -202,7 +202,8 @@ void prisoner::init()
 {
 	_image = IMAGEMANAGER->findImage("prisoner_inJail");
 	//_prisonerFreedImage = IMAGEMANAGER->findImage("prisoner_freed");
-	_prisonerFreedImage = IMAGEMANAGER->findImage("hobro_freed");
+	_prisonerFreedImage = IMAGEMANAGER->findImage("hobro");
+	_prisonerFreedFrameImage = IMAGEMANAGER->findImage("hobro_freed");
 	_speed = 8.0f;
 	_gravity = 0.0f;
 	_angle = PI + PI_2;
@@ -244,17 +245,17 @@ void prisoner::move()
 	int index = 0;
 
 	_image = _prisonerFreedImage;
-	_isFrameImage = true;
 	_animationSpeed = 2;
 	_activationRc = RectMake(_x + _image->getWidth() / 3 - 5, _y + _image->getHeight() / 2, _image->getWidth() / 3 + 5, _image->getHeight() / 2);
 	if (_isActived)
 	{
 		for (int i = 0; i < _vElement.size(); i++)
 			FRAMEMANAGER->frameChange(_vElement[i].elementImg, _count, _index, _animationSpeed, _isLeft);
-		FRAMEMANAGER->frameChange(_image, _count, index, _animationSpeed, _isLeft);
 	}
 	else
 	{
+		_image = _prisonerFreedFrameImage;
+		_isFrameImage = true;
 		FRAMEMANAGER->frameChange(_image, _count, _index, _animationSpeed, _isLeft);
 		if (_image->getFrameX() == _image->getMaxFrameX())
 			_state = OBJECT_DESTROY;

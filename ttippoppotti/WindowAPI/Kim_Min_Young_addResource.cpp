@@ -79,6 +79,7 @@ void loadingScene::Kim_Min_Young_addImage()
 	_loading->loadImage("bottle_gray", "objectImage/bottle_gray_01.bmp", 17, 39, true, RGB(255, 0, 255));
 	_loading->loadImage("bottle_brown", "objectImage/bottle_brown_01.bmp", 31, 44, true, RGB(255, 0, 255));
 	_loading->loadImage("saveFlag_pole", "objectImage/saveFlag_pole_01.bmp", 22, 203, true, RGB(255, 0, 255));
+	_loading->loadImage("hobro", "objectImage/hobro_01.bmp", 128, 128, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("hobro_freed", "objectImage/hobro_freed_01.bmp", 1536, 128, 12, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("human_dead", "objectImage/human_dead.bmp", 972, 115, 12, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("truck", "objectImage/truck_01.bmp", 388, 231, true, RGB(255, 0, 255));
