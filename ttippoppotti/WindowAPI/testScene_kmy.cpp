@@ -32,7 +32,7 @@ void testScene_kmy::update(void)
 		//파리날림
 		//EFFECTMANAGER->flyingFlies(900, 2000);
 
-		EFFECTMANAGER->yellowSparks(800, 2000, FALSE);
+		EFFECTMANAGER->yellowSparks(800, 2000, false);
 
 		EFFECTMANAGER->ashes(700, 2000);
 
@@ -48,8 +48,17 @@ void testScene_kmy::update(void)
 	}
 	if (KEYMANAGER->isOnceKeyDown('Y'))
 	{
+		float x = 900, y = 2000;
+		x++;
+		y++;x++;
+		y++;x++;
+		y++;x++;
+		y++;x++;
+		y++;x++;
+		y++;x++;
+		y++;
 	//	EFFECTMANAGER->missileTrail(900, 2200, false);
-		EFFECTMANAGER->missilePuff(900, 2200, 100, false);
+		EFFECTMANAGER->missilePuff(x, y, false);
 	}
 }
 

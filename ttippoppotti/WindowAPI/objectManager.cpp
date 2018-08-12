@@ -503,9 +503,20 @@ void objectManager::update()
 					if (_flagCount >= _maxFlag)
 					{
 						_isGameClear = true;
-						_vObject[i]->setState(OBJECT_MOVE);
 					}
+					if (_isGameClear && _isDead)
+						_vObject[i]->setState(OBJECT_MOVE);
 				}
+				//if (_vObject[i]->getType() == WOODENBOX || _vObject[i]->getType() == PRISONER)
+				//{
+				//	_vObject[i]->setGravity(_vObject[i]->getGravity() + 0.55f);
+				//	_vObject[i]->setSpeed(8.0f);
+				//	_vObject[i]->setY(_vObject[i]->getY() - sinf(-PI_2) * _vObject[i]->getSpeed() + _vObject[i]->getGravity());
+				//	if (_vObject[i]->getType() == PRISONER)
+				//	{
+				//		;
+				//	}
+				//}
 			case OBJECT_MOVE:
 				break;
 			case OBJECT_DESTROY:

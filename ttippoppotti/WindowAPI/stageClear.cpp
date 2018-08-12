@@ -13,6 +13,13 @@ HRESULT stageClear::init(void)
 		_clear[i] = new image;
 		_clear[i]->init(str.c_str(), 813, 176, true, RGB(255, 0, 255));
 	}
+	for (int i = 0; i < 54; i++)
+	{
+		str = "stageClear/input/input (" + to_string(i + 1) + ").bmp";
+		_input[i] = new image;
+		_input[i]->init(str.c_str(), 434, 80, true, RGB(255, 0, 255));
+	}
+
 	_clearCount = _imageIndex = 0;
 
 	_clearBlank = new image;
@@ -28,8 +35,9 @@ HRESULT stageClear::init(void)
 	x = 1920.f;
 	timeBoardX = 1920.f;
 	enemyBoardX = 1920.f;
+	inputBoardX = 1920.f;
 
-	_isPrintImage = _isPrintEnemy = _isPrintTime = _isCalculateTime = false;
+	_isPrintImage = _isPrintEnemy = _isPrintTime = _isCalculateTime = _isPrintInput = _isPrintInputBoard = false;
 	_isAddEnemy = _isShowEnemy = false;
 	_enemyCount = 0;
 	ZeroMemory(timePos, sizeof(POINT));
@@ -239,6 +247,28 @@ void stageClear::update(void)
 	{
 		if(_claerTime > _calculateTime)
 			_calculateTime += 0.17f;
+		else
+		{
+			_isPrintInputBoard = true;
+		}
+	}
+
+	if (_isPrintInputBoard && inputBoardX >= 745.f)
+	{
+		if (inputBoardX >= 0.f)
+		{
+			inputBoardX += cosf(180.f) * 100.f;
+		}
+	}
+
+	if (inputBoardX <= 745.f && !_isPrintInput)
+	{
+		_clearCount++;
+		if (_clearCount >= 25)
+		{
+			_isPrintInput = true;
+			_clearCount = 0;
+		}
 	}
 
 	_rc[0] = RectMake(x, 0, 2000, 170);

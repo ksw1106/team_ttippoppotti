@@ -7,6 +7,26 @@ HRESULT stageScene::init(void)
 	gameNode::init(TRUE);
 	//이곳에서 초기화를 한다
 
+	for (int i = 0; i < 3; i++)
+	{
+		ZeroMemory(&_backGround[i], sizeof(world));
+		_backGround[i]._rc = RectMake(0, 2878 - WINSIZEY, 5755, WINSIZEY);
+
+		_backGround[i]._image = new image;
+	}
+
+	_backGroundPixel = new image;
+	_backGroundPixel->init("background_pixel.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_ladderPixel = new image;
+	_ladderPixel->init("ladder_pixel.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_backGround[0]._image->init("background.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	/*_backGround[1]._image = IMAGEMANAGER->findImage("backGround_tree4");
+	_backGround[2]._image = IMAGEMANAGER->findImage("backGround_tree3");
+	_backGround[3]._image = IMAGEMANAGER->findImage("backGround_tree2");
+	_backGround[4]._image = IMAGEMANAGER->findImage("backGround_tree1");*/
+	_backGround[1]._image->init("background_rock.bmp", 5755, 2878, true, RGB(255, 0, 255));
+	_backGround[2]._image->init("background_object.bmp", 5755, 2878, true, RGB(255, 0, 255));
+
 	_playerManager = new playerManager;
 	_playerManager->init(1);
 
@@ -15,9 +35,8 @@ HRESULT stageScene::init(void)
 
 	_mapData = new mapData;
 	_mapData->init(1);
-
-	_mapData->setObjectPixel("backGround_object");
-	_mapData->setBackGroundMap("backGround_pixel");
+	_mapData->setObjectPixel(_backGround[2]._image);
+	_mapData->setBackGroundMap(_backGroundPixel);
 
 	_test = new testScene_kmy;
 	_test->init();
@@ -31,7 +50,7 @@ HRESULT stageScene::init(void)
 
 	_missionFailed = new missionFailed;
 	_missionFailed->init();
-	_missionFailed->setCurrentStage(1);
+
 	EFFECTMANAGER->init();
 	_playerManager->setMapData(_mapData);
 	_enemyManager->setMapData(_mapData);
@@ -41,21 +60,7 @@ HRESULT stageScene::init(void)
 	_playerManager->setEnemyManager(_enemyManager);
 	_enemyManager->setPlayerManager(_playerManager);
 
-	COLLISIONMANAGER->setPixelMap(IMAGEMANAGER->findImage("backGround_pixel"), IMAGEMANAGER->findImage("ladder_pixel"));
-
-	for (int i = 0; i < 3; i++)
-	{
-		ZeroMemory(&_backGround[i], sizeof(world));
-		_backGround[i]._rc = RectMake(0, 2878 - WINSIZEY, 5755, WINSIZEY);
-	}
-
-	_backGround[0]._image = IMAGEMANAGER->findImage("backGround");
-	/*_backGround[1]._image = IMAGEMANAGER->findImage("backGround_tree4");
-	_backGround[2]._image = IMAGEMANAGER->findImage("backGround_tree3");
-	_backGround[3]._image = IMAGEMANAGER->findImage("backGround_tree2");
-	_backGround[4]._image = IMAGEMANAGER->findImage("backGround_tree1");*/
-	_backGround[1]._image = IMAGEMANAGER->findImage("backGround_rock");
-	_backGround[2]._image = IMAGEMANAGER->findImage("backGround_object");
+	COLLISIONMANAGER->setPixelMap(_backGroundPixel, _ladderPixel);
 
 	_camDebug = false;
 	_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
@@ -70,6 +75,12 @@ void stageScene::release(void)
 	//init함수에서 동적할당 new를 사용했다면 이곳에서 delete 사용한다
 	//이미지매니져 사용시 safe_delete 할 필요 없다
 
+	for (int i = 0; i < 3; i++)
+	{
+		SAFE_DELETE(_backGround[i]._image);
+	}
+	SAFE_DELETE(_backGroundPixel);
+	SAFE_DELETE(_ladderPixel);
 	//_playerManager->release();
 	//_enemyManager->release();
 	_mapData->release();
@@ -245,8 +256,8 @@ void stageScene::render(void)
 	_enemyManager->render();
 	if (KEYMANAGER->isToggleKey('8'))
 	{
-		IMAGEMANAGER->findImage("backGround_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
-		IMAGEMANAGER->findImage("ladder_pixel")->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+		_backGroundPixel->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
+		_ladderPixel->render(getMemDC(), 0, 0, _rcCamera.left, _rcCamera.top, WINSIZEX, WINSIZEY);
 	}
 	_test->render();
 

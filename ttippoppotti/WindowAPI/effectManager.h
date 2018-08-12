@@ -39,7 +39,7 @@ public:
 
 	void missileTrail(float x, float y, bool isLeft);
 
-	void missilePuff(float x, float y, int speed, bool isLeft);
+	void missilePuff(float x, float y, bool isLeft);
 	//ÇÇ ºÐ¼ö
 	void chuckBloodFountain(float x, float y);
 	//³«¼®
@@ -89,7 +89,7 @@ public:
 	void playAshes(string effectName, float x, float y);
 	void playBigBang(string effectName, float x, float y);
 	void playMissileTrail(string effectName, float x, float y, bool isLeft);
-	void playMissilePuff(string effectName, float x, float y, int speed, bool isLeft);
+	void playMissilePuff(string effectName, float x, float y, bool isLeft);
 	effectManager() {}
 	~effectManager() {}
 };

@@ -416,8 +416,8 @@ void effects::boomMissileTrail()
 			else
 			{
 				_vParticle[i].y = _vParticle[i].fireY;
-				_vParticle[i].alpha -= 25;
-				if (_vParticle[i].alpha <= 25)
+				_vParticle[i].alpha -= 10;
+				if (_vParticle[i].alpha <= 10)
 				{
 					_isRunning = true;
 					_isMissileTrail = true;
@@ -434,7 +434,7 @@ void effects::boomMissileTrail()
 }
 
 
-void effects::activateMissilePuff(float x, float y, int speed, bool isLeft)
+void effects::activateMissilePuff(float x, float y, bool isLeft)
 {
 	_isRunning = true;
 	_isMissilePuff = true;
@@ -488,10 +488,12 @@ void effects::activateMissilePuff(float x, float y, int speed, bool isLeft)
 		}
 		else
 		{
-			_vParticle[i].x = x - cosf(_vParticle[i].angle) * WINSIZEY;
-			_vParticle[i].y = y + sinf(_vParticle[i].angle) * WINSIZEY;
+			_vParticle[i].x = x - cosf(_vParticle[i].angle) * _vParticle[i].speed;
+			_vParticle[i].y = y + sinf(_vParticle[i].angle) * _vParticle[i].speed;
+			_vParticle[i].oldX = _vParticle[i].x;
+			_vParticle[i].oldY = _vParticle[i].y;
 		}
-		_vParticle[i].speed = speed;
+		//_vParticle[i].speed = speed;
 
 	}
 }
@@ -505,15 +507,14 @@ void effects::boomMissilePuff()
 			if (!_vParticle[i].fire) continue;
 			if (_vParticle[i].x < _vParticle[i].fireX)
 				_vParticle[i].x += cosf(_vParticle[i].angle) * _vParticle[i].speed;
-			else
-				_vParticle[i].fire = false;
+			//else
+				//_vParticle[i].fire = false;
 			if (_vParticle[i].y < _vParticle[i].fireY)
 				_vParticle[i].y += -sinf(_vParticle[i].angle) * _vParticle[i].speed;
-			else
+			//else
+			if (_vParticle[i].fire)
 			{
 				_vParticle[i].fire = false;
-				_isRunning = false;
-				_isMissilePuff = false;
 			}
 
 			if (_vParticle[i].isFrameImg)
@@ -615,7 +616,7 @@ void effects::activateParabolaNoCollision(float x, float y, bool isLeft)
 
 void effects::boomParabola()
 {
-	//돌무더기, 피, 탄피, 나무파편
+	//돌무더기, 피, 탄피, 나무파편 등
 	if (_isParabola)
 	{
 		for (int i = 0; i < _vParticle.size(); ++i)
@@ -638,7 +639,7 @@ void effects::boomParabola()
 					_animationSpeed++;
 				}
 			}
-			if (_vParticle[i].count == 500 || _vParticle[i].speed < 1.0f)
+			if (_vParticle[i].count == 500 || _vParticle[i].speed < 0.8f)
 			{
 				_vParticle[i].fire = false;
 				_isRunning = false;
@@ -825,7 +826,7 @@ void effects::collisionProcess()
 			if (COLLISIONMANAGER->pixelCollision(_vParticle[i].rc, _vParticle[i].x, _vParticle[i].y, _vParticle[i].speed, _vParticle[i].gravity, 3) == GREEN) //아래
 			{
 				_vParticle[i].gravity = 0;
-				//_vParticle[i].angle = PI2 - _vParticle[i].angle;
+				_vParticle[i].angle = PI2 - _vParticle[i].angle;
 				_vParticle[i].y -= _vParticle[i].rc.bottom - _vParticle[i].rc.top;
 				_vParticle[i].speed *= 0.5;
 			}
