@@ -146,11 +146,11 @@ void enemyManager::update(void)
 	this->collideBulletWithPixel();
 	// 할아버지 총알 vs 에너미 충돌
 	this->collideWithGBullet();
-	// 할아비 총알 vs 브로빌 충돌
-	this->collideBrovilWithGBullet();
 	
 	if (_stageNum == 1)
 	{
+		// 할아비 총알 vs 브로빌 충돌
+		this->collideBrovilWithGBullet();
 		// 플레이어 총알과 브로빌 충돌
 		this->collideBrovilwithPBullet();
 			
@@ -192,6 +192,7 @@ void enemyManager::render(void)
 	}
 	
 	_eBullet->render();
+	
 	if (_stageNum == 1)
 	{
 		_brovil->render();
@@ -1395,7 +1396,7 @@ void enemyManager::DogDieWithBullet(int i)
 		_vDog[i]->setStatus(D_KNOCK_BACK);
 	}
 
-	if (_brovil->getBrovilStatus() == D_DEAD)
+	if (_vDog[i]->getStatus() == D_DEAD)
 	{
 		_vDog[i]->deadMove();
 	}

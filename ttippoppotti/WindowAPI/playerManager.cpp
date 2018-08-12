@@ -5,62 +5,71 @@
 
 HRESULT playerManager::init(int num)
 {
+	stageNum = num;
+	_player = new player;
+	_playerChange[0] = new player;
+	_playerChange[1] = new player;
+	if (num == 1)
+	{
+		_playerChange[0]->init(0, 100.f, 1900.f);
+		_playerChange[1]->init(1, 100.f, 1900.f);
+	}
+	else if (num == 2)
+	{
+		_playerChange[0]->init(0, 375.f, 1104.f);
+		_playerChange[1]->init(1, 375.f, 1104.f);
+	}
+	_rambroChange = false;
 
-		//_player = new player;
-		_playerChange[0] = new player;
-		_playerChange[0]->init(0);
-		_playerChange[1] = new player;
-		_playerChange[1]->init(1);
+	_player = _playerChange[_rambroChange];
+	_player->setRcRambro(_player->getRcRambro());
 
-		_rambroChange = false;
+	_pBullet = new pBullet;
+	_pBullet->init(700.f);
+	_pGrenade = new pGrenade;
+	_pGrenade->init(500.f);
+	_gBullet = new gBullet;
+	_gBullet->init(400.f);
+	_gMissile = new gMissile;
+	_gMissile->init(2000.f);
+	_xMissile = new xMissile;
+	_xMissile->init(2000.f);
 
-		_player = _playerChange[_rambroChange];
-		_player->setRcRambro(_player->getRcRambro());
+	_p1Bubble = IMAGEMANAGER->findImage("p1Bubble");
+	_p1Bubble->setX(_player->getX() + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
+	_p1Bubble->setY(_player->getY() - 100);
 
-		_pBullet = new pBullet;
-		_pBullet->init(700.f);
-		_pGrenade = new pGrenade;
-		_pGrenade->init(500.f);
-		_gBullet = new gBullet;
-		_gBullet->init(400.f);
-		_gMissile = new gMissile;
-		_gMissile->init(2000.f);
-		_xMissile = new xMissile;
-		_xMissile->init(2000.f);
+	_rcKnifeRight = RectMake(_player->getX() + 60, _player->getY() + 30, 30, 30);
+	_rcKnifeLeft = RectMake(_player->getX() - 20, _player->getY() + 30, 30, 30);
 
-		_p1Bubble = IMAGEMANAGER->findImage("p1Bubble");
-		_p1Bubble->setX(_player->getX() + _player->getImage(_player->getState())->getFrameWidth() / 2 - _p1Bubble->getFrameWidth() / 2);
-		_p1Bubble->setY(_player->getY() - 100);
 
-		_rcKnifeRight = RectMake(_player->getX() + 60, _player->getY() + 30, 30, 30);
-		_rcKnifeLeft = RectMake(_player->getX() - 20, _player->getY() + 30, 30, 30);
+	hit_left = hit_right = hit_top = hit_bottom = false;
 
-		hit_left = hit_right = hit_top = hit_bottom = false;
+	_index = _count = 0;
+	_animationSpeed = 5;
 
-		_index = _count = 0;
-		_animationSpeed = 5;
+	_fireCount = 0;
+	_grenadeCount = 0;
+	_missileCount = 0;
 
-		_fireCount = 0;
-		_grenadeCount = 0;
-		_missileCount = 0;
+	_knifeCollision = false;
+	_isLadder = false;
+	_rambroFire = false;
+	_rambroGrenade = false;
+	_isGrenade = false;
+	_xMissileCollision = false;
+	_xMissileColl = false;
+	_isMissile = false;
+	_missile = false;
+	_isGameover = false;
 
-		_knifeCollision = false;
-		_isLadder = false;
-		_rambroFire = false;
-		_rambroGrenade = false;
-		_isGrenade = false;
-		_xMissileCollision = false;
-		_xMissileColl = false;
-		_isMissile = false;
-		_missile = false;
-		_isGameover = false;
+	//_rc8 = RectMake(500.f, 2100.f, 60, 60);
+	//_rcMissileRight = RectMake(100.f, 1000.f, 100, 10);
+	//_rcMissileLeft = RectMake(1500.f, 1000.f, 100, 10);
 
-		_rc8 = RectMake(500.f, 2100.f, 60, 60);
-		//_rcMissileRight = RectMake(100.f, 1000.f, 100, 10);
-		//_rcMissileLeft = RectMake(1500.f, 1000.f, 100, 10);
-
-		_player->setrcSkyRight(_player->getrcSkyRight());
-		_player->setrcSkyLeft(_player->getrcSkyLeft());
+	_player->setrcSkyRight(_player->getrcSkyRight());
+	_player->setrcSkyLeft(_player->getrcSkyLeft());
+	
 	
 
 	return S_OK;
@@ -764,7 +773,7 @@ void playerManager::update(void)
 						OBJECTMANAGER->getVObject()[k]->setIsActived(true);
 					if (OBJECTMANAGER->getVObject()[k]->getType() == AMERICAN_FLAG || OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
 					{
-						OBJECTMANAGER->setFlagCount(OBJECTMANAGER->getFlagCount() + 1);
+						//OBJECTMANAGER->setFlagCount(OBJECTMANAGER->getFlagCount() + 1);
 						OBJECTMANAGER->getVObject()[k]->setState(OBJECT_MOVE);
 					}
 				}
@@ -776,7 +785,7 @@ void playerManager::update(void)
 					{
 						//할아버지 등장 시점 
 						_rambroChange = true;
-						_playerChange[1]->init(1);
+						_playerChange[1]->init(1,_player->getX(),_player->getY());
 						_player = _playerChange[_rambroChange];
 						_rambroFire = true;
 						_rambroGrenade = true;
@@ -827,7 +836,7 @@ void playerManager::update(void)
 						}
 						else if (OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED)
 						{
-							EFFECTMANAGER->explosion(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top);
+							EFFECTMANAGER->bigBang(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top);
 							CAMERAMANAGER->CameraShake();
 							OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
 						}
@@ -857,9 +866,11 @@ void playerManager::update(void)
 				{
 					_pBullet->getVPlayerBullet()[i].isActived = false;
 					_mapData->deleteMap(j);
+					EFFECTMANAGER->rockFall(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y, _pBullet->getVPlayerBullet()[i].isLeft);
 					if (_pBullet->getVPlayerBullet()[i].isActived == false)
 					{
 						EFFECTMANAGER->bulletPuff(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y);
+						//EFFECTMANAGER->yellowSparks(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y, _player->getIsLeft());
 					}
 					break;
 				}
@@ -898,9 +909,11 @@ void playerManager::update(void)
 				{
 					_pBullet->getVPlayerBullet()[i].isActived = false;
 					_mapData->deleteMap(j);
+					EFFECTMANAGER->rockFall(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y, _pBullet->getVPlayerBullet()[i].isLeft);
 					if (_pBullet->getVPlayerBullet()[i].isActived == false)
 					{
 						EFFECTMANAGER->bulletPuff(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y);
+						//EFFECTMANAGER->yellowSparks(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y, !_player->getIsLeft());
 					}
 					break;
 				}
@@ -952,7 +965,7 @@ void playerManager::update(void)
 						}
 						else if (OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED)
 						{
-							EFFECTMANAGER->explosion(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top);
+							EFFECTMANAGER->bigBang(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top);
 							CAMERAMANAGER->CameraShake();
 							OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
 						}
@@ -980,6 +993,7 @@ void playerManager::update(void)
 				{
 					_gBullet->getVPlayergBullet()[i].isActived = false;
 					_mapData->deleteMap(j);
+					EFFECTMANAGER->rockFall(_gBullet->getVPlayergBullet()[i].x, _gBullet->getVPlayergBullet()[i].y, _gBullet->getVPlayergBullet()[i].isLeft);
 					if (_gBullet->getVPlayergBullet()[i].isActived == false)
 					{
 						EFFECTMANAGER->bulletPuff(_gBullet->getVPlayergBullet()[i].x, _gBullet->getVPlayergBullet()[i].y);
@@ -1021,6 +1035,7 @@ void playerManager::update(void)
 				{
 					_gBullet->getVPlayergBullet()[i].isActived = false;
 					_mapData->deleteMap(j);
+					EFFECTMANAGER->rockFall(_gBullet->getVPlayergBullet()[i].x, _gBullet->getVPlayergBullet()[i].y, _gBullet->getVPlayergBullet()[i].isLeft);
 					if (_gBullet->getVPlayergBullet()[i].isActived == false)
 					{
 						EFFECTMANAGER->bulletPuff(_gBullet->getVPlayergBullet()[i].x, _gBullet->getVPlayergBullet()[i].y);
@@ -1055,6 +1070,70 @@ void playerManager::update(void)
 	for (int i = 0; i < _pGrenade->getVPlayerGrenade().size(); i++)			// 수류탄이랑 벽이랑 충돌하면 벽 지워주기
 	{
 		if (!_pGrenade->getVPlayerGrenade()[i].isActived)continue;
+		for (int k = 0; k < OBJECTMANAGER->getVObject().size(); k++)
+		{
+			if (OBJECT_DESTROY == OBJECTMANAGER->getVObject()[k]->getState()) continue;
+			if (OBJECTMANAGER->getVObject()[k]->getType() == WOODENBOX || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY ||
+				OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED || OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
+			{
+				switch (OBJECTMANAGER->getVObject()[k]->getState())
+				{
+				case OBJECT_IDLE:
+					//총알과 박스/드럼통/감옥이 부딪혔을 때 (수류탄에도 똑같이 적용해 줄 것!)
+					if (IntersectRect(&temp, &_pGrenade->getVPlayerGrenade()[i].rc, &OBJECTMANAGER->getVObject()[k]->getRect()))
+					{
+						//_pGrenade->getVPlayerGrenade()[i].angle = PI;
+
+						int width = _pGrenade->getVPlayerGrenade()[i].rc.right - _pGrenade->getVPlayerGrenade()[i].rc.left;
+						int height = _pGrenade->getVPlayerGrenade()[i].rc.bottom - _pGrenade->getVPlayerGrenade()[i].rc.top;
+
+						if (_pGrenade->getVPlayerGrenade()[i].rc.left + width / 2 < temp.left)
+						{
+							_pGrenade->getVPlayerGrenade()[i].x - (temp.right - temp.left);
+							_pGrenade->getVPlayerGrenade()[i].angle = PI - _pGrenade->getVPlayerGrenade()[i].angle;
+							_pGrenade->getVPlayerGrenade()[i].speed *= 0.6f;
+						}
+						else if (_pGrenade->getVPlayerGrenade()[i].rc.left + width / 2 > temp.right)
+						{
+							_pGrenade->getVPlayerGrenade()[i].x + (temp.right - temp.left);
+							_pGrenade->getVPlayerGrenade()[i].angle = PI - _pGrenade->getVPlayerGrenade()[i].angle;
+							_pGrenade->getVPlayerGrenade()[i].speed *= 0.6f;
+						}
+						if (_pGrenade->getVPlayerGrenade()[i].rc.top + height / 2 < temp.top)
+						{
+							_pGrenade->getVPlayerGrenade()[i].y - (temp.bottom - temp.top);
+							_pGrenade->getVPlayerGrenade()[i].angle = PI2 - _pGrenade->getVPlayerGrenade()[i].angle;
+							_pGrenade->getVPlayerGrenade()[i].speed *= 0.6f;
+						}
+						else if (_pGrenade->getVPlayerGrenade()[i].rc.top + height / 2 < temp.bottom)
+						{
+							_pGrenade->getVPlayerGrenade()[i].y + (temp.bottom - temp.top);
+							_pGrenade->getVPlayerGrenade()[i].angle = PI2 - _pGrenade->getVPlayerGrenade()[i].angle;
+							_pGrenade->getVPlayerGrenade()[i].speed *= 0.6f;
+						}
+						//if (OBJECTMANAGER->getVObject()[k]->getType() == WOODENBOX)
+						//{
+						//	
+						//	//EFFECTMANAGER->woodDebris(OBJECTMANAGER->getVObject()[i]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top, _player->getIsLeft());
+						//	//OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
+						//}
+						//else if (OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED)
+						//{
+						//	//EFFECTMANAGER->explosion(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top);
+						//	CAMERAMANAGER->CameraShake();
+						//	//OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
+						//}
+						//else if (OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
+						//{
+						//	//EFFECTMANAGER->woodDebris(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top, _player->getIsLeft());
+						//	//OBJECTMANAGER->getVObject()[k]->setState(OBJECT_MOVE);
+						//}
+						////EFFECTMANAGER->bulletPuff(_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y);
+					}
+					break;
+				}
+			}
+		}
 
 		if (COLLISIONMANAGER->pixelCollision(_pGrenade->getVPlayerGrenade()[i].rc,			// 아래쪽 벽
 			_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y,
@@ -1099,6 +1178,7 @@ void playerManager::update(void)
 				{
 					_mapData->deleteMapIndexByIndex(j, 2, 2);
 					_pGrenade->getVPlayerGrenade()[i].isActived = false;
+					EFFECTMANAGER->rockFall(_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y, _pGrenade->getVPlayerGrenade()[i].isLeft);
 					EFFECTMANAGER->rambroGrenadeExplosion(_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y);
 					CAMERAMANAGER->CameraShake();
 				}
@@ -1162,6 +1242,7 @@ void playerManager::update(void)
 						_gMissile->getVPlayergMissile()[i].isActived = false;
 						_mapData->deleteMapIndexByIndex(j, 2, 2);
 						CAMERAMANAGER->CameraShake();
+						EFFECTMANAGER->rockFall(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y, _gMissile->getVPlayergMissile()[i].isLeft);
 						//EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
 						missileCount++;
 						break;
@@ -1177,6 +1258,7 @@ void playerManager::update(void)
 						_gMissile->getVPlayergMissile()[i].isActived = false;
 						_mapData->deleteMapIndexByIndex(j, 2, 2);
 						CAMERAMANAGER->CameraShake();
+						EFFECTMANAGER->rockFall(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y, _gMissile->getVPlayergMissile()[i].isLeft);
 						//EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
 						missileCount++;
 						break;
@@ -1192,6 +1274,7 @@ void playerManager::update(void)
 						_gMissile->getVPlayergMissile()[i].isActived = false;
 						_mapData->deleteMapIndexByIndex(j, 2, 2);
 						CAMERAMANAGER->CameraShake();
+						EFFECTMANAGER->rockFall(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y, _gMissile->getVPlayergMissile()[i].isLeft);
 						//EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
 						missileCount++;
 						break;
@@ -1207,6 +1290,7 @@ void playerManager::update(void)
 						_gMissile->getVPlayergMissile()[i].isActived = false;
 						_mapData->deleteMapIndexByIndex(j, 2, 2);
 						CAMERAMANAGER->CameraShake();
+						EFFECTMANAGER->rockFall(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y, _gMissile->getVPlayergMissile()[i].isLeft);
 						//EFFECTMANAGER->rambroGrenadeExplosion(_gMissile->getVPlayergMissile()[i].x, _gMissile->getVPlayergMissile()[i].y);
 						missileCount++;
 						break;
@@ -1227,6 +1311,7 @@ void playerManager::update(void)
 			if (IntersectRect(&temp, &_rcKnifeRight, &_mapData->getObject()[i]._rc))
 			{
 				_mapData->deleteMap(i);
+				//EFFECTMANAGER->rockFall(, _pBullet->getVPlayerBullet()[i].y, _player->getIsLeft());
 				EFFECTMANAGER->knifePuff(_player->getX() - 30, _player->getY() - 25, _player->getIsLeft());
 				break;
 			}
@@ -1239,20 +1324,21 @@ void playerManager::update(void)
 			if (IntersectRect(&temp, &_rcKnifeLeft, &_mapData->getObject()[i]._rc))
 			{
 				_mapData->deleteMap(i);
+				//EFFECTMANAGER->rockFall(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y, _player->getIsLeft());
 				EFFECTMANAGER->knifePuff(_player->getX() - 34, _player->getY() - 25, _player->getIsLeft());
 				break;
 			}
 		}
 	}
 
-	if (IntersectRect(&temp, &_rc8, &_player->getRcRambro()))
-	{
-		_rambroChange = true;
-		_playerChange[1]->init(1);
-		_player = _playerChange[_rambroChange];
-		_rambroFire = true;
-		_rambroGrenade = true;
-	}
+	//if (IntersectRect(&temp, &_rc8, &_player->getRcRambro()))
+	//{
+	//	_rambroChange = true;
+	//	_playerChange[1]->init(1);
+	//	_player = _playerChange[_rambroChange];
+	//	_rambroFire = true;
+	//	_rambroGrenade = true;
+	//}
 	_player->setX(tempX);
 	_player->setY(tempY);
 
