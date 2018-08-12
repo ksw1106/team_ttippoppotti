@@ -46,7 +46,6 @@ private:
 	bool _isRunning;		//이펙트 재생중이냐?
 	bool _isParabola;
 	bool _isLeft;
-	bool _isFountain;
 	bool _isExplosion;
 	bool _isStaticAnim;
 	bool _isFlyingFlies;

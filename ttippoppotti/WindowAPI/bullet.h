@@ -8,6 +8,7 @@
 struct tagBullet
 {
 	image* bulletImage;
+	image* bulletFallImage;
 	image* grenadeImage;
 	image* missileImageRight;
 	image* missileImageLeft;
@@ -25,6 +26,7 @@ struct tagBullet
 	int count;
 	int frameCount;
 	int frameIndex;
+	int frameIndex2;
 	int frameSpeed;
 	
 };
@@ -186,12 +188,14 @@ class pGrenade : public gameNode
 {
 private:
 	vector<tagBullet> _vBullet;
+	//vector<tagBullet> _vBulletTrail;
 
 private:
 	float _range;
 	int _grenadeMax;
 	int _count, _index, _animationSpeed;
 	const char* _imageName;
+	int _trailcount;
 
 public:
 
@@ -205,6 +209,7 @@ public:
 	void move();
 
 	vector<tagBullet>& getVPlayerGrenade() { return _vBullet; }
+	//vector<tagBullet>& getVPlayerGrenadeTrail() { return _vBulletTrail; }
 
 	pGrenade() {}
 	~pGrenade() {}

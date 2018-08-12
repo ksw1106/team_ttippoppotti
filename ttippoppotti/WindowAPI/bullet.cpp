@@ -214,8 +214,10 @@ HRESULT bossRocket::init(float range)
 	{
 		ZeroMemory(&_bossRocket[i], sizeof(tagBullet));
 		_bossRocket[i].bulletImage = IMAGEMANAGER->findImage("Å×·¯ÄßÅÍ ·ÎÄÏ");
+		_bossRocket[i].bulletFallImage = IMAGEMANAGER->findImage("Å×·¯ÄßÅÍ ·ÎÄÏ³«ÇÏ");
 		_bossRocket[i].speed = 4.f;
-		_bossRocket[i].frameSpeed = 5;
+		_bossRocket[i].frameSpeed = 10;
+		
 	}
 
 	_interval = 0;
@@ -232,8 +234,7 @@ void bossRocket::update(void)
 {
 	this->move();
 	
-	_interval++;
-	if (_interval > 1000) _interval = 0;
+	_interval++;	
 }
 
 void bossRocket::render(void)
@@ -241,20 +242,31 @@ void bossRocket::render(void)
 	for (int i = 0; i < BOSS_ROCKET_MAX; ++i)
 	{
 		if (!_bossRocket[i].isActived) continue;
-		_bossRocket[i].bulletImage->frameRender(getMemDC(), _bossRocket[i].rc.left - CAMERAMANAGER->getCamera().left, _bossRocket[i].rc.top - CAMERAMANAGER->getCamera().top,
-			_bossRocket[i].bulletImage->getFrameX(), _bossRocket[i].bulletImage->getFrameY());		
+		
+		if (_bossRocket[i].gravity <= 0.f)
+			_bossRocket[i].bulletImage->frameRender(getMemDC(), _bossRocket[i].x - CAMERAMANAGER->getCamera().left, _bossRocket[i].y - CAMERAMANAGER->getCamera().top,
+				_bossRocket[i].bulletImage->getFrameX(), _bossRocket[i].bulletImage->getFrameY());
+		else
+		{
+			_bossRocket[i].bulletFallImage->frameRender(getMemDC(), _bossRocket[i].x - CAMERAMANAGER->getCamera().left, _bossRocket[i].y - CAMERAMANAGER->getCamera().top,
+				_bossRocket[i].bulletFallImage->getFrameX(), _bossRocket[i].bulletFallImage->getFrameY());
+		}
 	}
+
+	char str[32];
+	sprintf(str, "%d", _bossRocket[0].frameIndex2);
+	TextOut(getMemDC(), 100, 500, str, strlen(str));
 }
 
 void bossRocket::fire(int x, int y, int fireSpeed, bool isLeft)
 {
-	if (_interval % 10 != 0) return;
-
+	if (_interval < 100) return;
+	_interval = 0;
 	for (int i = 0; i < BOSS_ROCKET_MAX; ++i)
 	{
 		if (_bossRocket[i].isActived) continue;
 
-		_bossRocket[i].x = _bossRocket[i].fireX = x;
+		_bossRocket[i].x = _bossRocket[i].fireX = x + 50*i;
 		_bossRocket[i].y = _bossRocket[i].fireY = y;
 		_bossRocket[i].gravity = 0.f;
 		_bossRocket[i].rc = RectMake(_bossRocket[i].x, _bossRocket[i].y, _bossRocket[i].bulletImage->getFrameWidth(), _bossRocket[i].bulletImage->getFrameHeight());
@@ -264,10 +276,14 @@ void bossRocket::fire(int x, int y, int fireSpeed, bool isLeft)
 		if (isLeft)
 		{
 			_bossRocket[i].angle = PI;
+			_bossRocket[i].frameIndex2 = 8;
+			_bossRocket[i].frameCount = 0;
 		}
 		else
 		{
 			_bossRocket[i].angle = 0.f;
+			_bossRocket[i].frameIndex2 = 0;
+			_bossRocket[i].frameCount = 0;
 		}
 		
 		break;
@@ -288,6 +304,7 @@ void bossRocket::move()
 		if (distance > _range)
 		{
 			_bossRocket[i].gravity += 0.5f;
+			
 		}
 		if (distance > 1500.f)
 		{
@@ -300,8 +317,31 @@ void bossRocket::move()
 
 
 void bossRocket::animation(int i)
-{
-	FRAMEMANAGER->frameChange(_bossRocket[i].bulletImage, _bossRocket[i].frameCount, _bossRocket[i].frameIndex, _bossRocket[i].frameSpeed, _bossRocket[i].isLeft);
+{	
+	if (_bossRocket[i].gravity <= 0.f)
+	{
+		FRAMEMANAGER->frameChange(_bossRocket[i].bulletImage, _bossRocket[i].frameCount, _bossRocket[i].frameIndex, _bossRocket[i].frameSpeed, _bossRocket[i].isLeft);
+	}
+	else if (_bossRocket[i].gravity > 0.f)
+	{
+		if (_bossRocket[i].isLeft)
+		{
+			if (_bossRocket[i].frameIndex2 <= 0)
+			{
+				_bossRocket[i].frameIndex2++;
+			}
+		}
+		else
+		{
+			if (_bossRocket[i].frameIndex2 >= 8)
+			{
+				_bossRocket[i].frameIndex2--;
+			}
+		}
+		
+		FRAMEMANAGER->frameChange(_bossRocket[i].bulletFallImage, _bossRocket[i].frameCount, _bossRocket[i].frameIndex2, _bossRocket[i].frameSpeed, _bossRocket[i].isLeft);
+
+	}
 }
 
 // enemy bullet
@@ -435,16 +475,22 @@ HRESULT pGrenade::init(float range)
 	{
 		tagBullet pGrenade;
 		ZeroMemory(&pGrenade, sizeof(tagBullet));
-		//pGrenade.bulletImage = new image;
-		//pGrenade.bulletImage->init("player_ramBro/rambro_grenade.bmp", 288, 72, 8, 2, true, RGB(255, 0, 255));
-		//pGrenade.grenadeImage = new image;
-		//pGrenade.grenadeImage->init("player_ramBro/rambro_grenade_bomb.bmp", 28, 35, true, RGB(255, 0, 255));
 		pGrenade.bulletImage = IMAGEMANAGER->findImage("rambro_grenade_frame");
 		pGrenade.grenadeImage = IMAGEMANAGER->findImage("rambro_grenade_bomb");
+		//pGrenade.missileImageLeft = IMAGEMANAGER->findImage("rambro_grenade_blue");
 		// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
 		_vBullet.push_back(pGrenade);
 	}
-	
+	//for (int i = 0; i < 30; i++)
+	//{
+	//	tagBullet pGrenade;
+	//	ZeroMemory(&pGrenade, sizeof(tagBullet));
+	//	pGrenade.missileImageLeft = IMAGEMANAGER->findImage("rambro_grenade_blue");
+	//	// º¤ÅÍ¿¡ ÃÑ¾Ë´ã±â
+	//	_vBulletTrail.push_back(pGrenade);
+	//}
+	//_trailcount = 0;
+
 	return S_OK;
 }
 
@@ -486,6 +532,8 @@ void pGrenade::render(void)
 	{
 		if (_vBullet[i].isActived == true)
 		{
+			//_vBulletTrail[i].missileImageLeft->frameRender(getMemDC(), _vBulletTrail[i].rc.left - CAMERAMANAGER->getCamera().left,
+			//	_vBulletTrail[i].rc.top - CAMERAMANAGER->getCamera().top);
 			_vBullet[i].bulletImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
 				_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top);
 			if (_vBullet[i].count > 50)
@@ -509,6 +557,7 @@ void pGrenade::fire(int x, int y, int fireSpeed, bool isLeft)
 		_vBullet[i].gravity = 0.0f;
 		_vBullet[i].bulletImage = IMAGEMANAGER->findImage("rambro_grenade_frame");
 		_vBullet[i].grenadeImage = IMAGEMANAGER->findImage("rambro_grenade_bomb");
+		
 		_vBullet[i].count = 0;		
 		_vBullet[i].x = _vBullet[i].fireX = x;
 		_vBullet[i].y = _vBullet[i].fireY = y;
@@ -523,9 +572,46 @@ void pGrenade::fire(int x, int y, int fireSpeed, bool isLeft)
 		{
 			_vBullet[i].angle = 35.f * PI / 180;
 		}
+		//_vBullet[i].count++;
+		//if (_vBullet[i].count > 3)
+		//{
+		//	_vBullet[i].missileImageLeft = IMAGEMANAGER->findImage("rambro_grenade_blue");
+		//}
 
 		break;
 	}
+	//for (int i = 0; i < _vBulletTrail.size(); i++)
+	//{
+	//	if (_vBulletTrail[i].isActived)continue;
+	//	_vBulletTrail[i].isActived = true;
+	//	_vBulletTrail[i].speed = fireSpeed;
+	//	_vBulletTrail[i].isLeft = isLeft;
+	//	_vBulletTrail[i].gravity = 0.0f;
+	//	_vBulletTrail[i].count = 0;
+	//	if (!_vBulletTrail[i].isLeft)
+	//	{
+	//		x = x - 10;
+	//		y = y - 10;
+	//	}
+	//	else
+	//	{
+	//
+	//	}
+	//	_vBulletTrail[i].x = _vBulletTrail[i].fireX = x;
+	//	_vBulletTrail[i].y = _vBulletTrail[i].fireY = y;
+	//	_vBulletTrail[i].rc = RectMake(_vBulletTrail[i].x, _vBulletTrail[i].y,
+	//		_vBulletTrail[i].missileImageLeft->getFrameWidth(),
+	//		_vBulletTrail[i].missileImageLeft->getFrameHeight());
+	//	if (_vBulletTrail[i].isLeft)
+	//	{
+	//		_vBulletTrail[i].angle = 145.f * PI / 180;
+	//	}
+	//	else
+	//	{
+	//		_vBulletTrail[i].angle = 35.f * PI / 180;
+	//	}
+	//	//break;
+	//}
 }
 
 void pGrenade::move()
@@ -545,6 +631,34 @@ void pGrenade::move()
 			_vBullet[i].count++;
 		}
 	}
+
+	//_trailcount++;
+	//for (int i = 0; i < _vBulletTrail.size(); ++i)
+	//{ 
+	//	if (_vBulletTrail[i].isActived)
+	//	{
+	//		_vBulletTrail[i].count++;
+	//		//if (_vBulletTrail[i].count > 2)
+	//		{
+	//			_vBulletTrail[i].gravity += 0.90f;
+	//			//if (i > 0)
+	//			//{
+	//			//	_vBulletTrail[i].x = _vBulletTrail[i - 1].x + cosf(_vBulletTrail[i].angle) * (_vBulletTrail[i].speed * i);
+	//			//	_vBulletTrail[i].y = _vBulletTrail[i - 1].y - sinf(_vBulletTrail[i].angle) * (_vBulletTrail[i].speed * i) + _vBulletTrail[i].gravity;
+	//			//}
+	//			//else
+	//			{
+	//				_vBulletTrail[i].x += cosf(_vBulletTrail[i].angle) * _vBulletTrail[i].speed;
+	//				_vBulletTrail[i].y += -sinf(_vBulletTrail[i].angle) * _vBulletTrail[i].speed + _vBulletTrail[i].gravity;
+	//			}
+	//
+	//			_vBulletTrail[i].rc = RectMake(_vBulletTrail[i].x, _vBulletTrail[i].y,
+	//				_vBulletTrail[i].missileImageLeft->getFrameWidth(),
+	//				_vBulletTrail[i].missileImageLeft->getFrameHeight());
+	//		}
+	//
+	//	}
+	//}
 }
 //=============================================================
 //	## Gbullet ## (ÇÒ¾Æ¹öÁö ÀÏ¹ÝÃÑ¾Ë)
@@ -736,7 +850,7 @@ void gMissile::move()
 		{
 			_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 			_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
-		
+
 			_vBullet[i].rc = RectMake(_vBullet[i].x, _vBullet[i].y,
 				_vBullet[i].missileImageRight->getFrameWidth(),
 				_vBullet[i].missileImageRight->getFrameHeight());
@@ -836,7 +950,7 @@ void xMissile::move()
 
 		_vBullet[i].x += cosf(_vBullet[i].angle) * _vBullet[i].speed;
 		_vBullet[i].y += -sinf(_vBullet[i].angle) * _vBullet[i].speed + _vBullet[i].gravity;
-		
+
 		_vBullet[i].rc = RectMake(_vBullet[i].x, _vBullet[i].y,
 			_vBullet[i].missileImageRight->getFrameWidth(),
 			_vBullet[i].missileImageRight->getFrameHeight());
@@ -851,15 +965,19 @@ void xMissile::move()
 			_vBullet[i].isCollision = true;
 			_vBullet[i].speed = 0.0f;
 		}
-		if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc,_vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 2) == GREEN)				// ¿À¸¥ÂÊ º®	
+		if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc, _vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 2) == GREEN)				// ¿À¸¥ÂÊ º®	
 		{
 			_vBullet[i].isCollision = true;
 			_vBullet[i].speed = 0.0f;
 		}
-		else if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc,_vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 0) == GREEN)			// ¿ÞÂÊ º®	
+		else if (COLLISIONMANAGER->pixelCollision(_vBullet[i].rc, _vBullet[i].x, _vBullet[i].y, _vBullet[i].speed, _vBullet[i].gravity, 0) == GREEN)			// ¿ÞÂÊ º®	
 		{
 			_vBullet[i].isCollision = true;
 			_vBullet[i].speed = 0.0f;
+		}
+		if (_vBullet[i].isCollision)
+		{
+			EFFECTMANAGER->missileTrail(_vBullet[i].x, _vBullet[i].y, _vBullet[i].isLeft);
 		}
 	}
 }

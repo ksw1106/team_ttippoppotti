@@ -38,6 +38,10 @@ private:
 
 	bool _rambroChange;
 
+	int _missileCount;
+	bool _isMissile;
+	bool _missile;
+
 	RECT _rc8;
 
 	RECT _rcMissileRight;
@@ -67,7 +71,8 @@ public:
 	void render(void);
 
 	void rambroDie();
-	void collision();
+	void rambroCollision();
+	void chuckCollision();
 	void p1Bubble();
 
 	playerManager();

@@ -31,6 +31,7 @@ void loadingScene::Lee_Moon_Gyu_addImage()
 	// bullet
 	_loading->loadFrameImage("rambro_grenade_frame", "player_ramBro/rambro_grenade_frame.bmp", 288, 72, 8, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("rambro_grenade_bomb", "player_ramBro/rambro_grenade_bomb.bmp", 288, 72, 8, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("rambro_grenade_blue", "player_ramBro/rambro_grenade_blue.bmp", 48, 48, 1, 1, true, RGB(255, 0, 255));
 
 }
 

@@ -43,7 +43,12 @@ void testScene_kmy::update(void)
 	if (KEYMANAGER->isOnceKeyDown('U'))
 	{
 		EFFECTMANAGER->RambroBloodFountain(1000, 2100);
-		//EFFECTMANAGER.
+
+		EFFECTMANAGER->rambroGrenadeExplosion(800, 1800);
+	}
+	if (KEYMANAGER->isOnceKeyDown('Y'))
+	{
+		EFFECTMANAGER->missileTrail(900, 2200, false);
 	}
 }
 

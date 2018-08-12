@@ -64,6 +64,7 @@ private:
 	
 	RECT _rcEnemy;
 	RECT _rcEnemySight;	
+	RECT _rcMoveRange;
 
 	float _angle;	
 	float _speed;
@@ -119,8 +120,7 @@ public:
 	bool getIsFire() { return _isFire; }
 	bool getIsApart() { return _isApart; }
 	enemyStatus getBodyStatus() { return _enemyStatus; }
-	gunStatus getArmStatus() { return _gunStatus; }
-	
+	gunStatus getArmStatus() { return _gunStatus; }	
 	
 	float getEnemyAngle() { return _angle; }
 	int getRandomNum() { return _randomNumber; }
