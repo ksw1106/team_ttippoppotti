@@ -63,6 +63,8 @@ HRESULT enemy::initSoldier(float x, float y)
 	_isStrange = false;
 	_isApart = false;
 	_rcEnemy = RectMake(_x, _y, _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());
+
+	_rcMoveRange = RectMake(_x - 300, _y, 600 + _enemyImage.bodyImage[_enemyStatus]->getFrameWidth(), _enemyImage.bodyImage[_enemyStatus]->getFrameHeight());
 	
 	return S_OK;
 }
@@ -82,14 +84,14 @@ void enemy::release(void)
 
 void enemy::update(void)
 {			
+	// 프레임 애니메이션
+	this->frameAnimate();
 	// 에너미 움직임 변화
 	this->changeStatus();
 	// 밑에 없으면 떨어짐
 	this->fall();
 	// 에이아이 움직임 랜덤조절
 	this->controlAI();
-	// 프레임 애니메이션
-	this->frameAnimate();
 	
 	++_fireCount;
 	if (_fireCount > 1000) _fireCount = 0;
@@ -154,16 +156,33 @@ void enemy::render(void)
 		//팔 이미지 렌더
 		if (_isAlive)
 		{
-			if (_isLeft)
+			if (_isFire)
 			{
-				_enemyImage.armImage[_gunStatus]->frameRender(getMemDC(), _x - (_enemyImage.armImage[_gunStatus]->getFrameWidth() - _enemyImage.bodyImage[_enemyStatus]->getFrameWidth()) - CAMERAMANAGER->getCamera().left,
-					_y - CAMERAMANAGER->getCamera().top, _enemyImage.armImage[_gunStatus]->getFrameX(), _enemyImage.armImage[_gunStatus]->getFrameY());
+				if (_isLeft)
+				{
+					_enemyImage.armImage[_gunStatus]->frameRender(getMemDC(), _x + RND->getFromIntTo(-2,2) - (_enemyImage.armImage[_gunStatus]->getFrameWidth() - _enemyImage.bodyImage[_enemyStatus]->getFrameWidth()) - CAMERAMANAGER->getCamera().left,
+						_y - CAMERAMANAGER->getCamera().top, _enemyImage.armImage[_gunStatus]->getFrameX(), _enemyImage.armImage[_gunStatus]->getFrameY());
+				}
+				else
+				{
+					_enemyImage.armImage[_gunStatus]->frameRender(getMemDC(), _x + RND->getFromIntTo(-2, 2) - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top,
+						_enemyImage.armImage[_gunStatus]->getFrameX(), _enemyImage.armImage[_gunStatus]->getFrameY());
+				}
 			}
 			else
 			{
-				_enemyImage.armImage[_gunStatus]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top,
-					_enemyImage.armImage[_gunStatus]->getFrameX(), _enemyImage.armImage[_gunStatus]->getFrameY());
+				if (_isLeft)
+				{
+					_enemyImage.armImage[_gunStatus]->frameRender(getMemDC(), _x - (_enemyImage.armImage[_gunStatus]->getFrameWidth() - _enemyImage.bodyImage[_enemyStatus]->getFrameWidth()) - CAMERAMANAGER->getCamera().left,
+						_y - CAMERAMANAGER->getCamera().top, _enemyImage.armImage[_gunStatus]->getFrameX(), _enemyImage.armImage[_gunStatus]->getFrameY());
+				}
+				else
+				{
+					_enemyImage.armImage[_gunStatus]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y - CAMERAMANAGER->getCamera().top,
+						_enemyImage.armImage[_gunStatus]->getFrameX(), _enemyImage.armImage[_gunStatus]->getFrameY());
+				}
 			}
+			
 		}
 		
 		// 플레이어 발견했을때, 느낌표 말풍선!
@@ -202,11 +221,17 @@ void enemy::walk()
 {	
 	if (_isLeft)
 	{
-		_x -= _speed/2;
+		if (_rcMoveRange.left < _x)
+			_x -= _speed / 3;
+		else
+			_isLeft = 1;
 	}
 	else
 	{
-		_x += _speed/2;
+		if (_rcMoveRange.right > _x + _enemyImage.bodyImage[_enemyStatus]->getFrameWidth())
+			_x += _speed / 3;
+		else
+			_isLeft = 0;
 	}
 }
 

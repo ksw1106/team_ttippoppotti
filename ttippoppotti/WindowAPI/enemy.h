@@ -64,6 +64,7 @@ private:
 	
 	RECT _rcEnemy;
 	RECT _rcEnemySight;	
+	RECT _rcMoveRange;
 
 	float _angle;	
 	float _speed;

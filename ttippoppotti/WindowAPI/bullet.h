@@ -26,8 +26,8 @@ struct tagBullet
 	int count;
 	int frameCount;
 	int frameIndex;
-	int frameSpeed;
 	int frameIndex2;
+	int frameSpeed;
 	
 };
 
