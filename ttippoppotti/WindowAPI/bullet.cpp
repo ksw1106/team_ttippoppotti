@@ -531,7 +531,7 @@ void pGrenade::update(void)
 				}
 				//_vBullet[i].grenadeImage->frameRender(getMemDC(), _vBullet[i].rc.left - CAMERAMANAGER->getCamera().left,
 				//	_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top);
-				EFFECTMANAGER->grenadePuff(_vBullet[i].rc.left+18 , _vBullet[i].rc.top+18 );
+				EFFECTMANAGER->grenadePuff(_vBullet[i].rc.left + 22, _vBullet[i].rc.top + 22);
 			}
 			FRAMEMANAGER->frameChange(_vBullet[i].bulletImage, _count, _index, _animationSpeed, false);
 		}
