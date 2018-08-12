@@ -18,6 +18,7 @@ struct tagParticle
 	bool fire;
 	bool isActive;
 	bool isFrameImg;
+	bool isAlphaImg;
 	int alpha;
 	int count;
 	int index;
@@ -45,6 +46,7 @@ private:
 	float _effectFPS;		//이펙트 속도
 	bool _isRunning;		//이펙트 재생중이냐?
 	bool _isParabola;
+	bool _isParabolaNoCollision;
 	bool _isLeft;
 	bool _isExplosion;
 	bool _isStaticAnim;
@@ -55,7 +57,7 @@ private:
 	bool _isMissilePuff;
 	bool _isFrameImg;		//프레임이미지냐?
 	bool _isAlphaImg;		//알파이미지냐?
-	
+
 
 public:
 	HRESULT init(const char* imageName, int particleMax = 0, bool isFrameImg = false);
@@ -69,9 +71,12 @@ public:
 	void activateBallExplosion(float x, float y);
 	//포물선 발사 설정 (피, 낙석, 나무파편)
 	void activateParabola(float x, float y, bool isLeft);
+	void activateParabolaNoCollision(float x, float y, bool isLeft);
 	void boomParabola();
+	void boomParabolaNoCollision();
 	//분수
 	void activateFountain(float x, float y);
+	void activateFountainNoCollision(float x, float y);
 	//핏자국
 	void activateBlotch(float x, float y);
 	void boomBlotch();
@@ -96,7 +101,7 @@ public:
 	//미사일
 	void activateMissileTrail(float x, float y, bool isLeft);
 	void boomMissileTrail();
-	void activateMissilePuff(float x, float y, bool isLeft);
+	void activateMissilePuff(float x, float y, int speed, bool isLeft);
 	void boomMissilePuff();
 
 	void boomStaticAnim();

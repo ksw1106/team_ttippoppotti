@@ -61,7 +61,7 @@ void progressBar::update(void)
 
 	if (_middleWidth > _frontWidth)
 	{	
-		_middleWidth -= 1;
+		_middleWidth -= (_middleWidth - _frontWidth)/10;
 	}
 	//_middleWidth = _rcProgressMiddle.right - _rcProgressMiddle.left;
 }

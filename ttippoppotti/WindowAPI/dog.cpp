@@ -91,6 +91,8 @@ void dog::update(void)
 		_dog.rcSight = RectMake(_dog.x - 500, _dog.y, 500, _dog.dogImage[_dogStatus]->getFrameHeight());
 	else
 		_dog.rcSight = RectMake(_dog.x + _dog.dogImage[_dogStatus]->getFrameWidth(), _dog.y, 500, _dog.dogImage[_dogStatus]->getFrameHeight());
+	// 공격반경 렉트
+	_dog.rcAttackRange = RectMake(_dog.x - 20, _dog.y - 20, _dog.x + _dog.dogImage[_dogStatus]->getFrameWidth() + 20, _dog.dogImage[_dogStatus]->getFrameHeight() + 20);
 
 	// 시체상태가 아닐때, 렉트 움직임
 	for (int i = 0; i < BODY_PART; ++i)
@@ -212,10 +214,18 @@ void dog::dogDie()
 
 void dog::dogAttack(bool isleft)
 {
-	if (isleft)
-		_dog.x -= _dog.speed;
+	if (_dog.isNear)
+	{
+		
+	}
 	else
-		_dog.x += _dog.speed;
+	{
+		if (isleft)
+			_dog.x -= _dog.speed;
+		else
+			_dog.x += _dog.speed;
+	}
+	
 }
 
 void dog::knockBackMove(bool bulletLeft)

@@ -79,15 +79,19 @@ public:
 	// 죽은 적 푸쉬백
 	void saveEnemy(enemyType enemy, deadType deadType, bool isLeft);
 	
+
+	// 브로빌
+	// 브로빌 vs 플레이어 총알 충돌
+	void collideBrovilwithPBullet();
+	// 브로빌 vs 플레이어 수류탄 충돌
+	void collideBrovilwithPGrenade();
+	// 브로빌 vs 지형충돌
+	void collideBrovilWithPixel();	
+	// 브로빌 시체 vs 지형 충돌
+	void collideBrovilCorpseWithPixel();
+
 	// 에너미 방향 바꾸기
 	void changeDirection();
-	
-	void soldierDieWithBullet(int i);
-	void soldierDieWithGrenade(int i);
-
-	void brovilDieWithBullet();
-	void brovilDieWithGrenade();
-
 	// 에너미 시야 vs 플레이어 충돌
 	void collideWithSight();
 	// 에너미 vs 픽셀
@@ -98,43 +102,39 @@ public:
 	void collideWithPGrenade();		
 	// 에너미 vs 할아버지 총알
 	void collideWithGBullet();
-	// 보스 vs 할아버지 총알
-	void collideBossWithGBullet();
-	void collideBossWithGGrenade();
-	
 	// 에너미 시체 vs 픽셀 충돌
 	void collideWithCorpse();
-	
 	// 에너미 총알 vs 픽셀
 	void collideBulletWithPixel();
 	// 에너미 총알 vs 플레이어 충돌
 	void collideWithPlayer();
-	
-	// 보스
-	void collideWithBossBullet();
-	void collideWithBossRocket();
-	void bossDirChange();
-	//void bossHPbar();
+		
 	// 보스 vs 플레이어 총알
 	void PBulletHitBoss();
-		
-	// 브로빌 vs 플레이어 총알 충돌
-	void collideBrovilwithPBullet();
-	// 브로빌 vs 플레이어 수류탄 충돌
-	void collideBrovilwithPGrenade();
-	// 브로빌 vs 지형충돌
-	void collideBrovilWithPixel();	
-	// 브로빌 시체 vs 지형 충돌
-	void collideBrovilCorpseWithPixel();
-
+	// 보스 vs 할아버지 총알
+	void collideBossWithGBullet();
+	void collideBossWithGGrenade();
+	void collideWithBossBullet();
+	void collideWithBossRocket();
+	void collideBossRocketWithPixel();
+	void bossDirChange();
+	
 	// 도그 vs 지형픽셀충돌
 	void collideDogSightWithPlayer();
+	void collideDogWithPlayer();
 	void collideDogWithPixel();
 	void collideDogWithPBullet();
+	void collideDogWithGBullet();
 	void collideDogCorpseWithPixel();
-	void DogDieWithBullet(int i);
-
 	
+	// 죽는함수
+	void soldierDieWithBullet(int i);
+	void soldierDieWithGrenade(int i);
+	void bossDie();
+	void DogDieWithBullet(int i);
+	void brovilDieWithBullet();
+	void brovilDieWithGrenade();
+
 	// 스테이지 클리어 조건
 	bool isClear();
 		

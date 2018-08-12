@@ -73,6 +73,7 @@ protected:
 	bool _isFrameImage;
 	int _count, _index;
 	int _animationSpeed;
+	
 public:
 	vector<tagElement> getVElement() { return _vElement; }
 	OBJECT_TYPE getType() { return _type; }

@@ -262,11 +262,11 @@ void boss::frameAnimate()
 
 void boss::verticalMove(float x, float y, float angle)
 {
-	if (_terrorKopter.y < y-100)
+	if (_terrorKopter.y < y-200)
 	{
 		_terrorKopter.y += _terrorKopter.speed;
 	}
-	else if (_terrorKopter.y > y+100)
+	else if (_terrorKopter.y > y+200)
 	{
 		_terrorKopter.y -= _terrorKopter.speed;
 	}
@@ -284,7 +284,7 @@ void boss::bombAttack(float x, float y, float angle)
 void boss::bossDie()
 {
 	_bodyStatus = B_DEATH;
-	_terrorKopter.y += 15.f;
+	_terrorKopter.y += 10.f;
 }
 
 bool boss::radarIn(float x, float y, float distance)

@@ -8,6 +8,7 @@
 struct tagBullet
 {
 	image* bulletImage;
+	image* bulletFallImage;
 	image* grenadeImage;
 	image* missileImageRight;
 	image* missileImageLeft;
@@ -25,6 +26,7 @@ struct tagBullet
 	int count;
 	int frameCount;
 	int frameIndex;
+	int frameIndex2;
 	int frameSpeed;
 	
 };
