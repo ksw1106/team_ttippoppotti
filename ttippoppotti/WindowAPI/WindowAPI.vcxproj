@@ -167,6 +167,7 @@
     <ClInclude Include="loadingScene.h" />
     <ClInclude Include="mainGame.h" />
     <ClInclude Include="mapData.h" />
+    <ClInclude Include="missionFailed.h" />
     <ClInclude Include="objectA.h" />
     <ClInclude Include="objectManager.h" />
     <ClInclude Include="player.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="stage2Scene.h" />
     <ClInclude Include="stageClear.h" />
     <ClInclude Include="stageScene.h" />
+    <ClInclude Include="stageStart.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="testScene_kmy.h" />
     <ClInclude Include="timeManager.h" />
@@ -212,6 +214,7 @@
     <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="mainGame.cpp" />
     <ClCompile Include="mapData.cpp" />
+    <ClCompile Include="missionFailed.cpp" />
     <ClCompile Include="objectA.cpp" />
     <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="player.cpp" />
@@ -224,6 +227,7 @@
     <ClCompile Include="stage2Scene.cpp" />
     <ClCompile Include="stageClear.cpp" />
     <ClCompile Include="stageScene.cpp" />
+    <ClCompile Include="stageStart.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

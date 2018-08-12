@@ -32,6 +32,12 @@ void loadingScene::Kim_Sang_Won_addImage()
 	_loading->loadImage("8", "number/clear/8.bmp", 53, 76, true, RGB(255, 0, 255));
 	_loading->loadImage("9", "number/clear/9.bmp", 48, 76, true, RGB(255, 0, 255));
 	_loading->loadImage("timeDot", "number/clear/timeDot.bmp", 19, 19);
+
+	_loading->loadImage("start1", "start1.bmp", 59, 197, true, RGB(255, 0, 255));
+	_loading->loadImage("start2", "start2.bmp", 115, 203, true, RGB(255, 0, 255));
+	_loading->loadImage("start3", "start3.bmp", 122, 203, true, RGB(255, 0, 255));
+	_loading->loadImage("letsgo", "letsgo.bmp", 955, 201, true, RGB(255, 0, 255));
+	_loading->loadImage("missionFailed", "missionFailed.bmp", 432, 98, true, RGB(255, 0, 255));
 }
 
 void loadingScene::Kim_Sang_Won_addSound()

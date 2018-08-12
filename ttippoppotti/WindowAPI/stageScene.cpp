@@ -7,13 +7,6 @@ HRESULT stageScene::init(void)
 	gameNode::init(TRUE);
 	//이곳에서 초기화를 한다
 
-	soundName[0] = "3";
-	soundName[1] = "2";
-	soundName[2] = "1";
-	soundName[3] = "go";
-	
-	soundCount = 0;
-
 	_playerManager = new playerManager;
 	_playerManager->init(1);
 
@@ -33,6 +26,12 @@ HRESULT stageScene::init(void)
 	_stageClear->init();
 	_stageClear->setEnemyManager(_enemyManager);
 
+	_stageStart = new stageStart;
+	_stageStart->init();
+
+	_missionFailed = new missionFailed;
+	_missionFailed->init();
+	_missionFailed->setCurrentStage(1);
 	EFFECTMANAGER->init();
 	_playerManager->setMapData(_mapData);
 	_enemyManager->setMapData(_mapData);
@@ -62,7 +61,7 @@ HRESULT stageScene::init(void)
 	_rcCamera = RectMakeCenter(_playerManager->getPlayer()->getX(), _playerManager->getPlayer()->getY(), WINSIZEX, WINSIZEY);
 	CAMERAMANAGER->setCamera(_rcCamera);
 
-	_isClear = false;
+	_isClear = _isOver = false;
 	return S_OK;
 }
 
@@ -71,53 +70,27 @@ void stageScene::release(void)
 	//init함수에서 동적할당 new를 사용했다면 이곳에서 delete 사용한다
 	//이미지매니져 사용시 safe_delete 할 필요 없다
 
+	//_playerManager->release();
+	//_enemyManager->release();
+	_mapData->release();
+	_stageClear->release();
+	_stageStart->release();
+	_missionFailed->release();
+	_test->release();
+	OBJECTMANAGER->release();
+
 	SAFE_DELETE(_playerManager);
 	SAFE_DELETE(_enemyManager);
 	SAFE_DELETE(_mapData);
 	SAFE_DELETE(_stageClear);
+	SAFE_DELETE(_stageStart);
+	SAFE_DELETE(_missionFailed);
+	SAFE_DELETE(_test);
 }
 
 void stageScene::update(void)
 {
-	
-	switch (soundCount)
-	{
-	case 0:
-		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount]))
-		{
-			SOUNDMANAGER->play(soundName[soundCount], 0.5f);
-			soundCount++;
-		}
-		break;
-	case 1:
-		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount-1]))
-		{
-			SOUNDMANAGER->play(soundName[soundCount], 0.5f);
-			soundCount++;
-		}
-		break;
-	case 2:
-		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount - 1]))
-		{
-			SOUNDMANAGER->play(soundName[soundCount], 0.5f);
-			soundCount++;
-		}
-		break;
-	case 3:
-		if (!SOUNDMANAGER->isPlaySound(soundName[soundCount - 1]))
-		{
-			SOUNDMANAGER->play(soundName[soundCount], 0.5f);
-			soundCount++;
-		}
-		break;
-	case 4:
-		if (SOUNDMANAGER->isPlaySound(soundName[soundCount - 1]))
-		{
-			SOUNDMANAGER->play("1stage", 0.5f);
-			soundCount++;
-		}
-		break;
-	}
+	_stageStart->update();
 	
 	_playerManager->update();
 	_enemyManager->update();
@@ -209,9 +182,22 @@ void stageScene::update(void)
 		CAMERAMANAGER->CameraShake();
 	}
 
+	if (KEYMANAGER->isOnceKeyDown('R'))
+	{
+		_isOver = true;
+	}
+
+	//_isClear = _enemyManager->isClear();
+	//_isOver = _playerManager->getIsGameover();
+
 	if (_isClear)
 	{
 		_stageClear->update();
+	}
+
+	if (_isOver)
+	{
+		_missionFailed->update();
 	}
 }
 
@@ -264,7 +250,18 @@ void stageScene::render(void)
 	}
 	_test->render();
 
+
 	//테스트
 	if (_isClear)
+	{
 		_stageClear->render();
+	}
+
+	if (_isOver)
+	{
+		_missionFailed->render();
+	}
+
+	_stageStart->render();
+
 }
