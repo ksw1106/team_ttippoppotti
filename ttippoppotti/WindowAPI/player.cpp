@@ -44,8 +44,6 @@ HRESULT player::init(int num, float x, float y)
 	_rambroUiImage = IMAGEMANAGER->findImage("rambro_ui_image");
 	_rambroUiImageRun = IMAGEMANAGER->findImage("rambro_ui_image_run");
 
-
-
 	_state = IDLE;
 	_gun = RUN_GUN;
 	_x = x;
@@ -66,12 +64,15 @@ HRESULT player::init(int num, float x, float y)
 
 	_rambroChange = false;
 
-	_flashCount = _flashIndex = _flashSpeed = 0;
-	_uiCount = _uiIndex = _uiSpeed = 0;
-	_runCount = 100000;
-	_runIndex = _runSpeed = 0;
+	_flashCount = _flashIndex = 0;
+	_flashSpeed = 5;
+	_uiCount = _uiIndex = 0;
+	_uiSpeed = 5;
+	_runCount, _runIndex = 0;
+	_runSpeed = 5;
 
-	_gunIndex = _gunCount = _gunSpeed = 0;
+	_gunIndex = _gunCount = 0;
+	_gunSpeed = 5;
 
 	_rcRambro = RectMake(_x, _y, _width, _height);
 	_rcFlashRight = RectMake(_x + 50, _y, 30, 30);
