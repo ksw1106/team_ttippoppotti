@@ -71,6 +71,8 @@ HRESULT player::init(int num, float x, float y)
 	_runCount = 100000;
 	_runIndex = _runSpeed = 0;
 
+	_gunIndex = _gunCount = _gunSpeed = 0;
+
 	_rcRambro = RectMake(_x, _y, _width, _height);
 	_rcFlashRight = RectMake(_x + 50, _y, 30, 30);
 	_rcFlashLeft = RectMake(_x - 68, _y, 30, 30);

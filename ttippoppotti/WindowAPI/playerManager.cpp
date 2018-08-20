@@ -1183,7 +1183,7 @@ void playerManager::update(void)
 			{
 				if (!_rambroGrenade)
 				{
-					_mapData->deleteMapIndexByIndex(j, 9, 9);
+					_mapData->deleteMapIndexByIndex(j, 3, 3);
 					_pGrenade->getVPlayerGrenade()[i].isActived = false;
 					EFFECTMANAGER->rockFall(_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y, _pGrenade->getVPlayerGrenade()[i].isLeft);
 					EFFECTMANAGER->rambroGrenadeExplosion(_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y);

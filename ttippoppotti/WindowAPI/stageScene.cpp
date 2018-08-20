@@ -106,7 +106,7 @@ void stageScene::update(void)
 	_playerManager->update();
 	_enemyManager->update();
 	OBJECTMANAGER->update();
-	_test->update();
+	//_test->update();
 	//이곳에서 계산식, 키보드, 마우스등등 업데이트를 한다
 	//간단하게 이곳에서 코딩한다고 생각하면 된다
 

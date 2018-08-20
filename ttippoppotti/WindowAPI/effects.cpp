@@ -786,11 +786,11 @@ void effects::activateFall(float x, float y)
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;
-		_vParticle[i].angle = -PI_2 + RND->getFromFloatTo(0.1f, 1.0f) - 0.8f;
+		_vParticle[i].angle = PI_2 + RND->getFromFloatTo(0.1f, 1.0f) - 0.8f;
 		_vParticle[i].gravity = 0.0f;
 		_vParticle[i].x = x + 32;
 		_vParticle[i].y = y + 32;
-		_vParticle[i].speed = RND->getFromFloatTo(1.0f, 10.0f);
+		_vParticle[i].speed = RND->getFromFloatTo(5.0f, 10.0f);
 		_vParticle[i].index = RND->getInt(3);
 		_animationSpeed = 5;
 		_vParticle[i].count = 0;

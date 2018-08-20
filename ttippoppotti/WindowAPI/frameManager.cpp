@@ -18,6 +18,7 @@ void frameManager::frameChange(image* img, int& count, int& index, int &speed, b
 	{
 		count++;
 		img->setFrameY(1);
+		if (speed <= 0) speed = 1;
 		if ((count % speed) == 0)
 		{
 			index--;
@@ -32,6 +33,7 @@ void frameManager::frameChange(image* img, int& count, int& index, int &speed, b
 	{
 		count++;
 		img->setFrameY(0);
+		if (speed <= 0) speed = 1;
 		if ((count % speed) == 0)
 		{
 			index++;
