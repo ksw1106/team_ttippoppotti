@@ -43,6 +43,7 @@ private:
 	int _bigBangCount;
 	int _index;
 	int _animationSpeed;
+	float _range;
 	float _effectFPS;		//이펙트 속도
 	bool _isRunning;		//이펙트 재생중이냐?
 	bool _isParabola;
@@ -77,6 +78,8 @@ public:
 	//분수
 	void activateFountain(float x, float y);
 	void activateFountainNoCollision(float x, float y);
+
+	void activateFall(float x, float y);
 	//핏자국
 	void activateBlotch(float x, float y);
 	void boomBlotch();
@@ -101,7 +104,7 @@ public:
 	//미사일
 	void activateMissileTrail(float x, float y, bool isLeft);
 	void boomMissileTrail();
-	void activateMissilePuff(float x, float y, bool isLeft);
+	void activateMissilePuff(float x, float y, int speed, bool isLeft);
 	void boomMissilePuff();
 
 	void boomStaticAnim();

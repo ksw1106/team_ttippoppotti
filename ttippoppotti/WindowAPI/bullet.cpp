@@ -861,6 +861,7 @@ void gMissile::fire(int x, int y, int fireSpeed, bool isLeft)
 			//_vBullet[i].angle = -20.f * (PI / 180);
 			_vBullet[i].angle = - PI_4;
 		}
+		EFFECTMANAGER->missilePuff(x, y, fireSpeed, isLeft);
 	}
 }
 
@@ -883,7 +884,6 @@ void gMissile::move()
 			{
 				_vBullet[i].isActived = false;
 			}
-			//EFFECTMANAGER->missilePuff(_vBullet[i].x, _vBullet[i].y, _vBullet[i].isLeft);
 		}
 	}
 }

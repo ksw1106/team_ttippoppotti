@@ -18,7 +18,7 @@ void frameManager::frameChange(image* img, int& count, int& index, int &speed, b
 	{
 		count++;
 		img->setFrameY(1);
-		if ((count&speed) == 0)
+		if ((count % speed) == 0)
 		{
 			index--;
 			if (index < 0)
@@ -32,7 +32,7 @@ void frameManager::frameChange(image* img, int& count, int& index, int &speed, b
 	{
 		count++;
 		img->setFrameY(0);
-		if ((count&speed) == 0)
+		if ((count % speed) == 0)
 		{
 			index++;
 			if (index > img->getMaxFrameX())

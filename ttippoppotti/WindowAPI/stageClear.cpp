@@ -183,6 +183,7 @@ void stageClear::update(void)
 						SOUNDMANAGER->play("soldierDead");
 						SOUNDMANAGER->volumeSetting("clear", 0.2f);
 						_enemyList[i].isSound = true;
+						EFFECTMANAGER->bloodFall(_enemyList[i].x + 10 + CAMERAMANAGER->getCamera().left, _enemyList[i].y + CAMERAMANAGER->getCamera().top);
 					}
 
 					_enemyList[i].gravity += 0.98f;

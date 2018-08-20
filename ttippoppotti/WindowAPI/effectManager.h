@@ -35,11 +35,13 @@ public:
 	//피 분수
 	void bloodFountain(float x, float y);
 	//피 분수
+	void bloodFall(float x, float y);
+	//피 분수
 	void RambroBloodFountain(float x, float y);
 
 	void missileTrail(float x, float y, bool isLeft);
 
-	void missilePuff(float x, float y, bool isLeft);
+	void missilePuff(float x, float y, int speed, bool isLeft);
 	//피 분수
 	void chuckBloodFountain(float x, float y);
 	//낙석
@@ -78,6 +80,7 @@ public:
 	void playParabolaNoCollision(string effectName, float x, float y, bool isLeft);
 	void playBlotch(string effectName, float x, float y);
 	void playFountain(string effectName, float x, float y);
+	void playFall(string effectName, float x, float y);
 	void playFountainNoCollision(string effectName, float x, float y);
 	void playExplosion(string effectName, float x, float y);
 	void playBallExplosion(string effectName, float x, float y);
@@ -89,7 +92,7 @@ public:
 	void playAshes(string effectName, float x, float y);
 	void playBigBang(string effectName, float x, float y);
 	void playMissileTrail(string effectName, float x, float y, bool isLeft);
-	void playMissilePuff(string effectName, float x, float y, bool isLeft);
+	void playMissilePuff(string effectName, float x, float y, int speed, bool isLeft);
 	effectManager() {}
 	~effectManager() {}
 };

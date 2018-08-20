@@ -14,6 +14,15 @@ HRESULT effectManager::init(void)
 	addEffect("bloodSplash7", "blood_still7", 20, 5);
 	addEffect("bloodSplash8", "blood_still8", 20, 5);
 
+	addEffect("bloodFall1", "blood_still1", 20, 2);
+	addEffect("bloodFall2", "blood_still2", 20, 2);
+	addEffect("bloodFall3", "blood_still3", 20, 2);
+	addEffect("bloodFall4", "blood_still4", 20, 2);
+	addEffect("bloodFall5", "blood_still5", 20, 2);
+	addEffect("bloodFall6", "blood_still6", 20, 2);
+	addEffect("bloodFall7", "blood_still7", 20, 2);
+	addEffect("bloodFall8", "blood_still8", 20, 2);
+
 	addEffect("rock1", "rock_big1", 10, 5);
 	addEffect("rock2", "rock_big2", 10, 5);
 	addEffect("rock3", "rock_sml1", 10, 5);
@@ -174,6 +183,18 @@ void effectManager::bloodFountain(float x, float y)
 	this->playFountain("bloodSplash8", x, y);
 }
 
+void effectManager::bloodFall(float x, float y)
+{
+	this->playFall("bloodFall1", x, y);
+	this->playFall("bloodFall2", x, y);
+	this->playFall("bloodFall3", x, y);
+	this->playFall("bloodFall4", x, y);
+	this->playFall("bloodFall5", x, y);
+	this->playFall("bloodFall6", x, y);
+	this->playFall("bloodFall7", x, y);
+	this->playFall("bloodFall8", x, y);
+}
+
 void effectManager::RambroBloodFountain(float x, float y)
 {
 	this->playFountainNoCollision("bloodSplash1", x, y);
@@ -184,13 +205,37 @@ void effectManager::RambroBloodFountain(float x, float y)
 	//this->playFountainNoCollision("bloodSplash6", x, y);
 	this->playFountainNoCollision("bloodSplash7", x, y);
 	//this->playFountainNoCollision("bloodSplash8", x, y);
-	//this->playFountain("bloodSplash1", x, y);
+	this->playFountain("bloodSplash1", x, y);
 	this->playFountain("bloodSplash2", x, y);
-	//this->playFountain("bloodSplash3", x, y);
+	this->playFountain("bloodSplash3", x, y);
 	this->playFountain("bloodSplash4", x, y);
-	//this->playFountain("bloodSplash5", x, y);
+	this->playFountain("bloodSplash5", x, y);
 	this->playFountain("bloodSplash6", x, y);
-	//this->playFountain("bloodSplash7", x, y);
+	this->playFountain("bloodSplash7", x, y);
+	this->playFountain("bloodSplash8", x, y);
+	this->playFountain("bloodSplash1", x, y);
+	this->playFountain("bloodSplash2", x, y);
+	this->playFountain("bloodSplash3", x, y);
+	this->playFountain("bloodSplash4", x, y);
+	this->playFountain("bloodSplash5", x, y);
+	this->playFountain("bloodSplash6", x, y);
+	this->playFountain("bloodSplash7", x, y);
+	this->playFountain("bloodSplash8", x, y);
+	this->playFountain("bloodSplash1", x, y);
+	this->playFountain("bloodSplash2", x, y);
+	this->playFountain("bloodSplash3", x, y);
+	this->playFountain("bloodSplash4", x, y);
+	this->playFountain("bloodSplash5", x, y);
+	this->playFountain("bloodSplash6", x, y);
+	this->playFountain("bloodSplash7", x, y);
+	this->playFountain("bloodSplash8", x, y);
+	this->playFountain("bloodSplash1", x, y);
+	this->playFountain("bloodSplash2", x, y);
+	this->playFountain("bloodSplash3", x, y);
+	this->playFountain("bloodSplash4", x, y);
+	this->playFountain("bloodSplash5", x, y);
+	this->playFountain("bloodSplash6", x, y);
+	this->playFountain("bloodSplash7", x, y);
 	this->playFountain("bloodSplash8", x, y);
 	this->playFountain("rambro_head", x, y);
 	this->playFountainNoCollision("rambro_arm", x, y);
@@ -207,9 +252,9 @@ void effectManager::missileTrail(float x, float y, bool isLeft)
 	//this->playMissileTrail("missileTrail3", x, y, isLeft);
 }
 
-void effectManager::missilePuff(float x, float y, bool isLeft)
+void effectManager::missilePuff(float x, float y, int speed, bool isLeft)
 {
-	this->playMissilePuff("flame1", x, y, isLeft);
+	this->playMissilePuff("flame1", x, y, speed, isLeft);
 }
 
 void effectManager::chuckBloodFountain(float x, float y)
@@ -223,13 +268,29 @@ void effectManager::chuckBloodFountain(float x, float y)
 	//this->playFountainNoCollision("bloodSplash7", x, y);
 	this->playFountainNoCollision("bloodSplash8", x, y);
 	this->playFountain("bloodSplash1", x, y);
-	//this->playFountain("bloodSplash2", x, y);
+	this->playFountain("bloodSplash2", x, y);
 	this->playFountain("bloodSplash3", x, y);
-	//this->playFountain("bloodSplash4", x, y);
+	this->playFountain("bloodSplash4", x, y);
 	this->playFountain("bloodSplash5", x, y);
-	//this->playFountain("bloodSplash6", x, y);
+	this->playFountain("bloodSplash6", x, y);
 	this->playFountain("bloodSplash7", x, y);
-	//this->playFountain("bloodSplash8", x, y);
+	this->playFountain("bloodSplash8", x, y);
+	this->playFountain("bloodSplash1", x, y);
+	this->playFountain("bloodSplash2", x, y);
+	this->playFountain("bloodSplash3", x, y);
+	this->playFountain("bloodSplash4", x, y);
+	this->playFountain("bloodSplash5", x, y);
+	this->playFountain("bloodSplash6", x, y);
+	this->playFountain("bloodSplash7", x, y);
+	this->playFountain("bloodSplash8", x, y);
+	this->playFountain("bloodSplash1", x, y);
+	this->playFountain("bloodSplash2", x, y);
+	this->playFountain("bloodSplash3", x, y);
+	this->playFountain("bloodSplash4", x, y);
+	this->playFountain("bloodSplash5", x, y);
+	this->playFountain("bloodSplash6", x, y);
+	this->playFountain("bloodSplash7", x, y);
+	this->playFountain("bloodSplash8", x, y);
 	this->playFountain("chuck_head", x, y);
 	this->playFountainNoCollision("chuck_arm", x, y);
 	this->playFountain("chuck_arm", x, y);
@@ -465,6 +526,24 @@ void effectManager::playFountain(string effectName, float x, float y)
 	}
 }
 
+void effectManager::playFall(string effectName, float x, float y)
+{
+	miEffect mIter;
+
+	for (mIter = _mEffect.begin(); mIter != _mEffect.end(); ++mIter)
+	{
+		if (!(mIter->first == effectName)) continue;
+
+		//이펙트키와 일치하면 이펙트 실행
+		for (int i = 0; i < mIter->second.size(); i++)
+		{
+			if (mIter->second[i]->getIsRunning()) continue;
+			mIter->second[i]->activateFall(x, y);
+			return;
+		}
+	}
+}
+
 void effectManager::playFountainNoCollision(string effectName, float x, float y)
 {
 	miEffect mIter;
@@ -663,7 +742,7 @@ void effectManager::playMissileTrail(string effectName, float x, float y, bool i
 	}
 }
 
-void effectManager::playMissilePuff(string effectName, float x, float y, bool isLeft)
+void effectManager::playMissilePuff(string effectName, float x, float y, int speed, bool isLeft)
 {
 	miEffect mIter;
 
@@ -675,7 +754,7 @@ void effectManager::playMissilePuff(string effectName, float x, float y, bool is
 		for (int i = 0; i < mIter->second.size(); i++)
 		{
 			if (mIter->second[i]->getIsRunning()) continue;
-			mIter->second[i]->activateMissilePuff(x, y, isLeft);
+			mIter->second[i]->activateMissilePuff(x, y, speed, isLeft);
 			return;
 		}
 	}

@@ -436,7 +436,7 @@ void playerManager::update(void)
 			{
 				_player->setState(IDLE);
 			}
-			if (_player->getState() != JUMP && _player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD && _player->getState() != IDLE && _player->getState() != RUN)
+			if (_player->getState() != JUMP && _player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD && _player->getState() != IDLE && _player->getState() != RUN &&_player->getState()!=KNIFE)
 			{
 				_player->setState(DIE);
 			}
@@ -491,7 +491,7 @@ void playerManager::update(void)
 				hit_right = false;
 				_player->setState(IDLE);
 			}
-			if (_player->getState() != JUMP && _player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD && _player->getState() != IDLE && _player->getState() !=RUN)
+			if (_player->getState() != JUMP && _player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD && _player->getState() != IDLE && _player->getState() != RUN && _player->getState() != KNIFE)
 			{
 				_player->setState(DIE);
 				_player->setY(_player->getY() + (-sin(_player->getAngle()) * _player->getJumpSpeed() + _player->getGravity()));
@@ -524,7 +524,7 @@ void playerManager::update(void)
 				hit_right = false;
 				_player->setState(IDLE);
 			}
-			if (_player->getState() != JUMP && _player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD && _player->getState() != IDLE)
+			if (_player->getState() != JUMP && _player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD && _player->getState() != IDLE && _player->getState() != RUN && _player->getState() != KNIFE)
 			{
 				_player->setState(DIE);
 				_player->setY(_player->getY() + (-sin(_player->getAngle()) * _player->getJumpSpeed() + _player->getGravity()));
@@ -563,7 +563,7 @@ void playerManager::update(void)
 			hit_right = true;
 			hit_left = false;
 
-			if (_player->getState() != JUMP && _player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD && _player->getState() != IDLE)
+			if (_player->getState() != JUMP && _player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD && _player->getState() != IDLE && _player->getState() != RUN && _player->getState() != KNIFE)
 			{
 				_player->setState(DIE);
 				_player->setY(_player->getY() + (-sin(_player->getAngle()) * _player->getJumpSpeed() + _player->getGravity()));
@@ -648,7 +648,7 @@ void playerManager::update(void)
 			}
 			_player->setIsLeft(true);
 
-			if (_player->getState() != JUMP && _player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD && _player->getState() != IDLE)
+			if (_player->getState() != JUMP && _player->getState() != HANG_FRONT_HOLD && _player->getState() != HANG_BACK_HOLD && _player->getState() != IDLE && _player->getState() != RUN && _player->getState() != KNIFE)
 			{
 				_player->setState(DIE);
 				_player->setY(_player->getY() + (-sin(_player->getAngle()) * _player->getJumpSpeed() + _player->getGravity()));
@@ -1183,7 +1183,7 @@ void playerManager::update(void)
 			{
 				if (!_rambroGrenade)
 				{
-					_mapData->deleteMapIndexByIndex(j, 2, 2);
+					_mapData->deleteMapIndexByIndex(j, 9, 9);
 					_pGrenade->getVPlayerGrenade()[i].isActived = false;
 					EFFECTMANAGER->rockFall(_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y, _pGrenade->getVPlayerGrenade()[i].isLeft);
 					EFFECTMANAGER->rambroGrenadeExplosion(_pGrenade->getVPlayerGrenade()[i].x, _pGrenade->getVPlayerGrenade()[i].y);
@@ -1225,10 +1225,12 @@ void playerManager::update(void)
 			if (!_player->getIsLeft())
 			{
 				_gMissile->fire(_player->getSkyRightX() + 50, _player->getSkyRightY() + 10, 20, _player->getIsLeft());
+				EFFECTMANAGER->missilePuff(_player->getSkyRightX() + 50, _player->getSkyRightY() + 10, 20, _player->getIsLeft());
 			}
 			else
 			{
 				_gMissile->fire(_player->getSkyLeftX() + 50, _player->getSkyLeftY() + 10, 20, _player->getIsLeft());
+				EFFECTMANAGER->missilePuff(_player->getSkyRightX() + 50, _player->getSkyRightY() + 10, 20, _player->getIsLeft());
 			}
 		}
 		_missileCount = 0;
@@ -1318,7 +1320,7 @@ void playerManager::update(void)
 			if (IntersectRect(&temp, &_rcKnifeRight, &_mapData->getObject()[i]._rc))
 			{
 				_mapData->deleteMap(i);
-				//EFFECTMANAGER->rockFall(, _pBullet->getVPlayerBullet()[i].y, _player->getIsLeft());
+				EFFECTMANAGER->rockFall(knifeRightX, knifeRightY, !_player->getIsLeft());
 				EFFECTMANAGER->knifePuff(_player->getX() - 30, _player->getY() - 25, _player->getIsLeft());
 				break;
 			}
@@ -1331,7 +1333,7 @@ void playerManager::update(void)
 			if (IntersectRect(&temp, &_rcKnifeLeft, &_mapData->getObject()[i]._rc))
 			{
 				_mapData->deleteMap(i);
-				//EFFECTMANAGER->rockFall(_pBullet->getVPlayerBullet()[i].x, _pBullet->getVPlayerBullet()[i].y, _player->getIsLeft());
+				EFFECTMANAGER->rockFall(knifeLeftX, knifeLeftY, !_player->getIsLeft());
 				EFFECTMANAGER->knifePuff(_player->getX() - 34, _player->getY() - 25, _player->getIsLeft());
 				break;
 			}
@@ -1495,6 +1497,14 @@ void playerManager::update(void)
 	}
 	*/
 	p1Bubble();	
+	if (KEYMANAGER->isOnceKeyDown('K'))
+	{
+		EFFECTMANAGER->RambroBloodFountain(_player->getX(), _player->getY());
+	}
+	if (KEYMANAGER->isOnceKeyDown('L'))
+	{
+		EFFECTMANAGER->chuckBloodFountain(_player->getX(), _player->getY());
+	}
 }
 
 void playerManager::render(void)
@@ -1523,18 +1533,18 @@ void playerManager::render(void)
 		RectangleMake(getMemDC(), _player->getX()-CAMERAMANAGER->getCamera().left, _player->getY()-CAMERAMANAGER->getCamera().top, 65, 80);
 		//RectangleMake(getMemDC(), _player->getX() + 20 - CAMERAMANAGER->getCamera().left, _player->getY() + 25 - CAMERAMANAGER->getCamera().top, _player->getWidth() + 10, _player->getHeight() + 5);
 	}
-	if (_knifeCollision)
-	{
-		if (!_player->getIsLeft())
-		{
-			RectangleMake(getMemDC(), _player->getX() + 60 - CAMERAMANAGER->getCamera().left, _player->getY() + 28 - CAMERAMANAGER->getCamera().top, 30, 30);
-		}
-		else
-		{
-			RectangleMake(getMemDC(), _player->getX() - 30 - CAMERAMANAGER->getCamera().left, _player->getY() + 28 - CAMERAMANAGER->getCamera().top, 30, 30);
-		}
-	}
-	//RectangleMake(getMemDC(), 20.f - CAMERAMANAGER->getCamera().left, 2100.f - CAMERAMANAGER->getCamera().top, 60, 60);
+	//if (_knifeCollision)
+	//{
+	//	if (!_player->getIsLeft())
+	//	{
+	//		RectangleMake(getMemDC(), _player->getX() + 60 - CAMERAMANAGER->getCamera().left, _player->getY() + 28 - CAMERAMANAGER->getCamera().top, 30, 30);
+	//	}
+	//	else
+	//	{
+	//		RectangleMake(getMemDC(), _player->getX() - 30 - CAMERAMANAGER->getCamera().left, _player->getY() + 28 - CAMERAMANAGER->getCamera().top, 30, 30);
+	//	}
+	//}
+	////RectangleMake(getMemDC(), 20.f - CAMERAMANAGER->getCamera().left, 2100.f - CAMERAMANAGER->getCamera().top, 60, 60);
 	//RectangleMake(getMemDC(), _player->getSkyRightX() - CAMERAMANAGER->getCamera().left, _player->getSkyRightY() - CAMERAMANAGER->getCamera().top, _player->getSkyLeftW(), _player->getSkyLeftH());
 	//RectangleMake(getMemDC(), _player->getSkyLeftX() - CAMERAMANAGER->getCamera().left, _player->getSkyLeftY() - CAMERAMANAGER->getCamera().top, _player->getSkyLeftW(), _player->getSkyLeftH());
 	
