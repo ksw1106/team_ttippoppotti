@@ -13,7 +13,8 @@ void loadingScene::Lee_Moon_Gyu_addImage()
 	_loading->loadFrameImage("rambro_die", "player_ramBro/rambro_die.bmp", 130, 210, 1, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("rambro_ladder", "player_ramBro/rambro_ladder.bmp", 1560, 210, 12, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("rambro_fire", "player_ramBro/rambro_fire.bmp", 1040, 210, 8, 2, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("rambro_runGun", "player_ramBro/rambro_runGun.bmp", 4020, 72, 32, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("rambro_runGun", "player_ramBro/rambro_runGun_5x2_628x72.bmp", 628, 72, 5, 2, true, RGB(255, 0, 255));
+	//_loading->loadFrameImage("rambro_runGun", "player_ramBro/rambro_runGun.bmp", 4020, 72, 32, 2, true, RGB(255, 0, 255));
 	//_loading->loadFrameImage("rambro_fireGun", "player_ramBro/rambro_fireGun.bmp", 440, 72, 4, 2, true, RGB(255, 0, 255));
 
 	// chuck

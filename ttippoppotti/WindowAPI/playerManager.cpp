@@ -843,6 +843,7 @@ void playerManager::update(void)
 						}
 						else if (OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED)
 						{
+							//_mapData->deleteMapIndexByIndex(OBJECTMANAGER->getVObject[k]., 3, 3);
 							EFFECTMANAGER->bigBang(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top);
 							CAMERAMANAGER->CameraShake();
 							OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
