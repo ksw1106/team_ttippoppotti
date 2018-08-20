@@ -80,6 +80,7 @@ public:
 	vector<tagElement> getVElement() { return _vElement; }
 	OBJECT_TYPE getType() { return _type; }
 	OBJECT_STATE getState() { return _state; }
+	int getTargetMap() { return _targetMap; }
 	float getX() { return _x; }
 	float getY() { return _y; }
 	float getOldX() { return _oldX; }

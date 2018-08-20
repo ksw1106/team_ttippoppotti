@@ -212,7 +212,7 @@ void prisoner::init()
 	_gravity = 0.0f;
 	_angle = PI + PI_2;
 	_count = _index = 0;
-	_animationSpeed = 3;
+	_animationSpeed = 5;
 	_isLeft = false;
 	_isFrameImage = false;
 	_activationRc = RectMake(_x - _image->getWidth() * 3, _y - _image->getHeight() * 3, _image->getWidth() * 6, _image->getHeight() * 6);
@@ -253,7 +253,7 @@ void prisoner::move()
 	int index = 0;
 
 	_image = _prisonerFreedImage;
-	_animationSpeed = 2;
+	_animationSpeed = 5;
 	_activationRc = RectMake(_x + _image->getWidth() / 3 - 5, _y + _image->getHeight() / 2, _image->getWidth() / 3 + 5, _image->getHeight() / 2);
 	if (_isActived)
 	{
