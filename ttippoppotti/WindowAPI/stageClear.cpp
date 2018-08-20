@@ -73,19 +73,24 @@ void stageClear::update(void)
 {
 	if (!_isAddEnemy)
 	{
-		//테스트용 적 벡터 만들기(나중에 지워야함)
-		for (int i = 0; i < 4; i++)
-		{
-			deadEnemy dEnemy;
-			ZeroMemory(&dEnemy, sizeof(deadEnemy));
+		////테스트용 적 벡터 만들기(나중에 지워야함)
+		//for (int i = 0; i < 4; i++)
+		//{
+		//	deadEnemy dEnemy;
+		//	ZeroMemory(&dEnemy, sizeof(deadEnemy));
+		//
+		//	dEnemy.isLeft = RND->getFromIntTo(0, 1);
+		//	dEnemy._enemyType = SOLDIER;
+		//
+		//	_temp.push_back(dEnemy);
+		//}
 
-			dEnemy.isLeft = RND->getFromIntTo(0, 1);
-			dEnemy._enemyType = SOLDIER;
+		//for (int i = 0; i < _enemyManager->getVDeadEnemyInfo().size(); i++)
+		//{
 
-			_temp.push_back(dEnemy);
-		}
+		//}
 
-		for (int i = 0; i < _temp.size(); i++)
+		for (int i = 0; i < _enemyManager->getVDeadEnemyInfo().size(); i++)
 		{
 			enemyList eList;
 			ZeroMemory(&eList, sizeof(enemyList));
@@ -94,7 +99,7 @@ void stageClear::update(void)
 			eList.oldX = eList.x;
 			eList.oldY = eList.y+15;
 
-			switch (_temp[i]._deadType)
+			switch (_enemyManager->getVDeadEnemyInfo()[i]._enemyType)
 			{
 			case SOLDIER:
 				eList.image[0] = new image;
@@ -103,12 +108,22 @@ void stageClear::update(void)
 				eList.image[1]->init("stageClear/enemy/dead_soldier_dead.bmp", 90, 100, 1, 2);
 				break;
 			case BROVIL:
+				eList.image[0] = new image;
+				eList.image[0]->init("stageClear/enemy/dead_brovil_idle.bmp", 56, 152, 1, 2);
+				eList.image[1] = new image;
+				eList.image[1]->init("stageClear/enemy/dead_brovil_dead.bmp", 100, 88, 1, 2);
+				break;
+			case DOG:
+				eList.image[0] = new image;
+				eList.image[0]->init("stageClear/enemy/dead_dog_idle.bmp", 74, 150, 1, 2);
+				eList.image[1] = new image;
+				eList.image[1]->init("stageClear/enemy/dead_dog_dead.bmp", 100, 95, 1, 2);
 				break;
 			case TERROCOPTER:
 				break;
 			}
 
-			switch (_temp[i].isLeft)
+			switch (_enemyManager->getVDeadEnemyInfo()[i].isLeft)
 			{
 			case TRUE:
 				eList.isLeft = true;
