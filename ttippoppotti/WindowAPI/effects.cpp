@@ -601,7 +601,7 @@ void effects::activateBallExplosion(float x, float y)
 	_isRunning = true;
 	_isStaticAnim = true;
 	_count = 0;
-	_animationSpeed = 2;
+	_animationSpeed = 5;
 	for (int i = 0; i < _particleMax; i++)
 	{
 		_vParticle[i].fire = true;

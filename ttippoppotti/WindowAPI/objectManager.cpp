@@ -65,7 +65,7 @@ HRESULT objectManager::init(int num)
 			_vObject.push_back(object);
 		}
 
-		_drumRedPos[0].x = 3009, _drumRedPos[0].y = 1422, drumRedTarget[0] = 433;
+		_drumRedPos[0].x = 3009, _drumRedPos[0].y = 1432, drumRedTarget[0] = 433;
 		for (int i = 0; i < 1; i++)
 		{
 			type = SKULL_DRUMRED;
@@ -76,7 +76,7 @@ HRESULT objectManager::init(int num)
 
 			_vObject.push_back(object);
 		}
-		_drumGrayPos[0].x = 2941, _drumGrayPos[0].y = 1220, drumGrayTarget[0] = 407;
+		_drumGrayPos[0].x = 2941, _drumGrayPos[0].y = 1229, drumGrayTarget[0] = 407;
 		for (int i = 0; i < 1; i++)
 		{
 			type = SKULL_DRUMGRAY;

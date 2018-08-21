@@ -23,8 +23,8 @@ HRESULT enemy::initSoldier(float x, float y)
 	_enemyImage.bodyImageIndex = 0;
 	_enemyImage.armImageIndex = 0;
 	
-	_enemyImage.count = 3;
-	_enemyImage.speed = 10;
+	_enemyImage.count = 0;
+	_enemyImage.speed = 5;
 	
 	_warnSign = new image;
 	_warnSign->init("enemyImage/ExclamationMark.bmp", 1020, 60, 17, 1);
