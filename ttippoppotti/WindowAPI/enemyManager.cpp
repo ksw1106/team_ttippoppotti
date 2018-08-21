@@ -417,6 +417,7 @@ void enemyManager::brovilDieWithBullet()
 	if (_brovil->getBrovilStatus() == BROVIL_DEAD)
 	{
 		_brovil->deadMove();
+		
 	}
 
 	//if (this->isEffect(2))

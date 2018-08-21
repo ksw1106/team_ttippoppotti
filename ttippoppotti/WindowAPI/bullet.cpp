@@ -476,7 +476,7 @@ HRESULT pGrenade::init(float range)
 {
 	_range = range;
 	_count = _index = 0;
-	_animationSpeed = 0;
+	_animationSpeed = 13;
 	for (int i = 0; i < 10; i++)
 	{
 		tagBullet pGrenade;
@@ -515,7 +515,7 @@ void pGrenade::release(void)
 void pGrenade::update(void)
 {
 	image* _tempImage;
-	_animationSpeed++;
+	//_animationSpeed++;
 	for (int i = 0; i < _vBullet.size(); ++i)
 	{
 		if (_vBullet[i].isActived == true)
@@ -533,7 +533,7 @@ void pGrenade::update(void)
 				//	_vBullet[i].rc.top - CAMERAMANAGER->getCamera().top);
 				EFFECTMANAGER->grenadePuff(_vBullet[i].rc.left + 22, _vBullet[i].rc.top + 22);
 			}
-			FRAMEMANAGER->frameChange(_vBullet[i].bulletImage, _count, _index, _animationSpeed, false);
+			FRAMEMANAGER->frameChange(_vBullet[i].bulletImage, _count, _index, _animationSpeed, !_vBullet[i].isLeft);
 		}
 	}
 	move();

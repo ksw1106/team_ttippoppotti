@@ -18,6 +18,7 @@ HRESULT player::init(int num, float x, float y)
 		_ramBro[LADDER] = IMAGEMANAGER->findImage("rambro_ladder");
 		_ramBro[FIRE] = IMAGEMANAGER->findImage("rambro_fire");
 		//_ramBro[ROLL] = IMAGEMANAGER->addFrameImage("broforce_roll", "broforce_roll.bmp", 936, 136, 13, 2, true, RGB(255, 0, 255));
+		_rambroGun[IDLE_GUN] = IMAGEMANAGER->findImage("rambro_idleGun");
 		_rambroGun[RUN_GUN] = IMAGEMANAGER->findImage("rambro_runGun");
 		//_rambroGun[FIRE_GUN] = IMAGEMANAGER->findImage("rambro_fireGun");
 	}
@@ -35,6 +36,7 @@ HRESULT player::init(int num, float x, float y)
 		_ramBro[LADDER] = IMAGEMANAGER->findImage("chuck_ladder");
 		_ramBro[FIRE] = IMAGEMANAGER->findImage("chuck_fire");
 		//_chuck[ROLL] = IMAGEMANAGER->findImage("chuck_roll");
+		_rambroGun[IDLE_GUN] = IMAGEMANAGER->findImage("chuck_idleGun");
 		_rambroGun[RUN_GUN] = IMAGEMANAGER->findImage("chuck_runGun");
 	}
 	
@@ -45,7 +47,16 @@ HRESULT player::init(int num, float x, float y)
 	_rambroUiImageRun = IMAGEMANAGER->findImage("rambro_ui_image_run");
 
 	_state = IDLE;
-	_gun = RUN_GUN;
+	//if (_state == IDLE)
+	//{
+	//	_gun = IDLE_GUN;
+	//}
+	//else if  (_state == RUN)
+	//{
+	//	_gun = RUN_GUN;
+	//}
+	_gun = IDLE_GUN;
+
 	_x = x;
 	_y = y;
 	_oldX = _x;
@@ -125,6 +136,20 @@ void player::update(void)
 
 	_gravity += 0.98f;
 
+	if (!_isLeft)
+	{
+
+	}
+	if (_state == RUN)
+	{
+		_gun = RUN_GUN;
+	}
+	if (_state == IDLE || _state == JUMP)
+	{
+		_gun = IDLE_GUN;
+	}
+	
+		
 	FRAMEMANAGER->frameChange(_ramBro[_state], _count, _index, _animationSpeed, _isLeft);
 	FRAMEMANAGER->frameChange(_rambroGun[_gun], _gunCount, _gunIndex, _gunSpeed, _isLeft);
 	
@@ -145,28 +170,40 @@ void player::render(void)
 	}
 	else
 	{
-		_ramBro[_state]->frameRender(getMemDC(), _x-34 - CAMERAMANAGER->getCamera().left, _y-25 - CAMERAMANAGER->getCamera().top);
+		_ramBro[_state]->frameRender(getMemDC(), _x - 34 - CAMERAMANAGER->getCamera().left, _y - 25 - CAMERAMANAGER->getCamera().top);
 	}
-	if (_state == RUN || _state==JUMP)
+	if (_state == RUN)
 	{
 		if (!_isLeft)
 		{
-			_rambroGun[_gun]->frameRender(getMemDC(), _x  - CAMERAMANAGER->getCamera().left, _y + 27 - CAMERAMANAGER->getCamera().top);
+			_rambroGun[_gun]->frameRender(getMemDC(), _x + 1 - CAMERAMANAGER->getCamera().left, _y + 27 - CAMERAMANAGER->getCamera().top);
 		}
 		else
 		{
-			_rambroGun[_gun]->frameRender(getMemDC(), _x -13 - CAMERAMANAGER->getCamera().left, _y + 27 - CAMERAMANAGER->getCamera().top);
+			//_gun = RUN_GUN;
+			_rambroGun[_gun]->frameRender(getMemDC(), _x - 23 - CAMERAMANAGER->getCamera().left, _y + 27 - CAMERAMANAGER->getCamera().top);
 		}
 	}
-	if (_state == IDLE)
+	else if (_state == IDLE)
 	{
 		if (!_isLeft)
 		{
-			_rambroGun[_gun]->frameRender(getMemDC(), _x  - CAMERAMANAGER->getCamera().left, _y + 30 - CAMERAMANAGER->getCamera().top);
+			_rambroGun[0]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y + 30 - CAMERAMANAGER->getCamera().top);
 		}
 		else
 		{
-			_rambroGun[_gun]->frameRender(getMemDC(), _x - CAMERAMANAGER->getCamera().left, _y + 33 - CAMERAMANAGER->getCamera().top);
+			_rambroGun[0]->frameRender(getMemDC(), _x - 15 - CAMERAMANAGER->getCamera().left, _y + 33 - CAMERAMANAGER->getCamera().top);
+		}
+	}
+	else if (_state == JUMP)
+	{
+		if (!_isLeft)
+		{
+			_rambroGun[0]->frameRender(getMemDC(), _x + 7 - CAMERAMANAGER->getCamera().left, _y + 30 - CAMERAMANAGER->getCamera().top);
+		}
+		else
+		{
+			_rambroGun[0]->frameRender(getMemDC(), _x - 23 - CAMERAMANAGER->getCamera().left, _y + 30 - CAMERAMANAGER->getCamera().top);
 		}
 	}
 

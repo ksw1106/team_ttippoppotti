@@ -317,12 +317,12 @@ void playerManager::update(void)
 		}
 		if (!_player->getIsLeft())								// ¿À¸¥ÂÊ
 		{
-			_pGrenade->fire(_player->getX() + 60, _player->getY() + 38, 20, _player->getIsLeft());
+			_pGrenade->fire(_player->getX() , _player->getY() , 20, _player->getIsLeft());
 			_isGrenade = true;
 		}
 		else													// ¿ÞÂÊ
 		{
-			_pGrenade->fire(_player->getX(), _player->getY() + 38, 20, _player->getIsLeft());
+			_pGrenade->fire(_player->getX(), _player->getY() , 20, _player->getIsLeft());
 			_isGrenade = true;
 		}
 	}
@@ -774,10 +774,16 @@ void playerManager::update(void)
 				{
 					if (OBJECTMANAGER->getVObject()[k]->getType() == PRISONER)
 						OBJECTMANAGER->getVObject()[k]->setIsActived(true);
-					if (OBJECTMANAGER->getVObject()[k]->getType() == AMERICAN_FLAG || OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
+					if (OBJECTMANAGER->getVObject()[k]->getType() == AMERICAN_FLAG)
 					{
 						//OBJECTMANAGER->setFlagCount(OBJECTMANAGER->getFlagCount() + 1);
 						OBJECTMANAGER->getVObject()[k]->setState(OBJECT_MOVE);
+					}
+					if ( OBJECTMANAGER->getVObject()[k]->getType() == HELICOPTER)
+					{
+						_isLadder = true;
+						_player->setX(OBJECTMANAGER->getVObject()[k]->getActivationRect().left + (OBJECTMANAGER->getVObject()[k]->getActivationRect().right - OBJECTMANAGER->getVObject()[k]->getActivationRect().left) / 2);
+						_player->setY(OBJECTMANAGER->getVObject()[k]->getActivationRect().top + (OBJECTMANAGER->getVObject()[k]->getActivationRect().bottom - OBJECTMANAGER->getVObject()[k]->getActivationRect().top) / 2);
 					}
 				}
 				break;
@@ -812,6 +818,8 @@ void playerManager::update(void)
 					RECT rc = OBJECTMANAGER->getVObject()[k]->getActivationRect();
 					//Çï¸®ÄßÅÍ »ç´Ù¸®¿¡ ¸Å´Þ¸²
 					_isLadder = true;
+					tempX = rc.left + (rc.right - rc.left) / 2;
+					tempY = rc.top + (rc.bottom - rc.top) / 2;
 					_player->setX(rc.left + (rc.right - rc.left) / 2);
 					_player->setY(rc.top + (rc.bottom - rc.top) / 2);
 				}
@@ -843,7 +851,7 @@ void playerManager::update(void)
 						}
 						else if (OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED)
 						{
-							//_mapData->deleteMapIndexByIndex(OBJECTMANAGER->getVObject[k]., 3, 3);
+							_mapData->deleteMapIndexByIndex(OBJECTMANAGER->getVObject()[k]->getTargetMap(), 3, 3);
 							EFFECTMANAGER->bigBang(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top);
 							CAMERAMANAGER->CameraShake();
 							OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
@@ -973,6 +981,7 @@ void playerManager::update(void)
 						}
 						else if (OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMGRAY || OBJECTMANAGER->getVObject()[k]->getType() == SKULL_DRUMRED)
 						{
+							_mapData->deleteMapIndexByIndex(OBJECTMANAGER->getVObject()[k]->getTargetMap(), 3, 3);
 							EFFECTMANAGER->bigBang(OBJECTMANAGER->getVObject()[k]->getRect().left, OBJECTMANAGER->getVObject()[k]->getRect().top);
 							CAMERAMANAGER->CameraShake();
 							OBJECTMANAGER->getVObject()[k]->setState(OBJECT_DESTROY);
@@ -1215,7 +1224,7 @@ void playerManager::update(void)
 			//	_pGrenade->getVPlayerGrenade()[i].isActived = false;
 		}
 	}
-	if (_missileCount >= 200)
+	if (_missileCount >= 150)
 	{
 		for (int i = 0; i < _xMissile->getVPlayerxMissile().size(); i++)
 		{

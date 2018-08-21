@@ -3,7 +3,7 @@
 #include "bullet.h"  //미사일클래스 사용하기 위해
 
 #define MAX_STATE 9
-#define MAX_GUN 1
+#define MAX_GUN 2
 
 enum STATE
 {
@@ -15,7 +15,7 @@ enum STATE
 
 enum GUN
 {
-	RUN_GUN, FIRE_GUN
+	IDLE_GUN, RUN_GUN, FIRE_GUN
 };
 
 enum { PLAYER_LEFT, PLAYER_TOP, PLAYER_RIGHT, PLAYER_BOTTOM };
